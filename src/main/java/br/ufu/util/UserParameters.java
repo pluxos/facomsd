@@ -44,4 +44,8 @@ public class UserParameters {
         return configuration.getInt(property);
     }
 
+    public static String get(String s) {
+        init();
+        return configuration.getString(s);
+    }
 }

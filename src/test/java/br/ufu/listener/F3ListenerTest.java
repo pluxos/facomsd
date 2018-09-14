@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class F3ListenerTest {
 
-    private static final String ITEM = "ITEM";
+    private static final String ITEM = "READ 1";
 
     @Test
     public void shouldListenToF3AndExecuteCommand() {

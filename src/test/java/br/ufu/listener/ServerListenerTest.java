@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class ServerListenerTest {
 
     private static final String IP = "127.0.0.1";
-    private static final String COMMAND = "COMMAND";
+    private static final String COMMAND = "READ 1";
 
     @Test
     public void shouldProduceCommand() {

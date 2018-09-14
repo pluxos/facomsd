@@ -14,7 +14,8 @@ import static org.junit.Assert.assertEquals;
 
 public class F2ListenerTest {
 
-    private static final String ITEM = "ITEM";
+    private static final String ITEM = "READ 1";
+    private static final String SEPARATOR = "\n";
 
     @Test
     public void shouldListenToF2AndWriteToLog() throws IOException {
@@ -31,7 +32,7 @@ public class F2ListenerTest {
         t.start();
 
         await().untilAsserted(() -> {
-            assertEquals(ITEM, readFileToString(tempFile));
+            assertEquals(ITEM + SEPARATOR, readFileToString(tempFile));
         });
 
     }

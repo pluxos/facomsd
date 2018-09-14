@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class F1ListenerTest {
 
-    private static final String ITEM = "ITEM";
+    private static final String ITEM = "READ 1";
 
     @Test
     public void shouldListenToF1AndProducesF2AndF3() {

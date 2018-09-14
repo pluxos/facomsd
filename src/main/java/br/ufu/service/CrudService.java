@@ -35,20 +35,28 @@ public class CrudService {
         }
     }
 
-    private String delete(String[] commandSplited) {
-        return crudRepository.delete(new BigInteger(commandSplited[1]));
+    private String delete(String[] commandSplited) throws InvalidCommandException {
+        return crudRepository.delete(parseNumber(commandSplited[1]));
     }
 
-    private String update(String[] commandSplited) {
-        return crudRepository.update(new BigInteger(commandSplited[1]), commandSplited[2]);
+    private String update(String[] commandSplited) throws InvalidCommandException {
+        return crudRepository.update(parseNumber(commandSplited[1]), commandSplited[2]);
     }
 
-    private String read(String[] commandSplited) {
-        return crudRepository.read(new BigInteger(commandSplited[1]));
+    private String read(String[] commandSplited) throws InvalidCommandException {
+        return crudRepository.read(parseNumber(commandSplited[1]));
     }
 
     private String create(String[] commandSplited) {
         return crudRepository.create(commandSplited[1]);
+    }
+
+    private BigInteger parseNumber(String number) throws InvalidCommandException {
+        try {
+            return new BigInteger(number);
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandException("Could not parse command", e);
+        }
     }
 
 }

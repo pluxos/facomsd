@@ -1,8 +1,8 @@
 package br.ufu.listener;
 
-import br.ufu.model.Command;
 import br.ufu.exception.InvalidCommandException;
 import br.ufu.exception.ListenerException;
+import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import org.apache.logging.log4j.LogManager;
@@ -23,12 +23,16 @@ public class F3Listener extends FxListener {
 
     @Override
     protected void listen() {
+        Command item = null;
         try {
-            Command item = queueService.consumeF3();
+            item = queueService.consumeF3();
             log.info("F3 Listener take command [{}]", item.getExecuteCommand());
             String response = crudService.execute(item.getExecuteCommand());
             item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s", response));
         } catch (InterruptedException | InvalidCommandException e) {
+            if (item != null) {
+                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s", "Invalid command"));
+            }
             throw new ListenerException(e);
         }
     }
