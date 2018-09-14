@@ -3,6 +3,16 @@
 # Servidor
 
 O server utiliza o maven como gerenciador de dependências e construção.
+Outras tecnologias são utilzadas para construir a aplicação:
+
+- [log4j2](https://logging.apache.org/log4j/2.x/): Biblioteca que provê implementação de geração de logs.
+- [commons-io](https://commons.apache.org/proper/commons-io/): Biblioteca de APIs com operações de manipulação de arquivos mantida pela Apache Foundation.
+- [commons-configuration2](http://commons.apache.org/proper/commons-configuration/): Biblioteca que provê configuração genérica de propriedades.
+- [junit](https://junit.org/junit5): Biblioteca utilizada para construção de testes unitários automatizados. 
+- [mockito](https://site.mockito.org/): Framework de mock para auxiliar na criação de testes unitários.
+- [awaitility](https://github.com/awaitility/awaitility): Biblioteca java para testes de aplicações assíncronas.
+
+
 Para construir a aplicação deve-se executar o seguinte comando:
 
 ```
