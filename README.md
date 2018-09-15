@@ -28,7 +28,7 @@ $ mvn clean test
 Para iniciar a aplicação deve-se executar o seguinte comando (após a construção):
 
 ```
-$ java -jar target/projeto-sd-1.0-SNAPSHOT.jar
+$ java -jar target/projeto-sd-server.jar
 ```
 
 Para testar o servidor  em funcionamento podemos usar o ```telnet``` execute os seguintes comandos:
@@ -56,6 +56,7 @@ Atualmente os seguintes parâmetros estão disponíveis:
 | Parâmetro | Descrição | Exemplo |
 | ----------| ----------|---------|
 | ```server.port``` | Porta de execução do servidor. Padrão: 4445 | 4445|
+| ```log.path``` | Caminho do arquivo de log | server.log |
 
 ## Operações disponíveis
 
