@@ -1,8 +1,12 @@
 from Commands import Commands
 from Communication import Communication
+from queue import Queue
 
 
-communication = Communication()
+requests = Queue()
+responses = Queue()
+
+communication = Communication(requests, responses)
 command = Commands(communication)
 
 command.start()
