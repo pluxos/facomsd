@@ -1,5 +1,4 @@
 import socket
-import threading
 from time import sleep
 
 class Connection:
