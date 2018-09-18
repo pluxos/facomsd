@@ -10,14 +10,19 @@ class Receptor(threading.Thread):
         self.requests = requests
 
     def run(self):
-
-        while True:
-            msg = self.connection.recv(1024)
-            if len(msg) == 0:
-                self.connection.close()
-                print("Close Connection with ", self.address)
-                break
-            print(len(msg))
-            print(msg.decode())
-            #self.connection.close()
-            #break
+        BUFFERSIZE = 1024
+        buffer = []
+        try:
+            while True:
+                msg = self.connection.recv(BUFFERSIZE)
+                if len(msg) == BUFFERSIZE:
+                    buffer += msg
+                elif len(msg) == 0:
+                    break
+                else:
+                    self.connection.send("ok".encode())
+                    print(msg.decode())
+                    buffer.clear()
+        finally:
+            self.connection.close()
+            print("Close Connection with ", self.address)

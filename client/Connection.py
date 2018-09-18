@@ -1,5 +1,4 @@
 import socket
-from time import sleep
 
 class Connection:
 
@@ -10,8 +9,19 @@ class Connection:
 
         self.responses = responses
 
-    def read(self, id):
-        print('Doing read in ' + id)
-        sleep(5)
-        self.responses.put("blablabla")
+    def sendRequest(self, msg):
+        self.socket.send(msg)
+        self.getResponse()
 
+    def getResponse(self):
+        buffer = ""
+        BUFFERSIZE = 1024
+        while True:
+            msg = self.socket.recv(BUFFERSIZE)
+            if len(msg) == BUFFERSIZE:
+                buffer += msg.decode()
+            else:
+                buffer += msg.decode()
+                break
+
+        self.responses.put(buffer)

@@ -1,4 +1,5 @@
 import threading
+from os import system
 
 menu = """
 
@@ -27,9 +28,10 @@ class Commands(threading.Thread):
                 a = input(menu).split()
                 if a[0] == "exit":
                     break
-                elif a[0] == "read":
+                else:
                     self.communication.new_message(a)
                     msg = self.communication.responses.get()
+                    system("clear")
                     print(msg)
             except Exception as error:
                 print(error)

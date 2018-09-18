@@ -19,8 +19,12 @@ class Communication(threading.Thread, Connection):
 
         while not self.stopRequest.isSet():
             if self.newMessage.isSet():
-                self.send()
-                self.newMessage.clear()
+                try:
+                    self.send()
+                except Exception as error:
+                    self.responses.put(str(error))
+                finally:
+                    self.newMessage.clear()
         print("Stop Thread of Communication in ", datetime.now())
 
     def new_message(self, msg):
@@ -29,20 +33,56 @@ class Communication(threading.Thread, Connection):
 
     def send(self):
         msg = self.requests.get()
-        print(msg)
-        print(type(msg))
 
         if msg[0].upper() == "READ":
-            self.read(msg[1])
+            self.read(msg[1:])
         elif msg[0].upper() == "CREATE":
-            self.write(msg[1], msg[2])
+            self.create(msg[1:])
         elif msg[0].upper() == "UPDATE":
-            self.update(msg[1], msg[2])
+            self.update(msg[1:])
         elif msg[0].upper() == "DELETE":
-            self.delete(msg[1])
+            self.delete(msg[1:])
 
     def join(self, timeout=None):
         print("Request Stop in ", datetime.now())
         super(Communication, self).join(timeout)
         self.socket.close()
         self.stopRequest.set()
+
+    def read(self, id):
+        if len(id) > 1:
+            raise Exception("invalid arguments! (READ ID)")
+        try:
+            int(id[0])
+        except Exception:
+            raise Exception("ID not is Integer!")
+        self.sendRequest(('read ' + id[0]).encode())
+
+    def create(self, args):
+        if len(args) != 2:
+            raise Exception("invalid arguments! (CREATE ID VALUE)")
+        try:
+            int(args[0])
+        except Exception:
+            raise Exception("ID not is Integer!")
+        self.sendRequest(('create ' + args[0] + " " + args[1]).encode())
+
+    def update(self, args):
+        if len(args) != 2:
+            if len(args) != 2:
+                raise Exception("invalid arguments! (UPDATE ID VALUE)")
+        try:
+            int(args[0])
+        except Exception:
+            raise Exception("ID not is Integer!")
+        self.sendRequest(('update ' + args[0] + " " + args[1]).encode())
+
+    def delete(self, id):
+        print(id)
+        if len(id) > 1:
+            raise Exception("invalid arguments! (DELETE ID)")
+        try:
+            int(id[0])
+        except Exception:
+            raise Exception("ID not is Integer!")
+        self.sendRequest(('delete ' + id[0]).encode())
