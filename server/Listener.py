@@ -4,7 +4,7 @@ import configparser
 
 
 CONFIG = configparser.ConfigParser()
-CONFIG.read('config.py')
+CONFIG.read('../config.py')
 
 
 class Listener:

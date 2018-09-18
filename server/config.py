@@ -1,3 +1,0 @@
-[all]
-PORT=12345
-DEBUG=True

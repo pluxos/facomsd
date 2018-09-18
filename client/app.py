@@ -1,13 +1,12 @@
 from Commands import Commands
-from Communication import Communication
-from queue import Queue
+from Listener import Communication
+from Connection import createSocket
 
 
-requests = Queue()
-responses = Queue()
+socket = createSocket()
 
-communication = Communication(requests, responses)
-command = Commands(communication)
+communication = Communication(socket)
+command = Commands(socket)
 
 command.start()
 communication.start()
