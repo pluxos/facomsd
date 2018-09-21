@@ -1,32 +1,40 @@
 package cliente;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import servidor.Dados;
+
 public class Client implements Runnable {
   public static void main(String args[]) {
     try {
-      for (int i = 0; i < 3; i++) {
+     
         Thread t = new Thread(new Client());
         t.start();
-      }
+      
     } catch (Exception e) {
     }
   }
   
   public void run() {
     try {
-      int numero, temp;
+      Long numero;
       Scanner s = new Scanner(System.in);
       Socket socket = new Socket("127.0.0.1", 9876);
-      Scanner s1 = new Scanner(socket.getInputStream());
-      PrintStream p = new PrintStream(socket.getOutputStream());
+      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
       System.out.println("Numero: ");
-      numero = s.nextInt();
-      p.println(numero);
-      temp = s1.nextInt();
-      System.out.println("temp:  " + temp);
+      numero = s.nextLong();
+      
+      out.writeObject(numero);
+      
+      //System.out.println("Resposta: "+ in.readObject());
+      Dados resposta = (Dados) in.readObject();
+      System.out.println(resposta.getTexto());
     } catch (Exception e) {
     }
   }

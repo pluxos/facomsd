@@ -6,7 +6,8 @@ import java.net.Socket;
 
 import servidor.Dados;
 
-public class Dao1 implements DAO {
+//public class Dao1 implements DAO {
+public class Dao1 {
   public Dados get(Long key) {
     Dados d = null;
     Socket socket;

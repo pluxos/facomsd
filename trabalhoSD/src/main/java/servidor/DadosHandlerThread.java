@@ -12,13 +12,19 @@ public class DadosHandlerThread extends Thread {
   public DadosHandlerThread(Socket socket, Map<Long, Dados> dados) {
     this.socket = socket;
     this.dados = dados;
+    System.out.println("dados setados " + this.dados.toString());
   }
   
   public void run() {
     try {
+      System.out.println("iniciando thread: " + socket);
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+      
+      //System.out.println("lendo key" + (Long) in.readObject());
       Long key = (Long) in.readObject();
+      System.out.println("key: " + key);
+      
       while (key.longValue() != 0L) {
         System.out.println("key " + key + " recebida");
         if (dados.containsKey(key)) {
