@@ -1,6 +1,7 @@
 package br.ufu.handler;
 
 import br.ufu.client.SocketClient;
+import br.ufu.exception.ClientCommandHandlerException;
 import br.ufu.exception.InvalidCommandException;
 import br.ufu.parser.Parser;
 import org.apache.logging.log4j.LogManager;
@@ -26,8 +27,8 @@ public class ClientCommandHandler implements Runnable {
         String[] commandSplited = command.split(COMMAND_SEPARATOR);
         String action = commandSplited[0];
 
-        if (VALID_COMMANDS.stream().noneMatch(e -> e.equals(action))) {
-            throw new InvalidCommandException(String.format(MESSAGE_INVALID_COMMAND, action, VALID_COMMANDS));
+        if (getValidCommands().stream().noneMatch(e -> e.equals(action))) {
+            throw new InvalidCommandException(String.format(MESSAGE_INVALID_COMMAND, action, getValidCommands()));
         }
 
         validateCommandParams(commandSplited);
@@ -37,7 +38,7 @@ public class ClientCommandHandler implements Runnable {
         String action = commands[0];
         switch (action) {
             case COMMAND_CREATE:
-                validateParams(commands, STRING_PARSER);
+                validateParams(commands, BIG_INTEGER_PARSER, STRING_PARSER);
                 break;
             case COMMAND_READ:
                 validateParams(commands, BIG_INTEGER_PARSER);
@@ -48,6 +49,9 @@ public class ClientCommandHandler implements Runnable {
             case COMMAND_DELETE:
                 validateParams(commands, BIG_INTEGER_PARSER);
                 break;
+            default:
+                String message = String.format("Não há como verificar argumentos  de comando invalido. [%s]", action);
+                throw new InvalidCommandException(message);
         }
     }
 
@@ -83,17 +87,17 @@ public class ClientCommandHandler implements Runnable {
             socketClient.stopConnection();
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new ClientCommandHandlerException(e);
         }
     }
 
     private void sendMessage(String message) {
         try {
             String response = socketClient.sendMessage(message);
-            System.out.println(response);
+            log.info(response);
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new ClientCommandHandlerException(e);
         }
     }
 }

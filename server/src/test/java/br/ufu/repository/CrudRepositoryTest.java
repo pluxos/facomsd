@@ -10,19 +10,19 @@ import static java.math.BigInteger.*;
 public class CrudRepositoryTest {
 
     @Test
-    public void shouldCreateItem() {
+    public void shouldCreateItem() throws DatabaseException {
         CrudRepository crudRepository = new CrudRepository();
         String item = "ITEM";
-        crudRepository.create(item);
+        crudRepository.create(ONE, item);
         Assert.assertEquals(item, crudRepository.read(ONE));
     }
 
     @Test
-    public void shouldUpdateItem() {
+    public void shouldUpdateItem() throws DatabaseException {
         CrudRepository crudRepository = new CrudRepository();
 
         String item = "ITEM";
-        crudRepository.create(item);
+        crudRepository.create(ONE, item);
         Assert.assertEquals(item, crudRepository.read(ONE));
 
         String itemUpdated = "ITEM-U";
@@ -31,16 +31,16 @@ public class CrudRepositoryTest {
 
     }
 
-    @Test
-    public void shouldDeleteItem() {
+    @Test(expected = DatabaseException.class)
+    public void shouldDeleteItem() throws DatabaseException {
         CrudRepository crudRepository = new CrudRepository();
 
         String item = "ITEM";
-        crudRepository.create(item);
+        crudRepository.create(ONE, item);
         Assert.assertEquals(item, crudRepository.read(ONE));
 
         crudRepository.delete(ONE);
-        Assert.assertNull(crudRepository.read(ONE));
+        crudRepository.read(ONE);
 
     }
 

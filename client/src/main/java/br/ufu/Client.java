@@ -2,25 +2,29 @@ package br.ufu;
 
 import br.ufu.client.SocketClient;
 import br.ufu.handler.ClientCommandHandler;
+import br.ufu.util.UserParameters;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 import static br.ufu.util.Constants.PROPERTY_SERVER_HOST;
 import static br.ufu.util.Constants.PROPERTY_SERVER_PORT;
-import static br.ufu.util.UserParameters.get;
-import static br.ufu.util.UserParameters.getInt;
 
 public class Client {
 
-    private final SocketClient socketClient;
-    private final Scanner scanner;
-    private final ClientCommandHandler clientCommandHandler;
+    private SocketClient socketClient;
+    private Scanner scanner;
+    private ClientCommandHandler clientCommandHandler;
+    private UserParameters userParameters;
 
-    public Client() {
+    public Client(String[] args) {
+        userParameters = new UserParameters(args);
+    }
+
+    private void init() {
         socketClient = new SocketClient();
         scanner = new Scanner(System.in);
-        clientCommandHandler = new ClientCommandHandler(scanner, socketClient);
+        clientCommandHandler = new ClientCommandHandler(getScanner(), getSocketClient());
     }
 
     public SocketClient getSocketClient() {
@@ -35,9 +39,15 @@ public class Client {
         return clientCommandHandler;
     }
 
+    public UserParameters getUserParameters() {
+        return userParameters;
+    }
+
     public void start() throws IOException, InterruptedException {
-        socketClient.startConnection(get(PROPERTY_SERVER_HOST), getInt(PROPERTY_SERVER_PORT));
-        Thread t = new Thread(clientCommandHandler);
+        init();
+        getSocketClient().startConnection(getUserParameters().get(PROPERTY_SERVER_HOST),
+                getUserParameters().getInt(PROPERTY_SERVER_PORT));
+        Thread t = new Thread(getClientCommandHandler());
         t.start();
         t.join();
     }

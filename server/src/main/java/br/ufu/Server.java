@@ -8,37 +8,41 @@ import br.ufu.repository.CrudRepository;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.service.StartupRecoverService;
+import br.ufu.util.UserParameters;
 import br.ufu.writer.LogWriter;
 
 import java.io.FileNotFoundException;
 
 import static br.ufu.util.Constants.PROPERTY_LOG_PATH;
 import static br.ufu.util.Constants.PROPERTY_SERVER_PORT;
-import static br.ufu.util.UserParameters.get;
-import static br.ufu.util.UserParameters.getInt;
 
 public class Server {
 
-    private final CrudRepository crudRepository;
-    private final CrudService crudService;
-    private final QueueService queueService;
-    private final LogWriter logWriter;
-    private final StartupRecoverService startupRecoverService;
-    private final ServerListener serverListener;
-    private final F1Listener f1Listener;
-    private final F2Listener f2Listener;
-    private final F3Listener f3Listener;
+    private CrudRepository crudRepository;
+    private CrudService crudService;
+    private QueueService queueService;
+    private LogWriter logWriter;
+    private StartupRecoverService startupRecoverService;
+    private ServerListener serverListener;
+    private F1Listener f1Listener;
+    private F2Listener f2Listener;
+    private F3Listener f3Listener;
+    private UserParameters userParameters;
 
-    public Server() throws FileNotFoundException {
+    public Server(String[] args) {
+        userParameters = new UserParameters(args);
+    }
+
+    private void init() throws FileNotFoundException {
         crudRepository = new CrudRepository();
-        crudService = new CrudService(crudRepository);
         queueService = new QueueService();
-        logWriter = new LogWriter(get(PROPERTY_LOG_PATH));
-        startupRecoverService = new StartupRecoverService(crudService);
-        serverListener = new ServerListener(queueService, getInt(PROPERTY_SERVER_PORT));
-        f1Listener = new F1Listener(queueService);
-        f2Listener = new F2Listener(queueService, logWriter);
-        f3Listener = new F3Listener(queueService, crudService);
+        crudService = new CrudService(getCrudRepository());
+        logWriter = new LogWriter(getUserParameters().get(PROPERTY_LOG_PATH));
+        startupRecoverService = new StartupRecoverService(getCrudService(), userParameters);
+        serverListener = new ServerListener(getQueueService(), getUserParameters().getInt(PROPERTY_SERVER_PORT));
+        f1Listener = new F1Listener(getQueueService());
+        f2Listener = new F2Listener(getQueueService(), getLogWriter());
+        f3Listener = new F3Listener(getQueueService(), getCrudService());
     }
 
     public CrudRepository getCrudRepository() {
@@ -77,12 +81,16 @@ public class Server {
         return f3Listener;
     }
 
+    public UserParameters getUserParameters() {
+        return userParameters;
+    }
+
     private void startListeners() throws InterruptedException {
 
-        Thread serverListenerThread = startThread(serverListener);
-        Thread f1ListenerThread = startThread(f1Listener);
-        Thread f2ListenerThread = startThread(f2Listener);
-        Thread f3ListenerThread = startThread(f3Listener);
+        Thread serverListenerThread = startThread(getServerListener());
+        Thread f1ListenerThread = startThread(getF1Listener());
+        Thread f2ListenerThread = startThread(getF2Listener());
+        Thread f3ListenerThread = startThread(getF3Listener());
 
         serverListenerThread.join();
         f1ListenerThread.join();
@@ -90,8 +98,9 @@ public class Server {
         f3ListenerThread.join();
     }
 
-    public void start() throws InterruptedException {
-        startupRecoverService.recover();
+    public void start() throws InterruptedException, FileNotFoundException {
+        init();
+        getStartupRecoverService().recover();
         startListeners();
     }
 

@@ -6,24 +6,56 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Optional.ofNullable;
+
 public class UserParameters {
 
+    private static final String START_PARAMETER_CHARS = "--";
+    private static final String SPACE = " ";
+    private static final String LINE_BREAK = "\n";
+    private static final String ATRIBUTE_DELIMITER = "=";
     private static final Logger log = LogManager.getLogger(UserParameters.class);
+    private Configuration configuration;
 
-    private static Configuration configuration;
-
-    private UserParameters() {
-
+    public UserParameters() {
+        this(new String[0]);
     }
 
-    private static void init() {
+    public UserParameters(String[] args) {
+        init(args);
+    }
 
-        if (configuration != null) {
-            return;
+    private static Map<String, String> parseArgs(String[] commandArgs) {
+        Map<String, String> args = new HashMap<>();
+        String text = String.join(SPACE, ofNullable(commandArgs).orElse(new String[0]));
+        if (StringUtils.isBlank(text)) {
+            return args;
         }
+        String[] strings = StringUtils.replace(text, LINE_BREAK, SPACE).split(SPACE);
+        Arrays.stream(strings).forEach(s -> {
+            String[] commandSplited = s.split(ATRIBUTE_DELIMITER);
+            args.put(commandSplited[0].replace(START_PARAMETER_CHARS, ""), commandSplited[1]);
+        });
+        return args;
+    }
+
+    public Integer getInt(String property) {
+        return configuration.getInt(property);
+    }
+
+    public String get(String s) {
+        return configuration.getString(s);
+    }
+
+    private void init(String[] args) {
 
         Parameters params = new Parameters();
 
@@ -31,21 +63,13 @@ public class UserParameters {
 
         builder.configure(params.properties()
                 .setFileName(Constants.APPLICATION_PROPERTIES));
+
         try {
             configuration = builder.getConfiguration();
+            parseArgs(args).forEach((k, v) -> configuration.addProperty(k, v));
         } catch (ConfigurationException cex) {
             log.warn("Could not get the configuration properties", cex);
         }
 
-    }
-
-    public static Integer getInt(String property) {
-        init();
-        return configuration.getInt(property);
-    }
-
-    public static String get(String s) {
-        init();
-        return configuration.getString(s);
     }
 }
