@@ -25,7 +25,6 @@ public class F2ListenerTest {
         queueService.produceF2(command);
 
         File tempFile = File.createTempFile("log_test_", ".txt");
-        System.out.println(tempFile.getAbsolutePath());
         LogWriter logWriter = new LogWriter(tempFile.getAbsolutePath());
 
         Thread t = new Thread(new F2Listener(queueService, logWriter));

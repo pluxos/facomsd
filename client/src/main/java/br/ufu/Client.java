@@ -19,9 +19,6 @@ public class Client {
 
     public Client(String[] args) {
         userParameters = new UserParameters(args);
-    }
-
-    private void init() {
         socketClient = new SocketClient();
         scanner = new Scanner(System.in);
         clientCommandHandler = new ClientCommandHandler(getScanner(), getSocketClient());
@@ -44,7 +41,6 @@ public class Client {
     }
 
     public void start() throws IOException, InterruptedException {
-        init();
         getSocketClient().startConnection(getUserParameters().get(PROPERTY_SERVER_HOST),
                 getUserParameters().getInt(PROPERTY_SERVER_PORT));
         Thread t = new Thread(getClientCommandHandler());

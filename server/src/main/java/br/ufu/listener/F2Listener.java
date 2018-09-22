@@ -28,10 +28,17 @@ public class F2Listener extends FxListener {
         try {
             Command item = queueService.consumeF2();
             log.info("F2 Listener take command [{}]", item.getExecuteCommand());
+            if (commadIsRead(item)) {
+                return;
+            }
             logWriter.write(item.getExecuteCommand());
             logWriter.write(FILE_SEPARATOR);
         } catch (InterruptedException | IOException e) {
             throw new ListenerException(e);
         }
+    }
+
+    private boolean commadIsRead(Command item) {
+        return "READ".equals(item.getExecuteCommand().split(" ")[0]);
     }
 }

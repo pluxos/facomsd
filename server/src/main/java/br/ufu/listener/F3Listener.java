@@ -1,7 +1,6 @@
 package br.ufu.listener;
 
 import br.ufu.exception.InvalidCommandException;
-import br.ufu.exception.ListenerException;
 import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
@@ -31,9 +30,9 @@ public class F3Listener extends FxListener {
             item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s", response));
         } catch (InterruptedException | InvalidCommandException e) {
             if (item != null) {
-                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s", "Invalid command"));
+                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s - %s", "Invalid command ", e.getMessage()));
             }
-            throw new ListenerException(e);
+            log.error(e.getMessage(), e);
         }
     }
 }

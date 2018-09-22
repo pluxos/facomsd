@@ -65,6 +65,10 @@ public class ClientCommandHandler implements Runnable {
 
     }
 
+    public SocketClient getSocketClient() {
+        return socketClient;
+    }
+
     @Override
     public void run() {
         while (scanner.hasNext()) {
@@ -84,7 +88,7 @@ public class ClientCommandHandler implements Runnable {
 
     private void stopConnection() {
         try {
-            socketClient.stopConnection();
+            getSocketClient().stopConnection();
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
             throw new ClientCommandHandlerException(e);
@@ -93,7 +97,7 @@ public class ClientCommandHandler implements Runnable {
 
     private void sendMessage(String message) {
         try {
-            String response = socketClient.sendMessage(message);
+            String response = getSocketClient().sendMessage(message);
             log.info(response);
         } catch (IOException e) {
             log.warn(e.getMessage(), e);

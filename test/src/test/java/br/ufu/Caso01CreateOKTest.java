@@ -1,7 +1,6 @@
 package br.ufu;
 
-import br.ufu.repository.DatabaseException;
-import org.junit.Assert;
+import br.ufu.handler.ClientCommandHandler;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -16,15 +15,17 @@ import static java.math.BigInteger.ONE;
 import static java.nio.charset.Charset.defaultCharset;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
 
-public class Caso01DeleteTest {
+public class Caso01CreateOKTest {
 
-    @Test(expected = DatabaseException.class)
-    public void shouldDeleteItem() throws Exception {
+
+    @Test
+    public void shouldCreateItem() throws Exception {
 
         //Dado: Criei as variáveis
         File tempLogFile = File.createTempFile("test_", ".log");
-        String[] commands = getArgs(tempLogFile, 4463);
+        String[] commands = getArgs(tempLogFile, 4461);
 
         Server serverSpy = Mockito.spy(new Server(commands));
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -33,7 +34,6 @@ public class Caso01DeleteTest {
 
         List<String> inputs = new ArrayList<>();
         inputs.add("CREATE 1 I");
-        inputs.add("DELETE 1");
         inputs.add("sair");
 
         final int[] currentInput = {0};
@@ -43,6 +43,11 @@ public class Caso01DeleteTest {
         Mockito.when(clientSpy.getScanner()).thenReturn(mockScanner);
         Mockito.when(mockScanner.hasNext()).thenReturn(true);
         Mockito.when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> inputs.get(currentInput[0]++));
+
+        ClientCommandHandler clientCommandHandler = Mockito.spy(new ClientCommandHandler(clientSpy.getScanner(), clientSpy.getSocketClient()));
+
+        Mockito.when(clientSpy.getClientCommandHandler())
+                .thenReturn(clientCommandHandler);
 
 
         //Start das Threads
@@ -57,17 +62,14 @@ public class Caso01DeleteTest {
             tClient.join();
 
             //O Arquivo de Log deve ser escrito
-            Assert.assertEquals(
-                    splitCommads("CREATE 1 I", "DELETE 1"),
-                    readFileToString(tempLogFile, defaultCharset())
-            );
+            assertEquals(splitCommads("CREATE 1 I"), readFileToString(tempLogFile, defaultCharset()));
+
+            //No banco o registro deve estar salvo
+            assertEquals("I", serverSpy.getCrudRepository().read(ONE));
         });
 
 
         tServer.stop();
-
-        //Deverá jogar exceção, com valor inexistente
-        serverSpy.getCrudRepository().read(ONE);
     }
 
 }
