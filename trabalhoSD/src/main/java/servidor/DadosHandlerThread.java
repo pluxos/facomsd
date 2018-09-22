@@ -21,7 +21,6 @@ public class DadosHandlerThread extends Thread {
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
       
-      //System.out.println("lendo key" + (Long) in.readObject());
       Long key = (Long) in.readObject();
       System.out.println("key: " + key);
       
@@ -31,7 +30,7 @@ public class DadosHandlerThread extends Thread {
           out.writeObject(dados.get(key));
         }
         else {
-          out.writeObject(new Dados(-1, ""));
+          out.writeObject(new Dados(-1, "Erro"));
         }
         key = (Long) in.readObject();
       }
