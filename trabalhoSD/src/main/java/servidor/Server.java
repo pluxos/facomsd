@@ -1,21 +1,21 @@
 package servidor;
 
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 public class Server {
+	//static Map<BigInteger, String> dados ;
+	static Semaphore mutex = new Semaphore(1);
 
   public static void main(String[] args) {
     ServerSocket serverSocket = null;
-    Map<Long, Dados> dados = new HashMap<Long, Dados>();
+    //dados = new HashMap<BigInteger, String>();
     
-    Data.recovery(dados);
+    //Data.recovery(dados);
     try {
       serverSocket = new ServerSocket(9876);
       while (true) {
-        new DadosHandlerThread(serverSocket.accept(), dados).start();
+        new DadosHandlerThread(serverSocket.accept()).start();
       }
     } catch (Exception e) {
     }

@@ -1,17 +1,59 @@
 package servidor;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Data {
-	public static void recovery(Map<Long, Dados> dados) {
 
-		
+	static Map<BigInteger, String> dados = new HashMap<BigInteger, String>();
+	// static Semaphore mutex = new Semaphore(1);
 
-		dados.put(1L, new Dados(1, "Teste1"));
-		dados.put(2L, new Dados(2, "Teste2"));
-		dados.put(3L, new Dados(3, "Teste3"));
-		dados.put(4L, new Dados(4, "Teste4"));
-		
+	public static void recovery() {
+
+//		dados.put(1.0,  "Teste1");
+//		dados.put(2,  "Teste2");
+//		dados.put(3, "Teste3");
+//		dados.put(4, "Teste4");
+
+	}
+
+	private static boolean validaExistencia(BigInteger key) {
+		if (!dados.containsKey(key)) {
+			return false;
+		}
+		return true;
+	}
+
+	public static String create(BigInteger key, String value) {
+		if (dados.containsKey(key)) {
+			return "Key ja cadastrada";
+		}
+		dados.put(key, value);
+		return "Dados Criados com sucesso";
+	}
+
+	public static String read(BigInteger key) {
+		if (validaExistencia(key))
+			return dados.get(key);
+		else
+			return "Dados nao encontrados";
+	}
+
+	public static String update(BigInteger key, String value) {
+		if (validaExistencia(key)) {
+			dados.put(key, value);
+			return "Dados alterados com sucesso";
+		} else
+			return "Key nao encontrada";
+	}
+
+	public static String delete(BigInteger key) {
+		if (validaExistencia(key)) {
+			dados.remove(key);
+			return "key removida com sucesso";
+		} else
+			return "Key nao encontrada";
 	}
 
 }

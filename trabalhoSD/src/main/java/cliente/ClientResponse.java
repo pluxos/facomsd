@@ -18,8 +18,8 @@ public class ClientResponse implements Runnable {
 		try {
 			while (true) {
 
-				Dados resposta = (Dados) in.readObject();
-				System.out.println("Resposta:   " + resposta.getTexto());
+				String resposta = (String) in.readObject();
+				System.out.println(">>>>> " + resposta + "\n\n");
 				Client.mutex.release();
 
 			}

@@ -1,6 +1,5 @@
 package cliente;
 
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -9,7 +8,7 @@ public class ClientSend implements Runnable {
 	Socket socket;
 	Scanner s;
 	ObjectOutputStream out;
-	Long numero;
+	String input;
 	String menu;
 
 	public ClientSend(Socket socket, Scanner s, ObjectOutputStream out, String menu) {
@@ -24,14 +23,14 @@ public class ClientSend implements Runnable {
 	public void run() {
 
 		try {
-			while (true) {
+			while (!s.equals("exit")) {
 				
 				Client.mutex.acquire();
 				
 				System.out.println("Comandos Disponiveis:\n"+menu);
 				System.out.println("Digite o comando ");
-				numero = s.nextLong();
-				out.writeObject(numero);
+				input = s.nextLine();
+				out.writeObject(input);
 				
 			}
 

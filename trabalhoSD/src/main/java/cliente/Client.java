@@ -21,7 +21,8 @@ public class Client implements Runnable {
     }
   }
   
-  public void run() {
+  @SuppressWarnings("deprecation")
+public void run() {
     try {
     	Scanner s = new Scanner(System.in);
         Socket socket = new Socket("127.0.0.1", 9876);
@@ -35,6 +36,11 @@ public class Client implements Runnable {
         tRead.start();
         Thread tResponse = new Thread(new ClientResponse(socket, in));
         tResponse.start();
+        
+        if(!tRead.isAlive()) {
+        	Thread.sleep(5000);
+        	tResponse.stop();
+        }
         
         
 
