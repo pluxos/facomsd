@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace client
 {
@@ -6,7 +7,19 @@ namespace client
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            ClientSocket.StartClient("T-1000");
+            // Client c = new Client();
+            // new Thread(() =>
+            // {
+            // Console.WriteLine("Thread 1");
+            //     c.listenClient();
+            // }).Start();
+
+            // new Thread(() =>
+            // {
+            // Console.WriteLine("Thread 2");
+                
+            // }).Start();
         }
     }
 }
