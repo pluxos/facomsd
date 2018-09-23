@@ -1,4 +1,4 @@
-package servidor;
+package servidor.command;
 
 import java.math.BigInteger;
 

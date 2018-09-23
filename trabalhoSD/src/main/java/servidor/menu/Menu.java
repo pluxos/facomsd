@@ -1,4 +1,4 @@
-package servidor;
+package servidor.menu;
 
 public class Menu {
 
