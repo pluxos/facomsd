@@ -6,17 +6,23 @@ import java.net.Socket;
 import servidor.Dados;
 
 public class ClientResponse implements Runnable {
-	Socket socket;
-	ObjectInputStream in;
+	// private Socket socket;
+	private ObjectInputStream in;
+	private boolean running;
 
-	public ClientResponse(Socket socket, ObjectInputStream in) {
-		this.socket = socket;
+	public ClientResponse(ObjectInputStream in) {
+		// this.socket = socket;
 		this.in = in;
+		this.running = true;
+	}
+
+	public void finalizar() {
+		this.running = false;
 	}
 
 	public void run() {
 		try {
-			while (true) {
+			while (this.running) {
 
 				String resposta = (String) in.readObject();
 				System.out.println(">>>>> " + resposta + "\n\n");

@@ -8,9 +8,8 @@ import java.util.Map;
 
 public class DadosHandlerThread extends Thread {
 	private Socket socket = null;
-	private String comando, value;
-	private BigInteger key;
-	int tipo;
+	private String comando;
+	private int tipo;
 
 	// Map<BigInteger, String> dados;
 
@@ -32,51 +31,23 @@ public class DadosHandlerThread extends Thread {
 			while (true) {
 				comando = (String) in.readObject();
 				System.out.println("Executando: " + comando);
-				String stringtipo = comando.split(" ")[0];
-				stringtipo.toLowerCase();
-				tipo = -1;
-				if (stringtipo.equals("create")) {
-					tipo = 1;
-				} else {
-					if (stringtipo.equals("read")) {
-						tipo = 2;
-					} else {
-						if (stringtipo.equals("update")) {
-							tipo = 3;
-						} else {
-							if (stringtipo.equals("delete")) {
-								tipo = 4;
-							}
-						}
-					}
-				}
-
-				if (stringtipo.equals("1") || stringtipo.equals("2") || stringtipo.equals("3")
-						|| stringtipo.equals("4")) {
-					tipo = Integer.parseInt(stringtipo);
-				}
+				tipo = ComandQuery.getTipoComando(comando);
 
 				switch (tipo) {
 				case 1:// create
-					key = new BigInteger((comando.split(":")[0]).split(" ")[1]);
-					value = comando.split(":")[1];
-					out.writeObject(Data.create(key, value));
+					out.writeObject(Data.create(ComandQuery.getKey(comando), ComandQuery.getValue(comando)));
 					break;
 
 				case 2:// read
-					key = new BigInteger(comando.split(" ")[1]);
-					out.writeObject(Data.read(key));
+					out.writeObject(Data.read(ComandQuery.getKey(comando)));
 					break;
 
 				case 3:// update
-					key = new BigInteger((comando.split(":")[0]).split(" ")[1]);
-					value = comando.split(":")[1];
-					out.writeObject(Data.update(key, value));
+					out.writeObject(Data.update(ComandQuery.getKey(comando), ComandQuery.getValue(comando)));
 					break;
 
 				case 4:// delete
-					key = new BigInteger(comando.split(" ")[1]);
-					out.writeObject(Data.delete(key));
+					out.writeObject(Data.delete(ComandQuery.getKey(comando)));
 					break;
 
 				default:
