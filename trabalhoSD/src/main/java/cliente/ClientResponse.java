@@ -1,9 +1,6 @@
 package cliente;
 
 import java.io.ObjectInputStream;
-import java.net.Socket;
-
-import servidor.Dados;
 
 public class ClientResponse implements Runnable {
 	// private Socket socket;

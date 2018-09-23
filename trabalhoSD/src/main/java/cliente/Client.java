@@ -6,21 +6,10 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
-import servidor.Dados;
-
 public class Client implements Runnable {
 
 	static Semaphore mutex = new Semaphore(1);
 	ClientResponse clientResponse;
-
-	public static void main(String args[]) {
-		try {
-			Thread cliente = new Thread(new Client());
-			cliente.start();
-			cliente.join();
-		} catch (Exception e) {
-		}
-	}
 
 	public void run() {
 		try {
@@ -31,24 +20,21 @@ public class Client implements Runnable {
 			String menu = (String) in.readObject();
 			Thread tRead = new Thread(new ClientSend(socket, s, out, menu));
 			tRead.start();
-			clientResponse = new ClientResponse( in);
+			clientResponse = new ClientResponse(in);
 			Thread tResponse = new Thread(clientResponse);
 			tResponse.start();
+
 			while (true) {
 				if (!tRead.isAlive()) {
-					
 					Thread.sleep(5000);
 					clientResponse.finalizar();
-					System.out.println("finalizando");
-					//tResponse.stop();
-					tResponse.join();
-					
 					break;
 				}
 
 			}
-			
+
 			System.out.println("ClientResponse finalizado");
+			System.exit(0);
 		} catch (Exception e) {
 		}
 	}

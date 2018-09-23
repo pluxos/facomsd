@@ -19,25 +19,24 @@ public class ClientSend implements Runnable {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void run() {
 
 		try {
-			while (!input.equals("exit")) {
+			while (!input.equals("sair")) {
 
 				Client.mutex.acquire();
 
 				System.out.println("Comandos Disponiveis:\n" + menu);
-				System.out.println("Digite o comando ");
+				System.out.println("Digite o comando ou exit para sair ");
 				input = s.nextLine();
-				if (input.toLowerCase().equals("exit"))
+				if (input.toLowerCase().equals("sair"))
 					break;
 				out.writeObject(input);
 
 			}
 			
 			System.out.println("ClientSend finalizado");
-			Thread.currentThread().stop();
+			return;
 
 		} catch (Exception e) {
 			// TODO: handle exception

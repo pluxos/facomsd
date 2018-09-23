@@ -2,9 +2,7 @@ package servidor;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.net.Socket;
-import java.util.Map;
 
 public class DadosHandlerThread extends Thread {
 	private Socket socket = null;
