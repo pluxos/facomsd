@@ -1,5 +1,6 @@
 package br.ufu;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -7,9 +8,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import static br.ufu.TestUtil.getArgs;
 import static br.ufu.TestUtil.getThread;
@@ -17,8 +17,10 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Caso02StateTest extends BaseTest {
+public class Caso02OrderTest extends BaseTest {
+
     @Test
+    @Ignore
     public void shouldTestRecover() throws Exception {
 
         //Dado: Criei as variáveis
@@ -30,13 +32,7 @@ public class Caso02StateTest extends BaseTest {
 
         Scanner mockScanner = Mockito.mock(Scanner.class);
 
-        List<String> inputs = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
-            inputs.add(String.format("CREATE %s I%s", i, i));
-        }
-        inputs.add("sair");
-
-        final int[] currentInput = {0};
+        ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(50);
 
         //Mockei com spy para simular o input do usuario
         //Também poderei usar estas classes depois
@@ -44,7 +40,7 @@ public class Caso02StateTest extends BaseTest {
         when(mockScanner.hasNext()).thenReturn(true);
         when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
             Thread.sleep(500);
-            return inputs.get(currentInput[0]++);
+            return blockingQueue.take();
         });
 
         //Start das Threads
@@ -54,34 +50,19 @@ public class Caso02StateTest extends BaseTest {
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
             tClient.start();
+            blockingQueue.offer("CREATE 1 1");
 
             tClient.join();
         });
 
 
-        tServer.stop();
         //Restart server
-        commands = getArgs(tempLogFile, 4469);
-
-        Server newServerSpy = Mockito.spy(new Server(commands));
-        Client newClientSpy = Mockito.spy(new Client(commands));
-
-        when(newClientSpy.getScanner()).thenReturn(mockScanner);
-
-        //Start das Threads
-        Thread newTServer = getThread(newServerSpy);
-        newTServer.start();
-
-        inputs.clear();
-        currentInput[0] = 0;
-
-        for (int i = 1; i < 6; i++) {
-            inputs.add(String.format("READ %s", i));
-        }
-        inputs.add("sair");
+        tServer.stop();
+        tServer = getThread(serverSpy);
+        tServer.start();
 
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
-            Thread tClient = getThread(newClientSpy);
+            Thread tClient = getThread(clientSpy);
             tClient.start();
             tClient.join();
             verifyMessage("Command RESPONSE: READ OK - I1");

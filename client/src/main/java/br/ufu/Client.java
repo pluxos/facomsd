@@ -21,7 +21,6 @@ public class Client {
         userParameters = new UserParameters(args);
         socketClient = new SocketClient();
         scanner = new Scanner(System.in);
-        clientCommandHandler = new ClientCommandHandler(getScanner(), getSocketClient());
     }
 
     public SocketClient getSocketClient() {
@@ -41,6 +40,7 @@ public class Client {
     }
 
     public void start() throws IOException, InterruptedException {
+        this.clientCommandHandler = new ClientCommandHandler(getScanner(), getSocketClient());
         getSocketClient().startConnection(getUserParameters().get(PROPERTY_SERVER_HOST),
                 getUserParameters().getInt(PROPERTY_SERVER_PORT));
         Thread t = new Thread(getClientCommandHandler());

@@ -12,6 +12,7 @@ import br.ufu.util.UserParameters;
 import br.ufu.writer.LogWriter;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static br.ufu.util.Constants.PROPERTY_LOG_PATH;
 import static br.ufu.util.Constants.PROPERTY_SERVER_PORT;
@@ -33,7 +34,7 @@ public class Server {
         userParameters = new UserParameters(args);
     }
 
-    private void init() throws FileNotFoundException {
+    private void init() throws IOException {
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
@@ -98,7 +99,7 @@ public class Server {
         f3ListenerThread.join();
     }
 
-    public void start() throws InterruptedException, FileNotFoundException {
+    public void start() throws InterruptedException, IOException {
         init();
         getStartupRecoverService().recover();
         startListeners();

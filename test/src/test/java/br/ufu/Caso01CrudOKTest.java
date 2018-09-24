@@ -53,12 +53,6 @@ public class Caso01CrudOKTest extends BaseTest {
             return inputs.get(currentInput[0]++);
         });
 
-        ClientCommandHandler clientCommandHandler = Mockito.spy(new ClientCommandHandler(clientSpy.getScanner(), clientSpy.getSocketClient()));
-
-        when(clientSpy.getClientCommandHandler())
-                .thenReturn(clientCommandHandler);
-
-
         //Start das Threads
         Thread tServer = getThread(serverSpy);
         tServer.start();
