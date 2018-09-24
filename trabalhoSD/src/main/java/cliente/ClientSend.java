@@ -27,7 +27,7 @@ public class ClientSend implements Runnable {
 				Client.mutex.acquire();
 
 				System.out.println("Comandos Disponiveis:\n" + menu);
-				System.out.println("Digite o comando ou exit para sair ");
+				System.out.println("Digite o comando ou 'sair' para sair ");
 				input = s.nextLine();
 				if (input.toLowerCase().equals("sair"))
 					break;
