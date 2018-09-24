@@ -12,14 +12,16 @@ public class QueueF1 extends Queue implements Runnable {
 	public void run() {
 
 		try {
+		  System.out.println("Iniciando F1");
 			while (true) {
 				ClientData elemento = super.queue.consumeF1();
-				System.out.println("copiando para F2 e F3");
 				super.queue.produceF2(elemento);
 				super.queue.produceF3(elemento);
+				System.out.println("consumido de F1 e copiando para F2 e F3");
 			}
+			
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("Erro, f1 finalizada");
 		}
 
 	}

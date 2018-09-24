@@ -11,13 +11,14 @@ public class QueueF2 extends Queue implements Runnable {
 	@Override
 	public void run() {
 		try {
+		  System.out.println("Iniciando F2");
 			while (true) {
 				ClientData elemento = super.queue.consumeF2();
 				System.out.println("Escrevendo no log");
 				//escrever elemento log
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+		  System.out.println("Erro, f2 finalizada");
 		}
 	}
 
