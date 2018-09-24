@@ -12,15 +12,18 @@ public class Client implements Runnable {
 
 	static Semaphore mutex = new Semaphore(1);
 	ClientResponse clientResponse;
+	CommandHandler commandHandler;
 
 	public void run() {
 		try {
 			Scanner s = new Scanner(System.in);
-			Socket socket = new Socket("127.0.0.1", Constant.SERVER_PORT);
+			
+			Socket socket = new Socket(Constant.HOST, Constant.SERVER_PORT);
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 			String menu = (String) in.readObject();
-			Thread tRead = new Thread(new ClientSend(socket, s, out, menu));
+			commandHandler = new CommandHandler(menu);
+			Thread tRead = new Thread(new ClientSend(socket, s, out, menu, commandHandler));
 			tRead.start();
 			clientResponse = new ClientResponse(in);
 			Thread tResponse = new Thread(clientResponse);

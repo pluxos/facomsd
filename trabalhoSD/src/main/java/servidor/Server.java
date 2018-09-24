@@ -13,8 +13,6 @@ public class Server {
 	private QueueCommand queueCommand = null;
 	private Queue queue = null;
 	
-	// QueueCommand queue = new QueueCommand();
-
 	public void iniciar() {
 		try {
 			serverSocket = new ServerSocket(Constant.SERVER_PORT);

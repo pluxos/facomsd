@@ -32,10 +32,13 @@ public class HandlerThreadServer extends Thread {
 			while (true) {
 				comando = (String) in.readObject();
 				System.out.println("Recebido: " + comando);
-				clientComand.setComando(comando);
-				clientComand.setOut(out);
-				queueCommand.produceF1(clientComand);
-
+				if (HandlerCommandClient.checkComand(comando)) {
+					clientComand.setComando(comando);
+					clientComand.setOut(out);
+					queueCommand.produceF1(clientComand);
+				} else {
+					out.writeObject("Comando incorreto!");
+				}
 			}
 //			out.close();
 //			in.close();

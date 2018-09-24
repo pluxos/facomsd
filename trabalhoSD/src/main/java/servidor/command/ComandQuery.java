@@ -11,7 +11,7 @@ public class ComandQuery {
 	 */
 	public static int getTipoComando(String comando) {
 		int tipo = -1;
-		String stringtipo = comando.split(" ")[0];
+		String stringtipo = comando.split(" ")[0].toLowerCase();
 		stringtipo.toLowerCase();
 		tipo = -1;
 		if (stringtipo.equals("create")) {
@@ -36,18 +36,23 @@ public class ComandQuery {
 		return tipo;
 	}
 
-	public static BigInteger getKey(String comando) {
+	public static BigInteger getKey(String comando) throws Exception {
 
 		if (comando.contains(":")) {
 			return new BigInteger((comando.split(":")[0]).split(" ")[1]);
 		} else {
-			return new BigInteger(comando.split(" ")[1]);
+			if (comando.split(" ").length > 1)
+				return new BigInteger(comando.split(" ")[1]);
 		}
-
+		throw new Exception("Key vazia");
 	}
 
-	public static String getValue(String comando) {
-		return comando.split(":")[1];
+	public static String getValue(String comando) throws Exception {
+		// comando.indexOf(":")
+		if (comando.contains(":")) {
+			return comando.substring(comando.indexOf(":") + 1, comando.length());
+		}
+		throw new Exception("Formato invalido");
 
 	}
 
