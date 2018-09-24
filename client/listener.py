@@ -17,7 +17,8 @@ class Communication(threading.Thread, Connection):
             msg = self.getResponse()
             if msg is not None and len(msg) == 0:
                 self.reconnect()
-            print(msg)
+            if msg is not None:
+                print(msg)
         self.connection.close()
         print("Stop Thread of Communication in ", datetime.now())
 

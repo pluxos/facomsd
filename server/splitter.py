@@ -18,9 +18,11 @@ class Splitter(AsyncService):
 
         while not self.stopEvent.isSet():
             try:
-                request = self.requests.get(True, 1)
-                self.toPersist.put(request)
-                self.toLog.put(request)
+                request, connection = self.requests.get(True, 1)
+
+                self.toPersist.put((request, connection))
+                if request.split()[0].upper() != "READ":
+                    self.toLog.put(request)
             except Empty:
                 continue
         print("Exiting Splitter")

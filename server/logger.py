@@ -15,6 +15,7 @@ class Logger(AsyncService):
             try:
                 request = self.toLog.get(True, 1)
                 with open(self.filename, 'a') as logFile:
+                    request = request.replace('\n', '')
                     logFile.write(request + '\n')
             except Empty:
                 continue

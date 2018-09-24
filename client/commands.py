@@ -28,6 +28,9 @@ class Commands(threading.Thread, Connection):
         while True:
             try:
                 msg = input(menu).split()
+                if not len(msg):
+                    print("Choose one command!")
+                    continue
                 if msg[0] == "exit":
                     break
                 else:
@@ -80,7 +83,6 @@ class Commands(threading.Thread, Connection):
         self.sendRequest(('update ' + args[0] + " " + args[1]).encode())
 
     def delete(self, id):
-        print(id)
         if len(id) > 1:
             raise Exception("invalid arguments! (DELETE ID)")
         try:

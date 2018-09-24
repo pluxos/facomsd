@@ -1,5 +1,6 @@
 from queue import Queue
 
+from reloadDatabase import ReloadDatabase
 from persistent import Persistent
 from listener   import Listener
 from splitter   import Splitter
@@ -24,6 +25,10 @@ signal.signal(signal.SIGINT, stop)
 requests = Queue()
 waitLog = Queue()
 waitPersist = Queue()
+
+
+loadDatabase = ReloadDatabase(requests)
+loadDatabase.load()
 
 
 splitter = Splitter(requests, waitLog, waitPersist)

@@ -22,9 +22,8 @@ class Receptor(AsyncService):
                     elif len(msg) == 0:
                         break
                     else:
-                        self.connection.send("ok".encode())
                         buffer += msg.decode()
-                        self.requests.put(buffer)
+                        self.requests.put((buffer, self.connection))
                         buffer = ""
                 except socket.timeout:
                     continue
