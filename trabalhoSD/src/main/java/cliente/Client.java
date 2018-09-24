@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
+import utils.Constant;
+
 public class Client implements Runnable {
 
 	static Semaphore mutex = new Semaphore(1);
@@ -14,7 +16,7 @@ public class Client implements Runnable {
 	public void run() {
 		try {
 			Scanner s = new Scanner(System.in);
-			Socket socket = new Socket("127.0.0.1", 9876);
+			Socket socket = new Socket("127.0.0.1", Constant.SERVER_PORT);
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 			String menu = (String) in.readObject();

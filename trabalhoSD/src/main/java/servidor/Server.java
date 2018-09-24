@@ -4,6 +4,7 @@ import java.net.ServerSocket;
 
 import servidor.queue.Queue;
 import servidor.queue.QueueCommand;
+import utils.Constant;
 
 public class Server {
 	// static Semaphore mutex = new Semaphore(1);
@@ -14,7 +15,7 @@ public class Server {
 
 	public void iniciar() {
 		try {
-			serverSocket = new ServerSocket(9876);
+			serverSocket = new ServerSocket(Constant.SERVER_PORT);
 			queueCommand = new QueueCommand();
 			queue = new Queue(queueCommand);
 			queue.run();
