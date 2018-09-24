@@ -2,9 +2,9 @@ from time import sleep
 import socket
 import configparser
 
-
+import os
 CONFIG = configparser.ConfigParser()
-CONFIG.read('../config.py')
+CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 
 
 class Socket:

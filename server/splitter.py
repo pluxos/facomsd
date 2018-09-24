@@ -21,9 +21,10 @@ class Splitter(AsyncService):
                 request, connection = self.requests.get(True, 1)
 
                 self.toPersist.put((request, connection))
-                if request.split()[0].upper() != "READ":
+                if request.split()[0].upper() != "READ" and connection is not None:
                     self.toLog.put(request)
             except Empty:
                 continue
         print("Exiting Splitter")
         self.stopEvent.clear()
+        self.stopFinish.set()

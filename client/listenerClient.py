@@ -1,9 +1,10 @@
 import threading
+import socket
 from datetime import datetime
 from connection import Connection
 
 
-class Communication(threading.Thread, Connection):
+class Listener(threading.Thread, Connection):
 
     def __init__(self, socket):
         Connection.__init__(self, socket)
@@ -15,6 +16,7 @@ class Communication(threading.Thread, Connection):
 
         while not self.stopRequest.isSet():
             msg = self.getResponse()
+
             if msg is not None and len(msg) == 0:
                 self.reconnect()
             if msg is not None:
@@ -24,5 +26,5 @@ class Communication(threading.Thread, Connection):
 
     def join(self, timeout=None):
         print("Request Stop in ", datetime.now())
-        super(Communication, self).join(timeout)
+        super(Listener, self).join(timeout)
         self.stopRequest.set()

@@ -2,9 +2,9 @@ from time import sleep
 from mysocket import Socket
 import socket
 import configparser
-
+import os
 CONFIG = configparser.ConfigParser()
-CONFIG.read('../config.py')
+CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 
 class Connection:
 
@@ -12,7 +12,14 @@ class Connection:
         self.connection = socket
 
     def sendRequest(self, msg):
-        self.connection.socket.send(msg)
+        send = False
+        while not send:
+            try:
+                self.connection.socket.send(msg)
+                send = True
+            except socket.error:
+                print("Retrying send " + msg.decode())
+                sleep(0.5)
 
     def getResponse(self):
         buffer = ""
@@ -21,14 +28,15 @@ class Connection:
         while True:
             try:
                 msg = self.connection.socket.recv(BUFFERSIZE)
+                if len(msg) == BUFFERSIZE:
+                    buffer += msg.decode()
+                else:
+                    buffer += msg.decode()
+                    break
             except socket.timeout:
                 return None
-            if len(msg) == BUFFERSIZE:
-                buffer += msg.decode()
-            else:
-                buffer += msg.decode()
-                break
-
+            except socket.error:
+                self.reconnect()
         return buffer
 
     def reconnect(self):

@@ -52,7 +52,7 @@ class Commands(threading.Thread, Connection):
         elif msg[0].upper() == "DELETE":
             self.delete(msg[1:])
         else:
-            print("Invalid Command!")
+            print("Invalid Command!" +  " ---> ", msg)
 
     def read(self, id):
         if len(id) > 1:

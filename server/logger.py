@@ -22,4 +22,4 @@ class Logger(AsyncService):
 
         print("Exiting logger")
         self.stopEvent.clear()
-        self.logFile.close()
+        self.stopFinish.set()

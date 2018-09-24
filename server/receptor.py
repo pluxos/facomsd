@@ -11,7 +11,7 @@ class Receptor(AsyncService):
         self.requests = requests
 
     def run(self):
-        BUFFERSIZE = 1024
+        BUFFERSIZE = 4096
         buffer = ""
         try:
             while not self.stopEvent.isSet():
@@ -32,3 +32,4 @@ class Receptor(AsyncService):
             print("Close Connection with ", self.address)
         print("Exiting Receptor")
         self.stopEvent.clear()
+        self.stopFinish.set()

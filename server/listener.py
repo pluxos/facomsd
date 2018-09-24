@@ -4,9 +4,9 @@ from asyncService import AsyncService
 import socket
 import configparser
 
-
+import os
 CONFIG = configparser.ConfigParser()
-CONFIG.read('../config.py')
+CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 
 
 class Listener(AsyncService):
@@ -15,9 +15,9 @@ class Listener(AsyncService):
         AsyncService.__init__(self)
         self.socket = socket.socket()
 
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.host = socket.gethostname()
         self.port = CONFIG.getint('all', 'PORT')
-
 
         self.socket.bind((self.host, self.port))
         self.socket.listen(1)
@@ -48,3 +48,4 @@ class Listener(AsyncService):
             self.socket.close()
         print("Exiting Listener")
         self.stopEvent.clear()
+        self.stopFinish.set()

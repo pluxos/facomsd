@@ -31,14 +31,13 @@ class Persistent(AsyncService):
 
             except Empty:
                 continue
-        for k,v in self.data:
-            print(k + ": " + v)
+        self.stopFinish.set()
 
     def read(self, request, connection):
         r = request.split()
         if connection is not None:
             if self.data.get(r[1]) is not None:
-                connection.send((r[1] + ": " + self.data[r[1]]).encode())
+                connection.send(("OK - " + r[1] + ": " + self.data[r[1]]).encode())
             else:
                 connection.send(("nOK -" + r[1] + " not found!").encode())
 
