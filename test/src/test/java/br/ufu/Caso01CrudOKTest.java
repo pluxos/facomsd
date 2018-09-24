@@ -20,14 +20,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Caso01ReadNOKTest extends NOKBaseTest {
+public class Caso01CrudOKTest extends BaseTest {
 
     @Test
-    public void shouldCreateItem() throws Exception {
+    public void shoulTestCrudOK() throws Exception {
 
         //Dado: Criei as variáveis
         File tempLogFile = File.createTempFile("test_", ".log");
-        String[] commands = getArgs(tempLogFile, 4466);
+        String[] commands = getArgs(tempLogFile, 4467);
 
         Server serverSpy = Mockito.spy(new Server(commands));
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -35,7 +35,11 @@ public class Caso01ReadNOKTest extends NOKBaseTest {
         Scanner mockScanner = Mockito.mock(Scanner.class);
 
         List<String> inputs = new ArrayList<>();
+        inputs.add("CREATE 1 I");
         inputs.add("READ 1");
+        inputs.add("UPDATE 1 IU");
+        inputs.add("READ 1");
+        inputs.add("DELETE 1");
         inputs.add("sair");
 
         final int[] currentInput = {0};
@@ -59,18 +63,31 @@ public class Caso01ReadNOKTest extends NOKBaseTest {
         Thread tServer = getThread(serverSpy);
         tServer.start();
 
+        Thread.sleep(500);
+
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
             tClient.start();
 
             tClient.join();
 
-            //O Arquivo de Log deve ser escrito
-            assertEquals("", readFileToString(tempLogFile, defaultCharset()));
+//        O Arquivo de Log deve ser escrito
+            String logCommands = splitCommads(
+                    "CREATE 1 I",
+                    "UPDATE 1 IU",
+                    "DELETE 1");
 
-            verifyMessage("Command RESPONSE: Invalid command  - NOK - ID inexistente na base");
+            assertEquals(logCommands, readFileToString(tempLogFile, defaultCharset()));
+
+            //As seguintes repostas deverão ser logadas
+            verifyMessage("Command RESPONSE: CREATE OK - I");
+            verifyMessage("Command RESPONSE: READ OK - I");
+            verifyMessage("Command RESPONSE: UPDATE OK - IU");
+            verifyMessage("Command RESPONSE: READ OK - IU");
+            verifyMessage("Command RESPONSE: DELETE OK - IU");
 
         });
+
 
         tServer.stop();
     }

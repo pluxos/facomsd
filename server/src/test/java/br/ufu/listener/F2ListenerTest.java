@@ -14,14 +14,24 @@ import static org.junit.Assert.assertEquals;
 
 public class F2ListenerTest {
 
-    private static final String ITEM = "READ 1";
+    private static final String ITEM = "CREATE 1";
     private static final String SEPARATOR = "\n";
+    private static final String ITEM_READ = "READ 1";
 
     @Test
     public void shouldListenToF2AndWriteToLog() throws IOException {
+        testF2(ITEM, ITEM + SEPARATOR);
+    }
 
+
+    @Test
+    public void shouldListenToF2AndDontWriteToLog() throws IOException {
+        testF2(ITEM_READ, "");
+    }
+
+    private void testF2(String itemRead, String logContent) throws IOException {
         QueueService queueService = new QueueService();
-        Command command = new Command(ITEM, null);
+        Command command = new Command(itemRead, null);
         queueService.produceF2(command);
 
         File tempFile = File.createTempFile("log_test_", ".txt");
@@ -31,9 +41,8 @@ public class F2ListenerTest {
         t.start();
 
         await().untilAsserted(() -> {
-            assertEquals(ITEM + SEPARATOR, readFileToString(tempFile));
+            assertEquals(logContent, readFileToString(tempFile));
         });
-
     }
 
 }

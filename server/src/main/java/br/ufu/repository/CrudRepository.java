@@ -10,7 +10,7 @@ public class CrudRepository {
 
     public String create(BigInteger id, String value) throws DatabaseException {
         if (database.containsKey(id)) {
-            throw new DatabaseException("ID já cadastrado na base");
+            throw new DatabaseException("ID " + id + " já cadastrado na base");
         }
         database.put(id, value);
         return value;
@@ -34,7 +34,7 @@ public class CrudRepository {
 
     private void checkExistence(BigInteger id) throws DatabaseException {
         if (!database.containsKey(id)) {
-            throw new DatabaseException("ID inexistente na base");
+            throw new DatabaseException("ID " + id + " inexistente na base");
         }
     }
 

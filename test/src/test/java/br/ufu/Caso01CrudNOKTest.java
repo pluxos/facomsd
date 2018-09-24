@@ -13,23 +13,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import static br.ufu.TestUtil.*;
-import static java.math.BigInteger.ONE;
 import static java.nio.charset.Charset.defaultCharset;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Caso01CreateNOKTest extends NOKBaseTest {
+public class Caso01CrudNOKTest extends BaseTest {
 
     @Test
-    public void shouldCreateItem() throws Exception {
+    public void shouldTestCrudNOK() throws Exception {
 
         //Dado: Criei as variáveis
         File tempLogFile = File.createTempFile("test_", ".log");
-        String[] commands = getArgs(tempLogFile, 4464);
+        String[] commands = getArgs(tempLogFile, 4466);
 
         Server serverSpy = Mockito.spy(new Server(commands));
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -39,6 +37,11 @@ public class Caso01CreateNOKTest extends NOKBaseTest {
         List<String> inputs = new ArrayList<>();
         inputs.add("CREATE 1 I");
         inputs.add("CREATE 1 I");
+        inputs.add("READ 2");
+        inputs.add("UPDATE 2 J");
+        inputs.add("CREATE 2 J");
+        inputs.add("READ 2");
+        inputs.add("DELETE 2");
         inputs.add("sair");
 
         final int[] currentInput = {0};
@@ -62,6 +65,7 @@ public class Caso01CreateNOKTest extends NOKBaseTest {
         Thread tServer = getThread(serverSpy);
         tServer.start();
 
+        Thread.sleep(500);
 
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
@@ -69,20 +73,29 @@ public class Caso01CreateNOKTest extends NOKBaseTest {
 
             tClient.join();
 
-            //O Arquivo de Log deve ser escrito
-            assertEquals(splitCommads("CREATE 1 I", "CREATE 1 I"), readFileToString(tempLogFile, defaultCharset()));
+//        O Arquivo de Log deve ser escrito
+            String logCommands = splitCommads(
+                    "CREATE 1 I",
+                    "CREATE 1 I",
+                    "UPDATE 2 J",
+                    "CREATE 2 J",
+                    "DELETE 2");
 
-            verifyMessage("Command RESPONSE: Invalid command  - NOK - ID já cadastrado na base");
+            assertEquals(logCommands, readFileToString(tempLogFile, defaultCharset()));
 
-            //No banco o registro deve estar salvo
-            assertEquals("I", serverSpy.getCrudRepository().read(ONE));
+            verifyMessage("Command RESPONSE: CREATE OK - I");
+            verifyMessage("Command RESPONSE: CREATE NOK - ID 1 já cadastrado na base");
+            verifyMessage("Command RESPONSE: READ NOK - ID 2 inexistente na base");
+            verifyMessage("Command RESPONSE: UPDATE NOK - ID 2 inexistente na base");
+            verifyMessage("Command RESPONSE: CREATE OK - J");
+            verifyMessage("Command RESPONSE: READ OK - J");
+            verifyMessage("Command RESPONSE: DELETE OK - J");
+
         });
 
 
         tServer.stop();
     }
-
-
 
 
 }

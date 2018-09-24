@@ -34,10 +34,10 @@ public class CrudService {
                 case DELETE:
                     return delete(commandSplited);
                 default:
-                    throw new InvalidCommandException("NOK - " + command + " is not a valid command");
+                    throw new InvalidCommandException(command + " is not a valid command");
             }
         } catch (DatabaseException e) {
-            throw new InvalidCommandException("NOK - " + e.getMessage());
+            throw new InvalidCommandException(e.getMessage());
         }
     }
 

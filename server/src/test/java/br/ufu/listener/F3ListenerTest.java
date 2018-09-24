@@ -38,21 +38,4 @@ public class F3ListenerTest {
 
     }
 
-
-    @Test(expected = ListenerException.class)
-    public void shouldThrowListenerExceptionOnInvalidCommand() throws InvalidCommandException {
-
-        //GIVEN
-        QueueService queueService = new QueueService();
-        CrudService crudService = Mockito.mock(CrudService.class);
-        Command command = new Command(ITEM, Mockito.mock(ClientHandler.class));
-        queueService.produceF3(command);
-
-        when(crudService.execute(anyString())).thenThrow(InvalidCommandException.class);
-
-        F3Listener f3Listener = new F3Listener(queueService, crudService);
-        f3Listener.listen();
-
-    }
-
 }

@@ -16,12 +16,12 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-public class NOKBaseTest {
+public class BaseTest {
 
     @Mock
     private Appender mockAppender;
 
-    private List<LogEvent> logEvents = new ArrayList<>();
+    private List<String> logEvents = new ArrayList<>();
 
     private Logger logger;
 
@@ -36,7 +36,7 @@ public class NOKBaseTest {
 
 
         Mockito.doAnswer(invocation -> {
-            logEvents.add(invocation.getArgument(0));
+            logEvents.add(((LogEvent) invocation.getArgument(0)).getMessage().getFormattedMessage());
             return null;
         }).when(mockAppender).append(Mockito.any());
 
@@ -48,7 +48,7 @@ public class NOKBaseTest {
     }
 
     protected void verifyMessage(String message) {
-        assertTrue(logEvents.stream().anyMatch(m -> m.getMessage().getFormattedMessage().equals(message)));
+        assertTrue(logEvents.stream().anyMatch(m -> m.equals(message)));
     }
 
 }

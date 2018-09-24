@@ -4,6 +4,7 @@ import br.ufu.exception.InvalidCommandException;
 import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
+import br.ufu.util.CommandUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,14 +24,16 @@ public class F3Listener extends FxListener {
     @Override
     protected void listen() {
         Command item = null;
+        String action = null;
         try {
             item = queueService.consumeF3();
+            action = CommandUtil.getAction(item.getExecuteCommand());
             log.info("F3 Listener take command [{}]", item.getExecuteCommand());
             String response = crudService.execute(item.getExecuteCommand());
-            item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s", response));
+            item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "OK", response));
         } catch (InterruptedException | InvalidCommandException e) {
             if (item != null) {
-                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s - %s", "Invalid command ", e.getMessage()));
+                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "NOK", e.getMessage()));
             }
             log.error(e.getMessage(), e);
         }
