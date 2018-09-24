@@ -1,24 +1,28 @@
+from time import sleep
+from mysocket import Socket
 import socket
 import configparser
+
+CONFIG = configparser.ConfigParser()
+CONFIG.read('../config.py')
 
 class Connection:
 
     def __init__(self, socket):
-        self.socket = socket
+        self.connection = socket
 
     def sendRequest(self, msg):
-        self.socket.send(msg)
+        self.connection.socket.send(msg)
 
     def getResponse(self):
         buffer = ""
         BUFFERSIZE = 1024
-        self.socket.settimeout(5)
+        self.connection.socket.settimeout(5)
         while True:
-            print("read Socket!")
             try:
-                msg = self.socket.recv(BUFFERSIZE)
+                msg = self.connection.socket.recv(BUFFERSIZE)
             except socket.timeout:
-                break
+                return None
             if len(msg) == BUFFERSIZE:
                 buffer += msg.decode()
             else:
@@ -27,11 +31,10 @@ class Connection:
 
         return buffer
 
+    def reconnect(self):
+        self.connection.reconnect()
+
 
 def createSocket():
-    CONFIG = configparser.ConfigParser()
-    CONFIG.read('../config.py')
-
-    s = socket.socket()
-    s.connect((CONFIG.get('all', 'HOST'), CONFIG.getint('all', 'PORT')))
+    s = Socket()
     return s

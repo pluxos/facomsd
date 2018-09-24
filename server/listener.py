@@ -1,4 +1,6 @@
-from Receptor import Receptor
+from receptor import Receptor
+from asyncService import AsyncService
+
 import socket
 import configparser
 
@@ -7,13 +9,15 @@ CONFIG = configparser.ConfigParser()
 CONFIG.read('../config.py')
 
 
-class Listener:
+class Listener(AsyncService):
 
     def __init__(self, requests):
+        AsyncService.__init__(self)
         self.socket = socket.socket()
 
         self.host = socket.gethostname()
         self.port = CONFIG.getint('all', 'PORT')
+
 
         self.socket.bind((self.host, self.port))
         self.socket.listen(1)
@@ -22,10 +26,15 @@ class Listener:
 
         self.recipients = []
 
-    def listen(self):
+    def run(self):
+        self.socket.settimeout(5)
         try:
-            while True:
-                connection, address = self.socket.accept()
+            while not self.stopEvent.isSet():
+                try:
+                    connection, address = self.socket.accept()
+                except socket.timeout:
+                    continue
+                connection.settimeout(5)
 
                 recep = Receptor(connection, address, self.requests)
                 self.recipients.append(recep)
@@ -33,4 +42,9 @@ class Listener:
                 print("Connection accepted with ", address)
                 recep.start()
         finally:
+            for r in self.recipients:
+                r.join()
+
             self.socket.close()
+        print("Exiting Listener")
+        self.stopEvent.clear()

@@ -1,6 +1,6 @@
 import threading
 from datetime import datetime
-from Connection import Connection
+from connection import Connection
 
 
 class Communication(threading.Thread, Connection):
@@ -15,8 +15,10 @@ class Communication(threading.Thread, Connection):
 
         while not self.stopRequest.isSet():
             msg = self.getResponse()
+            if msg is not None and len(msg) == 0:
+                self.reconnect()
             print(msg)
-        self.socket.close()
+        self.connection.close()
         print("Stop Thread of Communication in ", datetime.now())
 
     def join(self, timeout=None):

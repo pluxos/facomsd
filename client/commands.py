@@ -1,5 +1,6 @@
 import threading
-from Connection import Connection
+from connection import Connection
+import socket
 
 
 menu = """
@@ -31,6 +32,8 @@ class Commands(threading.Thread, Connection):
                     break
                 else:
                     self.send(msg)
+            except socket.error:
+                self.reconnect()
             except Exception as error:
                 print(error)
                 continue
