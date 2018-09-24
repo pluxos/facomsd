@@ -24,8 +24,9 @@ public class Data {
 		}
 		return true;
 	}
-
-	public synchronized static String create(BigInteger key, String value) {
+	
+	
+	public synchronized static String create(BigInteger key, String value) throws Exception {
 		if (dados.containsKey(key)) {
 			return "Key ja cadastrada";
 		}
@@ -33,14 +34,14 @@ public class Data {
 		return "Dados Criados com sucesso";
 	}
 
-	public synchronized static String read(BigInteger key) {
+	public synchronized static String read(BigInteger key) throws Exception {
 		if (validaExistencia(key))
 			return dados.get(key);
 		else
 			return "Dados nao encontrados";
 	}
 
-	public synchronized static String update(BigInteger key, String value) {
+	public synchronized static String update(BigInteger key, String value) throws Exception {
 		if (validaExistencia(key)) {
 			dados.put(key, value);
 			return "Dados alterados com sucesso";
@@ -48,7 +49,7 @@ public class Data {
 			return "Key nao encontrada";
 	}
 
-	public synchronized static String delete(BigInteger key) {
+	public synchronized static String delete(BigInteger key) throws Exception {
 		if (validaExistencia(key)) {
 			dados.remove(key);
 			return "key removida com sucesso";
