@@ -1,5 +1,6 @@
 package cliente;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -16,6 +17,9 @@ public class Client {
   private ObjectInputStream in;
   private Thread tRead;
   private Thread tResponse;
+ private Scanner s;
+ private Socket socket;
+ private String menu="";
   
   public ObjectOutputStream getObjectOutputStream() {
     return out;
@@ -25,14 +29,18 @@ public class Client {
     return in;
   }
   
+  public void init() throws IOException, ClassNotFoundException {
+    s = new Scanner(System.in);
+    socket = new Socket(Constant.HOST, Constant.SERVER_PORT);
+    out = new ObjectOutputStream(socket.getOutputStream());
+    in = new ObjectInputStream(socket.getInputStream());
+    menu = (String) in.readObject();
+    commandHandler = new CommandHandler(menu);
+  }
+  
   public void start() {
     try {
-      Scanner s = new Scanner(System.in);
-      Socket socket = new Socket(Constant.HOST, Constant.SERVER_PORT);
-      out = new ObjectOutputStream(socket.getOutputStream());
-      in = new ObjectInputStream(socket.getInputStream());
-      String menu = (String) in.readObject();
-      commandHandler = new CommandHandler(menu);
+      init();
       tRead = new Thread(new ClientSend(socket, s, out, menu, commandHandler));
       tRead.start();
       clientResponse = new ClientResponse(in);
