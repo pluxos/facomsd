@@ -22,7 +22,7 @@ public class Caso02StateTest extends BaseTest {
     public void shouldTestRecover() throws Exception {
 
         //Dado: Criei as variáveis
-        File tempLogFile = File.createTempFile("test_", ".log");
+        File tempLogFile = File.createTempFile("test_state_", ".log");
         String[] commands = getArgs(tempLogFile, 4468);
 
         Server serverSpy = Mockito.spy(new Server(commands));
@@ -42,10 +42,7 @@ public class Caso02StateTest extends BaseTest {
         //Também poderei usar estas classes depois
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenReturn(true);
-        when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
-            return inputs.get(currentInput[0]++);
-        });
+        when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> inputs.get(currentInput[0]++));
 
         //Start das Threads
         Thread tServer = getThread(serverSpy);
@@ -54,7 +51,6 @@ public class Caso02StateTest extends BaseTest {
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
             tClient.start();
-
             tClient.join();
         });
 

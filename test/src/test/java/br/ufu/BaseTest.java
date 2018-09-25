@@ -51,4 +51,16 @@ public class BaseTest {
         assertTrue(logEvents.stream().anyMatch(m -> m.equals(message)));
     }
 
+    protected Integer getLogSize() {
+        return logEvents.size();
+    }
+
+    protected Long getLogSizeWithoutReads() {
+        return logEvents.stream().filter(e -> !e.contains("READ")).count();
+    }
+
+    protected String getLastLog() {
+        return logEvents.get(logEvents.size() - 1);
+    }
+
 }

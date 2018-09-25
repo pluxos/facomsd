@@ -59,8 +59,6 @@ public class Caso01CrudNOKTest extends BaseTest {
         Thread tServer = getThread(serverSpy);
         tServer.start();
 
-        Thread.sleep(500);
-
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
             tClient.start();

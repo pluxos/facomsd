@@ -57,8 +57,6 @@ public class Caso01CrudOKTest extends BaseTest {
         Thread tServer = getThread(serverSpy);
         tServer.start();
 
-        Thread.sleep(500);
-
         await().dontCatchUncaughtExceptions().untilAsserted(() -> {
             Thread tClient = getThread(clientSpy);
             tClient.start();
