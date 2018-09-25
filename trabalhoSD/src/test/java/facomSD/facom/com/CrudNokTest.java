@@ -34,7 +34,7 @@ public class CrudNokTest {
 	      c.getObjectOutputStream().writeObject("create 1:teste");
 	      resposta = (String) c.getObjectInputStream().readObject();
 	      System.out.println(resposta);
-	      assertTrue(resposta.equals("Dados ja cadastrados"));
+	      assertTrue(resposta.equals("Key ja cadastrada"));
 	      c.getObjectOutputStream().writeObject("read 2");
 	      resposta = (String) c.getObjectInputStream().readObject();
 	      System.out.println(resposta);
@@ -42,7 +42,7 @@ public class CrudNokTest {
 	      c.getObjectOutputStream().writeObject("update 2:teste");
 	      resposta = (String) c.getObjectInputStream().readObject();
 	      System.out.println(resposta);
-	      assertTrue(resposta.equals("Dados nao encontrados"));
+	      assertTrue(resposta.equals("Key nao encontrada"));
 	      c.getObjectOutputStream().writeObject("delete 1");
 	      resposta = (String) c.getObjectInputStream().readObject();
 	      System.out.println(resposta);
