@@ -18,55 +18,31 @@ public class QueueF2 extends Queue implements Runnable {
 	@Override
 	public void run() {
 		try {
-			System.out.println("Iniciando F3");
+			System.out.println("Iniciando F2");
+			File arquivo = new File("operacoes.log");
+			if (!arquivo.exists()) {
+				arquivo.createNewFile();
+			}
+			Path path = Paths.get("operacoes.log");
 			while (true) {
-				ClientData elemento =  super.queue.consumeF2();
+				ClientData elemento = super.queue.consumeF2();
 				if (elemento.getComando().charAt(0) != '2'
 						&& elemento.getComando().charAt(0) != 'r'
 						&& elemento.getComando().charAt(0) != 'R') {
-					System.out.println("Escrevendo no log");
-					File arquivo = new File("operacoes.log");
-					if (!arquivo.exists()) {
-						try {
-							arquivo.createNewFile();
-						} catch (IOException e) {
-							try {
-								String erro = "Erro ao criar arquivo de log, finalizando conexão";
-								System.out.println(erro);
-								elemento.getOut().writeObject(erro);
-							} catch (IOException ex) {
-								System.out
-										.println("Falha ao enviar mensagem para o cliente!");
-							}
-							System.exit(0);
-						}
+
+					String gravar;
+					if (arquivo.length() <= 0) {
+						gravar = elemento.getComando();
+					} else {
+						gravar = System.lineSeparator() + elemento.getComando();
 					}
-					try {
-						Path path = Paths.get("operacoes.log");
-						String gravar;
-						if (arquivo.length() <= 0) {
-							gravar = elemento.getComando();
-						} else {
-							gravar = System.lineSeparator()
-									+ elemento.getComando();
-						}
-						Files.write(path, gravar.getBytes(),
-								StandardOpenOption.APPEND);
-					} catch (IOException e) {
-						try {
-							String erro = "Erro ao escrever no arquivo de log, finalizando conexão";
-							System.out.println(erro);
-							elemento.getOut().writeObject(erro);
-						} catch (IOException ex) {
-							System.out
-									.println("Falha ao enviar mensagem para o cliente!");
-						}
-						System.exit(0);
-					}
+					Files.write(path, gravar.getBytes(), StandardOpenOption.APPEND);
 				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (IOException io) {
+			System.out.println("Erro ao escrever em log, finalizando o servidor");
 		}
 	}
 
