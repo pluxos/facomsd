@@ -26,21 +26,25 @@ public class OrdemTest {
       ts.start();
       Thread.sleep(5000);
       c.init();
+      //ESCREVE UM VALOR EM UM ITEM - 0 ATE 999
       for (int i = 0; i < 1000; i++) {
         c.getObjectOutputStream().writeObject("create " + i + ":" + (i + 1) + "");
         String resposta = (String) c.getObjectInputStream().readObject();
         System.out.println(resposta);
         assertTrue(resposta.equals("Dados criados com sucesso"));
       }
+      //LER O VALOR DE V
       c.getObjectOutputStream().writeObject("read 999");
       String resposta = (String) c.getObjectInputStream().readObject();
       System.out.println(resposta);
       assertTrue(resposta.equals("1000"));
       int v = Integer.parseInt(resposta);
+      //ESCREVER O VALOR DE A1000
       c.getObjectOutputStream().writeObject("create 1000:" + (v + 1));
       resposta = (String) c.getObjectInputStream().readObject();
       System.out.println(resposta);
       assertTrue(resposta.equals("Dados criados com sucesso"));
+      //CONFIRMAR QUE O VALOR DE A1000 E IGUAL A 1001
       c.getObjectOutputStream().writeObject("read 1000");
       resposta = (String) c.getObjectInputStream().readObject();
       System.out.println(resposta);

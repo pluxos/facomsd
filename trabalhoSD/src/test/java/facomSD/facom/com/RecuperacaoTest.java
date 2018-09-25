@@ -35,6 +35,7 @@ public class RecuperacaoTest {
 			c.init();
 			ObjectOutputStream out = c.getObjectOutputStream();
 			ObjectInputStream in = c.getObjectInputStream();
+			//5 ITENS SAO CRIADOS
 			for (int i = 0; i < 5; i++) {
 				System.out.println("Executando" + " create " + i + ":teste" + i + "");
 				out.writeObject("create " + i + ":teste" + i + "");
@@ -44,27 +45,33 @@ public class RecuperacaoTest {
 				System.out.println("sucesso");
 			}
 			Thread.sleep(5000);
+			//PROCESSO SERVIDOR E MORTO
 			ts.interrupt();
 			Thread.sleep(5000);
 			ts = new Thread(new ThreadStartServer());
+			//PROCESSO SERVIDOR E INICIADO
 			ts.start();
 			Thread.sleep(5000);
+			//5 ITENS CRIADOS ANTERIORMENTE SAO LIDOS
 			for (int i = 0; i < 5; i++) {
 				c.getObjectOutputStream().writeObject("read " + i + "");
 				String resposta = (String) c.getObjectInputStream().readObject();
 				System.out.println(resposta);
 				assertTrue(resposta.equals("teste" + i + ""));
 			}
-
-//      REPETINDO O PROCESSO COM NOVOS ITENS
+			//REPETICAO DO TESTE COM 3 NOVOS ITENS
 			for (int i = 5; i < 8; i++) {
 				c.getObjectOutputStream().writeObject("create " + i + ":teste" + i + "");
 				String resposta = (String) c.getObjectInputStream().readObject();
 				System.out.println(resposta);
 				assertTrue(resposta.equals("Dados criados com sucesso"));
 			}
-//      MATAR SERVIDOR
-//      REINICIAR SERVIDOR
+			Thread.sleep(5000);
+			ts.interrupt();
+			Thread.sleep(5000);
+			ts = new Thread(new ThreadStartServer());
+			ts.start();
+			Thread.sleep(5000);
 			for (int i = 5; i < 8; i++) {
 				c.getObjectOutputStream().writeObject("read " + i + "");
 				String resposta = (String) c.getObjectInputStream().readObject();

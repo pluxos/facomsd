@@ -30,26 +30,32 @@ public class CrudNokTest {
 			ts.start();
 			Thread.sleep(5000);
 			c.init();
+			//CREATE DO ITEM I
 			c.getObjectOutputStream().writeObject("create 0:teste");
 			String resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados criados com sucesso"));
+			//CREATE DO ITEM I - JA CRIADO
 			c.getObjectOutputStream().writeObject("create 0:teste");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados ja cadastrados"));
+			//READ DO ITEM J - NAO EXISTENTE
 			c.getObjectOutputStream().writeObject("read 1");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados nao encontrados"));
+			//UPDATE DO ITEM J - NAO EXISTENTE
 			c.getObjectOutputStream().writeObject("update 1:teste");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados nao encontrados"));
+			//READ DO ITEM J - NAO EXISTENTE 
 			c.getObjectOutputStream().writeObject("read 1");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados nao encontrados"));
+			//DELETE DO ITEM I
 			c.getObjectOutputStream().writeObject("delete 0");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);

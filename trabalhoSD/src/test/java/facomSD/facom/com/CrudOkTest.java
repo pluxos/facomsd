@@ -30,26 +30,32 @@ public class CrudOkTest {
 			ts.start();
 			Thread.sleep(5000);
 			c.init();
+			//CREATE DO NOVO ITEM I
 			c.getObjectOutputStream().writeObject("create 0:teste0");
 			String resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados criados com sucesso"));
+			//READ DO ITEM I
 			c.getObjectOutputStream().writeObject("read 0");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("teste0"));
+			//UPDATE DO ITEM I
 			c.getObjectOutputStream().writeObject("update 0:teste");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados alterados com sucesso"));
+			//READ DO ITEM I
 			c.getObjectOutputStream().writeObject("read 0");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("teste"));
+			//DELETE DO ITEM I
 			c.getObjectOutputStream().writeObject("delete 0");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados removidos com sucesso"));
+			//READ DO ITEM I
 			c.getObjectOutputStream().writeObject("read 0");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
