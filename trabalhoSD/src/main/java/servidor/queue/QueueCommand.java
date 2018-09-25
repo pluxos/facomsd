@@ -18,15 +18,18 @@ public class QueueCommand {
   // }
   public void produceF1(ClientData elemento) {
     producer(f1, elemento);
-    System.out.println("adicionado em f1");
+    System.out.println(elemento.getComando()+" adicionado em f1");
   }
   
   public void produceF2(ClientData elemento) {
     producer(f2, elemento);
+    System.out.println(elemento.getComando()+" adicionado em f2");
+    
   }
   
   public void produceF3(ClientData elemento) {
     producer(f3, elemento);
+    System.out.println(elemento.getComando()+" adicionado em f3");
   }
   
   public ClientData consumeF1() throws InterruptedException {

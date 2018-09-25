@@ -20,6 +20,8 @@ public class ClientSend implements Runnable {
 		this.commandHandler = commandHandler;
 
 	}
+	
+
 
 	public void run() {
 

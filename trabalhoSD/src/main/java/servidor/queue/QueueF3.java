@@ -28,7 +28,7 @@ public class QueueF3 extends Queue implements Runnable {
     try {
       System.out.println("Iniciando F3");
       while (true) {
-        ClientData elemento = super.queue.consumeF3();
+        ClientData elemento =  super.queue.consumeF3();
         out = elemento.getOut();
         String resposta = execute.execute(elemento.getComando());
         System.out.println("comando de F3 executado");

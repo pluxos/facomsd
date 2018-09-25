@@ -3,6 +3,8 @@ package facomSD.facom.com;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,11 +29,15 @@ public class RecuperacaoTest {
     s = new ServerApp();
     try {
       c.init();
-      for(int i=0; i<5; i++) {
-    	  c.getObjectOutputStream().writeObject("create "+i+":teste"+i+"");
-          String resposta = (String) c.getObjectInputStream().readObject();
+      ObjectOutputStream out = c.getObjectOutputStream();
+      ObjectInputStream in = c.getObjectInputStream();
+      for(int i=0; i<100; i++) {
+    	  System.out.println("Executando"+" create "+i+":teste"+i+"");
+    	  out.writeObject("create "+i+":teste"+i+"");
+          String resposta = (String) in.readObject();
           System.out.println(resposta);
-          assertTrue(resposta.equals("Dados criados com sucesso"));  
+          assertTrue(resposta.equals("Dados Criados com sucesso")); 
+          System.out.println("sucesso");
       }
 //      MATAR SERVIDOR
 //      REINICIAR SERVIDOR

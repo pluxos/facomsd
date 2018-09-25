@@ -18,8 +18,9 @@ public class QueueF2 extends Queue implements Runnable {
 	@Override
 	public void run() {
 		try {
+			System.out.println("Iniciando F3");
 			while (true) {
-				ClientData elemento = super.queue.consumeF2();
+				ClientData elemento =  super.queue.consumeF2();
 				if (elemento.getComando().charAt(0) != '2'
 						&& elemento.getComando().charAt(0) != 'r'
 						&& elemento.getComando().charAt(0) != 'R') {
