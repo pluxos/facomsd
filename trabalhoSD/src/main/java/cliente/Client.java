@@ -56,6 +56,7 @@ public class Client {
       System.out.println("ClientResponse finalizado");
       System.exit(0);
     } catch (Exception e) {
+    	System.out.println("Servidor não encontrado");
     }
   }
 }
