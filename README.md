@@ -9,7 +9,7 @@
 3 - Update Ex: 3 123 000000<br/>
 4 - Delete&nbsp; Ex: 4 123<br/>
 5 - Sair&nbsp; &nbsp; &nbsp;Ex: 5</ul>
-4 - Se desejar excluir o arquivo log.txt digite "Y" <br/></ul>
+4 - Se desejar excluir o arquivo log.txt digite "Y" após o comando sair(5)<br/></ul>
 
 <h3>Teste I</h3>
 <ul>1 - Deletar o arquivo "log.txt" se existir.<br/>
