@@ -1,6 +1,7 @@
 package servidor;
 
 import java.net.ServerSocket;
+import java.util.concurrent.Semaphore;
 
 import servidor.dataBase.Data;
 import servidor.queue.Queue;
@@ -8,10 +9,12 @@ import servidor.queue.QueueCommand;
 import utils.Constant;
 
 public class Server {
-  // static Semaphore mutex = new Semaphore(1);
+  public static Semaphore mutex_f1 = new Semaphore(1);
+  public static Semaphore mutex = new Semaphore(1);
   private ServerSocket serverSocket = null;
   private QueueCommand queueCommand = null;
   private Queue queue = null;
+  private boolean running = true;
   
   public void iniciar() {
     try {
@@ -20,14 +23,17 @@ public class Server {
       Data.recovery();
       queue = new Queue(queueCommand);
       queue.run();
-      while (true) {
+      while (running) {
+        if (!running)
+          return;
         new HandlerThreadServer(serverSocket.accept(), queueCommand).start();
       }
+      System.out.println("server finalizado");
     } catch (Exception e) {
     }
   }
   
   public void stop() {
-	  System.exit(1);
+    this.running = false;
   }
 }

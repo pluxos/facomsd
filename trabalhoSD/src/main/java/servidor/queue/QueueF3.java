@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import servidor.ClientData;
+import servidor.Server;
 import servidor.command.ExecuteCommand;
 
 public class QueueF3 extends Queue implements Runnable {
@@ -28,6 +29,7 @@ public class QueueF3 extends Queue implements Runnable {
     try {
       System.out.println("Iniciando F3");
       while (true) {
+        Server.mutex.acquire();
         ClientData elemento =  super.queue.consumeF3();
         out = elemento.getOut();
         String resposta = execute.execute(elemento.getComando());

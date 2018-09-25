@@ -1,11 +1,11 @@
 package facomSD.facom.com;
 
-import servidor.ServerApp;
+import servidor.Server;
 
 public class ThreadStartServer implements Runnable {
-
-	public void run() {
-		ServerApp.iniciar();
-	}
-
+  Server s = new Server();
+  
+  public void run() {
+    s.iniciar();
+  }
 }
