@@ -26,4 +26,8 @@ public class Server {
     } catch (Exception e) {
     }
   }
+  
+  public void stop() {
+	  System.exit(1);
+  }
 }
