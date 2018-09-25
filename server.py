@@ -15,7 +15,6 @@ try: # abre arquivo de configuracao, inicia as filas, banco e socket
     maxclients = config.readline().split()
     maxclients = int(maxclients[1])
     config.close()
-    log = open("log.txt","a")
     f1 = fila.Fila()
     f2 = fila.Fila()
     f3 = fila.Fila()
@@ -53,8 +52,8 @@ def recupera_memoria(): #abre arquivo de log e restaura a memoria
                     bd.update(int(linha[1]),linha[2].strip("\n"))
                 elif int(linha[0]) == 4:
                     bd.delete(int(linha[1]))               
-            log.close()
             print(bd.dicionario) #
+        log.close()
     except:
         print("Erro ao abrir arquivo para recuperar memoria")
 
@@ -68,6 +67,7 @@ def inicia_server(): #conecta ao cliente e inicia thread para receber requisicoe
         try:
             c = Thread(target=client_thread, name="client", daemon = True, args=(conexao, endereco, cont))
             c.start()
+            c.join()
         except:
             print("client_tread não iniciou.")
             traceback.print_exc()
@@ -81,7 +81,7 @@ def encerra_server(): # se todos os clientes se desconectarem deleta o arquivo d
     if entrada =="Y" or entrada =="y":
         if os.path.isfile("log.txt"): #verifica se arquivo de log existe e o remove
             os.remove("log.txt")
-        soc.close()
+    soc.close()
 
 def client_thread(conexao, endereco, cont): #recebe as requisicoes dos clientes e inicia thread para duplicar a fila
     ativo = True
@@ -101,6 +101,7 @@ def client_thread(conexao, endereco, cont): #recebe as requisicoes dos clientes 
                 f1.insere(requisicao)
                 d = Thread(target=duplica_thread, name="duplica", args=(conexao, endereco))
                 d.start()
+                d.join()
             except:
                 print("Thread did not start.")
                 ativo = False
@@ -124,7 +125,8 @@ def duplica_thread(conexao, endereco):# remove as requisicoes de f1 e duplica pa
         ativo = False
 
 def log_thread(conexao, endereco): #grava as requisicoes em arquivo de log
-    ativo = True
+    ativo = True    
+    log = open("log.txt","a")
     while ativo:
         while not f2.vazia():
             requisicao = str(f2.retira())
