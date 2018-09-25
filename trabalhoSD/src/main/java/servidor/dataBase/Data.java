@@ -40,7 +40,7 @@ public class Data {
   
   public synchronized static String create(BigInteger key, String value) throws Exception {
     if (dados.containsKey(key)) {
-      return "Key ja cadastrada";
+      return "Dados ja cadastrados";
     }
     dados.put(key, value);
     return "Dados criados com sucesso";
@@ -59,7 +59,7 @@ public class Data {
       return "Dados alterados com sucesso";
     }
     else
-      return "Key nao encontrada";
+      return "Dados nao encontrados";
   }
   
   public synchronized static String delete(BigInteger key) throws Exception {
