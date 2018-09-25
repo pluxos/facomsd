@@ -31,12 +31,12 @@ public class CrudNokTest {
 			Thread.sleep(5000);
 			c.init();
 			//CREATE DO ITEM I
-			c.getObjectOutputStream().writeObject("create 0:teste");
+			c.getObjectOutputStream().writeObject("create 0:i");
 			String resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados criados com sucesso"));
 			//CREATE DO ITEM I - JA CRIADO
-			c.getObjectOutputStream().writeObject("create 0:teste");
+			c.getObjectOutputStream().writeObject("create 0:i");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados ja cadastrados"));
@@ -46,17 +46,22 @@ public class CrudNokTest {
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados nao encontrados"));
 			//UPDATE DO ITEM J - NAO EXISTENTE
-			c.getObjectOutputStream().writeObject("update 1:teste");
+			c.getObjectOutputStream().writeObject("update 1:j");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados nao encontrados"));
-			//READ DO ITEM J - NAO EXISTENTE 
+			//CREATE DO ITEM J
+			c.getObjectOutputStream().writeObject("create 1:j");
+			resposta = (String) c.getObjectInputStream().readObject();
+			System.out.println(resposta);
+			assertTrue(resposta.equals("Dados criados com sucesso"));
+			//READ DO ITEM J
 			c.getObjectOutputStream().writeObject("read 1");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
-			assertTrue(resposta.equals("Dados nao encontrados"));
+			assertTrue(resposta.equals("j"));
 			//DELETE DO ITEM I
-			c.getObjectOutputStream().writeObject("delete 0");
+			c.getObjectOutputStream().writeObject("delete 1");
 			resposta = (String) c.getObjectInputStream().readObject();
 			System.out.println(resposta);
 			assertTrue(resposta.equals("Dados removidos com sucesso"));
