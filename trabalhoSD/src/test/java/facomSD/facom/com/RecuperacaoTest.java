@@ -36,7 +36,7 @@ public class RecuperacaoTest {
     	  out.writeObject("create "+i+":teste"+i+"");
           String resposta = (String) in.readObject();
           System.out.println(resposta);
-          assertTrue(resposta.equals("Dados Criados com sucesso")); 
+          assertTrue(resposta.equals("Dados criados com sucesso")); 
           System.out.println("sucesso");
       }
 //      MATAR SERVIDOR

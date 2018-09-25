@@ -43,7 +43,7 @@ public class Data {
       return "Key ja cadastrada";
     }
     dados.put(key, value);
-    return "Dados Criados com sucesso";
+    return "Dados criados com sucesso";
   }
   
   public synchronized static String read(BigInteger key) throws Exception {
@@ -65,7 +65,7 @@ public class Data {
   public synchronized static String delete(BigInteger key) throws Exception {
     if (validaExistencia(key)) {
       dados.remove(key);
-      return "key removida com sucesso";
+      return "Dados removidos com sucesso";
     }
     else
       return "Key nao encontrada";
