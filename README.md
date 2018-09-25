@@ -1,4 +1,4 @@
-# Grupo 3 - Daniel Augusto, Fabrício Aquino e Rodrigo Uehara Entrega 1
+# Grupo 3 - Daniel Augusto, Fabrício Aquino e Rodrigo Uehara
 <h3>Entrega 1</h3>
 <h3>Passos</h3>
 <ul>1 - Iniciar o server.py<br/>
