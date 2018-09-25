@@ -24,14 +24,20 @@ public class RecuperacaoTest {
   @Test
   public void testRun() {
     Client c;
-    c = new Client();
+    
     ServerApp s;
     s = new ServerApp();
     try {
+    
+      Thread ts = new Thread(new ThreadStartServer());
+      ts.start();
+      Thread.sleep(5000);
+      System.out.println("teste");
+      c = new Client();
       c.init();
       ObjectOutputStream out = c.getObjectOutputStream();
       ObjectInputStream in = c.getObjectInputStream();
-      for(int i=0; i<100; i++) {
+      for(int i=0; i<5; i++) {
     	  System.out.println("Executando"+" create "+i+":teste"+i+"");
     	  out.writeObject("create "+i+":teste"+i+"");
           String resposta = (String) in.readObject();
@@ -39,9 +45,12 @@ public class RecuperacaoTest {
           assertTrue(resposta.equals("Dados criados com sucesso")); 
           System.out.println("sucesso");
       }
-//      MATAR SERVIDOR
-//      REINICIAR SERVIDOR
-//      for(int i=0; i<5; i++) {
+      Thread.sleep(5000);
+//      ServerApp.stop();
+//      ServerApp.iniciar();
+//      
+//      
+//     for(int i=0; i<5; i++) {
 //    	  c.getObjectOutputStream().writeObject("read "+i+":teste"+i+"");
 //          String resposta = (String) c.getObjectInputStream().readObject();
 //          System.out.println(resposta);
@@ -72,7 +81,10 @@ public class RecuperacaoTest {
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-    }
+    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     
     
     
