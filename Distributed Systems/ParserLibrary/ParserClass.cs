@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ParserLibrary
@@ -6,16 +8,17 @@ namespace ParserLibrary
     public class ParserClass
     {
 
-        public static byte[] Serialize(object obj)
+        public static byte[] Serialize<T>(T obj)
         {
             var stream = new MemoryStream();
             new BinaryFormatter().Serialize(stream, obj);
             return stream.ToArray();
         }
 
-        public static string Deserialize(byte[] stream)
+        public static T Deserialize<T>(byte[] stream)
         {
-            return new BinaryFormatter().Deserialize(new MemoryStream(stream)).ToString();
+            var binaryFormatter = new BinaryFormatter();
+            return (T)binaryFormatter.Deserialize(new MemoryStream(stream));
         }
     }
 }

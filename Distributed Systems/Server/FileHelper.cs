@@ -6,31 +6,17 @@ namespace Server
 {
     public static class FileHelper
     {
-        public static string ReadFile(string path)
+        public static string[] ReadFile(string path)
         {
-            string line;
             try
             {
-                //Pass the file path and file name to the StreamReader constructor
-                StreamReader sr = new StreamReader(path);
-
-                //Read the first line of text
-                line = sr.ReadLine();
-
-                //Continue to read until you reach end of file
-                while (line != null)
-                {
-                    //Read the next line
-                    line = sr.ReadLine();
-                }
-                //close the file
-                sr.Close();
-                return line;
+                var lines = File.ReadAllLines(path);
+                return lines;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
-                return "";
+                return null;
             }
         }
 

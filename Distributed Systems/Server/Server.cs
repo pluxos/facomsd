@@ -1,6 +1,7 @@
 ﻿using ParserLibrary;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
 using System.Text;
 
@@ -8,12 +9,11 @@ namespace Server
 {
     public class Server
     {
-
-        static Queue<string> F1 = new Queue<string>();
         static Queue<string> F2 = new Queue<string>();
         static Queue<string> F3 = new Queue<string>();
         static Dictionary<BigInteger, byte[]> keyValuePairs = new Dictionary<BigInteger, byte[]>();
         ServerSocket ss;
+
         public Server()
         {
             ss = new ServerSocket();
@@ -21,11 +21,7 @@ namespace Server
 
         public void Listen()
         {
-            while (true)
-            {
-                Console.WriteLine("Queue1:" + ss.data);
-                F1.Enqueue(ss.data);
-            }
+            ss.Receive();
         }
 
         public void Persist()
@@ -34,15 +30,15 @@ namespace Server
             {
                 try
                 {
-                    string message = F2.Dequeue();
-                    if (message != CommandTypes.Read)
+                    if (F2.Count > 0)
                     {
-                        FileHelper.WriteFile("C:\\Users\\mario\\Documents\\SD\\facomsd\\bkp.txt", message);
+                        string message = F2.Dequeue();
+                        FileHelper.WriteFile($"{Directory.GetCurrentDirectory()}\\bkp.txt", message);
                     }
                 }
-                catch (InvalidOperationException ioe)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Unexpected exception : {0}", ioe.ToString());
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
                 }
             }
         }
@@ -51,12 +47,26 @@ namespace Server
         {
             try
             {
-                string bkp = FileHelper.ReadFile("C:\\Users\\mario\\Documents\\SD\\facomsd\\bkp.txt");
-                CreateRegister(bkp);
+                if (!File.Exists($"{Directory.GetCurrentDirectory()}\\bkp.txt"))
+                {
+                    using (var streamWriter = new StreamWriter($"{Directory.GetCurrentDirectory()}\\bkp.txt", true))
+                    {
+                        streamWriter.WriteLine("");
+                    }
+                }
+                string[] bkp = FileHelper.ReadFile($"{Directory.GetCurrentDirectory()}\\bkp.txt");
+                if (bkp.Length > 0)
+                {
+                    foreach (string message in bkp)
+                    {
+                        F3.Enqueue(message);
+                    }
+                    SingleExecute();
+                }
             }
-            catch (InvalidOperationException ioe)
+            catch (Exception e)
             {
-                Console.WriteLine("Unexpected exception : {0}", ioe.ToString());
+                Console.WriteLine("Unexpected exception : {0}", e.ToString());
             }
         }
 
@@ -64,83 +74,148 @@ namespace Server
         {
             while (true)
             {
-                try
+                if (ss.F1.Count > 0)
                 {
-                    string message = F1.Dequeue();
-                    F2.Enqueue(message);
+                    string message = ss.F1.Dequeue();
+                    if (GetCommand(message) != CommandTypes.Read)
+                    {
+                        F2.Enqueue(message);
+                    }
                     F3.Enqueue(message);
-                }
-                catch (InvalidOperationException ioe)
-                {
-                    Console.WriteLine("Unexpected exception : {0}", ioe.ToString());
                 }
             }
         }
 
 
-        void CreateRegister(string command)
+        void CreateRegister(string message)
         {
-            keyValuePairs.Add(1, Encoding.ASCII.GetBytes(command));
-        }
-
-        string ReadRegister()
-        {
-            return Encoding.ASCII.GetString(keyValuePairs.ContainsKey(1) ? keyValuePairs[1] : new byte[1]);
-        }
-
-        void UpdateRegister(string command)
-        {
-            if (keyValuePairs.ContainsKey(1))
+            if (keyValuePairs.ContainsKey(GetKey(message)))
             {
-                keyValuePairs[1] = Encoding.ASCII.GetBytes(command);
+                ss.Send("\tError: Key already exists");
             }
             else
             {
-                ss.Send("Error: Value not found");
+                keyValuePairs.Add(GetKey(message), Encoding.ASCII.GetBytes(GetValue(message)));
+                ss.Send("\tKey created successfully");
+
             }
-
         }
 
-        void DeleteRegister(string command)
+        void ReadRegister(string message)
         {
-
-        }
-
-        public void Execute()
-        {
-            string command = "";
-            while (true)
+            if (keyValuePairs.ContainsKey(GetKey(message)))
             {
-                try
-                {
-                    command = F3.Dequeue();
-                }
-                catch (InvalidOperationException ioe)
-                {
-                    Console.WriteLine("Unexpected exception : {0}", ioe.ToString());
-                }
+                ss.Send($"\tValue:{Encoding.ASCII.GetString(keyValuePairs[GetKey(message)])}");
+            }
+            else
+            {
+                ss.Send("\tError: Key not found");
+            }
+        }
 
-                switch (command)
+        void UpdateRegister(string message)
+        {
+            if (keyValuePairs.ContainsKey(GetKey(message)))
+            {
+                keyValuePairs[GetKey(message)] = Encoding.ASCII.GetBytes(GetValue(message));
+                ss.Send($"\tKey {GetKey(message)} updated successfully");
+
+            }
+            else
+            {
+                ss.Send("\tError: Key not found");
+            }
+        }
+
+        void DeleteRegister(string message)
+        {
+            if (keyValuePairs.ContainsKey(GetKey(message)))
+            {
+                keyValuePairs.Remove(GetKey(message));
+                ss.Send($"\tKey {GetKey(message)} deleted successfully");
+            }
+            else
+            {
+                ss.Send("\tError: Key not found");
+            }
+        }
+
+        public void SingleExecute()
+        {
+            string message = "";
+            while (F3.Count > 0)
+            {
+                message = F3.Dequeue();
+
+                switch (GetCommand(message))
                 {
                     case CommandTypes.Create:
-                        CreateRegister(command);
+                        CreateRegister(message);
                         break;
 
                     case CommandTypes.Read:
-                        ReadRegister();
+                        ReadRegister(message);
                         break;
 
                     case CommandTypes.Update:
-                        UpdateRegister(command);
+                        UpdateRegister(message);
                         break;
 
                     case CommandTypes.Delete:
-                        DeleteRegister(command);
+                        DeleteRegister(message);
                         break;
                     default:
                         break;
                 }
             }
+        }
+
+        public void Execute()
+        {
+            while (true)
+            {
+                string message = "";
+                while (F3.Count > 0)
+                {
+                    message = F3.Dequeue();
+
+                    switch (GetCommand(message))
+                    {
+                        case CommandTypes.Create:
+                            CreateRegister(message);
+                            break;
+
+                        case CommandTypes.Read:
+                            ReadRegister(message);
+                            break;
+
+                        case CommandTypes.Update:
+                            UpdateRegister(message);
+                            break;
+
+                        case CommandTypes.Delete:
+                            DeleteRegister(message);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        string GetCommand(string message)
+        {
+            return message.Split(" ")[0];
+        }
+
+        BigInteger GetKey(string message)
+        {
+            return BigInteger.Parse(message.Split(" ")[1]);
+        }
+
+        string GetValue(string message)
+        {
+            return message.Split(" ")[2];
         }
     }
 }

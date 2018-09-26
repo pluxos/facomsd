@@ -10,7 +10,6 @@ namespace Client
             new Thread(() =>
             {
                 c.Listen();
-
             }).Start();
 
             new Thread(() =>

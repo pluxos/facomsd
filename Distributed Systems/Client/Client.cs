@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Client
 {
@@ -13,37 +18,68 @@ namespace Client
 
         public void Listen()
         {
-            while (true)
-            {
-                cs.ReceiveMessage();
-            }
+            cs.ReceiveMessage();
         }
 
-        bool isValidAnswer(string aws)
+        bool IsValidAnswer(string aws)
         {
-            //TODO Validar resposta.
-            if (string.Compare(aws, "exit") == 0)
+            string[] splitAws = aws.Split(" ");
+
+            if (string.Compare(splitAws[0], "Create") == 0 || string.Compare(splitAws[0], "Update") == 0)
             {
-                return false;
+                if (splitAws.Length == 3)
+                {
+                    if (int.TryParse(splitAws[1], out int n) && new Regex("^[a-zA-Z0-9]*$").IsMatch(splitAws[2]))
+                    {
+                        cs.SendMessage(aws);
+                        return true;
+                    }
+                }
+                else if (splitAws.Length == 2)
+                {
+                    if (int.TryParse(splitAws[1], out int n))
+                    {
+                        cs.SendMessage(aws);
+                        return true;
+
+                    }
+                }
             }
-            cs.SendMessage(aws);
-            return true;
+            else if(string.Compare(splitAws[0], "Read") == 0 || string.Compare(splitAws[0], "Delete") == 0)
+            {
+                if (splitAws.Length == 2)
+                {
+                    if (int.TryParse(splitAws[1], out int n))
+                    {
+                        cs.SendMessage(aws);
+                        return true;
+
+                    }
+                }
+            }
+            return false;
         }
 
         public void ReadIO()
         {
             while (true)
             {
-                Console.WriteLine("Welcome to the SKYNET, type exit and prepare yourself for the judgement day:");
-                Console.WriteLine("Create <value>");
-                Console.WriteLine("Read <value>");
-                Console.WriteLine("Update <value>");
-                Console.WriteLine("Delete <value>");
+                Console.Clear();
+                Console.WriteLine("Welcome to the SKYNET, type <exit> human and prepare yourself for the judgment day:");
+                Console.WriteLine("Create <key> <value>");
+                Console.WriteLine("Read <key>");
+                Console.WriteLine("Update <key> <value>");
+                Console.WriteLine("Delete <key>");
                 string aws = Console.ReadLine();
                 Console.Clear();
-                if (!isValidAnswer(aws))
+                if (string.Compare(aws, "exit") == 0)
                 {
                     break;
+                }
+                if (!IsValidAnswer(aws))
+                {
+                    Console.WriteLine("Comando inválido, tente novamente!");
+                    Thread.Sleep(1000);
                 }
             }
         }

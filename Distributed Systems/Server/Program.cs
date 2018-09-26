@@ -5,16 +5,16 @@ namespace Server
 {
     class Program
     {
-
-
         static void Main(string[] args)
         {
             Server s = new Server();
 
-            new Thread(() =>
+            Thread thread = new Thread(() =>
             {
                 s.Restore();
-            }).Join();
+            });
+            thread.Start();
+            thread.Join();
 
             new Thread(() =>
             {
@@ -25,7 +25,6 @@ namespace Server
             {
                 s.Replicate();
             }).Start();
-
 
             new Thread(() =>
             {

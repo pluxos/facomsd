@@ -2,12 +2,13 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Client
 {
     public class ClientSocket
     {
-        static byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[32768];
         static IPHostEntry ipHostInfo;
         static IPAddress ipAddress;
         static IPEndPoint remoteEP;
@@ -15,8 +16,6 @@ namespace Client
 
         public ClientSocket()
         {
-
-            // Connect to a remote device.  
             try
             {
                 // Establish the remote endpoint for the socket.  
@@ -34,6 +33,8 @@ namespace Client
                 Console.WriteLine("Socket connected to {0}",
                     sender.RemoteEndPoint.ToString());
 
+                sender.Send(new byte[1]);
+
             }
             catch (Exception e)
             {
@@ -43,30 +44,33 @@ namespace Client
 
         public void SendMessage(string clientMessage)
         {
+            byte[] buffer = new byte[32768];
             // Connect the socket to the remote endpoint. Catch any errors.  
             try
             {
                 buffer = ParserClass.Serialize(clientMessage);
                 int bytesSent = sender.Send(buffer);
-
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unexpected exception : {0}", e.ToString());
             }
-
         }
 
         public void ReceiveMessage()
         {
-            try
+            byte[] buffer = new byte[32768];
+            while (true)
             {
-                int bytesRec = sender.Receive(buffer);
-                Console.WriteLine(ParserClass.Deserialize(buffer));
-            }
-            catch (Exception e)
-            {
-                //Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                try
+                {
+                    int bytesRec = sender.Receive(buffer);
+                    Console.WriteLine(ParserClass.Deserialize<string>(buffer));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                }
             }
         }
 
