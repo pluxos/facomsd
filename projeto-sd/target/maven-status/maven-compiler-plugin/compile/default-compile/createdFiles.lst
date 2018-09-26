@@ -1,0 +1,13 @@
+br/ufu/tcp/resources/SingletonDataLoader.class
+br/ufu/tcp/client/Client$Listening$1.class
+br/ufu/tcp/dao/MessageDAO.class
+br/ufu/tcp/resources/Fila.class
+br/ufu/tcp/resources/Fila$Thread1.class
+br/ufu/tcp/teste/Teste1.class
+br/ufu/tcp/client/Client$Listening.class
+br/ufu/tcp/client/Client.class
+br/ufu/tcp/server/ListeningClient.class
+br/ufu/App.class
+br/ufu/tcp/server/Server.class
+br/ufu/tcp/resources/Fila$Thread3.class
+br/ufu/tcp/resources/Fila$Thread2.class
