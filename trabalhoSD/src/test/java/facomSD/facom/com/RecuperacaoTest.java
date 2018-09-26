@@ -26,8 +26,9 @@ public class RecuperacaoTest {
 	public void testRun() {
 		Client c;
 
-		try {
-			Thread ts = new Thread(new ThreadStartServer());
+		try { 
+			ThreadStartServer t = new ThreadStartServer();
+			Thread ts = new Thread(t);
 			ts.start();
 			Thread.sleep(5000);
 			System.out.println("teste");
@@ -46,8 +47,10 @@ public class RecuperacaoTest {
 			}
 			Thread.sleep(5000);
 			//PROCESSO SERVIDOR E MORTO
-			ts.interrupt();
+			t.getS().stop();
+			out.writeObject("read 0");
 			Thread.sleep(5000);
+			System.out.println("----"+ts.isAlive()+"----");
 			ts = new Thread(new ThreadStartServer());
 			//PROCESSO SERVIDOR E INICIADO
 			ts.start();

@@ -3,9 +3,17 @@ package facomSD.facom.com;
 import servidor.Server;
 
 public class ThreadStartServer implements Runnable {
-  Server s = new Server();
-  
-  public void run() {
-    s.iniciar();
-  }
+	Server s;
+
+	public ThreadStartServer(){
+		s = new Server();
+	}
+	
+	public Server getS() {
+		return s;
+	}
+
+	public void run() {
+		s.iniciar();
+	}
 }

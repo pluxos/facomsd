@@ -39,9 +39,6 @@ public class HandlerThreadServer extends Thread {
 					out.writeObject("Syntaxe ou comando incorreto!");
 				}
 			}
-			// out.close();
-			// in.close();
-			// socket.close();
 		} catch (Exception e) {
 		}
 	}
