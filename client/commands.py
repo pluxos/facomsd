@@ -17,29 +17,36 @@ commands available:
 
 class Commands(threading.Thread, Connection):
 
-    def __init__(self, socket):
+    def __init__(self, socket, threadName):
         Connection.__init__(self, socket)
         threading.Thread.__init__(self)
         self.stopRequest = threading.Event()
+        self.setName('commandsThread')
+        self.stdinWait = True
+        self.setName(threadName)
 
     def run(self):
         print("Starting Thread of Commands...")
 
-        while True:
-            try:
-                msg = input(menu).split()
-                if not len(msg):
-                    print("Choose one command!")
+        while not self.stopRequest.isSet():
+            if self.stdinWait:
+                try:
+                    msg = input(menu).split()
+                    if not len(msg):
+                        print("Choose one command!")
+                        continue
+                    if msg[0] == "exit":
+                        break
+                    else:
+                        self.send(msg)
+                except socket.error:
+                    self.reconnect()
+                except Exception as error:
+                    print(error)
                     continue
-                if msg[0] == "exit":
-                    break
-                else:
-                    self.send(msg)
-            except socket.error:
-                self.reconnect()
-            except Exception as error:
-                print(error)
-                continue
+
+    def stop(self):
+        self.stopRequest.set()
 
     def send(self, msg):
 
@@ -51,6 +58,9 @@ class Commands(threading.Thread, Connection):
             self.update(msg[1:])
         elif msg[0].upper() == "DELETE":
             self.delete(msg[1:])
+        elif msg[0].upper() == "EXIT":
+            import sys
+            sys.exit()
         else:
             print("Invalid Command!" +  " ---> ", msg)
 

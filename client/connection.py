@@ -15,23 +15,27 @@ class Connection:
         send = False
         while not send:
             try:
-                self.connection.socket.send(msg)
+                self.connection.socket.send(msg + '$\n'.encode())
                 send = True
             except socket.error:
                 print("Retrying send " + msg.decode())
                 sleep(0.5)
+                self.reconnect()
 
     def getResponse(self):
         buffer = ""
         BUFFERSIZE = 1024
-        self.connection.socket.settimeout(5)
+        self.connection.socket.settimeout(1)
         while True:
             try:
                 msg = self.connection.socket.recv(BUFFERSIZE)
                 if len(msg) == BUFFERSIZE:
                     buffer += msg.decode()
+                if len(msg) == 0:
+                    raise socket.error
                 else:
                     buffer += msg.decode()
+                    buffer = buffer.split('$\n')
                     break
             except socket.timeout:
                 return None

@@ -9,7 +9,6 @@ class AsyncService(threading.Thread):
         threading.Thread.__init__(self)
         self.stopEvent = threading.Event()
         self.stopFinish = threading.Event()
-        #self.daemon = True
 
     def join(self, timeout=None):
         self.stopEvent.set()

@@ -10,8 +10,11 @@ CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 class Socket:
 
     def __init__(self):
-        self.socket = socket.socket()
-        self.socket.connect((CONFIG.get('all', 'HOST'), CONFIG.getint('all', 'PORT')))
+        try:
+            self.socket = socket.socket()
+            self.socket.connect((CONFIG.get('all', 'HOST'), CONFIG.getint('all', 'PORT')))
+        except socket.error:
+            self.reconnect()
 
     def close(self):
         self.socket.close()

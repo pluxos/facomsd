@@ -4,10 +4,11 @@ from queue import Empty
 
 class Logger(AsyncService):
 
-    def __init__(self, toLog):
+    def __init__(self, toLog, threadName):
         AsyncService.__init__(self)
         self.toLog = toLog
         self.filename = 'log.requests'
+        self.setName(threadName)
 
     def run(self):
 

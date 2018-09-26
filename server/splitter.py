@@ -6,12 +6,14 @@ from asyncService import AsyncService
 
 class Splitter(AsyncService):
 
-    def __init__(self, requests, toLog, toPersist):
+    def __init__(self, requests, toLog, toPersist, threadName):
         AsyncService.__init__(self)
         self.requests = requests
         self.toLog = toLog
         self.toPersist = toPersist
         self.stopEvent = threading.Event()
+
+        self.setName(threadName)
 
 
     def run(self):
@@ -19,7 +21,6 @@ class Splitter(AsyncService):
         while not self.stopEvent.isSet():
             try:
                 request, connection = self.requests.get(True, 1)
-
                 self.toPersist.put((request, connection))
                 if request.split()[0].upper() != "READ" and connection is not None:
                     self.toLog.put(request)

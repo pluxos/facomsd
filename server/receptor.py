@@ -4,14 +4,15 @@ import socket
 
 class Receptor(AsyncService):
 
-    def __init__(self, connection, address, requests):
+    def __init__(self, connection, address, requests, threadName):
         AsyncService.__init__(self)
         self.connection = connection
         self.address = address
         self.requests = requests
+        self.setName(threadName)
 
     def run(self):
-        BUFFERSIZE = 4096
+        BUFFERSIZE = 1024
         buffer = ""
         try:
             while not self.stopEvent.isSet():
@@ -23,7 +24,12 @@ class Receptor(AsyncService):
                         break
                     else:
                         buffer += msg.decode()
-                        self.requests.put((buffer, self.connection))
+                        buffer = buffer.split('$\n')
+                        for b in buffer:
+                            if len(b) > 0:
+                                b = b.replace('\n', '')
+                                #print("receive : " + b)
+                                self.requests.put((b, self.connection))
                         buffer = ""
                 except socket.timeout:
                     continue

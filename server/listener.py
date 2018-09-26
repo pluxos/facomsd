@@ -11,7 +11,7 @@ CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 
 class Listener(AsyncService):
 
-    def __init__(self, requests):
+    def __init__(self, requests, threadName):
         AsyncService.__init__(self)
         self.socket = socket.socket()
 
@@ -25,18 +25,19 @@ class Listener(AsyncService):
         self.requests = requests
 
         self.recipients = []
+        self.setName(threadName)
 
     def run(self):
-        self.socket.settimeout(5)
+        self.socket.settimeout(1)
         try:
             while not self.stopEvent.isSet():
                 try:
                     connection, address = self.socket.accept()
                 except socket.timeout:
                     continue
-                connection.settimeout(5)
+                connection.settimeout(1)
 
-                recep = Receptor(connection, address, self.requests)
+                recep = Receptor(connection, address, self.requests, self.getName())
                 self.recipients.append(recep)
 
                 print("Connection accepted with ", address)
