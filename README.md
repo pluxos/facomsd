@@ -11,7 +11,8 @@
 ```
 	1-Iniciar o servidor executando a classe ServerApp;
 	2-Iniciar o cliente executando a classe ClientApp;
-	3-Inserir comandos no formato <comando key:value> onde comando é do tipo string, key é do tipo biginteger e value é do tipo string;
+	3-Inserir comandos no formato <comando key:value>, 
+	onde comando é do tipo string, key é do tipo biginteger e value é do tipo string;
 ```
 
 ### Instruções para execução dos testes:
