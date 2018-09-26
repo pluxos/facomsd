@@ -1,7 +1,16 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
-
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome 2018_2_X, onde X é um identificador atribuído pelo professor para o seu grupo de trabalho. 
-
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
-
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+Grupo 10:
+	Diego Rodrigues de Jesus;
+	Gabriel Dias Ribeiro;
+	Kaique Vandersar Ribeiro Lopes;
+	Matheus Silva Vieira;
+	Vitor Hugo Ferreira;
+	
+Instruções para execução do projeto:
+	1-Iniciar o servidor executando a classe ServerApp;
+	2-Iniciar o cliente executando a classe ClientApp;
+	3-Inserir comandos no formato <comando key:value> onde comando é do tipo string, key é do tipo biginteger e value é do tipo string;
+	
+Instruções para execução dos testes:
+	1-Executar as classes do pacote src>test>java como jUnit teste;
+	
+Obs: Para reexecução de um teste é necessário limpar o arquivo de log.
