@@ -1,6 +1,12 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
-# Core
+# Test
 
-Pacote contendo arquivos/classes comuns ao servidor e ao cliente.
+Módulo exclusivo de testes da aplicação.
+
+Para executar os testes basta executar o comando abaixo:
+
+```
+$ mvn clean test
+```
 

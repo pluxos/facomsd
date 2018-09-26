@@ -73,9 +73,10 @@ public class ClientCommandHandler implements Runnable {
     public void run() {
         while (scanner.hasNext()) {
             String command = scanner.nextLine();
+            System.out.println(command);
             if (COMMAND_SAIR.equals(command)) {
                 stopConnection();
-                return;
+                break;
             }
             try {
                 validateCommand(command);

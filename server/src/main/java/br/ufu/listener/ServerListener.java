@@ -17,6 +17,7 @@ public class ServerListener implements Runnable {
     private final QueueService queueService;
     private final int port;
     private ServerSocket serverSocket;
+    private boolean running = true;
 
     public ServerListener(QueueService queueService, int port) {
         this.port = port;
@@ -26,12 +27,12 @@ public class ServerListener implements Runnable {
     private void start(int port) throws IOException {
         log.info("Running socket on {}", port);
         serverSocket = new ServerSocket(port);
-        while (true)
+        while (running)
             new ClientHandler(queueService, serverSocket.accept()).start();
     }
 
-    public void stop() throws IOException {
-        serverSocket.close();
+    public void stop() {
+        this.running = false;
     }
 
     @Override
