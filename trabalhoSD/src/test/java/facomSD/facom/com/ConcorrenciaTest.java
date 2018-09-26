@@ -36,19 +36,19 @@ public class ConcorrenciaTest {
 			}
 
 			for (int i = 0; i < 10; i++) {
-				tNok[i] = new Thread(new ThreadCrudNok((i+10)*4));
+				tNok[i] = new Thread(new ThreadCrudNok((i + 10) * 4));
 				tNok[i].start();
 			}
-			
+
 			for (int i = 1; i <= 10; i++) {
-				tOrdem[i] = new Thread(new ThreadOrdemTest(i*2000));
+				tOrdem[i] = new Thread(new ThreadOrdemTest(i * 2000));
 				tOrdem[i].start();
 			}
 
 			for (int i = 0; i < 10; i++) {
 				t[i].join();
 				tNok[i].join();
-				tOrdem[i+1].join();
+				tOrdem[i + 1].join();
 			}
 
 		} catch (InterruptedException e) {
