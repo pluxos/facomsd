@@ -24,9 +24,11 @@ proc = queue.Queue() # fila F3
 
 # alocando alguns threads para manipular as requisicoes
 consumidor = utils.Consumidor(reqs, [logq, proc])
+log = utils.Log(logq, configs.get("path", "./configs.ini"))
 
 # iniciando as threads
 consumidor.start()
+log.start()
 
 server_socket.listen(1)
 

@@ -24,6 +24,24 @@ class Consumidor(threading.Thread):
             for tg in self.targets:
                 tg.put(item)
 
+class Log(threading.Thread):
+    """
+    Grava as operacoes dos usuarios em um arquivo de log para que o sistema
+    possa usar caso alguma falha de sistema ocorra.
+    """
+    def __init__(self, qeue, path):
+        super().__init__(name="log")
+        self.arquivo = open(path, "w")
+        self.qeue = qeue
+
+    def run(self):
+        """
+        Grava as operacoes realizadas em disco
+        """
+        while True:
+            # consome um item da fila e depois escreve no arquivo
+            item = self.qeue.get()
+            self.arquivo.write(str(item) + "\n")
 
 class Processamento(threading.Thread):
     """
@@ -65,6 +83,40 @@ class Processamento(threading.Thread):
                     resposta = "MENSAGEM: Novo registro criado: {0} -> {1}".format(chave, valor)
                     self.connection_socket.send(bytes(resposta, "utf-8"))
             # encerra a thread e fecha todas as conexoes com o cliente
+            elif comando.lower() == "read":
+                chave = item[1]
+
+                # checa se a chave existe no registro
+                if self.db.get(chave) is None:
+                    resposta = "ERRO: o registro de chave {0} nao existe!".format(chave)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
+                else:
+                    valor = self.db.get(chave)
+                    resposta = "MENSAGEM: registro {0} -> {1}".format(chave, valor)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
+            elif comando.lower() == "update":
+                chave = item[1]
+                valor = item[2]
+
+                # checa se a chave existe no registro
+                if self.db.get(chave) is None: 
+                    resposta = "ERRO: o registro de chave {0} nao existe!".format(chave)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
+                else:
+                    self.db.update({chave: valor})
+                    resposta = "MENSAGEM: registro atualizado {0} -> {1}".format(chave, valor)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
+            elif comando.lower() == "delete":
+                chave = item[1]
+
+                # checa se o registro existe no banco de dados
+                if self.db.get(chave) is None:
+                    resposta = "ERRO: o registro da chave {0} nao existe!".format(chave)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
+                else:
+                    del(self.db[chave])
+                    resposta = "MENSAGEM: registro {0} -> {1} apagado!".format(chave)
+                    self.connection_socket.send(bytes(resposta, "utf-8"))
             elif comando.lower() == "exit":
                 self.connection_socket.close()
                 # encerrando o laco e consequentemente a thread
