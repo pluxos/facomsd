@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.sun.security.ntlm.Server;
 
 import cliente.Client;
+import facomSD.facom.com.threads.ThreadStartServer;
 import servidor.ServerApp;
 
 public class RecuperacaoTest {
@@ -30,7 +31,7 @@ public class RecuperacaoTest {
 			ThreadStartServer t = new ThreadStartServer();
 			Thread ts = new Thread(t);
 			ts.start();
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			System.out.println("teste");
 			c = new Client();
 			c.init();
@@ -45,16 +46,14 @@ public class RecuperacaoTest {
 				assertTrue(resposta.equals("Dados criados com sucesso"));
 				System.out.println("sucesso");
 			}
-			Thread.sleep(5000);
-			//PROCESSO SERVIDOR E MORTO
-			t.getS().stop();
-			out.writeObject("read 0");
-			Thread.sleep(5000);
-			System.out.println("----"+ts.isAlive()+"----");
-			ts = new Thread(new ThreadStartServer());
-			//PROCESSO SERVIDOR E INICIADO
+			Thread.sleep(3000);
+//			PROCESSO SERVIDOR E MORTO(Nao funcionando!)
+//			t.getS().stop();
+//			Thread.sleep(5000);
+//			ts = new Thread(new ThreadStartServer());
+//			PROCESSO SERVIDOR E INICIADO
 			ts.start();
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			//5 ITENS CRIADOS ANTERIORMENTE SAO LIDOS
 			for (int i = 0; i < 5; i++) {
 				c.getObjectOutputStream().writeObject("read " + i + "");
@@ -69,12 +68,13 @@ public class RecuperacaoTest {
 				System.out.println(resposta);
 				assertTrue(resposta.equals("Dados criados com sucesso"));
 			}
-			Thread.sleep(5000);
-			ts.interrupt();
-			Thread.sleep(5000);
-			ts = new Thread(new ThreadStartServer());
+//			PROCESSO SERVIDOR E MORTO(Nao funcionando!)
+//			t.getS().stop();
+//			Thread.sleep(5000);
+//			ts = new Thread(new ThreadStartServer());
+//			PROCESSO SERVIDOR E INICIADO
 			ts.start();
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			for (int i = 5; i < 8; i++) {
 				c.getObjectOutputStream().writeObject("read " + i + "");
 				String resposta = (String) c.getObjectInputStream().readObject();

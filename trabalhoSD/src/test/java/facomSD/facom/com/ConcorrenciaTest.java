@@ -5,6 +5,11 @@ import org.junit.Test;
 
 import com.sun.security.ntlm.Server;
 
+import facomSD.facom.com.threads.ThreadCrudNok;
+import facomSD.facom.com.threads.ThreadCrudOk;
+import facomSD.facom.com.threads.ThreadOrdemTest;
+import facomSD.facom.com.threads.ThreadStartServer;
+
 public class ConcorrenciaTest {
 
 	Server server;

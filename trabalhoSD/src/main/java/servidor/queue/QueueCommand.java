@@ -45,7 +45,7 @@ public class QueueCommand {
   }
   
   private boolean producer(BlockingQueue<ClientData> queue, ClientData elemento) {
-   // queue = resizeIf(queue);
+    queue = resizeIf(queue);
     return queue.offer(elemento);
   }
   

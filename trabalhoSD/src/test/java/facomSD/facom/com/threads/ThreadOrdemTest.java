@@ -1,4 +1,4 @@
-package facomSD.facom.com;
+package facomSD.facom.com.threads;
 
 import static org.junit.Assert.assertTrue;
 
