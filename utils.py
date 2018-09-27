@@ -3,152 +3,163 @@ import threading
 
 class Consumidor(threading.Thread):
     """
-    Essa thread consome tudo que esta em determinadas filas e depois
-    copia o item consumido para demais filas chamadas target.
+    Consome itens armazenados em uma fila associado a uma Thread e copia
+    os itens para uma ou mais filas de destino.
     """
 
-    def __init__(self, queue, targets):
-        super().__init__(name="consumidor")
-        self.queue = queue
-        self.targets = targets
+    def __init__(self, queue, targets, thread_name="consumidor"):
+        super().__init__(name=thread_name) # nome da thread
+        self.queue = queue                 # fila associada a thread
+        self.targets = targets             # filas destino
 
     def run(self):
         """
-        Copia as filas de uma fila queue para outras target
+        Copia os itens de uma fila de origem para uma ou mais filas de
+        destino.
         """
         while True:
-            # retirando os elementos da fila queue e copiando para as
-            # demais filas em targets
+            # retira um item de uma fila e copia para as temais filas
+            # associadas a esta thread
             item = self.queue.get()
 
             for tg in self.targets:
                 tg.put(item)
 
-class Log(threading.Thread):
+
+class Logger(threading.Thread):
     """
-    Grava as operacoes dos usuarios em um arquivo de log para que o sistema
-    possa usar caso alguma falha de sistema ocorra.
-    """
-    def __init__(self, qeue, path):
-        super().__init__(name="log")
-        self.arquivo = open(path, "w")
-        self.qeue = qeue
+    Grava as operacoes realizadas por um ou mais usuarios em um arquivo
+    de log para fins de recuperacao de falhas.
+    """        
+
+    def __init__(self, queue, log_fd, thread_name="logger"):
+        super().__init__(name=thread_name)
+        self.queue = queue
+        self.log_fd = log_fd
 
     def run(self):
         """
-        Grava as operacoes realizadas em disco
+        Retira as requisicoes da fila de requests e as grava em disco
         """
         while True:
-            # consome um item da fila e depois escreve no arquivo
-            item = self.qeue.get()
-            self.arquivo.write(str(item) + "\n")
+            item = self.queue.get()
+            self.log_fd.write(item[0] + "\n")
+            self.log_fd.flush()
+
 
 class Processamento(threading.Thread):
     """
-    Processa as mensagens enviada por cada usuario conecado ao sistema e
-    gera as devidas respostas para cada cliente.
+    Processa as requisicoes armazenadas na fila de requisicoes e depois
+    gera as devidas respostas ou alteracoes no banco de dados da
+    aplicacao.
     """
-    
-    def __init__(self, connection_socket, addr, queue, db):
-        super().__init__(name="processamento")
-        self.connection_socket = connection_socket
-        self.addr = addr
+
+    def __init__(self, queue, db, thread_name="processamento"):
+        super().__init__(name=thread_name)
         self.queue = queue
         self.db = db
 
     def run(self):
         """
-        O cliente atual mantem esta thread viva ate que o comando EXIT seja
-        digitado no console de aplicacao. Entao a thread e a conexao sao
-        encerrados.
+        Processa as requisicoes na fila de requisicoes na fila do
+        servidor
         """
         while True:
-            # obtendo os comandos da fila de execucao do sistema
-            item = self.queue.get()
+            # retira um item da fila de requisicoes. Um item esta no formato
+            # (tokens, socket)
+            toks, conn = self.queue.get()
+            comando = toks[0]
 
-            comando = item[0]
-
-            # verificando qual foi o comando enviado pelo usuario
-            # ( CREATE | READ | UPDATE | DELETE )
             if comando.lower() == "create":
-                chave, valor = item[1], item[2]
+                chave = int(toks[1])
+                valor = toks[2]
 
-                # checa se a chave ja existe no banco de dados
+                # a chave ja existe no registro?
                 if self.db.get(chave) is not None:
                     resposta = "ERRO: A chave {0} ja existe no banco de dados!".format(chave)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
-                # senao insere a chave e o valor
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
                 else:
                     self.db.setdefault(chave, valor)
-                    resposta = "MENSAGEM: Novo registro criado: {0} -> {1}".format(chave, valor)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
-            # encerra a thread e fecha todas as conexoes com o cliente
+                    resposta = "MENSAGEM: Registro {0}->{1} criado com exito!".format(chave, valor)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
+            
             elif comando.lower() == "read":
-                chave = item[1]
+                chave = int(toks[1])
+                valor = self.db.get(chave)
 
-                # checa se a chave existe no registro
-                if self.db.get(chave) is None:
-                    resposta = "ERRO: o registro de chave {0} nao existe!".format(chave)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
+                # checa se o valor retornado eh "null"
+                if valor is None:
+                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
                 else:
-                    valor = self.db.get(chave)
-                    resposta = "MENSAGEM: registro {0} -> {1}".format(chave, valor)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
-            elif comando.lower() == "update":
-                chave = item[1]
-                valor = item[2]
+                    resposta = "MENSAGEM: Registro {0}->{1}!".format(chave, valor)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
 
-                # checa se a chave existe no registro
-                if self.db.get(chave) is None: 
-                    resposta = "ERRO: o registro de chave {0} nao existe!".format(chave)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
+            elif comando.lower() == "update":
+                chave = int(toks[1])
+                valor = toks[2]
+
+                # se o valor retornado for "nulo" entao nao existe nada para atualizar
+                if self.db.get(chave) is None:
+                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
                 else:
                     self.db.update({chave: valor})
-                    resposta = "MENSAGEM: registro atualizado {0} -> {1}".format(chave, valor)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
-            elif comando.lower() == "delete":
-                chave = item[1]
+                    resposta = "MENSAGEM: Registro {0}->{1} atualizado!".format(chave, valor)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
 
-                # checa se o registro existe no banco de dados
-                if self.db.get(chave) is None:
-                    resposta = "ERRO: o registro da chave {0} nao existe!".format(chave)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
+            elif comando.lower() == "delete":
+                chave = int(toks[1])
+                valor = self.db.get(chave)
+
+                # se o valor for "null" entao nao existe nada para apagar
+                if valor is None:
+                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
                 else:
                     del(self.db[chave])
-                    resposta = "MENSAGEM: registro {0} -> {1} apagado!".format(chave)
-                    self.connection_socket.send(bytes(resposta, "utf-8"))
+                    resposta = "MENSAGEM: Registro {0}->{1} apagado!".format(chave, valor)
+                    # retorna a mensagem para o devido socket associado a requisicao
+                    conn.send(bytes(resposta, "utf-8"))
             elif comando.lower() == "exit":
-                self.connection_socket.close()
-                # encerrando o laco e consequentemente a thread
-                break
+                conn.send(bytes("EXIT", "utf-8"))
+                conn.close()
 
 
 class Requisicoes(threading.Thread):
-    """
-    Recebe uma conexao com o usuario e trata as mensagens recebidas pelo
-    usuario e depois as insere na fila de requisicoes. A corretude dos
-    comandos eh de responsabilidade da aplicacao cliente.
-    """
 
-    def __init__(self, connection_socket, addr, queue):
-        super().__init__(name="requisicoes")
-        self.connection_socket = connection_socket
+    def __init__(self, client_sock, addr, queue, thread_name="requisicoes"):
+        super().__init__(name=thread_name, daemon=True)
+        self.client_sock = client_sock
         self.addr = addr
         self.queue = queue
 
     def run(self):
         """
-        Para cada novo usuario conectado, uma nova thread sera criada
-        para tratar os comandos recebidos.
+        Processa as requisicoes de um usuario conectado ao servidor enquanto
+        ele nao der o sinal para finalizar a thread. As mensagens sao
+        verificadas no lado do cliente, portanto todas mensagens processadas
+        aqui estao corretas.
         """
-        # tratando uma mensagem enviada pelo cliente. A verificacao da
-        # corretude dos comandos eh feita no lado do cliente
-        mensagem = self.connection_socket.recv(1024).decode("utf-8")
+        keep_alive = True
 
-        # quebrando a mensagem em tokens
-        toks = mensagem.split(" ")
-        # item = [self.addr] + toks
-        item = toks
+        while keep_alive:
+            # recebe uma mensagem do usuario
+            mensagem = self.client_sock.recv(4096).decode("utf-8")
+            # print(mensagem)
+            # quebra a mensagem do cliente em tokens
+            toks = mensagem.split(" ")
 
-        # guardando a requisicao na fila de requisicoes
-        self.queue.put(item)
+            # se o cliente deseja sair, entao a thread deve morrer
+            if toks[0].lower() == "exit":
+                keep_alive = False
+            # armazenando a nova requisicao na fila de requisicoes
+            item = toks, self.client_sock
+            self.queue.put(item)

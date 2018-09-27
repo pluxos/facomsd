@@ -1,44 +1,45 @@
-""" Codigo da aplicacao servidor """
 import queue
 import socket
 import utils
 
-
-arquivo = open("C:\\Users\\Luis Carlos\\Documents\\Projetos\\SD\\configs.ini", "r")
+arquivo = open("C:\\Users\\Luis Carlos\\Documents\\GitHub\\sd\\facomsd\\configs.ini", "r")
 configs = eval(arquivo.read())
 arquivo.close()
 
-port = configs.get("port", 12345)
 host = socket.gethostname()
+port = configs.get("port", 12345)
+logfile = open(configs.get("log"))
 
+# criando o socket do servidor e associando o servidor a uma porta
 server_socket = socket.socket()
 server_socket.bind((host, port))
 
-# criando um banco de dados em memoria para armazenar os dados
+# alocando um banco de dados em memoria para armazenar os itens
 db = {}
 
-# alocando filas para armazenar e tratar as requisicoes
-reqs = queue.Queue() # fila F1
-logq = queue.Queue() # fila F2
-proc = queue.Queue() # fila F3
+# alocando as filas para armazenar os processamento das requisicoes
+# enviado pelos usuarios
+reqs = queue.Queue() # F1 (requisicoes)
+logs = queue.Queue() # F2 (log)
+proc = queue.Queue() # F3 (processamento)
 
-# alocando alguns threads para manipular as requisicoes
-consumidor = utils.Consumidor(reqs, [logq, proc])
-log = utils.Log(logq, configs.get("path", "./configs.ini"))
+# instanciando as threads para serem usados no sistema
+consumidor = utils.Consumidor(reqs, [logs, proc])
+processamento = utils.Processamento(proc, db)
+logger = utils.Logger(logs, logfile)
 
-# iniciando as threads
+# inicializando as threads
 consumidor.start()
-log.start()
+processamento.start()
 
 server_socket.listen(1)
 
+# laco principal da execucao do servidor de aplicacao
 while True:
-    # aceitando se comunicar com a aplicacao cliente
-    c, addr = server_socket.accept()
+    conn, addr = server_socket.accept()
+    print("Got connection from {0}...".format(addr))
+    # criando uma nova thread para processar as requisicoes
+    # dos clientes
+    utils.Requisicoes(conn, addr, reqs).start()
 
-    print("Got connection from {0}!!!".format(addr))
-
-    # delegando a conexao com o cliente para uma
-    # thread para tratar as requisicoes
-    utils.Requisicoes(c, addr, reqs).start()
-    utils.Processamento(c, addr, proc, db).start()
+server_socket.close()
