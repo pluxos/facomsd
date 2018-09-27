@@ -8,7 +8,7 @@ arquivo.close()
 
 host = socket.gethostname()
 port = configs.get("port", 12345)
-logfile = open(configs.get("log"))
+logfile = open(configs.get("log"), "w")
 
 # criando o socket do servidor e associando o servidor a uma porta
 server_socket = socket.socket()

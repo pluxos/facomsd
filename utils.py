@@ -1,3 +1,4 @@
+import os
 import threading
 
 
@@ -45,6 +46,7 @@ class Logger(threading.Thread):
             item = self.queue.get()
             self.log_fd.write(item[0] + "\n")
             self.log_fd.flush()
+            os.fsync(self.log_fd.fileno)
 
 
 class Processamento(threading.Thread):
