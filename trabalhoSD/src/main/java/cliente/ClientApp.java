@@ -6,6 +6,7 @@ public class ClientApp {
       Client cliente = new Client();
       cliente.start();
     } catch (Exception e) {
+      System.out.println("Erro ao executar cliente!!!");
     }
   }
 }

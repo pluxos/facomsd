@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Data {
-  static Map<BigInteger, String> dados = new HashMap<BigInteger, String>();
+  private Map<BigInteger, String> dados = new HashMap<BigInteger, String>();
   
-  public static Map<BigInteger, String> getDados() {
+  public Map<BigInteger, String> getDados() {
     return dados;
   }
   
