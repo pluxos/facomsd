@@ -40,8 +40,3 @@ class TesteConcurrency:
         fio.daemon = True
         fio.start()
         
-        
-            
-      
-  
-        
