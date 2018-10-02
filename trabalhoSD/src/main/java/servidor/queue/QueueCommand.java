@@ -11,25 +11,19 @@ public class QueueCommand {
   private BlockingQueue<ClientData> f2 = new ArrayBlockingQueue<ClientData>(Constant.MAX_QUEUE);
   private BlockingQueue<ClientData> f3 = new ArrayBlockingQueue<ClientData>(Constant.MAX_QUEUE);
   
-  // public QueueCommand() {
-  // this.f1 = new ArrayBlockingQueue<String>(Constant.MAX_QUEUE);
-  // this.f2 = new ArrayBlockingQueue<String>(Constant.MAX_QUEUE);
-  // this.f3 = new ArrayBlockingQueue<String>(Constant.MAX_QUEUE);
-  // }
   public void produceF1(ClientData elemento) {
     producer(f1, elemento);
-    System.out.println(elemento.getComando()+" adicionado em f1");
+    //System.out.println(elemento.getComando() + " adicionado em f1");
   }
   
   public void produceF2(ClientData elemento) {
     producer(f2, elemento);
-    System.out.println(elemento.getComando()+" adicionado em f2");
-    
+    //System.out.println(elemento.getComando() + " adicionado em f2");
   }
   
   public void produceF3(ClientData elemento) {
     producer(f3, elemento);
-    System.out.println(elemento.getComando()+" adicionado em f3");
+    //System.out.println(elemento.getComando() + " adicionado em f3");
   }
   
   public ClientData consumeF1() throws InterruptedException {

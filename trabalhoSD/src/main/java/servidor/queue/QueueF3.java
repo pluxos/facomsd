@@ -30,10 +30,10 @@ public class QueueF3 extends Queue implements Runnable {
       System.out.println("Iniciando F3");
       while (true) {
         Server.mutex.acquire();
-        ClientData elemento =  super.queue.consumeF3();
+        ClientData elemento = super.queue.consumeF3();
         out = elemento.getOut();
-        String resposta = execute.execute(elemento.getComando());
-        System.out.println("comando de F3 executado");
+        String resposta = execute.execute(elemento.getComando(), elemento.getData());
+        System.out.println(">>>>> comando de F3 executado");
         elemento.getOut().writeObject(resposta);
       }
     } catch (InterruptedException e) {

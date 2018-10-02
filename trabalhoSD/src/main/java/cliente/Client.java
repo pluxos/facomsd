@@ -17,9 +17,9 @@ public class Client {
   private ObjectInputStream in;
   private Thread tRead;
   private Thread tResponse;
- private Scanner s;
- private Socket socket;
- private String menu="";
+  private Scanner s;
+  private Socket socket;
+  private String menu = "";
   
   public ObjectOutputStream getObjectOutputStream() {
     return out;
@@ -56,7 +56,7 @@ public class Client {
       System.out.println("ClientResponse finalizado");
       System.exit(0);
     } catch (Exception e) {
-    	System.out.println("Servidor não encontrado");
+      System.out.println("Servidor não encontrado");
     }
   }
 }

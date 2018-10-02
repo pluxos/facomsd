@@ -2,16 +2,14 @@ package facomSD.facom.com;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.security.ntlm.Server;
-
 import cliente.Client;
 import facomSD.facom.com.threads.ThreadStartServer;
-import servidor.ServerApp;
 
 public class OrdemTest {
   @Before
@@ -23,9 +21,11 @@ public class OrdemTest {
     Client c;
     c = new Client();
     try {
+      File arquivo = new File("operacoes.log");
+      arquivo.delete(); // deleta arquivo de log
       Thread ts = new Thread(new ThreadStartServer());
       ts.start();
-      Thread.sleep(5000);
+      Thread.sleep(3000);
       c.init();
       //ESCREVE UM VALOR EM UM ITEM - 0 ATE 999
       for (int i = 0; i < 1000; i++) {

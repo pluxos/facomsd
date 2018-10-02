@@ -3,12 +3,10 @@ package cliente;
 import java.io.ObjectInputStream;
 
 public class ClientResponse implements Runnable {
-  // private Socket socket;
   private ObjectInputStream in;
   private boolean running;
   
   public ClientResponse(ObjectInputStream in) {
-    // this.socket = socket;
     this.in = in;
     this.running = true;
   }
