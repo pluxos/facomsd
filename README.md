@@ -1,7 +1,17 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
+## Informações Gerais
+A aplicação roda em Python3, não foi testada em Python2.
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome 2018_2_X, onde X é um identificador atribuído pelo professor para o seu grupo de trabalho. 
+Todos os requisitos do professor estão nos comentários do arquivo common.py segundo slides
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+# Instalação
+Para rodar a aplicação, é necessário ter a biblioteca termcolor do python
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+```bash
+sudo -H pip3 install --upgrade pip
+sudo pip3 install termcolor
+sudo pip3 install pytest
+sudo pip3 install pyyaml
+```
+
+## Testes
+Para rodar os testes, em um terminal, digite: `pytest test_cliente.py -vv`: dessa forma, os testes serão executados em ordem de aparecimento no código. (_Importante para a primeira sequencia de tests_)
