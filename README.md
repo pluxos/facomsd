@@ -18,4 +18,5 @@
 	```
 	1-Executar as classes do pacote src>test>java como jUnit teste;
 
-#Obs: Para reexecução de um teste é necessário limpar o arquivo de log.
+
+
