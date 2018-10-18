@@ -38,4 +38,8 @@ public class CrudRepository {
         }
     }
 
+    public Map<BigInteger, String> getDatabase() {
+        return database;
+    }
+
 }

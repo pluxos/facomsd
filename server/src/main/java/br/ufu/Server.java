@@ -1,9 +1,6 @@
 package br.ufu;
 
-import br.ufu.listener.F1Listener;
-import br.ufu.listener.F2Listener;
-import br.ufu.listener.F3Listener;
-import br.ufu.listener.ServerListener;
+import br.ufu.listener.*;
 import br.ufu.repository.CrudRepository;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
@@ -29,6 +26,7 @@ public class Server {
     private F2Listener f2Listener;
     private F3Listener f3Listener;
     private UserParameters userParameters;
+    private SnapshotSchedule snapshotSchedule;
 
     public Server(String[] args) {
         userParameters = new UserParameters(args);
@@ -44,6 +42,7 @@ public class Server {
         f1Listener = new F1Listener(getQueueService());
         f2Listener = new F2Listener(getQueueService(), getLogWriter());
         f3Listener = new F3Listener(getQueueService(), getCrudService());
+        snapshotSchedule = new SnapshotSchedule(getCrudRepository());
     }
 
     public CrudRepository getCrudRepository() {
@@ -86,17 +85,21 @@ public class Server {
         return userParameters;
     }
 
+    public SnapshotSchedule getSnapshotSchedule() { return snapshotSchedule; }
+
     private void startListeners() throws InterruptedException {
 
         Thread serverListenerThread = startThread(getServerListener());
         Thread f1ListenerThread = startThread(getF1Listener());
         Thread f2ListenerThread = startThread(getF2Listener());
         Thread f3ListenerThread = startThread(getF3Listener());
+        Thread snapshotSchedule = startThread(getSnapshotSchedule());
 
         serverListenerThread.join();
         f1ListenerThread.join();
         f2ListenerThread.join();
         f3ListenerThread.join();
+        snapshotSchedule.join();
     }
 
     public void start() throws InterruptedException, IOException {

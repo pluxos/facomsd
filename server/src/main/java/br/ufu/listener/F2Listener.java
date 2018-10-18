@@ -31,8 +31,7 @@ public class F2Listener extends FxListener {
             if (commadIsRead(item)) {
                 return;
             }
-            logWriter.write(item.getExecuteCommand());
-            logWriter.write(FILE_SEPARATOR);
+            logWriter.write(item.getExecuteCommand() + FILE_SEPARATOR);
         } catch (InterruptedException | IOException e) {
             throw new ListenerException(e);
         }
