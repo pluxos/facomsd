@@ -1,10 +1,8 @@
 package br.ufu.listener;
 
-import br.ufu.exception.UserParametersException;
 import br.ufu.model.Command;
 import br.ufu.service.QueueService;
 import br.ufu.util.UserParameters;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -22,7 +20,7 @@ public class ServerListenerTest {
     private static final String COMMAND = "READ 1";
 
     @Test
-    public void shouldProduceCommand() throws UserParametersException {
+    public void shouldProduceCommand() {
 
         QueueService queueService = new QueueService();
         QueueService queueServiceSpy = Mockito.spy(queueService);

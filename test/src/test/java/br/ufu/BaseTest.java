@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -21,7 +21,7 @@ public class BaseTest {
     @Mock
     private Appender mockAppender;
 
-    private List<String> logEvents = new ArrayList<>();
+    private List<String> logEvents = new CopyOnWriteArrayList<>();
 
     private Logger logger;
 

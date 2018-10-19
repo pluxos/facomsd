@@ -3,9 +3,7 @@ package br.ufu.repository;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigInteger;
-
-import static java.math.BigInteger.*;
+import static java.math.BigInteger.ONE;
 
 public class CrudRepositoryTest {
 

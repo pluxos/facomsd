@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 
 import static java.math.BigInteger.ONE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

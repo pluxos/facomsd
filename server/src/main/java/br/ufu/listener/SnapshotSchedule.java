@@ -40,13 +40,13 @@ public class SnapshotSchedule implements Runnable {
     public void run() {
         while(running) {
             try {
-                Thread.sleep (5000);
+                Thread.sleep (50000);
                 SnapshotWriter snapshotWriter = createSnapshot();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {
                     snapshotWriter.write(item.getKey(), item.getValue());
                 }
-                log.info("Snapshot xxx gerado!");
+                log.info("Snapshot " + snapshotNumber + " gerado!");
             } catch (InterruptedException | IOException e) {
                 log.warn(e.getMessage(), e);
                 throw new SnapshotException(e);

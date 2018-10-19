@@ -1,12 +1,12 @@
 package br.ufu.repository;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CrudRepository {
 
-    private Map<BigInteger, String> database = new HashMap<>();
+    private Map<BigInteger, String> database = new ConcurrentHashMap<>();
 
     public String create(BigInteger id, String value) throws DatabaseException {
         if (database.containsKey(id)) {
@@ -38,8 +38,6 @@ public class CrudRepository {
         }
     }
 
-    public Map<BigInteger, String> getDatabase() {
-        return database;
-    }
+    public Map<BigInteger, String> getDatabase() { return database; }
 
 }

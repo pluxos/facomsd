@@ -1,5 +1,7 @@
 package br.ufu;
 
+import org.awaitility.core.ConditionTimeoutException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static br.ufu.TestUtil.getArgs;
 import static br.ufu.TestUtil.getThread;
@@ -22,13 +25,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class Caso02StateParallelTest extends BaseTest {
 
-    public Thread testRecover(String key, int startIndex, int p1, int p2, File tempLogFile) {
+    public Thread testRecoverCreate(String key, int startIndex, int p1, File tempLogFile) {
 
         return new Thread(() -> {
 
             String[] commands = getArgs(tempLogFile, p1);
 
-            Server serverSpy = Mockito.spy(new Server(commands));
             Client clientSpy = Mockito.spy(new Client(commands));
 
             Scanner mockScanner = Mockito.mock(Scanner.class);
@@ -45,42 +47,41 @@ public class Caso02StateParallelTest extends BaseTest {
             //Também poderei usar estas classes depois
             when(clientSpy.getScanner()).thenReturn(mockScanner);
             when(mockScanner.hasNext()).thenReturn(true);
-            when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-                Thread.sleep(50);
-                return inputs.take();
-            });
-
-            //Start das Threads
-            Thread tServer = getThread(serverSpy);
-            tServer.start();
+            when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> inputs.take());
 
             await().dontCatchUncaughtExceptions().untilAsserted(() -> {
                 Thread tClient = getThread(clientSpy);
                 tClient.start();
                 tClient.join();
             });
+        });
+    }
 
+    public Thread testRecoverRead(String key, int startIndex, int p2, File tempLogFile) {
 
-            stopServer(tServer);
+        return new Thread(() -> {
             //Restart server
-            commands = getArgs(tempLogFile, p2);
+            String[] commands = getArgs(tempLogFile, p2);
 
-            Server newServerSpy = Mockito.spy(new Server(commands));
             Client newClientSpy = Mockito.spy(new Client(commands));
 
+            Scanner mockScanner = Mockito.mock(Scanner.class);
+
+            ArrayBlockingQueue<String> inputs = new ArrayBlockingQueue<>(10);
+
             when(newClientSpy.getScanner()).thenReturn(mockScanner);
-
-            //Start das Threads
-            Thread newTServer = getThread(newServerSpy);
-            newTServer.start();
-
+            //Mockei com spy para simular o input do usuario
+            //Também poderei usar estas classes depois
+            when(newClientSpy.getScanner()).thenReturn(mockScanner);
+            when(mockScanner.hasNext()).thenReturn(true);
+            when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> inputs.take());
 
             for (int i = startIndex; i < startIndex + 5; i++) {
                 inputs.offer(String.format("READ %s", i));
             }
             inputs.offer("sair");
 
-            await().atLeast(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
                 Thread tClient = getThread(newClientSpy);
                 tClient.start();
                 tClient.join();
@@ -91,9 +92,8 @@ public class Caso02StateParallelTest extends BaseTest {
                 verifyMessage("Command RESPONSE: READ OK - " + key + "" + (startIndex + 4));
             });
 
-            stopServer(tServer);
-
         });
+
     }
 
     private void stopServer(Thread tServer) {
@@ -110,23 +110,77 @@ public class Caso02StateParallelTest extends BaseTest {
 
         int paralellThreads = 10;
         int startIndex = 1;
-        int startPort = 4470;
+
+        final AtomicInteger atomicInteger = new AtomicInteger();
+
+        startForCreate(tempLogFile, paralellThreads, startIndex, 3700, atomicInteger);
+        startForRead(tempLogFile, paralellThreads, startIndex, 3701, atomicInteger);
+
+        Assert.assertEquals(0, atomicInteger.get());
+
+
+    }
+
+    private void startForCreate(File tempLogFile, int paralellThreads, int startIndex, int port, AtomicInteger atomicInteger) throws InterruptedException {
+        String[] commands = getArgs(tempLogFile, port);
+        Server serverSpy = Mockito.spy(new Server(commands));
+
+        //Start das Threads
+        Thread tServer = getThread(serverSpy);
+        tServer.start();
 
         List<Thread> threadList = new ArrayList<>();
 
-
         for (int i = 0; i < paralellThreads; i++) {
             String key = String.valueOf((char) (i + 65));
-            Thread thread = testRecover(key, startIndex, startPort++, startPort++, tempLogFile);
+            Thread thread = testRecoverCreate(key, startIndex, port, tempLogFile);
+            thread.setUncaughtExceptionHandler((thread1, throwable) -> {
+                if (throwable.getClass().equals(ConditionTimeoutException.class)) {
+                    atomicInteger.addAndGet(1);
+                }
+            });
             thread.start();
             threadList.add(thread);
             startIndex += 5;
         }
 
+
         for (Thread thread : threadList) {
             thread.join();
         }
 
+        stopServer(tServer);
+    }
+
+    private void startForRead(File tempLogFile, int paralellThreads, int startIndex, int port, AtomicInteger atomicInteger) throws InterruptedException {
+        String[] commands = getArgs(tempLogFile, port);
+        Server serverSpy = Mockito.spy(new Server(commands));
+
+        //Start das Threads
+        Thread tServer = getThread(serverSpy);
+        tServer.start();
+
+        List<Thread> threadList = new ArrayList<>();
+
+        for (int i = 0; i < paralellThreads; i++) {
+            String key = String.valueOf((char) (i + 65));
+            Thread thread = testRecoverRead(key, startIndex, port, tempLogFile);
+            thread.setUncaughtExceptionHandler((thread1, throwable) -> {
+                if (throwable.getClass().equals(ConditionTimeoutException.class)) {
+                    atomicInteger.addAndGet(1);
+                }
+            });
+            thread.start();
+            threadList.add(thread);
+            startIndex += 5;
+        }
+
+
+        for (Thread thread : threadList) {
+            thread.join();
+        }
+
+        stopServer(tServer);
     }
 
     private File getLogFile() {

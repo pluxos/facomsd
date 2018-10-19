@@ -1,17 +1,15 @@
 package br.ufu.listener;
 
-import br.ufu.model.Command;
-import br.ufu.exception.InvalidCommandException;
-import br.ufu.exception.ListenerException;
 import br.ufu.handler.ClientHandler;
+import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.awaitility.Awaitility.await;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class F3ListenerTest {
 

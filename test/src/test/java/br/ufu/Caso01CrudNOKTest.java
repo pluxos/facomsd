@@ -1,6 +1,5 @@
 package br.ufu;
 
-import br.ufu.handler.ClientCommandHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -50,10 +49,7 @@ public class Caso01CrudNOKTest extends BaseTest {
         //Também poderei usar estas classes depois
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenReturn(true);
-        when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
-            return inputs.get(currentInput[0]++);
-        });
+        when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> inputs.get(currentInput[0]++));
 
         //Start das Threads
         Thread tServer = getThread(serverSpy);

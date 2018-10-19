@@ -12,7 +12,7 @@ import java.util.List;
 @SuppressWarnings("squid:S2386Mutable")
 public class Constants {
 
-    public static final int MAX_QUEUE_ITEMS = 10;
+    public static final int MAX_QUEUE_ITEMS = 50;
     public static final String COMMAND_SEPARATOR = " ";
     public static final String MESSAGE_INVALID_COMMAND = "[%s] is not a valid command. Valid commands are: %s";
     public static final String PROPERTY_SERVER_HOST = "server.host";
