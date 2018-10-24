@@ -1,116 +1,100 @@
 # coding: utf-8
-from threading import Thread
+from threading import Thread, Event
 import socket
 import sys
+import time
+
+HOST = 'localhost'
+PORT = 10001
+BUFFER_SIZE = 1024
+EVENT = Event()
+SOCKET_CONN = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+SOCKET_CONN.connect((HOST, PORT))
+LOCK = False
 
 
-def menu():
-
-    stop = False
-
-    while not stop:
-        print("")
-        print("")
-        print("-------------------------------")
-        print('[1] - Listar registros')
-        print('[2] - Adicionar registro')
-        print('[3] - Atualizar registro')
-        print('[4] - Excluir registro')
-        print('[5] - Sair')
-
-        # captura a opção desejada
-        opt = str(input("Selecione uma opção: "))
-
-        if opt == "1":
-
-            # cria uma thread para executar a operação separadamente
-            thread2 = Thread(target=send_message, args=('select', '', ''))
-            thread2.start()
-            thread2.join()
-
-        elif opt == "2":
-            try:
-                value = input("Valor a ser adicionado: ")
-                # cria uma thread para executar a operação separadamente
-                thread3 = Thread(target=send_message, args=('insert', '', value))
-                thread3.start()
-                thread3.join()
-            except:
-                print('Valor inválido')
-
-        elif opt == "3":
-
-            key = input("Digite a chave a ser atualizada: ")
-            value = input("Digite o novo valor: ")
-
-            # cria uma thread para executar a operação separadamente
-            thread4 = Thread(target=send_message, args=('update', key, value))
-            thread4.start()
-            thread4.join()
-
-        elif opt == "4":
-
-            key = input("Digite a chave a ser deletada: ")
-
-            # cria uma thread para executar a operação separadamente
-            thread5 = Thread(target=send_message, args=('delete', key, ''))
-            thread5.start()
-            thread5.join()
-
-        elif opt == "5":
-
-            print("\n Fechando conexão")
-            stop = True
-
-        elif opt != "":
-
-            print("\n Digite um comando válido")
+def show_menu():
+    print('Digite um dos comandos a seguir:\n')
+    print('[1] - Listar registros')
+    print('[2] - Adicionar registro')
+    print('[3] - Atualizar registro')
+    print('[4] - Excluir registro')
+    print('[5] - Sair')
 
 
-def send_message(option, key, value):
-    ''' Envia para o server.py as mensagens de CRUD através da porta 10001 '''
+def read_info(command):
+    key = ''
+    value = ''
+    instruction = ''
 
-    message = str(option)+"/"+str(key)+"/"+str(value)
+    if command == '1':
+        key = input('Digite a chave a ser lida: ')
+        instruction = 'select'
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # cria um socket TCP que será utilizado para estabelecer a conexão
+    elif command == '2':
+        key = input('Digite a chave a ser inserida: ')
+        value = input('Digite o valor a ser inserido: ')
+        instruction = 'insert'
+    elif command == '3':
+        key = input('Digite a chave a ser alterada: ')
+        value = input('Digite o novo valor: ')
+        instruction = 'update'
+    elif command == '4':
+        key = input('Digite a chave a ser removida: ')
+        instruction = 'delete'
 
-    server_address = ('localhost', 10001)
-    print('Conectando a: {} porta: {}'.format(*server_address))
-    sock.connect(server_address)
-    # conectando no socket através da porta especificada
-
-    try:
-        print('enviando {!r}'.format(message))
-        sock.sendall(message.encode('utf-8'))
-
-        amount_received = 0
-        amount_expected = len(message)
-
-        '''
-            vai lendo o socket de 1024 em 1024 bytes para não
-            correr o risco de exceder o limite da pilha de memória
-        '''
-        while amount_received < amount_expected:
-            data = sock.recv(1024)
-            amount_received += len(data)
-            print('recebendo {!r}'.format(data))
-
-    finally:
-        print('Fechando conexão')
-        sock.close()
+    return (instruction, key, value)
 
 
-def clear():
-    ''' Função para limpar o leitor de entrada do python '''
-    print(chr(27)+'[2j')
-    print('\033c')
-    print('\x1bc')
+def receiver():
+    global LOCK
+    while not EVENT.isSet():
+        msg = SOCKET_CONN.recv(BUFFER_SIZE).decode()  # 1024 é a quantidade de bytes que vai ser lido
+        if not msg:  # se o servidor cair ele retorna uma msg vazia
+            EVENT.set()  # seta o evento para true e o while pára
+            break
+        print(msg)
+        print('\n')
+        LOCK = False
+
+
+def sender():
+    global LOCK
+    # se o evento não estiver setado
+    while not EVENT.isSet():
+        if not LOCK:
+            show_menu()
+            command = input()
+
+            if command == "5":
+                # seta o evento com true
+                EVENT.set()
+                break
+            # verifica se é um comando válido
+            elif command in ('1', '2', '3', '4'):
+                instruction, key, value = read_info(command)
+                # envia o comando para o servidor através do socket
+                SOCKET_CONN.send('{0}/{1}/{2}'.format(instruction, key, value).encode())
+                LOCK = True
+            else:
+                print("Comando inválido, tente novamente...")
+
 
 if __name__ == "__main__":
     # Verifica se a execução do python começou nesse arquivo
 
-    t1 = Thread(target=menu)
+    t1 = Thread(target=receiver)
     t1.setDaemon(True)
     t1.start()
-    t1.join()
+
+    t2 = Thread(target=sender)
+    t2.setDaemon(True)
+    t2.start()
+
+    t2.join()
+
+    if t1.isAlive():
+        time.sleep(5)
+        print("Encerrando execução.")
+    else:
+        print("Servidor desconectado... Encerrando execução.")

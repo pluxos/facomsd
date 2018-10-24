@@ -1,176 +1,165 @@
 # coding: utf-8
-from threading import Thread
+from threading import Thread, Event
 import socket
-import sys
-import os.path
+import queue
+import time
 import os
 
 
-keys = []
-bytes = []
-database = {'keys': keys, 'bytes': bytes}
-operations = []
+HOST = 'localhost'
+PORT = 10001
+BUFFER_SIZE = 1024
+EVENT = Event()
+SOCKET_CONN = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+SOCKET_CONN.bind((HOST, PORT))
+SOCKET_CONN.listen()
 
+INPUT_QUEUE = queue.Queue(maxsize=-1)
+PROCESS_QUEUE = queue.Queue(maxsize=-1)
+LOG_QUEUE = queue.Queue(maxsize=-1)
+hashtable = {}
 
-def databaser(comand, key, value):
-
-    print('[DB] Received: '+str(comand))
-
-    if comand == 'select':
-        # limpa a tela para evitar excesso de informação
-        clear()
-        print("[DB] SELECT:")
-
-        keys = database['keys']
-        response = []
-
-        if len(keys) > 0:
-            for key in keys:
-                msg = 'id {0}: <{1}>'.format(key, database['bytes'][key])
-                print(msg)
-                response.append(msg)
-        else:
-            msg = "Tabela vazia"
-            print(msg)
-            response = [msg]
-
-        return ', '.join(response)
-
-    if comand == 'insert':
-        # limpa a tela para evitar excesso de informação
-        clear()
-        print('[DB] INSERT: '+str(value))
-
-        count = len(database['keys'])
-        database['keys'].append(count)
-        database['bytes'].append(bytearray(value, 'utf8'))
-        print("\n Registro Adicionado")
-        return str("\n Registro Adicionado")
-
-    if comand == 'update':
-        # limpa a tela para evitar excesso de informação
-        clear()
-        print('[DB] UPDATE: key '+str(key))
-
-        try:
-            database['bytes'][int(key)] = bytearray(value, 'utf8')
-            print("\n Registro Atualizado")
-            return str("\n Registro Atualizado")
-        except Exception:
-            print("\n Chave não encontrada")
-            return str("\n Chave não encontrada")
-
-    if comand == 'delete':
-        # limpa a tela para evitar excesso de informação
-        clear()
-        print('[DB] DELETE: key '+str(key))
-
-        try:
-            database['bytes'][int(key)] = None
-            print("\n Registro Excluído")
-            return str("\n Registro Excluído")
-        except Exception:
-            print("\n Chave não encontrada")
-            return str("\n Chave não encontrada")
-
-    # print('[DB] Key: '+str(key))
-
-
-def server():
-
-    if os.path.isfile('db.txt'):
-        try:
-            file = open('db.txt', 'r')
-
-            for line in file.read().split('\n'):
-                message = line.split("/")
-                comand = message[0]
-                key = message[1]
-                value = message[2]
-                databaser(comand, key, value)
-
-            file.close()
-        except:
-            print('erro ao abrir arquivo')
-
-    file = open('db.txt', 'a')
-
+def reload_hash():
     try:
-        # cria um socket para comunicação via TCP
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(5)
-
-        # configura o socket para receber comandos na porta 10001
-        server_address = ('localhost', 10001)
-        print('Iniciando conexão na {} porta {}'.format(*server_address))
-        sock.bind(server_address)
-
-        # começa a escutar
-        sock.listen(1)
-
-        while True:
-
-            print('Esperando por conexões')
-            connection, client_address = sock.accept()
-
-            try:
-                print('Conexão de', client_address)
-
-                while True:
-
-                    # tenta ler o socket
-                    data = connection.recv(1024)
-
-                    print('recebido {!r}'.format(data))
-
-                    if data:
-                        # caso tenha dados na conexão, tenta decodificar
-                        comands = data.decode("UTF-8")
-                        # separa os comandos para identificar o que deve ser feito
-                        message = str(comands).split("/")
-                        comand = message[0]
-                        key = message[1]
-                        value = message[2]
-
-                        if comand in ['insert', 'update', 'delete']:
-                            operations.append(comands)
-                        # chama a função que executa os comandos
-                        back_message = databaser(comand, key, value)
-
-                        # se o retorno for uma lista, transforma em string
-                        if (type(back_message) == list):
-                            back_message = ''.join(back_message)
-
-                        print('enviando dados para o cliente')
-                        connection.sendall(back_message.encode("UTF-8"))
-                    else:
-                        print('no data from', client_address)
-                        break
-
-            finally:
-                # fecha a conexão do socket
-                connection.close()
+        with open('db.txt', 'r') as file:
+            i = 0
+            for line in file:
+                line.replace('\n', '')
+                i += 1
+                process_command(reload=True, data=line)
+            print('{0} instruções recuperadas'.format(i))
     except:
-        print('Timeout de 5 segundos atingido')
-    finally:
-        if operations:
-            for operation in operations:
-                file.writelines(operation)
-            file.write('\n')
-        file.close()
+        print('Erro ao tentar recarregar a tabela hash')
 
 
-def clear():
-    ''' Função para limpar o leitor de entrada do python '''
-    print(chr(27)+'[2j')
-    print('\033c')
-    print('\x1bc')
+def receive_command(connection, address):
+    global EVENT
+    global INPUT_QUEUE
+    global BUFFER_SIZE
+
+    print('Nova conexão estabelecida:', address)
+    while not EVENT.is_set():
+        data = connection.recv(BUFFER_SIZE).decode()
+        if not data:
+            break
+        INPUT_QUEUE.put((connection, address, data))
+
+    connection.close()
 
 
-if __name__ == "__main__":
-    # Verifica se a execução do python começou nesse arquivo
+def enqueue_command():
+    global EVENT
+    global INPUT_QUEUE
+    global PROCESS_QUEUE
+    global LOG_QUEUE
 
-    t1 = Thread(target=server)
+    while not EVENT.is_set():
+        if not INPUT_QUEUE.empty():
+            connection, address, data = INPUT_QUEUE.get()
+            PROCESS_QUEUE.put((connection, data))
+            LOG_QUEUE.put((address, data))
+
+
+def process_command(reload=False, data=""):
+    global EVENT
+    while not EVENT.is_set():
+        if not PROCESS_QUEUE.empty() or reload:
+            if not reload:
+                connection, data = PROCESS_QUEUE.get()
+
+            print(data)
+            query = data.split('/')
+            command = query[0]
+            key = int(query[1])
+            received_data = " ".join(map(str, query[2:])) if len(query) > 2 else ""
+
+            response = ''
+
+            if command == 'insert':
+                if key not in list(hashtable.keys()):
+                    hashtable[key] = received_data
+                    response = 'Chave {0} inserida com valor: {1}'.format(key, received_data).encode()
+                else:
+                    response = 'Já existe um valor para a chave {0}'.format(key).encode()
+
+            elif command == 'update':
+                if key in list(hashtable.keys()):
+                    hashtable[key] = received_data
+                    response = "Chave {0} atualizada com valor: {1}".format(key, received_data).encode()
+                else:
+                    response = 'A chave {0} não foi encontrada no banco de dados'.format(key).encode()
+
+            elif command == 'delete':
+                if key in list(hashtable.keys()):
+                    hashtable.pop(key, None)
+                    response = 'Chave {0} removida com sucesso'.format(key).encode()
+                else:
+                    response = 'A chave {0} não foi encontrada no banco de dados'.format(key).encode()
+
+            elif command == 'select':
+                if key in list(hashtable.keys()):
+                    response = str(hashtable[key]).encode()
+                else:
+                    response = 'A chave {0} não foi encontrada no banco de dados'.format(key).encode()
+
+            else:
+                response = 'Comando inválido'.encode()
+
+            if not reload:
+                try:
+                    connection.send(response)
+                except:
+                    print('Erro ao tentar enviar a seguinte mensagem para o cliente: ' + response)
+
+            else:
+                break
+
+
+def log_command():
+    global EVENT
+    global LOG_QUEUE
+    logfile = open('db.txt', 'a')
+    while not EVENT.is_set():
+        if not LOG_QUEUE.empty():
+            address, data = LOG_QUEUE.get()
+            if data.split('/') != 'select':
+                logfile.write(data + '\n')
+                logfile.flush()
+
+    logfile.close()
+
+
+def program_loop():
+    print('Servidor recebendo conexões!')
+    while True:
+        try:
+            connection, address = SOCKET_CONN.accept()
+            t = Thread(target=receive_command, args=(connection, address))
+            t.setDaemon(True)
+            t.start()
+        except KeyboardInterrupt:
+            EVENT.set()
+            print('Desligando servidor...')
+            time.sleep(5)
+            SOCKET_CONN.close()
+            break
+
+def run():
+    reload_hash()
+
+    t1 = Thread(target=enqueue_command)
     t1.setDaemon(True)
     t1.start()
-    t1.join()
+
+    t2 = Thread(target=process_command)
+    t2.setDaemon(True)
+    t2.start()
+
+    t3 = Thread(target=log_command)
+    t3.setDaemon(True)
+    t3.start()
+
+    program_loop()
+
+if __name__ == '__main__':
+    run()
