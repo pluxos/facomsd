@@ -1,4 +1,4 @@
 [all]
 HOST=localhost
-PORT=12335
+PORT=50051
 FILENAME=log.requests

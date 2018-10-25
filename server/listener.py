@@ -1,26 +1,29 @@
-from receptor import Receptor
-from asyncService import AsyncService
-
-import socket
+import sys
 import configparser
-
 import os
+
+sys.path.append('../grpcDefinitions')
+
+from concurrent import futures
+from grpc import server as grpc_server
+from time import sleep
+
+from asyncService import AsyncService
+from server import Server
+from sd_work_pb2_grpc import ServerServicer, add_ServerServicer_to_server
+
+
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + '/../config.py')
+timeToSleep = 2
 
 
 class Listener(AsyncService):
 
     def __init__(self, requests, threadName):
         AsyncService.__init__(self)
-        self.socket = socket.socket()
-
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.host = socket.gethostname()
-        self.port = CONFIG.getint('all', 'PORT')
-
-        self.socket.bind((self.host, self.port))
-        self.socket.listen(1)
+        self.host = CONFIG.get('all', 'host')
+        self.port = str(CONFIG.getint('all', 'PORT'))
 
         self.requests = requests
 
@@ -28,25 +31,15 @@ class Listener(AsyncService):
         self.setName(threadName)
 
     def run(self):
-        self.socket.settimeout(1)
+        server = grpc_server(futures.ThreadPoolExecutor(max_workers=10))
+        add_ServerServicer_to_server(Server(self.requests), server)
+        server.add_insecure_port(self.host + ":" + self.port)
+        server.start()
         try:
+            print("I'm going sleep")
             while not self.stopEvent.isSet():
-                try:
-                    connection, address = self.socket.accept()
-                except socket.timeout:
-                    continue
-                connection.settimeout(1)
-
-                recep = Receptor(connection, address, self.requests, self.getName())
-                self.recipients.append(recep)
-
-                print("Connection accepted with ", address)
-                recep.start()
-        finally:
-            for r in self.recipients:
-                r.join()
-
-            self.socket.close()
-        print("Exiting Listener")
+                sleep(timeToSleep)
+        except KeyboardInterrupt:
+            server.stop(0)
         self.stopEvent.clear()
         self.stopFinish.set()

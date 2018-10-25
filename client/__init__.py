@@ -1,5 +1,6 @@
 from commands import Commands
 from listenerClient import Listener
+from queue import Queue
 from connection import createSocket
 import threading
 
@@ -7,10 +8,10 @@ import threading
 class Client(threading.Thread):
     def __init__(self, threadName='client'):
         threading.Thread.__init__(self)
-        self.socket = createSocket()
-
-        self.listener = Listener(self.socket, threadName)
-        self.command = Commands(self.socket, threadName)
+        #self.socket = createSocket()
+        self.commandsToProcess = Queue()
+        self.listener = Listener(self.commandsToProcess, threadName)
+        self.command = Commands(self.commandsToProcess, threadName)
         self.setName(threadName)
 
     def run(self):

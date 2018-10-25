@@ -91,13 +91,8 @@ class ThreadOut:
         self.stdout = stdout
 
     def write(self, value):
-        # f = self.fhs.get(
-        #         threading.current_thread(),
-        #         open('logs/' + str(threading.current_thread().name), 'w')
-        #     )
         with open('logs/' + str(threading.current_thread().name) + '.txt', 'a') as f:
             f.write(value)
-        # self.fhs[threading.current_thread()] = f
         self.stdout.write(value)
 
 

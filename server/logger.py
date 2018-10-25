@@ -16,7 +16,7 @@ class Logger(AsyncService):
             try:
                 request = self.toLog.get(True, 1)
                 with open(self.filename, 'a') as logFile:
-                    request = request.replace('\n', '')
+                    request = self.getRequest(request)
                     logFile.write(request + '\n')
             except Empty:
                 continue
@@ -24,3 +24,13 @@ class Logger(AsyncService):
         print("Exiting logger")
         self.stopEvent.clear()
         self.stopFinish.set()
+
+    def getRequest(self, request):
+
+        type = request[0].upper()
+        if type == "DELETE":
+            return 'DELETE ' + request[1].id.decode()
+        elif type == "CREATE":
+            return 'CREATE ' + request[1].id.decode() + ' ' + request[1].data
+        elif type == "UPDATE":
+            return 'UPDATE ' + request[1].id.decode() + ' ' + request[1].data

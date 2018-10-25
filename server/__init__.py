@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../grpcDefinitions')
+
 from queue import Queue
 
 from reloadDatabase import ReloadDatabase

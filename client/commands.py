@@ -1,5 +1,5 @@
 import threading
-from connection import Connection
+from connection_with_grpc import ConnectionWithGRPC
 import socket
 
 
@@ -15,15 +15,15 @@ commands available:
 """
 
 
-class Commands(threading.Thread, Connection):
+class Commands(threading.Thread):
 
-    def __init__(self, socket, threadName):
-        Connection.__init__(self, socket)
+    def __init__(self, toProcess, threadName):
         threading.Thread.__init__(self)
         self.stopRequest = threading.Event()
         self.setName('commandsThread')
         self.stdinWait = True
         self.setName(threadName)
+        self.toProcess = toProcess
 
     def run(self):
         print("Starting Thread of Commands...")
@@ -39,8 +39,8 @@ class Commands(threading.Thread, Connection):
                         break
                     else:
                         self.send(msg)
-                except socket.error:
-                    self.reconnect()
+                # except socket.error:
+                #     self.reconnect()
                 except Exception as error:
                     print(error)
                     continue
@@ -49,54 +49,12 @@ class Commands(threading.Thread, Connection):
         self.stopRequest.set()
 
     def send(self, msg):
-
-        if msg[0].upper() == "READ":
-            self.read(msg[1:])
-        elif msg[0].upper() == "CREATE":
-            self.create(msg[1:])
-        elif msg[0].upper() == "UPDATE":
-            self.update(msg[1:])
-        elif msg[0].upper() == "DELETE":
-            self.delete(msg[1:])
+        c = msg[0].upper()
+        if c == "READ" or c == "CREATE" or c == "UPDATE" or c == "DELETE":
+            self.toProcess.put(msg)
         elif msg[0].upper() == "EXIT":
             import sys
             sys.exit()
         else:
             print("Invalid Command!" +  " ---> ", msg)
 
-    def read(self, id):
-        if len(id) > 1:
-            raise Exception("invalid arguments! (READ ID)")
-        try:
-            int(id[0])
-        except Exception:
-            raise Exception("ID not is Integer!")
-        self.sendRequest(('read ' + id[0]).encode())
-
-    def create(self, args):
-        if len(args) != 2:
-            raise Exception("invalid arguments! (CREATE ID VALUE)")
-        try:
-            int(args[0])
-        except Exception:
-            raise Exception("ID not is Integer!")
-        self.sendRequest(('create ' + args[0] + " " + args[1]).encode())
-
-    def update(self, args):
-        if len(args) != 2:
-            if len(args) != 2:
-                raise Exception("invalid arguments! (UPDATE ID VALUE)")
-        try:
-            int(args[0])
-        except Exception:
-            raise Exception("ID not is Integer!")
-        self.sendRequest(('update ' + args[0] + " " + args[1]).encode())
-
-    def delete(self, id):
-        if len(id) > 1:
-            raise Exception("invalid arguments! (DELETE ID)")
-        try:
-            int(id[0])
-        except Exception:
-            raise Exception("ID not is Integer!")
-        self.sendRequest(('delete ' + id[0]).encode())
