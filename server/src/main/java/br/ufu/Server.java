@@ -12,8 +12,7 @@ import br.ufu.writer.LogWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static br.ufu.util.Constants.PROPERTY_LOG_PATH;
-import static br.ufu.util.Constants.PROPERTY_SERVER_PORT;
+import static br.ufu.util.Constants.*;
 
 public class Server {
 
@@ -43,7 +42,8 @@ public class Server {
         f1Listener = new F1Listener(getQueueService());
         f2Listener = new F2Listener(getQueueService(), getLogWriter());
         f3Listener = new F3Listener(getQueueService(), getCrudService());
-        snapshotSchedule = new SnapshotSchedule(getCrudRepository());
+        snapshotSchedule = new SnapshotSchedule(getCrudRepository(),
+                getUserParameters().getInt(PROPERTY_SNAP_TIME), getUserParameters().get(PROPERTY_SNAP_PATH) );
     }
 
     public CrudRepository getCrudRepository() {

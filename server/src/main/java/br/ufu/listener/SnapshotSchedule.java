@@ -16,9 +16,13 @@ public class SnapshotSchedule implements Runnable {
     private boolean running = true;
     private final CrudRepository crudRepository;
     private Integer snapshotNumber = 0;
+    private Integer snapTime;
+    private String snapPath;
 
-    public SnapshotSchedule(CrudRepository crudRepository) {
+    public SnapshotSchedule(CrudRepository crudRepository, Integer snapTime, String snapPath) {
         this.crudRepository = crudRepository;
+        this.snapTime = snapTime;
+        this.snapPath = snapPath;
     }
 
     public void stop() {
@@ -32,7 +36,7 @@ public class SnapshotSchedule implements Runnable {
 
     private SnapshotWriter createSnapshot() throws IOException {
         Integer snapshotNumber = getSnapshotNumber();
-        SnapshotWriter snapshot = new SnapshotWriter(snapshotNumber);
+        SnapshotWriter snapshot = new SnapshotWriter(snapPath, snapshotNumber);
         return snapshot;
     }
 
@@ -40,7 +44,7 @@ public class SnapshotSchedule implements Runnable {
     public void run() {
         while(running) {
             try {
-                Thread.sleep (10000);
+                Thread.sleep (snapTime);
                 SnapshotWriter snapshotWriter = createSnapshot();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {

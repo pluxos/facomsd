@@ -12,11 +12,8 @@ public class SnapshotWriter {
     private final static String SEPARATOR = " ";
     private final static String BREAK_LINE = "\n";
 
-    public SnapshotWriter(Integer snapshotNumber) throws IOException {
-
-        //set relative path
-
-        File file = new File( "/tmp/snap_logs/snap." + snapshotNumber + ".txt");
+    public SnapshotWriter(String snapPath, Integer snapshotNumber) throws IOException {
+        File file = new File(  snapPath + "snap." + snapshotNumber.toString() + ".txt");
         file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
     }

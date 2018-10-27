@@ -17,6 +17,8 @@ public class Constants {
     public static final String MESSAGE_INVALID_COMMAND = "[%s] is not a valid command. Valid commands are: %s";
     public static final String PROPERTY_SERVER_HOST = "server.host";
     public static final String PROPERTY_SERVER_PORT = "server.port";
+    public static final String PROPERTY_SNAP_TIME = "snap.time";
+    public static final String PROPERTY_SNAP_PATH = "snap.path";
     public static final String PROPERTY_LOG_PATH = "log.path";
     public static final Parser<BigInteger> BIG_INTEGER_PARSER = new BigIntegerParser();
     public static final String MESSAGE_PARAMETROS_INSUFICIENTES = "Parâmetros insuficientes";
