@@ -1,7 +1,7 @@
 package br.ufu.listener;
 
 import br.ufu.exception.ListenerException;
-import br.ufu.handler.ClientHandler;
+import br.ufu.handler.ClientHandlerSocket;
 import br.ufu.service.QueueService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +28,7 @@ public class ServerListener implements Runnable {
         log.info("Running socket on {}", port);
         serverSocket = new ServerSocket(port);
         while (running)
-            new ClientHandler(queueService, serverSocket.accept()).start();
+            new ClientHandlerSocket(queueService, serverSocket.accept()).start();
     }
 
     public void stop() {

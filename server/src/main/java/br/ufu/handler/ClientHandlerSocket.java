@@ -11,17 +11,17 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientHandler extends Thread {
+public class ClientHandlerSocket extends Thread {
 
 
-    private static final Logger log = LogManager.getLogger(ClientHandler.class);
+    private static final Logger log = LogManager.getLogger(ClientHandlerSocket.class);
 
     private final QueueService queueService;
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
 
-    public ClientHandler(QueueService queueService, Socket socket) {
+    public ClientHandlerSocket(QueueService queueService, Socket socket) {
         this.clientSocket = socket;
         this.queueService = queueService;
     }
@@ -35,7 +35,7 @@ public class ClientHandler extends Thread {
 
             String command;
             while ((command = in.readLine()) != null) {
-                queueService.produceF1(new Command(command, this));
+//                queueService.produceF1(new Command(command, this));
                 log.info("Command REQUESTED: {}", command);
             }
         } catch (IOException e) {

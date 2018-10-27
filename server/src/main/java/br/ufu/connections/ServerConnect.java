@@ -12,20 +12,19 @@ public class ServerConnect {
 
     private static final Logger log = LogManager.getLogger(ServerConnect.class);
     private Server server;
-    private final QueueService queueService;
+
 
     public ServerConnect(QueueService queueService, int port) {
-        this.queueService = queueService;
         this.server = ServerBuilder.forPort(port)
-                .addService(new GreeterImpl())
+                .addService(new ClientHandler(queueService))
                 .build();
     }
 
-    public void start() throws IOException, InterruptedException {
-        log.info("gRPC server starting");
+    public void start() throws IOException {
         server.start();
-        log.info("gRPC server started");
-        server.awaitTermination();
     }
 
+    public void blockUntilShutdown() throws InterruptedException {
+        server.awaitTermination();
+    }
 }

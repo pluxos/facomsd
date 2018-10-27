@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class SnapshotSchedule implements Runnable {
 
-    private static final Logger log = LogManager.getLogger(F1Listener.class);
+    private static final Logger log = LogManager.getLogger(SnapshotSchedule.class);
     private boolean running = true;
     private final CrudRepository crudRepository;
     private Integer snapshotNumber = 0;
@@ -40,7 +40,7 @@ public class SnapshotSchedule implements Runnable {
     public void run() {
         while(running) {
             try {
-                Thread.sleep (50000);
+                Thread.sleep (10000);
                 SnapshotWriter snapshotWriter = createSnapshot();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {

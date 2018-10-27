@@ -20,6 +20,7 @@ public class F1Listener extends FxListener {
     @Override
     protected void listen() {
         try {
+            System.out.println("f1 em ação");
             Command item = queueService.consumeF1();
             log.info("F1 Listener take command [{}]", item.getExecuteCommand());
             queueService.produceF2(item);

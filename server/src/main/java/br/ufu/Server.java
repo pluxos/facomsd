@@ -22,7 +22,6 @@ public class Server {
     private QueueService queueService;
     private LogWriter logWriter;
     private StartupRecoverService startupRecoverService;
-//    private ServerListener serverListener;
     private F1Listener f1Listener;
     private F2Listener f2Listener;
     private F3Listener f3Listener;
@@ -40,12 +39,11 @@ public class Server {
         crudService = new CrudService(getCrudRepository());
         logWriter = new LogWriter(getUserParameters().get(PROPERTY_LOG_PATH));
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters);
-//        serverListener = new ServerListener(getQueueService(), getUserParameters().getInt(PROPERTY_SERVER_PORT));
         serverConnect = new ServerConnect(getQueueService(), getUserParameters().getInt(PROPERTY_SERVER_PORT));
-//        f1Listener = new F1Listener(getQueueService());
-//        f2Listener = new F2Listener(getQueueService(), getLogWriter());
-//        f3Listener = new F3Listener(getQueueService(), getCrudService());
-//        snapshotSchedule = new SnapshotSchedule(getCrudRepository());
+        f1Listener = new F1Listener(getQueueService());
+        f2Listener = new F2Listener(getQueueService(), getLogWriter());
+        f3Listener = new F3Listener(getQueueService(), getCrudService());
+        snapshotSchedule = new SnapshotSchedule(getCrudRepository());
     }
 
     public CrudRepository getCrudRepository() {
@@ -67,10 +65,6 @@ public class Server {
     public StartupRecoverService getStartupRecoverService() {
         return startupRecoverService;
     }
-
-//    public ServerListener getServerListener() {
-//        return serverListener;
-//    }
 
     public F1Listener getF1Listener() {
         return f1Listener;
@@ -107,13 +101,14 @@ public class Server {
         f2ListenerThread.join();
         f3ListenerThread.join();
         snapshotSchedule.join();
+        serverConnect.blockUntilShutdown();
     }
 
     public void start() throws InterruptedException, IOException {
         init();
+        getStartupRecoverService().recover();
         serverConnect.start();
-//        getStartupRecoverService().recover();
-//        startListeners();
+        startListeners();
     }
 
     private Thread startThread(Runnable runnable) {

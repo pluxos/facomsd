@@ -16,7 +16,8 @@ public class SnapshotWriter {
 
         //set relative path
 
-        File file = new File( "/Users/algartelecom/Projects/SI/snap_logs/snap." + snapshotNumber + ".txt");
+        File file = new File( "/tmp/snap_logs/snap." + snapshotNumber + ".txt");
+        file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
     }
 

@@ -5,6 +5,8 @@ import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.util.CommandUtil;
+import io.grpc.examples.servergreeting.Response;
+import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,12 +32,18 @@ public class F3Listener extends FxListener {
             action = CommandUtil.getAction(item.getExecuteCommand());
             log.info("F3 Listener take command [{}]", item.getExecuteCommand());
             String response = crudService.execute(item.getExecuteCommand());
-            item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "OK", response));
+            sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "OK", response), item.getObserver());
         } catch (InterruptedException | InvalidCommandException e) {
             if (item != null) {
-                item.getClientHandler().sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "NOK", e.getMessage()));
+                sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "NOK", e.getMessage()), item.getObserver());
             }
             log.error(e.getMessage(), e);
         }
+    }
+
+    public void sendResponse(String response, StreamObserver<Response> responseObserver) {
+        Response resp = Response.newBuilder().setResp(response).build();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
     }
 }
