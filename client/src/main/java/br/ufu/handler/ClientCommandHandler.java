@@ -1,5 +1,6 @@
 package br.ufu.handler;
 
+import br.ufu.client.ClientConnect;
 import br.ufu.client.SocketClient;
 import br.ufu.exception.ClientCommandHandlerException;
 import br.ufu.exception.InvalidCommandException;
@@ -15,12 +16,15 @@ import static br.ufu.util.Constants.*;
 public class ClientCommandHandler implements Runnable {
 
     private static final Logger log = LogManager.getLogger(ClientCommandHandler.class);
+    private final ClientConnect clientConnect;
     private final Scanner scanner;
-    private final SocketClient socketClient;
+    private String id;
+//    private final SocketClient socketClient;
 
-    public ClientCommandHandler(Scanner scanner, SocketClient socketClient) {
+    public ClientCommandHandler(Scanner scanner, ClientConnect clientConnect, String id) {
         this.scanner = scanner;
-        this.socketClient = socketClient;
+        this.clientConnect = clientConnect;
+        this.id = id;
     }
 
     private static void validateCommand(String command) throws InvalidCommandException {
@@ -65,8 +69,13 @@ public class ClientCommandHandler implements Runnable {
 
     }
 
-    public SocketClient getSocketClient() {
-        return socketClient;
+
+    public ClientConnect getClientConnect() {
+        return clientConnect;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -89,8 +98,8 @@ public class ClientCommandHandler implements Runnable {
 
     private void stopConnection() {
         try {
-            getSocketClient().stopConnection();
-        } catch (IOException e) {
+            getClientConnect().shutdown();
+        } catch (InterruptedException e) {
             log.warn(e.getMessage(), e);
             throw new ClientCommandHandlerException(e);
         }
@@ -98,11 +107,11 @@ public class ClientCommandHandler implements Runnable {
 
     private void sendMessage(String message) {
         try {
-            String response = getSocketClient().sendMessage(message);
-            log.info(response);
-        } catch (IOException e) {
+            System.out.println(getId());
+            getClientConnect().greet(message, getId());
+//            log.info(response);
+        } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            throw new ClientCommandHandlerException(e);
         }
     }
 }

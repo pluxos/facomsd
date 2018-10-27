@@ -6,4 +6,7 @@ public class ClientCommandHandlerException extends RuntimeException {
     public ClientCommandHandlerException(IOException e) {
         super(e);
     }
+    public ClientCommandHandlerException(InterruptedException e) {
+        super(e);
+    }
 }
