@@ -30,8 +30,12 @@ public class StartupRecoverService {
     }
 
     private String getSnap() {
-        File[] files = new File(userParameters.get(PROPERTY_SNAP_PATH)
-                + "snaps-server-" + serverId.toString()).listFiles();
+        File path = new File(userParameters.get(PROPERTY_SNAP_PATH)
+                + "snaps-server-" + serverId.toString());
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        File[] files = path.listFiles();
         if (files.length > 0) {
             Arrays.sort(files);
             return files[files.length - 1].getAbsolutePath();
@@ -41,8 +45,12 @@ public class StartupRecoverService {
     }
 
     private String getLog() {
-        File[] logs = new File(userParameters.get(PROPERTY_LOG_PATH)
-                + "logs-server-" + serverId).listFiles();
+        File path = new File(userParameters.get(PROPERTY_LOG_PATH)
+                + "logs-server-" + serverId);
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        File[] logs = path.listFiles();
         if (logs.length > 0) {
             Arrays.sort(logs);
             return logs[logs.length - 1].getAbsolutePath();
@@ -55,26 +63,29 @@ public class StartupRecoverService {
         try {
 
             String snapFile = getSnap();
-            System.out.println(snapFile);
-            List<String> snapshot = FileUtils.readLines(new File(snapFile), defaultCharset());
-            snapshot.forEach(command -> {
-                try {
-                    crudService.execute("CREATE " + command);
-                } catch (InvalidCommandException e) {
-                    log.warn("Could not execute command on recover", e);
-                }
-            });
+            if (snapFile != "") {
+                List<String> snapshot = FileUtils.readLines(new File(snapFile), defaultCharset());
+                snapshot.forEach(command -> {
+                    try {
+                        crudService.execute("CREATE " + command);
+                    } catch (InvalidCommandException e) {
+                        log.warn("Could not execute command on recover", e);
+                    }
+                });
+            }
 
             String logFile = getLog();
-            List<String> commands = FileUtils.readLines(new File(logFile), defaultCharset());
-            commands.forEach(command -> {
-                try {
-                    System.out.println(command);
-                    crudService.execute(command);
-                } catch (InvalidCommandException e) {
-                    log.warn("Could not execute command on recover", e);
-                }
-            });
+            if (logFile != "") {
+                List<String> commands = FileUtils.readLines(new File(logFile), defaultCharset());
+                commands.forEach(command -> {
+                    try {
+                        System.out.println(command);
+                        crudService.execute(command);
+                    } catch (InvalidCommandException e) {
+                        log.warn("Could not execute command on recover", e);
+                    }
+                });
+            }
 
         } catch (IOException e) {
             log.warn("Could not open log or snap file for recover", e);

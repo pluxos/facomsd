@@ -40,10 +40,6 @@ public class F2Listener extends FxListener {
         return logNumber;
     }
 
-    public LogWriter getLogWriter() {
-        return logWriter;
-    }
-
     public void setNewLog() throws IOException {
         BigInteger logNumber = getLogNumber();
         LogWriter log = new LogWriter(logPath, logNumber, serverId);

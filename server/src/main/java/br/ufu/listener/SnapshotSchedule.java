@@ -50,7 +50,6 @@ public class SnapshotSchedule implements Runnable {
             try {
                 Thread.sleep (snapTime);
                 SnapshotWriter snapshotWriter = createSnapshot();
-//                f2.getLogWriter().getWriter().close();
                 f2.setNewLog();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {
