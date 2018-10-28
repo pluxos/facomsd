@@ -10,9 +10,8 @@ public class LogWriter {
 
     private OutputStreamWriter writer;
 
-    public LogWriter(String snapPath, BigInteger logNumber, BigInteger serverId) throws IOException {
-        File file = new File(  snapPath + "logs-server-"
-                + serverId.toString() + "/log." + logNumber.toString() + ".txt");
+    public LogWriter(String snapPath, BigInteger logNumber) throws IOException {
+        File file = new File(  snapPath + "/log." + logNumber.toString() + ".txt");
         file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
     }

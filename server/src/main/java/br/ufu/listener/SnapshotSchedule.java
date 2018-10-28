@@ -6,6 +6,7 @@ import br.ufu.writer.SnapshotWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Map;
@@ -38,10 +39,27 @@ public class SnapshotSchedule implements Runnable {
         return snapshotNumber;
     }
 
+    public String getSnapshotPath() {
+        return snapPath + "snaps-server-" + serverId.toString();
+    }
+
     private SnapshotWriter createSnapshot() throws IOException {
         BigInteger snapshotNumber = getSnapshotNumber();
-        SnapshotWriter snapshot = new SnapshotWriter(snapPath, snapshotNumber, serverId);
+        SnapshotWriter snapshot = new SnapshotWriter(getSnapshotPath(), snapshotNumber);
         return snapshot;
+    }
+
+    private static void controlSnapNumber(String snapPath){
+        File snapDirectory = new File(snapPath);
+        if(snapDirectory.isDirectory()) {
+            File[] listSnaps = snapDirectory.listFiles();
+            if (listSnaps.length > 3) {
+                if (listSnaps[0].delete())
+                    System.out.println("  Deleted!");
+                else
+                    System.out.println("  Delete failed - reason unknown");
+            }
+        }
     }
 
     @Override
@@ -55,7 +73,9 @@ public class SnapshotSchedule implements Runnable {
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {
                     snapshotWriter.write(item.getKey(), item.getValue());
                 }
+                snapshotWriter.getWriter().close();
                 log.info("Snapshot " + snapshotNumber + " gerado!");
+                controlSnapNumber(getSnapshotPath());
             } catch (InterruptedException | IOException e) {
                 log.warn(e.getMessage(), e);
                 throw new SnapshotException(e);

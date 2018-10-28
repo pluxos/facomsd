@@ -7,6 +7,7 @@ import br.ufu.writer.LogWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -28,7 +29,7 @@ public class F2Listener extends FxListener {
         this.serverId = serverId;
 
         try {
-            setNewLog();
+            this.logWriter = new LogWriter(getLogPath(),  new BigInteger("0"));
         } catch (IOException e) {
             throw new ListenerException(e);
         }
@@ -41,9 +42,29 @@ public class F2Listener extends FxListener {
     }
 
     public void setNewLog() throws IOException {
+        this.logWriter.getWriter().close();
         BigInteger logNumber = getLogNumber();
-        LogWriter log = new LogWriter(logPath, logNumber, serverId);
+        LogWriter log = new LogWriter(getLogPath(), logNumber);
         this.logWriter = log;
+        controlLogNumber(getLogPath());
+    }
+
+    public String getLogPath() {
+        return logPath + "logs-server-" + serverId.toString();
+    }
+
+    private static void controlLogNumber(String logPath){
+
+        File logDirectory = new File(logPath);
+        if(logDirectory.isDirectory()) {
+            File[] listLogs = logDirectory.listFiles();
+            if (listLogs.length > 3) {
+                if (listLogs[0].delete())
+                    System.out.println("  Deleted!");
+                else
+                    System.out.println("  Delete failed - reason unknown");
+            }
+        }
     }
 
     @Override
@@ -55,6 +76,7 @@ public class F2Listener extends FxListener {
                 return;
             }
             logWriter.write(item.getExecuteCommand() + FILE_SEPARATOR);
+
         } catch (InterruptedException | IOException e) {
             throw new ListenerException(e);
         }
