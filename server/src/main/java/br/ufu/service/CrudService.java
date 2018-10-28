@@ -53,7 +53,7 @@ public class CrudService {
         return crudRepository.read(BIG_INTEGER_PARSER.parse(commandSplited[1]));
     }
 
-    private String create(String[] commandSplited) throws InvalidCommandException, DatabaseException {
+    public String create(String[] commandSplited) throws InvalidCommandException, DatabaseException {
         return crudRepository.create(BIG_INTEGER_PARSER.parse(commandSplited[1]), commandSplited[2]);
     }
 

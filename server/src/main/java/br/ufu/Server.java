@@ -38,7 +38,7 @@ public class Server {
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
         logWriter = new LogWriter(getUserParameters().get(PROPERTY_LOG_PATH));
-        startupRecoverService = new StartupRecoverService(getCrudService(), userParameters);
+        startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, new BigInteger("32423482304324"));
         serverConnect = new ServerConnect(getQueueService(), getUserParameters().getInt(PROPERTY_SERVER_PORT));
         f1Listener = new F1Listener(getQueueService());
         f2Listener = new F2Listener(getQueueService(), getLogWriter());
@@ -105,7 +105,7 @@ public class Server {
 
     public void start() throws InterruptedException, IOException {
         init();
-//        getStartupRecoverService().recover();
+        getStartupRecoverService().recover();
         serverConnect.start();
         startListeners();
     }

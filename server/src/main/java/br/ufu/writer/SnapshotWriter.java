@@ -13,7 +13,8 @@ public class SnapshotWriter {
     private final static String BREAK_LINE = "\n";
 
     public SnapshotWriter(String snapPath, BigInteger snapshotNumber, BigInteger serverId) throws IOException {
-        File file = new File(  snapPath + "snaps-server-" + serverId.toString() + "/snap." + snapshotNumber.toString() + ".txt");
+        File file = new File(  snapPath + "snaps-server-"
+                + serverId.toString() + "/snap." + snapshotNumber.toString() + ".txt");
         file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
     }
