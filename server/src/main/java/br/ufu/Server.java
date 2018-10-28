@@ -11,6 +11,7 @@ import br.ufu.writer.LogWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 
 import static br.ufu.util.Constants.*;
 
@@ -43,7 +44,7 @@ public class Server {
         f2Listener = new F2Listener(getQueueService(), getLogWriter());
         f3Listener = new F3Listener(getQueueService(), getCrudService());
         snapshotSchedule = new SnapshotSchedule(getCrudRepository(),
-                getUserParameters().getInt(PROPERTY_SNAP_TIME), getUserParameters().get(PROPERTY_SNAP_PATH) );
+                getUserParameters().getInt(PROPERTY_SNAP_TIME), getUserParameters().get(PROPERTY_SNAP_PATH), new BigInteger("32423482304324"));
     }
 
     public CrudRepository getCrudRepository() {
@@ -90,13 +91,11 @@ public class Server {
 
     private void startListeners() throws InterruptedException {
 
-//        Thread serverListenerThread = startThread(getServerListener());
         Thread f1ListenerThread = startThread(getF1Listener());
         Thread f2ListenerThread = startThread(getF2Listener());
         Thread f3ListenerThread = startThread(getF3Listener());
         Thread snapshotSchedule = startThread(getSnapshotSchedule());
 
-//        serverListenerThread.join();
         f1ListenerThread.join();
         f2ListenerThread.join();
         f3ListenerThread.join();
@@ -106,7 +105,7 @@ public class Server {
 
     public void start() throws InterruptedException, IOException {
         init();
-        getStartupRecoverService().recover();
+//        getStartupRecoverService().recover();
         serverConnect.start();
         startListeners();
     }

@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CrudRepository {
 
-    private Map<BigInteger, String> database = new ConcurrentHashMap<>();
+    private final Map<BigInteger, String> database = new ConcurrentHashMap<>();
 
     public String create(BigInteger id, String value) throws DatabaseException {
         if (database.containsKey(id)) {

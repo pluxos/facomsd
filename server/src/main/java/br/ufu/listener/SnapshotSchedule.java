@@ -15,28 +15,30 @@ public class SnapshotSchedule implements Runnable {
     private static final Logger log = LogManager.getLogger(SnapshotSchedule.class);
     private boolean running = true;
     private final CrudRepository crudRepository;
-    private Integer snapshotNumber = 0;
+    private BigInteger snapshotNumber = new BigInteger("0");
     private Integer snapTime;
+    private BigInteger serverId;
     private String snapPath;
 
-    public SnapshotSchedule(CrudRepository crudRepository, Integer snapTime, String snapPath) {
+    public SnapshotSchedule(CrudRepository crudRepository, Integer snapTime, String snapPath, BigInteger serverId) {
         this.crudRepository = crudRepository;
         this.snapTime = snapTime;
         this.snapPath = snapPath;
+        this.serverId = serverId;
     }
 
     public void stop() {
         this.running = false;
     }
 
-    private Integer getSnapshotNumber() {
-        snapshotNumber = snapshotNumber + 1;
+    private BigInteger getSnapshotNumber() {
+        snapshotNumber = snapshotNumber.add(new BigInteger("1"));
         return snapshotNumber;
     }
 
     private SnapshotWriter createSnapshot() throws IOException {
-        Integer snapshotNumber = getSnapshotNumber();
-        SnapshotWriter snapshot = new SnapshotWriter(snapPath, snapshotNumber);
+        BigInteger snapshotNumber = getSnapshotNumber();
+        SnapshotWriter snapshot = new SnapshotWriter(snapPath, snapshotNumber, serverId);
         return snapshot;
     }
 
