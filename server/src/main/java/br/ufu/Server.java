@@ -7,9 +7,7 @@ import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.service.StartupRecoverService;
 import br.ufu.util.UserParameters;
-import br.ufu.writer.LogWriter;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -20,7 +18,6 @@ public class Server {
     private CrudRepository crudRepository;
     private CrudService crudService;
     private QueueService queueService;
-    private LogWriter logWriter;
     private StartupRecoverService startupRecoverService;
     private F1Listener f1Listener;
     private F2Listener f2Listener;
@@ -37,13 +34,12 @@ public class Server {
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
-        logWriter = new LogWriter(getUserParameters().get(PROPERTY_LOG_PATH));
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, new BigInteger("32423482304324"));
         serverConnect = new ServerConnect(getQueueService(), getUserParameters().getInt(PROPERTY_SERVER_PORT));
         f1Listener = new F1Listener(getQueueService());
-        f2Listener = new F2Listener(getQueueService(), getLogWriter());
+        f2Listener = new F2Listener(getQueueService(), getUserParameters().get(PROPERTY_LOG_PATH), new BigInteger("32423482304324"));
         f3Listener = new F3Listener(getQueueService(), getCrudService());
-        snapshotSchedule = new SnapshotSchedule(getCrudRepository(),
+        snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(),
                 getUserParameters().getInt(PROPERTY_SNAP_TIME), getUserParameters().get(PROPERTY_SNAP_PATH), new BigInteger("32423482304324"));
     }
 
@@ -57,10 +53,6 @@ public class Server {
 
     public QueueService getQueueService() {
         return queueService;
-    }
-
-    public LogWriter getLogWriter() {
-        return logWriter;
     }
 
     public StartupRecoverService getStartupRecoverService() {

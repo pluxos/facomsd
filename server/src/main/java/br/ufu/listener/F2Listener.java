@@ -8,19 +8,46 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 public class F2Listener extends FxListener {
 
     private static final Logger log = LogManager.getLogger(F2Listener.class);
     private static final String FILE_SEPARATOR = "\n";
+    private BigInteger logNumber = new BigInteger("0");
+    private final BigInteger serverId;
+    private final String logPath;
 
     private final QueueService queueService;
 
-    private final LogWriter logWriter;
+    private LogWriter logWriter;
 
-    public F2Listener(QueueService queueService, LogWriter logWriter) {
+    public F2Listener(QueueService queueService, String logPath, BigInteger serverId) {
         this.queueService = queueService;
-        this.logWriter = logWriter;
+        this.logPath = logPath;
+        this.serverId = serverId;
+
+        try {
+            setNewLog();
+        } catch (IOException e) {
+            throw new ListenerException(e);
+        }
+
+    }
+
+    private BigInteger getLogNumber() {
+        logNumber = logNumber.add(new BigInteger("1"));
+        return logNumber;
+    }
+
+    public LogWriter getLogWriter() {
+        return logWriter;
+    }
+
+    public void setNewLog() throws IOException {
+        BigInteger logNumber = getLogNumber();
+        LogWriter log = new LogWriter(logPath, logNumber, serverId);
+        this.logWriter = log;
     }
 
     @Override

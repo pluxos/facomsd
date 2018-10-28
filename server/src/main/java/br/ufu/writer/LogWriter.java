@@ -4,13 +4,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigInteger;
 
 public class LogWriter {
 
     private OutputStreamWriter writer;
 
-    public LogWriter(String path) throws IOException {
-        File file = new File(path);
+    public LogWriter(String snapPath, BigInteger logNumber, BigInteger serverId) throws IOException {
+        File file = new File(  snapPath + "logs-server-"
+                + serverId.toString() + "/log." + logNumber.toString() + ".txt");
+        file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
     }
 
@@ -19,4 +22,7 @@ public class LogWriter {
         writer.flush();
     }
 
+    public OutputStreamWriter getWriter() {
+        return writer;
+    }
 }

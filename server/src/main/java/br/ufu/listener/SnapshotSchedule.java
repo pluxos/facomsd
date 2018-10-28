@@ -19,12 +19,14 @@ public class SnapshotSchedule implements Runnable {
     private Integer snapTime;
     private BigInteger serverId;
     private String snapPath;
+    private F2Listener f2;
 
-    public SnapshotSchedule(CrudRepository crudRepository, Integer snapTime, String snapPath, BigInteger serverId) {
+    public SnapshotSchedule(CrudRepository crudRepository, F2Listener f2, Integer snapTime, String snapPath, BigInteger serverId) {
         this.crudRepository = crudRepository;
         this.snapTime = snapTime;
         this.snapPath = snapPath;
         this.serverId = serverId;
+        this.f2 = f2;
     }
 
     public void stop() {
@@ -48,6 +50,8 @@ public class SnapshotSchedule implements Runnable {
             try {
                 Thread.sleep (snapTime);
                 SnapshotWriter snapshotWriter = createSnapshot();
+//                f2.getLogWriter().getWriter().close();
+                f2.setNewLog();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
                 for (Map.Entry<BigInteger, String> item : database.entrySet()) {
                     snapshotWriter.write(item.getKey(), item.getValue());
