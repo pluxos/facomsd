@@ -9,6 +9,11 @@ service Server {
     rpc delete(Id) returns (ServerResponse) {}
 }
 
+service p2p {
+    rpc join(ServerInfo) returns (ServerInfo) {}
+    rpc exit(ServerInfo) returns (ServerInfo) {}
+}
+
 message Id {
     bytes id = 1;
 }
@@ -21,4 +26,10 @@ message Data {
 message ServerResponse {
     string message = 1;
     Data data = 2;
+}
+
+message ServerInfo {
+    string host = 1;
+    string port = 2;
+    string message = 3;
 }

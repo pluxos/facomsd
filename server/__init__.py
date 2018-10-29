@@ -21,23 +21,28 @@ class Server(AsyncService):
         self.waitPersist = Queue()
 
         self.setName(threadName)
-        self.loadDatabase = ReloadDatabase(self.requests)
+        #self.loadDatabase = ReloadDatabase(self.requests)
 
         self.splitter = Splitter(self.requests, self.waitLog, self.waitPersist, threadName)
 
-        self.logger = Logger(self.waitLog, threadName)
-
         self.persistent = Persistent(self.waitPersist, threadName)
+
+        self.reloadDatabase = ReloadDatabase(self.persistent, self.splitter)
+
+        self.logger = Logger(self.waitLog, threadName, self.reloadDatabase)
+
 
         self.listener = Listener(self.requests, threadName)
 
     def run(self):
 
-        self.loadDatabase.load()
+        while not self.persistent.isLoaded.isSet():
+            sleep(0.1)
         self.splitter.start()
         self.logger.start()
         self.persistent.start()
         self.listener.start()
+        self.reloadDatabase.start()
 
         while not self.stopEvent.isSet():
             sleep(1)

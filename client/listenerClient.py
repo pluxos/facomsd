@@ -32,7 +32,7 @@ class Listener(threading.Thread, ConnectionWithGRPC):
             except Empty:
                 continue
             except Exception as e:
-                print(e)
+                print("Exception: ", e)
 
         print("Stop Thread of Communication in ", datetime.now())
 

@@ -33,7 +33,7 @@ class Listener(AsyncService):
     def run(self):
         server = grpc_server(futures.ThreadPoolExecutor(max_workers=10))
         add_ServerServicer_to_server(Server(self.requests), server)
-        server.add_insecure_port(self.host + ":" + self.port)
+        server.add_insecure_port("0.0.0.0:" + self.port)
         server.start()
         try:
             print("I'm going sleep")
