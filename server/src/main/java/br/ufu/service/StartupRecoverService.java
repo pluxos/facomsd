@@ -30,33 +30,29 @@ public class StartupRecoverService {
     }
 
     private String getSnap() {
+        String snapPath = "";
         File path = new File(userParameters.get(PROPERTY_SNAP_PATH)
                 + "snaps-server-" + serverId.toString());
-        if (!path.exists()) {
-            path.mkdirs();
-        }
+        if (!path.exists()) { path.mkdirs(); }
         File[] files = path.listFiles();
         if (files.length > 0) {
             Arrays.sort(files);
-            return files[files.length - 1].getAbsolutePath();
-        } else {
-            return "";
+            snapPath = files[files.length - 1].getAbsolutePath();
         }
+        return snapPath;
     }
 
     private String getLog() {
+        String logPath = "";
         File path = new File(userParameters.get(PROPERTY_LOG_PATH)
                 + "logs-server-" + serverId);
-        if (!path.exists()) {
-            path.mkdirs();
-        }
+        if (!path.exists()) { path.mkdirs(); }
         File[] logs = path.listFiles();
         if (logs.length > 0) {
             Arrays.sort(logs);
-            return logs[logs.length - 1].getAbsolutePath();
-        } else {
-            return "";
+            logPath = logs[logs.length - 1].getAbsolutePath();
         }
+        return logPath;
     }
 
     public void recover() {

@@ -12,16 +12,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 public class ClientHandler extends GreeterGrpc.GreeterImplBase {
 
     private static final Logger log = LogManager.getLogger(ClientHandler.class);
-
-//    private BlockingQueue<String> filatemp;
-//    private BlockingQueue<String> filaResposta;
-//    private Map<String, StreamObserver<Response>> monitorargrpc; //Identificador para Observer
-//    private Map<BigInteger, ArrayList<String>> monitorarChaveId; //Chave para Lista de Identificadores
 
     private final QueueService queueService;
 
@@ -33,7 +27,6 @@ public class ClientHandler extends GreeterGrpc.GreeterImplBase {
     public void say(Request req, StreamObserver<Response> responseObserver) {
         try {
             System.out.println("Msg recebida: " + req.getAll());
-
             queueService.produceF1(new Command(req.getAll(), responseObserver));
 //            String resposta =  queueService.consumeF1();
 
@@ -54,13 +47,11 @@ public class ClientHandler extends GreeterGrpc.GreeterImplBase {
         Response response = Response.newBuilder().setResp("Chave sendo monitorada").build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
-
     }
 
     @Override
     public void notify(Request req, StreamObserver<Response> responseObserver) {
 //        monitorargrpc.put(req.getAll(), responseObserver);
-
         //responseObserver.onCompleted();
     }
 
