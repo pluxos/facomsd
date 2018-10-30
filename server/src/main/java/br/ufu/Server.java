@@ -7,6 +7,7 @@ import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.service.StartupRecoverService;
 import br.ufu.util.UserParameters;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -98,6 +99,11 @@ public class Server {
     public void start() throws InterruptedException, IOException {
         init();
         getStartupRecoverService().recover();
+
+        String[] numbers = getStartupRecoverService().recoverIds();
+        this.getF2Listener().startLogNumber(numbers[0]);
+        this.getSnapshotSchedule().startSnapNumber(numbers[1]);
+
         serverConnect.start();
         startListeners();
     }

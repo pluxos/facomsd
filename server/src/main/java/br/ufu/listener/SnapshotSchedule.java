@@ -3,12 +3,15 @@ package br.ufu.listener;
 import br.ufu.exception.SnapshotException;
 import br.ufu.repository.CrudRepository;
 import br.ufu.writer.SnapshotWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 
 public class SnapshotSchedule implements Runnable {
@@ -28,10 +31,19 @@ public class SnapshotSchedule implements Runnable {
         this.snapPath = snapPath;
         this.serverId = serverId;
         this.f2 = f2;
+
     }
 
     public void stop() {
         this.running = false;
+    }
+
+    public void startSnapNumber(String snapNumber){
+        if(!StringUtils.isBlank(snapNumber)) {
+            Integer snapN = Integer.valueOf(snapNumber) + 1;
+            snapNumber = String.valueOf(snapN);
+            this.snapshotNumber = new BigInteger(snapNumber);
+        }
     }
 
     private BigInteger getSnapshotNumber() {
@@ -53,6 +65,11 @@ public class SnapshotSchedule implements Runnable {
         File snapDirectory = new File(snapPath);
         if(snapDirectory.isDirectory()) {
             File[] listSnaps = snapDirectory.listFiles();
+            Arrays.sort(listSnaps, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    return Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
             if (listSnaps.length > 3) {
                 if (listSnaps[0].delete())
                     System.out.println("  Deleted!");

@@ -4,12 +4,15 @@ import br.ufu.exception.ListenerException;
 import br.ufu.model.Command;
 import br.ufu.service.QueueService;
 import br.ufu.writer.LogWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.Arrays;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Comparator;
 
 public class F2Listener extends FxListener {
 
@@ -27,13 +30,28 @@ public class F2Listener extends FxListener {
         this.queueService = queueService;
         this.logPath = logPath;
         this.serverId = serverId;
+    }
 
-        try {
-            this.logWriter = new LogWriter(getLogPath(),  new BigInteger("0"));
-        } catch (IOException e) {
-            throw new ListenerException(e);
+    public void startLogNumber(String logN) {
+        if (StringUtils.isBlank(logN)) {
+            logN = "0";
+            this.logNumber = new BigInteger(logN);
+            try {
+                this.logWriter = new LogWriter(getLogPath(), new BigInteger(logN));
+            } catch (IOException e) {
+                throw new ListenerException(e);
+            }
+        } else {
+            Integer logI = Integer.valueOf(logN) + 1;
+            logN = String.valueOf(logI);
+            this.logNumber = new BigInteger(logN);
+            try {
+                this.logWriter = new LogWriter(getLogPath(), new BigInteger(logN));
+            } catch (IOException e) {
+                throw new ListenerException(e);
+            }
+
         }
-
     }
 
     private BigInteger getLogNumber() {
@@ -58,6 +76,11 @@ public class F2Listener extends FxListener {
         File logDirectory = new File(logPath);
         if(logDirectory.isDirectory()) {
             File[] listLogs = logDirectory.listFiles();
+            Arrays.sort(listLogs, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    return Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
             if (listLogs.length > 3) {
                 if (listLogs[0].delete())
                     System.out.println("  Deleted!");

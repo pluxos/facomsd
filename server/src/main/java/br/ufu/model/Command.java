@@ -3,6 +3,7 @@ package br.ufu.model;
 import io.grpc.examples.servergreeting.Response;
 import io.grpc.stub.StreamObserver;
 
+
 public class Command {
 
     private String executeCommand;

@@ -9,7 +9,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static br.ufu.util.Constants.PROPERTY_LOG_PATH;
@@ -37,7 +39,11 @@ public class StartupRecoverService {
         }
         File[] files = path.listFiles();
         if (files.length > 0) {
-            Arrays.sort(files);
+            Arrays.sort(files, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    return Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
             return files[files.length - 1].getAbsolutePath();
         } else {
             return "";
@@ -52,17 +58,50 @@ public class StartupRecoverService {
         }
         File[] logs = path.listFiles();
         if (logs.length > 0) {
-            Arrays.sort(logs);
+            Arrays.sort(logs, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    return Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
             return logs[logs.length - 1].getAbsolutePath();
         } else {
             return "";
         }
     }
 
+    public String[] recoverIds(){
+        String[] numbers = new String[2];
+        numbers[0] = " ";
+        numbers[1] = " ";
+        String snapFile = getSnap();
+
+        if (snapFile != "") {
+            File snap = new File(snapFile);
+            String snapName = snap.getName();
+            snapName = snapName.replace("snap.","");
+            snapName = snapName.replace(".txt","");
+            numbers[1] = snapName;
+        }
+
+        String logFile = getLog();
+
+        if (logFile != "") {
+            File logF = new File(logFile);
+            String logName = logF.getName();
+            logName = logName.replace("log.", "");
+            logName = logName.replace(".txt", "");
+            numbers[0] = logName;
+        }
+
+        return numbers;
+    }
+
+
     public void recover() {
         try {
 
             String snapFile = getSnap();
+
             if (snapFile != "") {
                 List<String> snapshot = FileUtils.readLines(new File(snapFile), defaultCharset());
                 snapshot.forEach(command -> {
@@ -75,6 +114,7 @@ public class StartupRecoverService {
             }
 
             String logFile = getLog();
+
             if (logFile != "") {
                 List<String> commands = FileUtils.readLines(new File(logFile), defaultCharset());
                 commands.forEach(command -> {
@@ -82,7 +122,7 @@ public class StartupRecoverService {
                         System.out.println(command);
                         crudService.execute(command);
                     } catch (InvalidCommandException e) {
-                        log.warn("Could not execute command on recover", e);
+                        log.warn("Could not open log or snap file for recover", e);
                     }
                 });
             }
