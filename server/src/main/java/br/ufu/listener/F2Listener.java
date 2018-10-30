@@ -9,9 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.Arrays;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class F2Listener extends FxListener {
@@ -71,16 +71,12 @@ public class F2Listener extends FxListener {
         return logPath + "logs-server-" + serverId.toString();
     }
 
-    private static void controlLogNumber(String logPath){
+    private static void controlLogNumber(String logPath) {
 
         File logDirectory = new File(logPath);
-        if(logDirectory.isDirectory()) {
+        if (logDirectory.isDirectory()) {
             File[] listLogs = logDirectory.listFiles();
-            Arrays.sort(listLogs, new Comparator<File>() {
-                public int compare(File f1, File f2) {
-                    return Long.compare(f1.lastModified(), f2.lastModified());
-                }
-            });
+            Arrays.sort(listLogs, Comparator.comparingLong(File::lastModified));
             if (listLogs.length > 3) {
                 if (listLogs[0].delete())
                     System.out.println("  Deleted!");

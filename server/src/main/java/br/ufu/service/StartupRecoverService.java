@@ -101,7 +101,6 @@ public class StartupRecoverService {
         try {
 
             String snapFile = getSnap();
-
             if (snapFile != "") {
                 List<String> snapshot = FileUtils.readLines(new File(snapFile), defaultCharset());
                 snapshot.forEach(command -> {
@@ -114,7 +113,6 @@ public class StartupRecoverService {
             }
 
             String logFile = getLog();
-
             if (logFile != "") {
                 List<String> commands = FileUtils.readLines(new File(logFile), defaultCharset());
                 commands.forEach(command -> {

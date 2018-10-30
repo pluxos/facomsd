@@ -31,15 +31,14 @@ public class SnapshotSchedule implements Runnable {
         this.snapPath = snapPath;
         this.serverId = serverId;
         this.f2 = f2;
-
     }
 
     public void stop() {
         this.running = false;
     }
 
-    public void startSnapNumber(String snapNumber){
-        if(!StringUtils.isBlank(snapNumber)) {
+    public void startSnapNumber(String snapNumber) {
+        if (!StringUtils.isBlank(snapNumber)) {
             Integer snapN = Integer.valueOf(snapNumber) + 1;
             snapNumber = String.valueOf(snapN);
             this.snapshotNumber = new BigInteger(snapNumber);
@@ -61,15 +60,11 @@ public class SnapshotSchedule implements Runnable {
         return snapshot;
     }
 
-    private static void controlSnapNumber(String snapPath){
+    private static void controlSnapNumber(String snapPath) {
         File snapDirectory = new File(snapPath);
-        if(snapDirectory.isDirectory()) {
+        if (snapDirectory.isDirectory()) {
             File[] listSnaps = snapDirectory.listFiles();
-            Arrays.sort(listSnaps, new Comparator<File>() {
-                public int compare(File f1, File f2) {
-                    return Long.compare(f1.lastModified(), f2.lastModified());
-                }
-            });
+            Arrays.sort(listSnaps, Comparator.comparingLong(File::lastModified));
             if (listSnaps.length > 3) {
                 if (listSnaps[0].delete())
                     System.out.println("  Deleted!");
@@ -81,9 +76,9 @@ public class SnapshotSchedule implements Runnable {
 
     @Override
     public void run() {
-        while(running) {
+        while (running) {
             try {
-                Thread.sleep (snapTime);
+                Thread.sleep(snapTime);
                 SnapshotWriter snapshotWriter = createSnapshot();
                 f2.setNewLog();
                 Map<BigInteger, String> database = crudRepository.getDatabase();
