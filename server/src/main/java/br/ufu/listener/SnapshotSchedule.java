@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Map;
 
 public class SnapshotSchedule implements Runnable {
@@ -53,12 +54,8 @@ public class SnapshotSchedule implements Runnable {
         File snapDirectory = new File(snapPath);
         if(snapDirectory.isDirectory()) {
             File[] listSnaps = snapDirectory.listFiles();
-            if (listSnaps.length > 3) {
-                if (listSnaps[0].delete())
-                    System.out.println("  Deleted!");
-                else
-                    System.out.println("  Delete failed - reason unknown");
-            }
+            Arrays.sort(listSnaps);
+            if (listSnaps.length > 3) { listSnaps[0].delete(); }
         }
     }
 

@@ -13,11 +13,13 @@ public class QueueService {
     private BlockingQueue<Command> f1;
     private BlockingQueue<Command> f2;
     private BlockingQueue<Command> f3;
+    private BlockingQueue<Command> f4;
 
     public QueueService() {
         this.f1 = new ArrayBlockingQueue<>(Constants.MAX_QUEUE_ITEMS);
         this.f2 = new ArrayBlockingQueue<>(Constants.MAX_QUEUE_ITEMS);
         this.f3 = new ArrayBlockingQueue<>(Constants.MAX_QUEUE_ITEMS);
+        this.f4 = new ArrayBlockingQueue<>(Constants.MAX_QUEUE_ITEMS);
     }
 
     public Command consumeF1() throws InterruptedException {
@@ -30,6 +32,10 @@ public class QueueService {
 
     public Command consumeF3() throws InterruptedException {
         return this.f3.take();
+    }
+
+    public Command consumeF4() throws InterruptedException {
+        return this.f4.take();
     }
 
     private boolean offer(BlockingQueue<Command> queue, Command item) {
@@ -59,5 +65,9 @@ public class QueueService {
 
     public void produceF3(Command item) {
         offer(f3, item);
+    }
+
+    public void produceF4(Command item) {
+        offer(f4, item);
     }
 }

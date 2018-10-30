@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.math.BigInteger;
 
 public class F2Listener extends FxListener {
@@ -54,16 +55,12 @@ public class F2Listener extends FxListener {
     }
 
     private static void controlLogNumber(String logPath){
-
         File logDirectory = new File(logPath);
         if(logDirectory.isDirectory()) {
             File[] listLogs = logDirectory.listFiles();
-            if (listLogs.length > 3) {
-                if (listLogs[0].delete())
-                    System.out.println("  Deleted!");
-                else
-                    System.out.println("  Delete failed - reason unknown");
-            }
+            Arrays.sort(listLogs);
+            if (listLogs.length > 3) { listLogs[0].delete(); }
+            else { }
         }
     }
 

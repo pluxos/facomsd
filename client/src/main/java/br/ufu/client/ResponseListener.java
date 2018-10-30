@@ -12,16 +12,16 @@ public class ResponseListener implements Runnable {
 
     private static final Logger log = LogManager.getLogger(ResponseListener.class);
     private GreeterGrpc.GreeterStub asyncStub;
-    private String individual;
+    private String address;
 
-    public ResponseListener(GreeterGrpc.GreeterStub asyncStub, String i) {
+    public ResponseListener(GreeterGrpc.GreeterStub asyncStub, String address) {
         this.asyncStub = asyncStub;
-        this.individual = i;
+        this.address = address;
     }
 
     @Override
     public void run() {
-        Request request = Request.newBuilder().setAll(this.individual).build();
+            Request request = Request.newBuilder().setAll(this.address).build();
         asyncStub.notify(request, new StreamObserver<Response>() {
             @Override
             public void onNext(Response note) {
