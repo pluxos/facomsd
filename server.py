@@ -122,7 +122,7 @@ def log_command():
     while not EVENT.is_set():
         if not LOG_QUEUE.empty():
             address, data = LOG_QUEUE.get()
-            if data.split('/') != 'select':
+            if data.split('/')[0] != 'select':
                 logfile.write(data + '\n')
                 logfile.flush()
 
