@@ -56,14 +56,14 @@ public class Client {
         clientConnect = new ClientConnect(getUserParameters().get(PROPERTY_SERVER_HOST),
                 getUserParameters().getInt(PROPERTY_SERVER_PORT));
         this.clientCommandHandler = new ClientCommandHandler(getScanner(), getClientConnect(), id);
-        this.responseListener = new ResponseListener(clientConnect.getAsyncStub(), id);
+//        this.responseListener = new ResponseListener(clientConnect.getAsyncStub(), id);
 
         Thread t1 = new Thread(getClientCommandHandler());
-        Thread t2 = new Thread(getResponseListener());
+//        Thread t2 = new Thread(getResponseListener());
         t1.start();
-        t2.start();
+//        t2.start();
         t1.join();
-        t2.join();
+//        t2.join();
     }
 
 }

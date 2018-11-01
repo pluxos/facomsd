@@ -1,13 +1,12 @@
 package br.ufu;
 
-import br.ufu.connections.ServerConnect;
+import br.ufu.connection.ServerConnection;
 import br.ufu.listener.*;
 import br.ufu.repository.CrudRepository;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.service.StartupRecoverService;
 import br.ufu.util.UserParameters;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -26,7 +25,7 @@ public class Server {
     private F4Listener f4Listener;
     private UserParameters userParameters;
     private SnapshotSchedule snapshotSchedule;
-    private ServerConnect serverConnect;
+    private ServerConnection serverConnect;
 
     public Server(String[] args) {
         userParameters = new UserParameters(args);
@@ -44,7 +43,7 @@ public class Server {
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, serverId);
-        serverConnect = new ServerConnect(getQueueService(), serverPort);
+        serverConnect = new ServerConnection(getQueueService(), serverPort);
         f1Listener = new F1Listener(getQueueService(), serverId, serverBand);
         f2Listener = new F2Listener(getQueueService(), logPath , serverId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
@@ -90,7 +89,7 @@ public class Server {
 
     public SnapshotSchedule getSnapshotSchedule() { return snapshotSchedule; }
 
-    public ServerConnect getServerConnect() {
+    public ServerConnection getServerConnect() {
         return serverConnect;
     }
 

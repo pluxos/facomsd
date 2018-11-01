@@ -1,4 +1,4 @@
-package br.ufu.connections;
+package br.ufu.handler;
 
 
 import br.ufu.model.Command;
@@ -28,12 +28,9 @@ public class ClientHandler extends GreeterGrpc.GreeterImplBase {
         try {
             System.out.println("Msg recebida: " + req.getAll());
             queueService.produceF1(new Command(req.getAll(), responseObserver));
-//            String resposta =  queueService.consumeF1();
-
         } catch (Exception ex) {
             log.error("Server interrupted: {}", ex);
         }
-//    } catch (InterruptedException ex) {
     }
 
     @Override

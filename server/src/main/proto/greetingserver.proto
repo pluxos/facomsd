@@ -1,48 +1,26 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.grpc.examples.servergreeting";
-option java_outer_classname = "ServerGreetingProto";
-option objc_class_prefix = "SGP";
+option java_package = "br.ufu.communication";
+option java_outer_classname = "CommunicationProto";
+option objc_class_prefix = "CMP";
 
-package servergretting;
+package communication;
 
 service Greeter {
-  rpc say (Request) returns (Response) {}
-  rpc create (CreateRequest) returns (CreateResponse) {}
-  rpc read (ReadRequest) returns (ReadResponse){}
-  rpc monitor (RequestM) returns(Response) {}
-  rpc notify (Request) returns(stream Response) {}
+  rpc message (Request) returns (Response) {}
+  rpc chord (RequestServer) returns (Response) {}
 }
 
-message RequestM {
-  string key = 1;
+message RequestServer {
+  string content = 1;
   string client = 2;
 }
 
 message Request {
-  string all = 1;
+  string req = 1;
 }
 
 message Response {
   string resp = 1;
-}
-
-message CreateRequest {
-  string operation = 1;
-  string key = 2;
-  string value = 3;
-}
-
-message CreateResponse {
-  string ok = 1;
-}
-
-message ReadRequest {
-  string operation = 1;
-  string key = 2;
-}
-
-message ReadResponse {
-  string value = 1;
 }

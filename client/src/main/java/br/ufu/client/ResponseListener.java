@@ -31,7 +31,7 @@ public class ResponseListener implements Runnable {
             @Override
             public void onError(Throwable t) {
                 Status status = Status.fromThrowable(t);
-                log.warn("RouteChat Failed: {0}", status);
+                log.warn("Connection with server failed: {}", status);
             }
 
             @Override

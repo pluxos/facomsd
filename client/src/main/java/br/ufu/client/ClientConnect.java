@@ -2,10 +2,12 @@ package br.ufu.client;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.examples.servergreeting.GreeterGrpc;
 import io.grpc.examples.servergreeting.Request;
-import io.grpc.examples.servergreeting.RequestM;
 import io.grpc.examples.servergreeting.Response;
+import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,36 +49,29 @@ public class ClientConnect {
         System.out.println("Message: " + message);
         System.out.println("Individual: " + individual);
 
-
-
-
         Request request = Request.newBuilder().setAll(message).build();
+        try {
+            asyncStub.say(request, new StreamObserver<Response>() {
+                @Override
+                public void onNext(Response note) {
+                    System.out.println("Response: " + note.getResp());
+                }
 
-        Response response;
-        response = blockingStub.say(request);
-        log.info("Response: " + response.getResp());
+                @Override
+                public void onError(Throwable t) {
+                    Status status = Status.fromThrowable(t);
+                    log.warn("Connection Failed: {}", status.getDescription());
+                }
 
-//        switch(msg[0]){
-//            case "1":
-//            case "2":
-//            case "3":
-//            case "4":{
-//                Request request = Request.newBuilder().setAll(message).build();
-//
-//                Response response;
-//                response = blockingStub.say(request);
-//                log.info("Response: " + response.getResp());
-//                break;
-//            }
-//            case "5":{
-//                RequestM request = RequestM.newBuilder().setKey(msg[1]).setClient(individual).build();
-//                Response response = blockingStub.monitor(request);
-//                log.info("Change: " + response.getResp());
-//                break;
-//            }
-//            default:
-//                log.error("An error has ocurred, Greet default switch option has achieved!");
-//        }
+                @Override
+                public void onCompleted() {
+                    log.info("Completed with success!\n");
+                }
+            });
+        } catch (StatusRuntimeException e) {
+            log.warn("RPC failed: {}", e.getStatus());
+            return;
+        }
 
     }
 
