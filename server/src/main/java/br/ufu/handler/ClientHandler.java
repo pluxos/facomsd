@@ -3,15 +3,12 @@ package br.ufu.handler;
 
 import br.ufu.model.Command;
 import br.ufu.service.QueueService;
-import io.grpc.examples.servergreeting.GreeterGrpc;
-import io.grpc.examples.servergreeting.Request;
-import io.grpc.examples.servergreeting.RequestM;
-import io.grpc.examples.servergreeting.Response;
+import br.ufu.communication.GreeterGrpc;
+import br.ufu.communication.Request;
+import br.ufu.communication.Response;
 import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.math.BigInteger;
 
 public class ClientHandler extends GreeterGrpc.GreeterImplBase {
 
@@ -24,33 +21,13 @@ public class ClientHandler extends GreeterGrpc.GreeterImplBase {
     }
 
     @Override
-    public void say(Request req, StreamObserver<Response> responseObserver) {
+    public void message(Request req, StreamObserver<Response> responseObserver) {
         try {
-            System.out.println("Msg recebida: " + req.getAll());
-            queueService.produceF1(new Command(req.getAll(), responseObserver));
+            System.out.println("Msg recebida: " + req.getReq());
+            queueService.produceF1(new Command(req.getReq(), responseObserver));
         } catch (Exception ex) {
             log.error("Server interrupted: {}", ex);
         }
     }
-
-    @Override
-    public void monitor(RequestM req, StreamObserver<Response> responseObserver) {
-
-        BigInteger chave = new BigInteger(req.getKey());
-        String individual = req.getClient();
-
-//        monitorarChaveId.computeIfAbsent(chave, k -> new ArrayList<String>()).add(individual);
-
-        Response response = Response.newBuilder().setResp("Chave sendo monitorada").build();
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void notify(Request req, StreamObserver<Response> responseObserver) {
-//        monitorargrpc.put(req.getAll(), responseObserver);
-        //responseObserver.onCompleted();
-    }
-
 }
 

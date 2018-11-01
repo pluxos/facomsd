@@ -1,6 +1,6 @@
 package br.ufu.model;
 
-import io.grpc.examples.servergreeting.Response;
+import br.ufu.communication.Response;
 import io.grpc.stub.StreamObserver;
 
 

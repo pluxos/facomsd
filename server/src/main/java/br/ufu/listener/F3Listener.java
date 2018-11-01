@@ -5,7 +5,7 @@ import br.ufu.model.Command;
 import br.ufu.service.CrudService;
 import br.ufu.service.QueueService;
 import br.ufu.util.CommandUtil;
-import io.grpc.examples.servergreeting.Response;
+import br.ufu.communication.Response;
 import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

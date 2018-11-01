@@ -1,14 +1,12 @@
 package br.ufu.handler;
 
-import br.ufu.client.ClientConnect;
-import br.ufu.client.SocketClient;
+import br.ufu.client.ClientConnection;
 import br.ufu.exception.ClientCommandHandlerException;
 import br.ufu.exception.InvalidCommandException;
 import br.ufu.parser.Parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import static br.ufu.util.Constants.*;
@@ -16,14 +14,14 @@ import static br.ufu.util.Constants.*;
 public class ClientCommandHandler implements Runnable {
 
     private static final Logger log = LogManager.getLogger(ClientCommandHandler.class);
-    private final ClientConnect clientConnect;
+    private final ClientConnection clientConnection;
     private final Scanner scanner;
     private String id;
 //    private final SocketClient socketClient;
 
-    public ClientCommandHandler(Scanner scanner, ClientConnect clientConnect, String id) {
+    public ClientCommandHandler(Scanner scanner, ClientConnection clientConnection, String id) {
         this.scanner = scanner;
-        this.clientConnect = clientConnect;
+        this.clientConnection = clientConnection;
         this.id = id;
     }
 
@@ -70,8 +68,8 @@ public class ClientCommandHandler implements Runnable {
     }
 
 
-    public ClientConnect getClientConnect() {
-        return clientConnect;
+    public ClientConnection getClientConnection() {
+        return clientConnection;
     }
 
     public String getId() {
@@ -98,7 +96,7 @@ public class ClientCommandHandler implements Runnable {
 
     private void stopConnection() {
         try {
-            getClientConnect().shutdown();
+            getClientConnection().shutdown();
         } catch (InterruptedException e) {
             log.warn(e.getMessage(), e);
             throw new ClientCommandHandlerException(e);
@@ -107,9 +105,7 @@ public class ClientCommandHandler implements Runnable {
 
     private void sendMessage(String message) {
         try {
-            System.out.println(getId());
-            getClientConnect().greet(message, getId());
-//            log.info(response);
+            getClientConnection().message(message);
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
         }

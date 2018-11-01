@@ -1,7 +1,6 @@
 package br.ufu;
 
-import br.ufu.client.ClientConnect;
-import br.ufu.client.ResponseListener;
+import br.ufu.client.ClientConnection;
 import br.ufu.handler.ClientCommandHandler;
 import br.ufu.util.UserParameters;
 
@@ -18,8 +17,7 @@ public class Client {
     private Scanner scanner;
     private ClientCommandHandler clientCommandHandler;
     private UserParameters userParameters;
-    private ClientConnect clientConnect;
-    private ResponseListener responseListener;
+    private ClientConnection clientConnection;
 
     public Client(String[] args) {
         userParameters = new UserParameters(args);
@@ -31,8 +29,8 @@ public class Client {
         return scanner;
     }
 
-    public ClientConnect getClientConnect() {
-        return clientConnect;
+    public ClientConnection getClientConnection() {
+        return clientConnection;
     }
 
     public ClientCommandHandler getClientCommandHandler() {
@@ -43,27 +41,20 @@ public class Client {
         return userParameters;
     }
 
-    public ResponseListener getResponseListener() {
-        return responseListener;
-    }
-
     public void start() throws IOException, InterruptedException {
         DatagramSocket socket = new DatagramSocket();
         InetAddress ip = socket.getLocalAddress();
         Integer port = socket.getLocalPort();
         String id = ip.toString() + port.toString();
 
-        clientConnect = new ClientConnect(getUserParameters().get(PROPERTY_SERVER_HOST),
+        clientConnection = new ClientConnection(getUserParameters().get(PROPERTY_SERVER_HOST),
                 getUserParameters().getInt(PROPERTY_SERVER_PORT));
-        this.clientCommandHandler = new ClientCommandHandler(getScanner(), getClientConnect(), id);
-//        this.responseListener = new ResponseListener(clientConnect.getAsyncStub(), id);
+        this.clientCommandHandler = new ClientCommandHandler(getScanner(), getClientConnection(), id);
 
-        Thread t1 = new Thread(getClientCommandHandler());
-//        Thread t2 = new Thread(getResponseListener());
-        t1.start();
-//        t2.start();
-        t1.join();
-//        t2.join();
+        Thread t = new Thread(getClientCommandHandler());
+        t.start();
+        t.join();
+        clientConnection.shutdown();
     }
 
 }

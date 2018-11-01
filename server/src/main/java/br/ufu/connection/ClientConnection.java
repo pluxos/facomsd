@@ -3,9 +3,9 @@ package br.ufu.connection;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
-import io.grpc.examples.servergreeting.GreeterGrpc;
-import io.grpc.examples.servergreeting.Request;
-import io.grpc.examples.servergreeting.Response;
+import br.ufu.communication.GreeterGrpc;
+import br.ufu.communication.Request;
+import br.ufu.communication.Response;
 import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +33,8 @@ public class ClientConnection {
     }
 
     public void send(String message, StreamObserver<Response> clientStream) {
-        Request request = Request.newBuilder().setAll(message).build();
-        asyncStub.say(request, new StreamObserver<Response>() {
+        Request request = Request.newBuilder().setReq(message).build();
+        asyncStub.message(request, new StreamObserver<Response>() {
             @Override
             public void onNext(Response resp) {
                 log.info("Obtained response from monitoring: {}", resp.getResp());
