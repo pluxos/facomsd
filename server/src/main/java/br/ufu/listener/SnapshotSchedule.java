@@ -66,10 +66,11 @@ public class SnapshotSchedule implements Runnable {
             File[] listSnaps = snapDirectory.listFiles();
             Arrays.sort(listSnaps, Comparator.comparingLong(File::lastModified));
             if (listSnaps.length > 3) {
-                if (listSnaps[0].delete())
-                    System.out.println("  Deleted!");
-                else
-                    System.out.println("  Delete failed - reason unknown");
+                try {
+                    listSnaps[0].delete();
+                } catch (Exception e) {
+                    log.warn("Snap control failed! {}", e.getMessage());
+                }
             }
         }
     }
@@ -86,7 +87,7 @@ public class SnapshotSchedule implements Runnable {
                     snapshotWriter.write(item.getKey(), item.getValue());
                 }
                 snapshotWriter.getWriter().close();
-                log.info("Snapshot " + snapshotNumber + " gerado!");
+                log.info("Snapshot " + snapshotNumber + " created!");
                 controlSnapNumber(getSnapshotPath());
             } catch (InterruptedException | IOException e) {
                 log.warn(e.getMessage(), e);

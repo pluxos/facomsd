@@ -15,32 +15,24 @@ public class F1Listener extends FxListener {
     private static final Logger log = LogManager.getLogger(F1Listener.class);
 
     private final QueueService queueService;
-    private final BigInteger leftRestriction;
-    private final BigInteger rightRestriction;
+    private final BigInteger serverBand;
 
     public F1Listener(QueueService queueService, BigInteger serverId, BigInteger serverBand) {
-        BigInteger interval = serverBand.divide(new BigInteger("2"));
-        this.leftRestriction = serverId.subtract(interval);
-        this.rightRestriction = serverId.add(interval);
+        this.serverBand= serverId.subtract(serverBand);
         this.queueService = queueService;
     }
 
     private boolean checkResponsibility(BigInteger value) {
-        if (value.compareTo(leftRestriction) == 1
-                && (rightRestriction.compareTo(value) == 1
-                    || value.equals(rightRestriction))) {
-            return true;
-        }
-        return false;
+        return value.compareTo(serverBand) == 1 && serverBand.compareTo(value) >= 0;
     }
 
     @Override
     protected void listen() {
         try {
             Command item = queueService.consumeF1();
-            log.info("F1 Listener take command [{}]", item.getExecuteCommand());
-            if (checkResponsibility(new BigInteger(
-                    CommandUtil.getKey(item.getExecuteCommand())))) {
+            String command = item.getExecuteCommand();
+            log.info("F1 Listener take command [{}]", command);
+            if (checkResponsibility(new BigInteger(CommandUtil.getKey(command)))) {
                 queueService.produceF2(item);
                 queueService.produceF3(item);
             } else {

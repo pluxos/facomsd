@@ -6,6 +6,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 public class ServerConnection {
 
@@ -13,10 +14,10 @@ public class ServerConnection {
     private Server server;
 
 
-    public ServerConnection(QueueService queueService, int port) {
+    public ServerConnection(QueueService queueService, int port, BigInteger maxKey) {
         System.out.println("Port -> " + port);
         this.server = ServerBuilder.forPort(port)
-                .addService(new ClientHandler(queueService))
+                .addService(new ClientHandler(queueService, maxKey))
                 .build();
     }
 

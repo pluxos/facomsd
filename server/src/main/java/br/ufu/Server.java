@@ -32,22 +32,25 @@ public class Server {
     }
 
     private void init() throws IOException {
-        BigInteger serverId = new BigInteger(getUserParameters().get(PROPERTY_SERVER_ID));
-        BigInteger serverBand = new BigInteger(getUserParameters().get(PROPERTY_SERVER_BAND));
-        Integer serverPort = getUserParameters().getInt(PROPERTY_SERVER_PORT);
-        String logPath = getUserParameters().get(PROPERTY_LOG_PATH);
-        String snapPath = getUserParameters().get(PROPERTY_SNAP_PATH);
-        Integer snapTime = getUserParameters().getInt(PROPERTY_SNAP_TIME);
+        BigInteger serverId = new BigInteger(userParameters.get(PROPERTY_SERVER_ID));
+        BigInteger serverBand = new BigInteger(userParameters.get(PROPERTY_SERVER_BAND));
+        Integer serverPort = userParameters.getInt(PROPERTY_SERVER_PORT);
+        String logPath = userParameters.get(PROPERTY_LOG_PATH);
+        String snapPath = userParameters.get(PROPERTY_SNAP_PATH);
+        Integer snapTime = userParameters.getInt(PROPERTY_SNAP_TIME);
+        Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
+        Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
+        BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
 
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, serverId);
-        serverConnect = new ServerConnection(getQueueService(), serverPort);
+        serverConnect = new ServerConnection(getQueueService(), serverPort, maxKey);
         f1Listener = new F1Listener(getQueueService(), serverId, serverBand);
         f2Listener = new F2Listener(getQueueService(), logPath , serverId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
-        f4Listener = new F4Listener(getQueueService(), serverBand);
+        f4Listener = new F4Listener(getQueueService(), leftServer, rightServer, serverId, maxKey);
         snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, serverId);
     }
 

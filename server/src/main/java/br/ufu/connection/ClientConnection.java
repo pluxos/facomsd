@@ -16,16 +16,22 @@ public class ClientConnection {
     private static final Logger log = LogManager.getLogger(ClientConnection.class);
     private final ManagedChannel channel;
     private final GreeterGrpc.GreeterStub asyncStub;
+    private final Integer port;
 
-    public ClientConnection(String ip, int port) {
+    public ClientConnection(String ip, Integer port) {
         this(ManagedChannelBuilder.forAddress(ip, port)
                 .usePlaintext()
-                .build());
+                .build(), port);
     }
 
-    ClientConnection(ManagedChannel channel) {
+    ClientConnection(ManagedChannel channel, Integer port) {
         this.channel = channel;
         asyncStub = GreeterGrpc.newStub(channel);
+        this.port = port;
+    }
+
+    public Integer getPort() {
+        return port;
     }
 
     public void shutdown() throws InterruptedException {
