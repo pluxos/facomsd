@@ -34,13 +34,14 @@ public class Server {
     private void init() throws IOException {
         BigInteger serverId = new BigInteger(userParameters.get(PROPERTY_SERVER_ID));
         BigInteger serverBand = new BigInteger(userParameters.get(PROPERTY_SERVER_BAND));
+        BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
         Integer serverPort = userParameters.getInt(PROPERTY_SERVER_PORT);
         String logPath = userParameters.get(PROPERTY_LOG_PATH);
         String snapPath = userParameters.get(PROPERTY_SNAP_PATH);
         Integer snapTime = userParameters.getInt(PROPERTY_SNAP_TIME);
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
-        BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
+        printServerInfo(serverPort, serverId, serverBand, leftServer, rightServer);
 
         crudRepository = new CrudRepository();
         queueService = new QueueService();
@@ -90,7 +91,9 @@ public class Server {
         return userParameters;
     }
 
-    public SnapshotSchedule getSnapshotSchedule() { return snapshotSchedule; }
+    public SnapshotSchedule getSnapshotSchedule() {
+        return snapshotSchedule;
+    }
 
     public ServerConnection getServerConnect() {
         return serverConnect;
@@ -117,8 +120,8 @@ public class Server {
         getStartupRecoverService().recover();
 
         String[] numbers = getStartupRecoverService().recoverIds();
-        this.getF2Listener().startLogNumber(numbers[0]);
-        this.getSnapshotSchedule().startSnapNumber(numbers[1]);
+        getF2Listener().startLogNumber(numbers[0]);
+        getSnapshotSchedule().startSnapNumber(numbers[1]);
 
         serverConnect.start();
         startListeners();
@@ -128,5 +131,16 @@ public class Server {
         Thread t = new Thread(runnable);
         t.start();
         return t;
+    }
+
+    private void printServerInfo(Integer port,  BigInteger id , BigInteger band,
+                                 Integer leftServer, Integer rightServer) {
+        System.out.println("Server Port -> " + port );
+        System.out.println("----------------------");
+        System.out.println("Route Table:");
+        System.out.println("Server on Left -> " + leftServer);
+        System.out.println("Server on Right -> " + rightServer);
+        System.out.println("----------------------");
+        System.out.println("Key range -> ( "+ id.subtract(band) +" , "+ id +" ]" );
     }
 }

@@ -10,12 +10,10 @@ import java.math.BigInteger;
 
 public class ServerConnection {
 
-//    private static final Logger log = LogManager.getLogger(ServerConnection.class);
     private Server server;
 
 
     public ServerConnection(QueueService queueService, int port, BigInteger maxKey) {
-        System.out.println("Port -> " + port);
         this.server = ServerBuilder.forPort(port)
                 .addService(new ClientHandler(queueService, maxKey))
                 .build();
