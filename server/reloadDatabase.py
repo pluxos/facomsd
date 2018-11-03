@@ -24,6 +24,9 @@ class ReloadDatabase(AsyncService):
         self.digitSize = CONFIG.getint('backup', 'digitSize')
         self.verifySnapshotVersion()
 
+        self.createIfNotFound('snapshots')
+        self.createIfNotFound('logs')
+
         self.load()
 
     def run(self):
@@ -36,6 +39,12 @@ class ReloadDatabase(AsyncService):
 
         self.stopEvent.clear()
         self.stopFinish.set()
+
+    def createIfNotFound(self, dir):
+        try:
+            os.listdir(dir)
+        except FileNotFoundError:
+            os.mkdir(dir)
 
     def saveSnapshot(self):
         print("Make the snapshot!")
@@ -97,6 +106,8 @@ class ReloadDatabase(AsyncService):
         self.persistence.isLoaded.set()
 
     def verifySnapshotVersion(self):
+        self.createIfNotFound('snapshots')
+
         snaps = os.listdir('snapshots')
 
         if len(snaps) > 0:
@@ -111,6 +122,7 @@ class ReloadDatabase(AsyncService):
 
 
     def clearFiles(self, dir):
+        self.createIfNotFound(dir)
         files = os.listdir(dir)
         if len(files) > 3:
             files.sort(reverse=True)

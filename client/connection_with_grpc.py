@@ -20,7 +20,12 @@ invalidFormatDelete = "invalid arguments! (DELETE ID)"
 class ConnectionWithGRPC:
 
     def __init__(self):
-        self._channel = insecure_channel(CONFIG.get('all', 'HOST') + ":" + str(CONFIG.getint('all', 'PORT')))
+        if len(sys.argv) == 2:
+            self.host = sys.argv[1]
+        else:
+            print("insert server ip to connect in arguments! (python3 __init__.py  IP)")
+            sys.exit(1)
+        self._channel = insecure_channel(self.host + ":" + str(CONFIG.getint('all', 'PORT')))
         self.stub = ServerStub(self._channel)
         print("connection stabilish" , self._channel)
         print("connection stabilish" , self.stub)

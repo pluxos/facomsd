@@ -1,5 +1,6 @@
 import sys
 sys.path.append('../grpcDefinitions')
+sys.path.append('./chord')
 
 from queue import Queue
 
@@ -9,6 +10,8 @@ from listener   import Listener
 from splitter   import Splitter
 from logger     import Logger
 from asyncService import AsyncService
+
+from node import Node
 
 from time import sleep
 
@@ -21,7 +24,8 @@ class Server(AsyncService):
         self.waitPersist = Queue()
 
         self.setName(threadName)
-        #self.loadDatabase = ReloadDatabase(self.requests)
+
+        self.node = Node(threadName)
 
         self.splitter = Splitter(self.requests, self.waitLog, self.waitPersist, threadName)
 
@@ -38,6 +42,7 @@ class Server(AsyncService):
 
         while not self.persistent.isLoaded.isSet():
             sleep(0.1)
+        self.node.start()
         self.splitter.start()
         self.logger.start()
         self.persistent.start()

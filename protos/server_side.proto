@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package server_side;
+
+service P2P {
+    rpc join(ServerInfo) returns (ServerInfo) {}
+    rpc exit(ServerInfo) returns (ServerInfo) {}
+}
+
+message ServerInfo {
+    string source = 1;
+    string next = 2;
+    string back = 3;
+    int64  serverID = 4;
+}

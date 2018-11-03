@@ -7,7 +7,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf import descriptor_pb2
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -19,6 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='sd_work.proto',
   package='sd_work',
   syntax='proto3',
+  serialized_options=None,
   serialized_pb=_b('\n\rsd_work.proto\x12\x07sd_work\"\x10\n\x02Id\x12\n\n\x02id\x18\x01 \x01(\x0c\" \n\x04\x44\x61ta\x12\n\n\x02id\x18\x01 \x01(\x0c\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\">\n\x0eServerResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x1b\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\r.sd_work.Data2\xd2\x01\n\x06Server\x12\x32\n\x06\x63reate\x12\r.sd_work.Data\x1a\x17.sd_work.ServerResponse\"\x00\x12.\n\x04read\x12\x0b.sd_work.Id\x1a\x17.sd_work.ServerResponse\"\x00\x12\x32\n\x06update\x12\r.sd_work.Data\x1a\x17.sd_work.ServerResponse\"\x00\x12\x30\n\x06\x64\x65lete\x12\x0b.sd_work.Id\x1a\x17.sd_work.ServerResponse\"\x00\x62\x06proto3')
 )
 
@@ -38,14 +38,14 @@ _ID = _descriptor.Descriptor(
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -69,21 +69,21 @@ _DATA = _descriptor.Descriptor(
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='data', full_name='sd_work.Data.data', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -107,21 +107,21 @@ _SERVERRESPONSE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='data', full_name='sd_work.ServerResponse.data', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -165,7 +165,7 @@ _SERVER = _descriptor.ServiceDescriptor(
   full_name='sd_work.Server',
   file=DESCRIPTOR,
   index=0,
-  options=None,
+  serialized_options=None,
   serialized_start=143,
   serialized_end=353,
   methods=[
@@ -176,7 +176,7 @@ _SERVER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_DATA,
     output_type=_SERVERRESPONSE,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
     name='read',
@@ -185,7 +185,7 @@ _SERVER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ID,
     output_type=_SERVERRESPONSE,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
     name='update',
@@ -194,7 +194,7 @@ _SERVER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_DATA,
     output_type=_SERVERRESPONSE,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
     name='delete',
@@ -203,7 +203,7 @@ _SERVER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ID,
     output_type=_SERVERRESPONSE,
-    options=None,
+    serialized_options=None,
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_SERVER)

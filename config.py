@@ -3,9 +3,8 @@ HOST=localhost
 PORT=50051
 FILENAME=log.requests
 
-
-[chord]
-M=64
+[p2p]
+PORT=50052
 
 [backup]
 digitSize=20
