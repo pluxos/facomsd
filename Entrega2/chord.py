@@ -34,9 +34,12 @@ class Chord:
             else:
                 self.srv.insert(i, (self.id[i-1], self.id[i], self.id[i+1],self.portas[i-1], self.portas[i], self.portas[i+1]))
 
-        for i in range(0, int(self.qnt_nodes) ):
+        for i in range(0, int(self.qnt_nodes) ): #inicia os servidores passando os parametros criados pelo chord
             cAnt, cAtu, cSuc, pAnt, pAtu, pSuc = self.srv[i]
             os.system("start /B start cmd.exe @cmd /k python server.py " + self.qnt_key + " " + self.qnt_nodes + " " + str(cAnt) + " " + str(cAtu) + " " + str(cSuc) + " " + str(pAnt) + " " + str(pAtu) + " " + str(pSuc) )
+        
+        #inicia cliente
+        os.system("start /B start cmd.exe @cmd /k python client.py ")
 
 if __name__ == '__main__':
     chord = Chord()

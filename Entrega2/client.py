@@ -42,16 +42,14 @@ class Client:
             while temp[0] != '5':
                 if self.validar_temp(entrada):
                     if temp[0] == '1':
-                        retorno = stub.Create(servicos_pb2.CreateUpdate(chave=temp[1], valor=temp[2]))
+                        retorno  = stub.Create.future(servicos_pb2.CreateUpdate(chave=temp[1], valor=temp[2]))
                     elif temp[0] == '2':
-                        retorno = stub.Read(servicos_pb2.ReadDelete(chave=temp[1]))
+                        retorno = stub.Read.future(servicos_pb2.ReadDelete(chave=temp[1]))
                     elif temp[0] == '3':
-                        retorno = stub.Update(servicos_pb2.CreateUpdate(chave=temp[1], valor=temp[2]))
+                        retorno = stub.Update.future(servicos_pb2.CreateUpdate(chave=temp[1], valor=temp[2]))
                     elif temp[0] == '4':
-                        retorno = stub.Delete(servicos_pb2.ReadDelete(chave=temp[1]))
-                    self.filaRespostas.insere(retorno.resposta)
-                    resposta = threading.Thread(target=self.resposta_thread, name="resposta")
-                    resposta.start()
+                        retorno = stub.Delete.future(servicos_pb2.ReadDelete(chave=temp[1]))
+                    retorno.add_done_callback(self.resposta)
                 else:
                     print("Comando não reconhecido")
                 entrada = input("Comando: ")
@@ -68,14 +66,12 @@ class Client:
         except:
             return False
 
-    def resposta_thread(self):
-        while not self.filaRespostas.vazia():
-            try:
-                msg = self.filaRespostas.retira()
-                print(msg)
-            except:
-                pass
+    def resposta(self,retorno):
+        res = retorno.result()
+        if res.resposta is not None:
+            print(res.resposta)
 
+       
 if __name__ == '__main__':
     client = Client()
     client.main()
