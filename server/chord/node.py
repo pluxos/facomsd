@@ -7,6 +7,7 @@ from time import sleep
 from grpc import server as grpc_server
 
 from chord_communication import Chord
+from server_side_pb2 import ServerInfo
 from server_side_pb2_grpc import add_P2PServicer_to_server
 from asyncService import AsyncService
 
@@ -19,19 +20,20 @@ class Node(AsyncService):
 
     def __init__(self, threadName):
         AsyncService.__init__(self)
-        self.chord = Chord()
 
         self.port = str(CONFIG.getint('p2p', 'PORT'))
         self.next = None
         self.back = None
         self.fingerTable = []
         self.setName(threadName)
-        self.host = socket.gethostname()
+        self.host = socket.gethostname() + ":" + self.port
+
+        self.chord = Chord(self)
 
         if len(sys.argv) == 4:
-            self.ringIp = sys.argv[1]
-            self.mBits  = sys.argv[2]
-            self.number  = sys.argv[3]
+            self.ringIp = sys.argv[1].strip()
+            self.mBits  = sys.argv[2].strip()
+            self.number  = int(sys.argv[3])
 
             serverInfo = self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.number, source=self.host))
 
@@ -43,6 +45,8 @@ class Node(AsyncService):
         else:
             print("Arguments Invalid ([IP] M N)")
             sys.exit(1)
+
+        print(self.__dict__)
 
 
     def run(self):
