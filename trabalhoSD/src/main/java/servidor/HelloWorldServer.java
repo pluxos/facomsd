@@ -23,7 +23,7 @@ public class HelloWorldServer implements GrpcServer {
     start();
   }
   
-  private void start() throws InterruptedException {
+  public void start() throws InterruptedException {
     try {
       System.out.println("iniciando");
       Server server = ServerBuilder.forPort(9877).addService(new ServerClass()).build();

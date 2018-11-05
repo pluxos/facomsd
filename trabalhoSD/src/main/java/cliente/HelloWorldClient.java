@@ -35,7 +35,7 @@ public class HelloWorldClient {
     commandHandler = new CommandHandler();
     try {
       while (!input.toLowerCase().equals("sair")) {
-        System.out.println("\n\n-------------------------------------\nDigite o comando ou 'sair' para sair ");
+        System.out.println("\n-------------------------------------\nDigite o comando ou 'sair' para sair ");
         while (true) {
           input = s.nextLine();
           if (input.toLowerCase().equals("sair"))
@@ -68,7 +68,7 @@ public class HelloWorldClient {
     Reply response;
     try {
       response = blockingStub.send(request);
-      System.out.println("Resposta: " + response.getMessage());
+      System.out.println(">>>  " + response.getMessage());
     } catch (StatusRuntimeException e) {
       e.printStackTrace();
       return;

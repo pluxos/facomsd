@@ -10,29 +10,29 @@ public class ComandQuery {
    */
   public static int getTipoComando(String comando) {
     int tipo = -1;
-    String stringtipo = comando.split(" ")[0].toLowerCase();
-    stringtipo.toLowerCase();
+    String stringTipo = comando.split(" ")[0].toLowerCase();
+    stringTipo.toLowerCase();
     tipo = -1;
-    if (stringtipo.equals("create")) {
+    if (stringTipo.equals("create")) {
       tipo = 1;
     }
     else {
-      if (stringtipo.equals("read")) {
+      if (stringTipo.equals("read")) {
         tipo = 2;
       }
       else {
-        if (stringtipo.equals("update")) {
+        if (stringTipo.equals("update")) {
           tipo = 3;
         }
         else {
-          if (stringtipo.equals("delete")) {
+          if (stringTipo.equals("delete")) {
             tipo = 4;
           }
         }
       }
     }
-    if (stringtipo.equals("1") || stringtipo.equals("2") || stringtipo.equals("3") || stringtipo.equals("4")) {
-      tipo = Integer.parseInt(stringtipo);
+    if (stringTipo.equals("1") || stringTipo.equals("2") || stringTipo.equals("3") || stringTipo.equals("4")) {
+      tipo = Integer.parseInt(stringTipo);
     }
     return tipo;
   }

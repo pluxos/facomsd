@@ -1,3 +1,5 @@
+/*  Remover esta classe  */
+
 //package facomSD.facom.com;
 //
 //import static org.junit.Assert.assertTrue;
