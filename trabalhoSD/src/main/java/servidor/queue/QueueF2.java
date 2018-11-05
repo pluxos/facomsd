@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import servidor.ClientData;
+import servidor.Queue;
 import servidor.ServerClass;
 
 public class QueueF2 extends Queue implements Runnable {

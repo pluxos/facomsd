@@ -10,7 +10,6 @@ import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
 import servidor.dataBase.RecoveryData;
-import servidor.queue.Queue;
 import servidor.queue.QueueCommand;
 
 public class ServerClass extends GreeterGrpc.GreeterImplBase implements BindableService {

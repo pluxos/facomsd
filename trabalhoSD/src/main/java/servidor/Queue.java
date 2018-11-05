@@ -1,4 +1,9 @@
-package servidor.queue;
+package servidor;
+
+import servidor.queue.QueueCommand;
+import servidor.queue.QueueF1;
+import servidor.queue.QueueF2;
+import servidor.queue.QueueF3;
 
 public class Queue {
   protected QueueCommand queue;

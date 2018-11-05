@@ -1,6 +1,7 @@
 package servidor.queue;
 
 import servidor.ClientData;
+import servidor.Queue;
 import servidor.ServerClass;
 
 public class QueueF1 extends Queue implements Runnable {

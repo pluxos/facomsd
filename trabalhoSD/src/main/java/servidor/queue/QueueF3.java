@@ -1,6 +1,7 @@
 package servidor.queue;
 
 import servidor.ClientData;
+import servidor.Queue;
 import servidor.ServerClass;
 import servidor.command.ExecuteCommand;
 
