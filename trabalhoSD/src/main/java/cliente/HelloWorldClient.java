@@ -1,4 +1,4 @@
-package utils;
+package cliente;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -11,10 +11,10 @@ import com.stackleader.training.grpc.helloworld.api.GreeterGrpc;
 import com.stackleader.training.grpc.helloworld.api.Reply;
 import com.stackleader.training.grpc.helloworld.api.Request;
 
-import cliente.CommandHandler;
 import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
 import io.grpc.okhttp.OkHttpChannelBuilder;
+import utils.GrpcServer;
 
 @Component(immediate = true)
 public class HelloWorldClient {

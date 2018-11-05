@@ -1,4 +1,4 @@
-package utils;
+package servidor;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.osgi.service.component.annotations.Reference;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import servidor.ServerClass;
+import utils.GrpcServer;
 
 @Component(immediate = true)
 public class HelloWorldServer implements GrpcServer {
