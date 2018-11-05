@@ -8,8 +8,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.stackleader.training.grpc.helloworld.api.GreeterGrpc;
-import com.stackleader.training.grpc.helloworld.api.HelloReply;
-import com.stackleader.training.grpc.helloworld.api.HelloRequest;
+import com.stackleader.training.grpc.helloworld.api.Reply;
+import com.stackleader.training.grpc.helloworld.api.Request;
 
 import cliente.CommandHandler;
 import io.grpc.ManagedChannel;
@@ -64,10 +64,10 @@ public class HelloWorldClient {
    */
   public void greet(String name) {
     System.out.println("enviando: " + name);
-    HelloRequest request = HelloRequest.newBuilder().setName(name).build();
-    HelloReply response;
+    Request request = Request.newBuilder().setName(name).build();
+    Reply response;
     try {
-      response = blockingStub.sayHello(request);
+      response = blockingStub.send(request);
       System.out.println("Resposta: " + response.getMessage());
     } catch (StatusRuntimeException e) {
       e.printStackTrace();

@@ -1,7 +1,7 @@
 package servidor;
 
-import com.stackleader.training.grpc.helloworld.api.HelloReply;
-import com.stackleader.training.grpc.helloworld.api.HelloRequest;
+import com.stackleader.training.grpc.helloworld.api.Reply;
+import com.stackleader.training.grpc.helloworld.api.Request;
 
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
@@ -12,10 +12,10 @@ public class HandlerThreadServer extends Thread {
   private QueueCommand queueCommand;
   private ClientData clientComand;
   private Data data;
-  private HelloRequest req;
-  StreamObserver<HelloReply> responseObserver;
+  private Request req;
+  StreamObserver<Reply> responseObserver;
   
-  public HandlerThreadServer(QueueCommand queueCommand, Data data, HelloRequest req, StreamObserver<HelloReply> responseObserver) {
+  public HandlerThreadServer(QueueCommand queueCommand, Data data, Request req, StreamObserver<Reply> responseObserver) {
     try {
       this.responseObserver = responseObserver;
       this.queueCommand = queueCommand;

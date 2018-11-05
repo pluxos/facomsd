@@ -1,6 +1,6 @@
 package servidor;
 
-import com.stackleader.training.grpc.helloworld.api.HelloReply;
+import com.stackleader.training.grpc.helloworld.api.Reply;
 
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
@@ -8,7 +8,7 @@ import servidor.dataBase.Data;
 public class ClientData {
   private String comando;
   private Data data;
-  StreamObserver<HelloReply> responseObserver;
+  StreamObserver<Reply> responseObserver;
   public Data getData() {
     return data;
   }
@@ -17,11 +17,11 @@ public class ClientData {
     this.data = data;
   }
   
-  public  StreamObserver<HelloReply> getOut() {
+  public  StreamObserver<Reply> getOut() {
     return responseObserver;
   }
   
-  public void setOut( StreamObserver<HelloReply> reply) {
+  public void setOut( StreamObserver<Reply> reply) {
     this.responseObserver = reply;
   }
   
@@ -34,7 +34,7 @@ public class ClientData {
   }
   
   public void sendReply(String s) {
-    HelloReply response = HelloReply.newBuilder().setMessage(s).build();
+    Reply response = Reply.newBuilder().setMessage(s).build();
     responseObserver.onNext(response);
     responseObserver.onCompleted();
   }

@@ -26,13 +26,10 @@ public class HelloWorldServer implements GrpcServer {
   private void start() throws InterruptedException {
     try {
       System.out.println("iniciando");
-      Server server = ServerBuilder
-          .forPort(9877)
-          .addService(new ServerClass()).build();
- 
-        server.start();
-        System.out.println("Server iniciado");
-        server.awaitTermination();
+      Server server = ServerBuilder.forPort(9877).addService(new ServerClass()).build();
+      server.start();
+      System.out.println("Server iniciado");
+      server.awaitTermination();
     } catch (IOException ex) {
     }
   }
@@ -48,6 +45,4 @@ public class HelloWorldServer implements GrpcServer {
       server.shutdown();
     }
   }
-  
-  
 }
