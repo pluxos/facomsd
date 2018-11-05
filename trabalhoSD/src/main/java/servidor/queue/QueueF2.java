@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import servidor.ClientData;
-import servidor.Server;
+import servidor.ServerClass;
 
 public class QueueF2 extends Queue implements Runnable {
   public QueueF2(QueueCommand queue) {
@@ -36,7 +36,7 @@ public class QueueF2 extends Queue implements Runnable {
           }
           Files.write(path, gravar.getBytes(), StandardOpenOption.APPEND);
         }
-        Server.mutex.release();
+        ServerClass.mutex.release();
       }
     } catch (InterruptedException e) {
       e.printStackTrace();

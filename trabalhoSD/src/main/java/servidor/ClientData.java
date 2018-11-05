@@ -1,14 +1,14 @@
 package servidor;
 
-import java.io.ObjectOutputStream;
+import com.stackleader.training.grpc.helloworld.api.HelloReply;
 
+import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
 
 public class ClientData {
   private String comando;
-  private ObjectOutputStream out;
   private Data data;
-  
+  StreamObserver<HelloReply> responseObserver;
   public Data getData() {
     return data;
   }
@@ -17,12 +17,12 @@ public class ClientData {
     this.data = data;
   }
   
-  public ObjectOutputStream getOut() {
-    return out;
+  public  StreamObserver<HelloReply> getOut() {
+    return responseObserver;
   }
   
-  public void setOut(ObjectOutputStream out) {
-    this.out = out;
+  public void setOut( StreamObserver<HelloReply> reply) {
+    this.responseObserver = reply;
   }
   
   public String getComando() {
@@ -31,5 +31,11 @@ public class ClientData {
   
   public void setComando(String comando) {
     this.comando = comando;
+  }
+  
+  public void sendReply(String s) {
+    HelloReply response = HelloReply.newBuilder().setMessage(s).build();
+    responseObserver.onNext(response);
+    responseObserver.onCompleted();
   }
 }

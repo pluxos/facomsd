@@ -1,7 +1,7 @@
 package servidor.queue;
 
 import servidor.ClientData;
-import servidor.Server;
+import servidor.ServerClass;
 
 public class QueueF1 extends Queue implements Runnable {
 
@@ -16,10 +16,10 @@ public class QueueF1 extends Queue implements Runnable {
 		  System.out.println("Iniciando F1");
 			while (true) {
 				ClientData elemento = super.queue.consumeF1();
-				Server.mutex_f1.acquire();
+				ServerClass.mutex_f1.acquire();
 				super.queue.produceF2(elemento);
 				super.queue.produceF3(elemento);
-				Server.mutex_f1.release();
+				ServerClass.mutex_f1.release();
 			}
 			
 		} catch (InterruptedException e) {

@@ -1,14 +1,11 @@
 package servidor.queue;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
 import servidor.ClientData;
-import servidor.Server;
+import servidor.ServerClass;
 import servidor.command.ExecuteCommand;
 
 public class QueueF3 extends Queue implements Runnable {
-  private ObjectOutputStream out;
+  
   
   public QueueF3(QueueCommand queue) {
     super(queue);
@@ -16,30 +13,25 @@ public class QueueF3 extends Queue implements Runnable {
   
   ExecuteCommand execute = new ExecuteCommand();
   
-  public void erro() {
-    try {
-      out.writeObject("Erro ao pocessar comando");
-    } catch (IOException e) {
-      System.out.println("Erro ao enviar resposta");
-    }
-  }
+
   
   @Override
   public void run() {
     try {
       System.out.println("Iniciando F3");
       while (true) {
-        Server.mutex.acquire();
+        ServerClass.mutex.acquire();
         ClientData elemento = super.queue.consumeF3();
-        out = elemento.getOut();
-        String resposta = execute.execute(elemento.getComando(), elemento.getData());
-        System.out.println(">>>>> comando de F3 executado");
-        elemento.getOut().writeObject(resposta);
+       // out = elemento.getOut();
+        String resposta = execute.execute(elemento);
+        System.out.println("resposta F3: "+resposta);
+        elemento.sendReply(resposta);
+       // elemento.getOut().writeObject(resposta);
       }
     } catch (InterruptedException e) {
-      erro();
+     System.out.println("erro");
     } catch (Exception e) {
-      erro();
+      System.out.println("erro");
     }
   }
 }

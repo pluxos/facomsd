@@ -35,7 +35,7 @@ public class Client {
     out = new ObjectOutputStream(socket.getOutputStream());
     in = new ObjectInputStream(socket.getInputStream());
     menu = (String) in.readObject();
-    commandHandler = new CommandHandler(menu);
+    commandHandler = new CommandHandler();
   }
   
   public void start() {

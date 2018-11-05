@@ -1,5 +1,6 @@
 package servidor.command;
 
+import servidor.ClientData;
 import servidor.dataBase.Data;
 
 public class ExecuteCommand {
@@ -46,5 +47,11 @@ public class ExecuteCommand {
       default:
         return "Comando invalido";
     }
+  }
+  
+  public String execute(ClientData elemento) throws Exception {
+    String comando = elemento.getComando();
+    Data dataBase = elemento.getData();
+    return execute(comando, dataBase);
   }
 }
