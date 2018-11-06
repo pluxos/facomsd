@@ -16,13 +16,11 @@ public class ClientCommandHandler implements Runnable {
     private static final Logger log = LogManager.getLogger(ClientCommandHandler.class);
     private final ClientConnection clientConnection;
     private final Scanner scanner;
-    private String id;
 //    private final SocketClient socketClient;
 
-    public ClientCommandHandler(Scanner scanner, ClientConnection clientConnection, String id) {
+    public ClientCommandHandler(Scanner scanner, ClientConnection clientConnection) {
         this.scanner = scanner;
         this.clientConnection = clientConnection;
-        this.id = id;
     }
 
     private static void validateCommand(String command) throws InvalidCommandException {
@@ -70,10 +68,6 @@ public class ClientCommandHandler implements Runnable {
 
     public ClientConnection getClientConnection() {
         return clientConnection;
-    }
-
-    public String getId() {
-        return id;
     }
 
     @Override

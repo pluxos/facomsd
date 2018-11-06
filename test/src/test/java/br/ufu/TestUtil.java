@@ -1,9 +1,9 @@
 package br.ufu;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mockito.Mockito;
 
 import java.math.BigInteger;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,20 +38,38 @@ public class TestUtil {
         };
     }
 
-    public static List<Server> initServers(Integer m, Integer n, Integer initialPort) {
+    public static List<Thread> initServers(Integer m, Integer n, Integer initialPort, Integer snapTime) {
         Integer port = initialPort;
         Integer lastPort = initialPort + n - 1;
         BigInteger initialId = new BigInteger("2").pow(m).subtract(new BigInteger("1"));
         BigInteger id = initialId;
         BigInteger band = new BigInteger("2").pow(m).divide(new BigInteger(n.toString()));
-        System.out.println("id = " + id);
-        System.out.println("band = " + band);
 
-        List<Server> servers = new ArrayList<>();
-        while(port <= lastPort){
-            servers.add(new Server(getServerArgs(port, id.toString(), band.toString(), 10000,
-                    port-1, port+1, initialId.toString())));
-            port += 1;
+        List<Thread> servers = new ArrayList<>();
+
+        servers.add(getThread(Mockito.spy(new Server(getServerArgs(port, id.toString(), band.toString(),
+                snapTime,lastPort, port+1, initialId.toString())))));
+        port += 1;
+        id = id.subtract(band);
+
+        Integer rightPort, leftPort;
+        String serverId, serverBand;
+        String maxId = initialId.toString();
+
+        for (;port <= lastPort; port++, id = id.subtract(band)){
+            serverId = id.toString();
+            rightPort = port - 1;
+            leftPort = port + 1;
+            serverBand =  band.toString();
+
+            if (port == initialPort) {
+                rightPort = lastPort;
+            } else if (port == lastPort) {
+                leftPort = initialPort;
+            }
+
+            servers.add(getThread(Mockito.spy(new Server(
+                    getServerArgs(port, serverId, serverBand, snapTime,rightPort, leftPort, maxId)))));
         }
         return servers;
     }

@@ -135,12 +135,11 @@ public class Server {
 
     private void printServerInfo(Integer port,  BigInteger id , BigInteger band,
                                  Integer leftServer, Integer rightServer) {
-        System.out.println("Server Port -> " + port );
         System.out.println("----------------------");
-        System.out.println("Route Table:");
+        System.out.println("Server Port -> " + port );
         System.out.println("Server on Left -> " + leftServer);
         System.out.println("Server on Right -> " + rightServer);
-        System.out.println("----------------------");
         System.out.println("Key range -> ( "+ id.subtract(band) +" , "+ id +" ]" );
+        System.out.println("----------------------");
     }
 }

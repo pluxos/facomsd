@@ -23,6 +23,7 @@ public class ClientConnection {
         this(ManagedChannelBuilder.forAddress(ip, port)
                 .usePlaintext()
                 .build());
+        System.out.println("Client connected to server " + ip + ":" + port);
     }
 
     ClientConnection(ManagedChannel channel) {

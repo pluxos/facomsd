@@ -42,14 +42,11 @@ public class Client {
     }
 
     public void start() throws IOException, InterruptedException {
-        DatagramSocket socket = new DatagramSocket();
-        InetAddress ip = socket.getLocalAddress();
-        Integer port = socket.getLocalPort();
-        String id = ip.toString() + port.toString();
+        Integer serverPort = getUserParameters().getInt(PROPERTY_SERVER_PORT);
+        String serverHost = getUserParameters().get(PROPERTY_SERVER_HOST);
 
-        clientConnection = new ClientConnection(getUserParameters().get(PROPERTY_SERVER_HOST),
-                getUserParameters().getInt(PROPERTY_SERVER_PORT));
-        this.clientCommandHandler = new ClientCommandHandler(getScanner(), getClientConnection(), id);
+        clientConnection = new ClientConnection(serverHost, serverPort);
+        this.clientCommandHandler = new ClientCommandHandler(getScanner(), getClientConnection());
 
         Thread t = new Thread(getClientCommandHandler());
         t.start();

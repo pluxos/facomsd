@@ -7,8 +7,11 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,20 +28,24 @@ public class BaseTest {
 
     private Logger logger;
 
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule().silent();
+
+
     @Before
     public void setup() {
         // prepare the appender so Log4j likes it
         when(mockAppender.getName()).thenReturn("MockAppender");
-        when(mockAppender.isStarted()).thenReturn(true);
+//        when(mockAppender.isStarted()).thenReturn(true);
 
         logger = (Logger) LogManager.getLogger(ClientCommandHandler.class);
         logger.addAppender(mockAppender);
 
 
-        Mockito.doAnswer(invocation -> {
-            logEvents.add(((LogEvent) invocation.getArgument(0)).getMessage().getFormattedMessage());
-            return null;
-        }).when(mockAppender).append(Mockito.any());
+//        Mockito.doAnswer(invocation -> {
+//            logEvents.add(((LogEvent) invocation.getArgument(0)).getMessage().getFormattedMessage());
+//            return null;
+//        }).when(mockAppender).append(Mockito.any());
 
     }
 
