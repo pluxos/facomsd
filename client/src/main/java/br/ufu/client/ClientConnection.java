@@ -1,13 +1,11 @@
 package br.ufu.client;
 
+import br.ufu.communication.RequestKeyValue;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import br.ufu.communication.GreeterGrpc;
 import br.ufu.communication.Request;
-import br.ufu.communication.Response;
-import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +24,7 @@ public class ClientConnection {
         System.out.println("Client connected to server " + ip + ":" + port);
     }
 
-    ClientConnection(ManagedChannel channel) {
+    private ClientConnection(ManagedChannel channel) {
         this.channel = channel;
         asyncStub = GreeterGrpc.newStub(channel);
     }
@@ -35,32 +33,62 @@ public class ClientConnection {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
+
     public void message(String message) {
+        String[] msg = message.split(" ");
 
-        Request request = Request.newBuilder().setReq(message).build();
-        try {
-            asyncStub.message(request, new StreamObserver<Response>() {
-                @Override
-                public void onNext(Response note) {
-                    log.info(note.getResp());
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    Status status = Status.fromThrowable(t);
-                    log.warn("Connection Failed: {}", status.getDescription());
-                }
-
-                @Override
-                public void onCompleted() {
-                    log.info("Completed with success!\n");
-                }
-            });
-        } catch (StatusRuntimeException e) {
-            log.warn("RPC failed: {}", e.getStatus());
-            return;
+        switch (msg[0]) {
+            case "CREATE":
+                sendCreate(msg[1], msg[2]);
+                break;
+            case "READ":
+                sendRead(msg[1]);
+                break;
+            case "UPDATE":
+                sendUpdate(msg[1], msg[2]);
+                break;
+            case "DELETE":
+                sendDelete(msg[1]);
+                break;
+            default:
+                log.warn("Invalid CRUD operation!");
         }
+    }
 
+    private void sendCreate(String key, String value) {
+        RequestKeyValue request = RequestKeyValue.newBuilder().setKey(key).setValue(value).build();
+        try {
+            asyncStub.create(request, new ResponseObserver(log));
+        } catch (StatusRuntimeException e) {
+            log.error("Create RPC failed: {}", e.getStatus());
+        }
+    }
+
+    private void sendRead(String key) {
+        Request request = Request.newBuilder().setKey(key).build();
+        try {
+            asyncStub.read(request, new ResponseObserver(log));
+        } catch (StatusRuntimeException e) {
+            log.error("Read RPC failed: {}", e.getStatus());
+        }
+    }
+
+    private void sendUpdate(String key, String value) {
+        RequestKeyValue request = RequestKeyValue.newBuilder().setKey(key).setValue(value).build();
+        try {
+            asyncStub.update(request, new ResponseObserver(log));
+        } catch (StatusRuntimeException e) {
+            log.error("Update RPC failed: {}", e.getStatus());
+        }
+    }
+
+    private void sendDelete(String key) {
+        Request request = Request.newBuilder().setKey(key).build();
+        try {
+            asyncStub.delete(request, new ResponseObserver(log));
+        } catch (StatusRuntimeException e) {
+            log.error("Delete RPC failed: {}", e.getStatus());
+        }
     }
 
 }

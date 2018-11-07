@@ -9,18 +9,21 @@ package communication;
 
 service Greeter {
   rpc message (Request) returns (Response) {}
-  rpc chord (RequestServer) returns (Response) {}
-}
-
-message RequestServer {
-  string content = 1;
-  string client = 2;
+  rpc create (RequestKeyValue) returns (Response) {}
+  rpc read (Request) returns (Response) {}
+  rpc update (RequestKeyValue) returns (Response) {}
+  rpc delete (Request) returns (Response) {}
 }
 
 message Request {
-  string req = 1;
+  string key = 1;
 }
 
 message Response {
   string resp = 1;
+}
+
+message RequestKeyValue {
+  string key = 1;
+  string value = 2;
 }

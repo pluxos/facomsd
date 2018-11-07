@@ -4,7 +4,6 @@ import br.ufu.connection.ClientConnection;
 import br.ufu.exception.ListenerException;
 import br.ufu.model.Command;
 import br.ufu.service.QueueService;
-import br.ufu.communication.Response;
 import br.ufu.util.CommandUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +14,7 @@ import java.math.BigInteger;
 public class F4Listener extends FxListener {
 
     private static final Logger log = LogManager.getLogger(F4Listener.class);
+    private static final String LOCALHOST = "127.0.0.1";
 
     private final QueueService queueService;
     private final ClientConnection leftServer;
@@ -28,8 +28,8 @@ public class F4Listener extends FxListener {
         this.queueService = queueService;
         this.serverId =  serverId;
         this.maxKey = maxKey;
-        this.leftServer = new ClientConnection("127.0.0.1", leftServer);
-        this.rightServer = new ClientConnection("127.0.0.1", rightServer);
+        this.leftServer = new ClientConnection(LOCALHOST, leftServer);
+        this.rightServer = new ClientConnection(LOCALHOST, rightServer);
     }
 
     private void passResponsability(Command item) {
