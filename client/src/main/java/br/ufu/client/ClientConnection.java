@@ -42,7 +42,7 @@ public class ClientConnection {
             asyncStub.message(request, new StreamObserver<Response>() {
                 @Override
                 public void onNext(Response note) {
-                    System.out.println("Response: " + note.getResp());
+                    log.info(note.getResp());
                 }
 
                 @Override

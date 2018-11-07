@@ -15,7 +15,7 @@ public class ServerConnection {
 
     public ServerConnection(QueueService queueService, int port, BigInteger maxKey) {
         this.server = ServerBuilder.forPort(port)
-                .addService(new ClientHandler(queueService, maxKey))
+                .addService(new ClientHandler(queueService, maxKey, port))
                 .build();
     }
 

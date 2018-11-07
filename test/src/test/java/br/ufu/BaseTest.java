@@ -1,5 +1,6 @@
 package br.ufu;
 
+import br.ufu.client.ClientConnection;
 import br.ufu.handler.ClientCommandHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
@@ -36,16 +37,16 @@ public class BaseTest {
     public void setup() {
         // prepare the appender so Log4j likes it
         when(mockAppender.getName()).thenReturn("MockAppender");
-//        when(mockAppender.isStarted()).thenReturn(true);
+        when(mockAppender.isStarted()).thenReturn(true);
 
-        logger = (Logger) LogManager.getLogger(ClientCommandHandler.class);
+        logger = (Logger) LogManager.getLogger(ClientConnection.class);
         logger.addAppender(mockAppender);
 
 
-//        Mockito.doAnswer(invocation -> {
-//            logEvents.add(((LogEvent) invocation.getArgument(0)).getMessage().getFormattedMessage());
-//            return null;
-//        }).when(mockAppender).append(Mockito.any());
+        Mockito.doAnswer(invocation -> {
+            logEvents.add(((LogEvent) invocation.getArgument(0)).getMessage().getFormattedMessage());
+            return null;
+        }).when(mockAppender).append(Mockito.any());
 
     }
 

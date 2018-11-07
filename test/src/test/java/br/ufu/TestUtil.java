@@ -1,8 +1,11 @@
 package br.ufu;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mockito.Mockito;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +50,6 @@ public class TestUtil {
 
         List<Thread> servers = new ArrayList<>();
 
-        servers.add(getThread(Mockito.spy(new Server(getServerArgs(port, id.toString(), band.toString(),
-                snapTime,lastPort, port+1, initialId.toString())))));
-        port += 1;
-        id = id.subtract(band);
-
         Integer rightPort, leftPort;
         String serverId, serverBand;
         String maxId = initialId.toString();
@@ -62,9 +60,9 @@ public class TestUtil {
             leftPort = port + 1;
             serverBand =  band.toString();
 
-            if (port == initialPort) {
+            if (port.equals(initialPort)) {
                 rightPort = lastPort;
-            } else if (port == lastPort) {
+            }else if (port.equals(lastPort)) {
                 leftPort = initialPort;
             }
 
@@ -72,6 +70,13 @@ public class TestUtil {
                     getServerArgs(port, serverId, serverBand, snapTime,rightPort, leftPort, maxId)))));
         }
         return servers;
+    }
+
+    public static void deleteLogsAndSnapshots() throws IOException {
+        File directory = new File("/tmp/sd-snaps");
+        if (directory .isDirectory()) {
+            FileUtils.deleteDirectory(directory);
+        }
     }
 
 
