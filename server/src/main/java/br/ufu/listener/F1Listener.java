@@ -15,17 +15,17 @@ public class F1Listener extends FxListener {
     private static final Logger log = LogManager.getLogger(F1Listener.class);
 
     private final QueueService queueService;
-    private final BigInteger serverBand;
+    private final BigInteger smallerKey;
     private final BigInteger serverId;
 
-    public F1Listener(QueueService queueService, BigInteger serverId, BigInteger serverBand) {
-        this.serverBand= serverId.subtract(serverBand);
+    public F1Listener(QueueService queueService, BigInteger serverId, BigInteger smallerKey) {
+        this.smallerKey= smallerKey;
         this.serverId = serverId;
         this.queueService = queueService;
     }
 
     private boolean checkResponsibility(BigInteger value) {
-        return value.compareTo(serverBand) == 1 && serverId.compareTo(value) >= 0;
+        return value.compareTo(smallerKey) >= 0 && serverId.compareTo(value) >= 0;
     }
 
     @Override

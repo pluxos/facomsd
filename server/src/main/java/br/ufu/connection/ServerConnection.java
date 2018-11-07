@@ -23,7 +23,7 @@ public class ServerConnection {
         server.start();
     }
 
-    public void blockUntilShutdown() throws InterruptedException {
+    public void shutdown() throws InterruptedException {
         server.awaitTermination();
     }
 }

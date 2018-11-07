@@ -107,7 +107,7 @@ public class StartupRecoverService {
                     try {
                         crudService.execute("CREATE " + command);
                     } catch (InvalidCommandException e) {
-                        log.warn("Could not execute command on recover", e);
+                        log.warn("Could not execute snapshot command on recover", e);
                     }
                 });
             }
@@ -120,7 +120,7 @@ public class StartupRecoverService {
                         System.out.println(command);
                         crudService.execute(command);
                     } catch (InvalidCommandException e) {
-                        log.warn("Could not open log or snap file for recover", e);
+                        log.warn("Could not execute log command on recover", e);
                     }
                 });
             }

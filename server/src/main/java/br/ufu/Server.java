@@ -33,7 +33,7 @@ public class Server {
 
     private void init() throws IOException {
         BigInteger serverId = new BigInteger(userParameters.get(PROPERTY_SERVER_ID));
-        BigInteger serverBand = new BigInteger(userParameters.get(PROPERTY_SERVER_BAND));
+        BigInteger smallerKey = new BigInteger(userParameters.get(PROPERTY_SMALLER_KEY));
         BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
         Integer serverPort = userParameters.getInt(PROPERTY_SERVER_PORT);
         String logPath = userParameters.get(PROPERTY_LOG_PATH);
@@ -41,14 +41,14 @@ public class Server {
         Integer snapTime = userParameters.getInt(PROPERTY_SNAP_TIME);
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
-        printServerInfo(serverPort, serverId, serverBand, leftServer, rightServer);
+        printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
 
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, serverId);
         serverConnect = new ServerConnection(getQueueService(), serverPort, maxKey);
-        f1Listener = new F1Listener(getQueueService(), serverId, serverBand);
+        f1Listener = new F1Listener(getQueueService(), serverId, smallerKey);
         f2Listener = new F2Listener(getQueueService(), logPath , serverId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
         f4Listener = new F4Listener(getQueueService(), leftServer, rightServer, serverId, maxKey);
@@ -112,7 +112,7 @@ public class Server {
         f3ListenerThread.join();
         f4ListenerThread.join();
         snapshotSchedule.join();
-        serverConnect.blockUntilShutdown();
+        serverConnect.shutdown();
     }
 
     public void start() throws InterruptedException, IOException {
@@ -133,13 +133,17 @@ public class Server {
         return t;
     }
 
-    private void printServerInfo(Integer port,  BigInteger id , BigInteger band,
+    private void printServerInfo(Integer port,  BigInteger biggerKey , BigInteger smallerKey,
                                  Integer leftServer, Integer rightServer) {
         System.out.println("----------------------");
         System.out.println("Server Port -> " + port );
         System.out.println("Server on Left -> " + leftServer);
         System.out.println("Server on Right -> " + rightServer);
-        System.out.println("Key range -> ( "+ id.subtract(band) +" , "+ id +" ]" );
+        System.out.println("Key range -> [ "+ smallerKey +" , "+ biggerKey +" ]" );
         System.out.println("----------------------");
+    }
+
+    public void shutdown() throws InterruptedException {
+        serverConnect.shutdown();
     }
 }

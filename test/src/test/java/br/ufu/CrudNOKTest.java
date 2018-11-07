@@ -28,7 +28,7 @@ public class CrudNOKTest extends BaseTest {
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(1000);
+            thread.sleep(100);
         }
 
         String[] commands = getClientArgs(4445);

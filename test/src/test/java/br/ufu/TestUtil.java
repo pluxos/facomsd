@@ -18,14 +18,14 @@ public class TestUtil {
         return StringUtils.join(commands, LINE_BREAK) + LINE_BREAK;
     }
 
-    public static String[] getServerArgs(int port, String id, String band, int snapTime,
+    public static String[] getServerArgs(int port, String id, String smallerKey, int snapTime,
                             int rightServer, int leftServer, String maxKey) {
         return new String[]{
                 "--log.path=/tmp/sd-snaps/",
                 "--server.host=127.0.0.1",
                 "--server.port=" + port,
                 "--server.id=" + id,
-                "--server.band=" + band,
+                "--smaller.key=" + smallerKey,
                 "--snap.path=/tmp/sd-snaps/",
                 "--snap.time=" + snapTime,
                 "--right.server=" + rightServer,
@@ -44,30 +44,32 @@ public class TestUtil {
     public static List<Thread> initServers(Integer m, Integer n, Integer initialPort, Integer snapTime) {
         Integer port = initialPort;
         Integer lastPort = initialPort + n - 1;
-        BigInteger initialId = new BigInteger("2").pow(m).subtract(new BigInteger("1"));
+        BigInteger initialId = new BigInteger("2").pow(m).subtract(BigInteger.ONE);
         BigInteger id = initialId;
         BigInteger band = new BigInteger("2").pow(m).divide(new BigInteger(n.toString()));
 
         List<Thread> servers = new ArrayList<>();
 
         Integer rightPort, leftPort;
-        String serverId, serverBand;
+        String serverId;
         String maxId = initialId.toString();
+        BigInteger smallerKey;
 
         for (;port <= lastPort; port++, id = id.subtract(band)){
             serverId = id.toString();
             rightPort = port - 1;
             leftPort = port + 1;
-            serverBand =  band.toString();
+            smallerKey =  id.subtract(band).add(BigInteger.ONE);
 
             if (port.equals(initialPort)) {
                 rightPort = lastPort;
             }else if (port.equals(lastPort)) {
                 leftPort = initialPort;
+                smallerKey = BigInteger.ZERO;
             }
 
-            servers.add(getThread(Mockito.spy(new Server(
-                    getServerArgs(port, serverId, serverBand, snapTime,rightPort, leftPort, maxId)))));
+            servers.add(getThread(Mockito.spy(new Server(getServerArgs(
+                    port, serverId, smallerKey.toString(), snapTime,rightPort, leftPort, maxId)))));
         }
         return servers;
     }

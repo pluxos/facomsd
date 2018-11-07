@@ -21,16 +21,15 @@ public class CrudOKTest extends BaseTest {
     public void shouldTestCrudOK() throws Exception {
 
         deleteLogsAndSnapshots();
-        Thread.sleep(3000);
 
-        List<Thread> servers =  initServers(4, 4, 4444, 100000);
+        List<Thread> servers =  initServers(6, 32, 4444, 100000);
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(1000);
+            thread.sleep(100);
         }
 
-        String[] commands = getClientArgs(4445);
+        String[] commands = getClientArgs(4449);
         Client clientSpy = Mockito.spy(new Client(commands));
 
         Scanner mockScanner = Mockito.mock(Scanner.class);
@@ -57,8 +56,7 @@ public class CrudOKTest extends BaseTest {
             Thread.sleep(500);
             return inputs.take();
         });
-
-        Thread.sleep(2000);
+        
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");
@@ -68,14 +66,14 @@ public class CrudOKTest extends BaseTest {
         verifyMessage("Command RESPONSE: CREATE OK - I");
         verifyMessage("Command RESPONSE: READ OK - I");
 
-//        verifyMessage("Command RESPONSE: CREATE OK - O");
-//        verifyMessage("Command RESPONSE: DELETE OK - O");
-//
-//        verifyMessage("Command RESPONSE: CREATE OK - J");
-//        verifyMessage("Command RESPONSE: UPDATE OK - P");
-//
-//        verifyMessage("Command RESPONSE: CREATE OK - U");
-//        verifyMessage("Command RESPONSE: DELETE OK - U");
+        verifyMessage("Command RESPONSE: CREATE OK - O");
+        verifyMessage("Command RESPONSE: DELETE OK - O");
+
+        verifyMessage("Command RESPONSE: CREATE OK - J");
+        verifyMessage("Command RESPONSE: UPDATE OK - P");
+
+        verifyMessage("Command RESPONSE: CREATE OK - U");
+        verifyMessage("Command RESPONSE: DELETE OK - U");
 
         for (Thread thread: servers) {
             thread.stop();

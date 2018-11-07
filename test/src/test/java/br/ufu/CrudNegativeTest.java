@@ -26,7 +26,7 @@ public class CrudNegativeTest extends BaseTest {
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(1000);
+            thread.sleep(100);
         }
 
         String[] commands = getClientArgs(4445);
@@ -49,7 +49,7 @@ public class CrudNegativeTest extends BaseTest {
             return inputs.take();
         });
 
-        Thread.sleep(500);
+        Thread.sleep(2000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");

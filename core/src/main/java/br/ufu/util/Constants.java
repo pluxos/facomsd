@@ -20,7 +20,7 @@ public class Constants {
     public static final String PROPERTY_SNAP_TIME = "snap.time";
     public static final String PROPERTY_SNAP_PATH = "snap.path";
     public static final String PROPERTY_LOG_PATH = "log.path";
-    public static final String PROPERTY_SERVER_BAND = "server.band";
+    public static final String PROPERTY_SMALLER_KEY = "smaller.key";
     public static final String PROPERTY_SERVER_ID = "server.id";
     public static final String PROPERTY_RIGHT_SERVER = "right.server";
     public static final String PROPERTY_LEFT_SERVER = "left.server";

@@ -22,14 +22,14 @@ public class CrudZeroTest extends BaseTest {
 
         deleteLogsAndSnapshots();
 
-        List<Thread> servers =  initServers(4, 4, 4444, 100000);
+        List<Thread> servers =  initServers(6, 11, 4444, 100000);
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(1000);
+            thread.sleep(100);
         }
 
-        String[] commands = getClientArgs(4445);
+        String[] commands = getClientArgs(4448);
         Client clientSpy = Mockito.spy(new Client(commands));
 
         Scanner mockScanner = Mockito.mock(Scanner.class);

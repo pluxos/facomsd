@@ -44,10 +44,12 @@ public class F4Listener extends FxListener {
         }
         if (left.compareTo(right) <= 0) {
             leftServer.send(item.getExecuteCommand(), item.getObserver());
-            log.info("Command sent to server on left. Port: {}", leftServer.getPort());
+            log.info("Command '" +item.getExecuteCommand()+ "' sent to server on left. Port: {}",
+                    leftServer.getPort());
         } else {
             rightServer.send(item.getExecuteCommand(), item.getObserver());
-            log.info("Command sent to server on right. Port: {}", rightServer.getPort());
+            log.info("Command '" +item.getExecuteCommand()+ "' sent to server on right. Port: {}",
+                    rightServer.getPort());
         }
     }
 

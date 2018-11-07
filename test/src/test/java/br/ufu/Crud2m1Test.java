@@ -25,12 +25,12 @@ public class Crud2m1Test extends BaseTest {
 
         Integer m = 4;
 
-        List<Thread> servers =  initServers(m, 4, 4444, 100000);
+        List<Thread> servers =  initServers(m, 5, 4444, 100000);
         BigInteger value = new BigInteger("2").pow(m).subtract(new BigInteger("1"));
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(1000);
+            thread.sleep(100);
         }
 
         String[] commands = getClientArgs(4445);
