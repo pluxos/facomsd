@@ -3,13 +3,20 @@ syntax = "proto3";
 package server_side;
 
 service P2P {
-    rpc join(ServerInfo) returns (ServerInfo) {}
+    rpc getNeighbors(ServerInfo) returns (ServerInfo) {}
     rpc exit(ServerInfo) returns (ServerInfo) {}
+    rpc join(ServerInfo) returns (ServerInfo) {}
+}
+
+message ServerID {
+    string host = 1;
+    int64 id = 2;
 }
 
 message ServerInfo {
     string source = 1;
-    string next = 2;
-    string back = 3;
+    ServerID next = 2;
+    ServerID back = 3;
     int64  serverID = 4;
 }
+

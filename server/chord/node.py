@@ -22,31 +22,29 @@ class Node(AsyncService):
         AsyncService.__init__(self)
 
         self.port = str(CONFIG.getint('p2p', 'PORT'))
-        self.next = None
-        self.back = None
         self.fingerTable = []
         self.setName(threadName)
-        self.host = socket.gethostname() + ":" + self.port
+        self.host = socket.gethostbyname(socket.getfqdn()) + ":" + self.port
 
         self.chord = Chord(self)
 
-        if len(sys.argv) == 4:
+        if len(sys.argv) == 5:
             self.ringIp = sys.argv[1].strip()
             self.mBits  = sys.argv[2].strip()
             self.number  = int(sys.argv[3])
+            self.id     = int(sys.argv[4])
 
-            serverInfo = self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.number, source=self.host))
+            self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.id, source=self.host))
 
-            self.next = serverInfo.next
-            self.back = serverInfo.back
-        elif len(sys.argv) == 3:
+        elif len(sys.argv) == 4:
             self.mBits  = sys.argv[1]
-            self.number  = sys.argv[2]
+            self.number = sys.argv[2]
+            self.id     = int(sys.argv[3])
         else:
-            print("Arguments Invalid ([IP] M N)")
+            print("Arguments Invalid ([IP] M N ID) '0 < ID <= N'")
             sys.exit(1)
 
-        print(self.__dict__)
+        # print(self.__dict__)
 
 
     def run(self):

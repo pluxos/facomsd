@@ -1,9 +1,8 @@
 import configparser
 import os
 from grpc import insecure_channel
-from server_side_pb2 import ServerInfo
+from server_side_pb2 import ServerInfo, ServerID
 from server_side_pb2_grpc import P2PServicer, P2PStub
-
 
 
 CONFIG = configparser.ConfigParser()
@@ -16,24 +15,99 @@ class Chord(P2PServicer):
         self.port = str(CONFIG.getint('p2p', 'PORT'))
         self.thisHost = self.node.host
 
-    def join(self, request, context):
-        response = ServerInfo()
-        if self.node.next is None or self.node.back is None:
-            self.node.next = request.source
-            self.node.back = request.source
-            print(self.node.__dict__)
-            response = ServerInfo(next=self.thisHost, back=self.thisHost)
+    def getNeighbors(self, request, context):
+        ft = self.node.fingerTable
+        this = ServerID(host=self.thisHost, id=self.node.id)
+        if len(self.node.fingerTable) == 0:
+            response = ServerInfo(next=this, back=this)
 
-        print("\n\n\n", context.__dict__, "\n\n\n")
+        elif self.node.id < request.serverID < ft[1][0]:
+            next = ServerID(host=ft[1][1], id=ft[1][0])
+            response = ServerInfo(next=next, back=this)
+
+        elif ft[0][0] < request.serverID < self.node.id:
+            back= ServerID(host=ft[0][1], id=ft[0][0])
+            response = ServerInfo(next=this, back=back)
+
+        elif ft[1][0] < self.node.id < request.serverID:
+            next = ServerID(host=ft[1][1], id=ft[1][0])
+            response = ServerInfo(next=next, back=this)
+
+        elif request.serverID < self.node.id < ft[0][0]:
+            back = ServerID(host=ft[0][1], id=ft[0][0])
+            response = ServerInfo(next=this, back=back)
+        else:
+            near = self.search_by_id(request.serverID)
+            print("forward search neighbor call from: ", request.serverID)
+            response = near.getNeighbors(request)
+
         return response
 
-    def exit(self, request, context):
-        pass
+    def join(self, request, context):
+        if len(request.next.host) > 0:
+            print("\n\n\nJOIN:", request.next, "\n\n\n")
+            next = self.server_id_to_finger_table(request.next)
+            if len(self.node.fingerTable) >= 2:
+                self.node.fingerTable[1] = next
+            else:
+                self.node.fingerTable = [None, next]
+
+        if len(request.back.host) > 0:
+            print("\n\n\nJOIN:", request.back, "\n\n\n")
+            back = self.server_id_to_finger_table(request.back)
+            if len(self.node.fingerTable) >= 2:
+                self.node.fingerTable[0] = back
+            else:
+                self.node.fingerTable = [back, None]
+
+        print("My fingerTable Updated: ")
+
+        print("[", end="")
+        for i in self.node.fingerTable:
+            if i is not None:
+                print(i[0],i[1], end=" ,")
+            else:
+                print(i, end=" ,")
+        print("]")
+        return ServerInfo(serverID=self.node.id, source=self.thisHost)
+
 
     def doJoin(self, destiny,  serverInfo):
         channel = insecure_channel(destiny + ":" + self.port)
+        this = ServerID(host=self.thisHost, id=self.node.id)
         stub = P2PStub(channel)
-        return stub.join(serverInfo)
+        near = stub.getNeighbors(serverInfo)
+
+        print(near)
+        stubNext = self.getStub(near.next)
+        n = stubNext.join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
+        next = (n.serverID, n.source, stubNext)
+
+        stubBack = self.getStub(near.back)
+        b = stubBack.join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id))
+        back = (b.serverID, b.source, stubBack)
+
+        self.node.fingerTable = [back, next]
+
+        print("My fingerTable: ", self.node.fingerTable)
+
+    def getStub(self, server):
+        channel = insecure_channel(server.host)
+        stub = P2PStub(channel)
+        return stub
+
+    def server_id_to_finger_table(self, server):
+        stub = self.getStub(server)
+        return (server.id, server.host, stub)
 
     def doExit(self, ServerInfo):
         pass
+
+    def search_by_id(self, target):
+        for i in range(1, len(self.node.fingerTable) + 1):
+            if self.node.fingerTable[-i][0] < target:
+                print("Search_by_id found: ",self.node.fingerTable[-i][0])
+                return self.node.fingerTable[-i][2]
+        return self.node.fingerTable[1][2]
+
+        

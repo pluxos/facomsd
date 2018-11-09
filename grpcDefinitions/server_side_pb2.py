@@ -19,10 +19,48 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='server_side',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x11server_side.proto\x12\x0bserver_side\"J\n\nServerInfo\x12\x0e\n\x06source\x18\x01 \x01(\t\x12\x0c\n\x04next\x18\x02 \x01(\t\x12\x0c\n\x04\x62\x61\x63k\x18\x03 \x01(\t\x12\x10\n\x08serverID\x18\x04 \x01(\x03\x32}\n\x03P2P\x12:\n\x04join\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04\x65xit\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x11server_side.proto\x12\x0bserver_side\"$\n\x08ServerID\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x03\"x\n\nServerInfo\x12\x0e\n\x06source\x18\x01 \x01(\t\x12#\n\x04next\x18\x02 \x01(\x0b\x32\x15.server_side.ServerID\x12#\n\x04\x62\x61\x63k\x18\x03 \x01(\x0b\x32\x15.server_side.ServerID\x12\x10\n\x08serverID\x18\x04 \x01(\x03\x32\xc1\x01\n\x03P2P\x12\x42\n\x0cgetNeighbors\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04\x65xit\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04join\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x62\x06proto3')
 )
 
 
+
+
+_SERVERID = _descriptor.Descriptor(
+  name='ServerID',
+  full_name='server_side.ServerID',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='host', full_name='server_side.ServerID.host', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='server_side.ServerID.id', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=34,
+  serialized_end=70,
+)
 
 
 _SERVERINFO = _descriptor.Descriptor(
@@ -41,15 +79,15 @@ _SERVERINFO = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='next', full_name='server_side.ServerInfo.next', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='back', full_name='server_side.ServerInfo.back', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -72,12 +110,22 @@ _SERVERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=34,
-  serialized_end=108,
+  serialized_start=72,
+  serialized_end=192,
 )
 
+_SERVERINFO.fields_by_name['next'].message_type = _SERVERID
+_SERVERINFO.fields_by_name['back'].message_type = _SERVERID
+DESCRIPTOR.message_types_by_name['ServerID'] = _SERVERID
 DESCRIPTOR.message_types_by_name['ServerInfo'] = _SERVERINFO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+ServerID = _reflection.GeneratedProtocolMessageType('ServerID', (_message.Message,), dict(
+  DESCRIPTOR = _SERVERID,
+  __module__ = 'server_side_pb2'
+  # @@protoc_insertion_point(class_scope:server_side.ServerID)
+  ))
+_sym_db.RegisterMessage(ServerID)
 
 ServerInfo = _reflection.GeneratedProtocolMessageType('ServerInfo', (_message.Message,), dict(
   DESCRIPTOR = _SERVERINFO,
@@ -94,12 +142,12 @@ _P2P = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=110,
-  serialized_end=235,
+  serialized_start=195,
+  serialized_end=388,
   methods=[
   _descriptor.MethodDescriptor(
-    name='join',
-    full_name='server_side.P2P.join',
+    name='getNeighbors',
+    full_name='server_side.P2P.getNeighbors',
     index=0,
     containing_service=None,
     input_type=_SERVERINFO,
@@ -110,6 +158,15 @@ _P2P = _descriptor.ServiceDescriptor(
     name='exit',
     full_name='server_side.P2P.exit',
     index=1,
+    containing_service=None,
+    input_type=_SERVERINFO,
+    output_type=_SERVERINFO,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='join',
+    full_name='server_side.P2P.join',
+    index=2,
     containing_service=None,
     input_type=_SERVERINFO,
     output_type=_SERVERINFO,

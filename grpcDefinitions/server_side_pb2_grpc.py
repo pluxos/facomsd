@@ -14,13 +14,18 @@ class P2PStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.join = channel.unary_unary(
-        '/server_side.P2P/join',
+    self.getNeighbors = channel.unary_unary(
+        '/server_side.P2P/getNeighbors',
         request_serializer=server__side__pb2.ServerInfo.SerializeToString,
         response_deserializer=server__side__pb2.ServerInfo.FromString,
         )
     self.exit = channel.unary_unary(
         '/server_side.P2P/exit',
+        request_serializer=server__side__pb2.ServerInfo.SerializeToString,
+        response_deserializer=server__side__pb2.ServerInfo.FromString,
+        )
+    self.join = channel.unary_unary(
+        '/server_side.P2P/join',
         request_serializer=server__side__pb2.ServerInfo.SerializeToString,
         response_deserializer=server__side__pb2.ServerInfo.FromString,
         )
@@ -30,7 +35,7 @@ class P2PServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def join(self, request, context):
+  def getNeighbors(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -44,16 +49,28 @@ class P2PServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def join(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_P2PServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'join': grpc.unary_unary_rpc_method_handler(
-          servicer.join,
+      'getNeighbors': grpc.unary_unary_rpc_method_handler(
+          servicer.getNeighbors,
           request_deserializer=server__side__pb2.ServerInfo.FromString,
           response_serializer=server__side__pb2.ServerInfo.SerializeToString,
       ),
       'exit': grpc.unary_unary_rpc_method_handler(
           servicer.exit,
+          request_deserializer=server__side__pb2.ServerInfo.FromString,
+          response_serializer=server__side__pb2.ServerInfo.SerializeToString,
+      ),
+      'join': grpc.unary_unary_rpc_method_handler(
+          servicer.join,
           request_deserializer=server__side__pb2.ServerInfo.FromString,
           response_serializer=server__side__pb2.ServerInfo.SerializeToString,
       ),
