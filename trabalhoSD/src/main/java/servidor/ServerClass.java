@@ -36,7 +36,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void send(Request req, StreamObserver<Reply> responseObserver) {
-    System.out.println("iniciando thread cliente");
+    System.out.println("iniciando thread cliente conectado");
     HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
     h.run();
     System.out.println("thread finalizada");

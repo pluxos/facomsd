@@ -5,18 +5,17 @@ import java.io.IOException;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 
-import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import utils.Constant;
 import utils.GrpcServer;
 
 @Component(immediate = true)
-public class HelloWorldServer implements GrpcServer {
-  private final int port = 5000;
+public class HandlerServer implements GrpcServer {
+//  private final int port = 5000;
   private Server server;
-  private BindableService greeterService;
+//  private BindableService greeterService;
   
   @Activate
   public void activate() throws InterruptedException {
@@ -26,7 +25,7 @@ public class HelloWorldServer implements GrpcServer {
   public void start() throws InterruptedException {
     try {
       System.out.println("iniciando");
-      Server server = ServerBuilder.forPort(9877).addService(new ServerClass()).build();
+      Server server = ServerBuilder.forPort(Constant.SERVER_PORT).addService(new ServerClass()).build();
       server.start();
       System.out.println("Server iniciado");
       server.awaitTermination();
@@ -34,10 +33,10 @@ public class HelloWorldServer implements GrpcServer {
     }
   }
   
-  @Reference
-  public void setGreeterService(BindableService greeterService) {
-    this.greeterService = greeterService;
-  }
+//  @Reference
+//  public void setGreeterService(BindableService greeterService) {
+//    this.greeterService = greeterService;
+//  }
   
   @Deactivate
   public void deactivate() {

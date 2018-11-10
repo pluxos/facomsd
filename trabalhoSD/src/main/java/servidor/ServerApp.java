@@ -2,7 +2,7 @@ package servidor;
 
 public class ServerApp {
   public static void main(String[] args) {
-    HelloWorldServer s = new HelloWorldServer();
+    HandlerServer s = new HandlerServer();
     try {
       s.activate();
     } catch (InterruptedException e) {
