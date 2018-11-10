@@ -22,7 +22,7 @@ class Logger(AsyncService):
                 request = self.toLog.get(True, 1)
                 version = self.reloadDB.snapshot_version
                 a = '0' * (self.digitSize - len(str(version)))
-                with open('logs/log.' + a + str(version - 1), 'a') as logFile:
+                with open('../logs/log.' + a + str(version - 1), 'a') as logFile:
                     request = self.getRequest(request)
                     logFile.write(request + '\n')
             except Empty:

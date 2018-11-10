@@ -6,6 +6,7 @@ service P2P {
     rpc getNeighbors(ServerInfo) returns (ServerInfo) {}
     rpc exit(ServerInfo) returns (ServerInfo) {}
     rpc join(ServerInfo) returns (ServerInfo) {}
+    rpc build_finger_table(FingerTable) returns (FingerTable) {}
 }
 
 message ServerID {
@@ -18,5 +19,10 @@ message ServerInfo {
     ServerID next = 2;
     ServerID back = 3;
     int64  serverID = 4;
+}
+
+message FingerTable {
+    ServerID source = 1;
+    repeated ServerID table = 2;
 }
 

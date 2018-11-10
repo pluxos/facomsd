@@ -8,6 +8,9 @@ from time import sleep, time
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + '/../config.py')
 
+LOG_PATH = '../logs'
+SNAP_PATH = '../snapshots'
+
 class ReloadDatabase(AsyncService):
 
     def __init__(self, persistence, splitter):
@@ -24,8 +27,8 @@ class ReloadDatabase(AsyncService):
         self.digitSize = CONFIG.getint('backup', 'digitSize')
         self.verifySnapshotVersion()
 
-        self.createIfNotFound('snapshots')
-        self.createIfNotFound('logs')
+        self.createIfNotFound(LOG_PATH)
+        self.createIfNotFound(SNAP_PATH)
 
         self.load()
 
@@ -57,10 +60,10 @@ class ReloadDatabase(AsyncService):
 
         a = '0' * (self.digitSize - len(str(self.snapshot_version)))
 
-        with open('./snapshots/snap.' + a + str(self.snapshot_version), 'wb') as file:
+        with open(SNAP_PATH+'/snap.' + a + str(self.snapshot_version), 'wb') as file:
             file.write(snapshot)
 
-        with open('./logs/log.' + a + str(self.snapshot_version), 'w'):
+        with open(LOG_PATH + '/log.' + a + str(self.snapshot_version), 'w'):
             pass
 
         self.snapshot_version += 1
@@ -72,7 +75,7 @@ class ReloadDatabase(AsyncService):
     def load(self):
         try:
             a = '0' * (self.digitSize - len(str(self.snapshot_version)))
-            with open('snapshots/snap.' + a + str(self.snapshot_version-1), 'rb') as f:
+            with open(SNAP_PATH + '/snap.' + a + str(self.snapshot_version-1), 'rb') as f:
                 self.persistence.data = pickle.loads(f.read())
         except FileNotFoundError:
             pass
@@ -81,7 +84,7 @@ class ReloadDatabase(AsyncService):
     def loadFromLog(self):
         a = '0' * (self.digitSize - len(str(self.snapshot_version)))
         try:
-            with open('logs/log.' + a + str(self.snapshot_version-1), 'r') as file:
+            with open(LOG_PATH + '/log.' + a + str(self.snapshot_version-1), 'r') as file:
                 print("database reloading..")
                 while True:
                     command = file.readline()
@@ -106,9 +109,9 @@ class ReloadDatabase(AsyncService):
         self.persistence.isLoaded.set()
 
     def verifySnapshotVersion(self):
-        self.createIfNotFound('snapshots')
+        self.createIfNotFound(SNAP_PATH)
 
-        snaps = os.listdir('snapshots')
+        snaps = os.listdir(SNAP_PATH)
 
         if len(snaps) > 0:
             snaps.sort()
@@ -117,8 +120,8 @@ class ReloadDatabase(AsyncService):
             self.snapshot_version = lastSnapID + 1
 
     def clearOldBackups(self):
-        self.clearFiles('snapshots/')
-        self.clearFiles('logs/')
+        self.clearFiles(SNAP_PATH)
+        self.clearFiles(LOG_PATH)
 
 
     def clearFiles(self, dir):
@@ -127,4 +130,4 @@ class ReloadDatabase(AsyncService):
         if len(files) > 3:
             files.sort(reverse=True)
             for f in files[3:]:
-                os.remove(dir + f)
+                os.remove(dir + '/' + f)

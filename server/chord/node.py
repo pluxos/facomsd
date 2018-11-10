@@ -2,8 +2,9 @@ import sys
 import configparser
 import os
 import socket
+import sched
 from concurrent import futures
-from time import sleep
+from time import sleep, time
 from math import ceil, floor
 from grpc import server as grpc_server
 
@@ -11,6 +12,7 @@ from chord_communication import Chord
 from server_side_pb2 import ServerInfo
 from server_side_pb2_grpc import add_P2PServicer_to_server
 from asyncService import AsyncService
+from build_finger_table_task import Build_finger_table
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
@@ -28,6 +30,8 @@ class Node(AsyncService):
         self.host = socket.gethostbyname(socket.getfqdn()) + ":" + self.port
 
         self.chord = Chord(self)
+
+        self.build_finger_table = Build_finger_table(self)
 
         if len(sys.argv) == 5:
             self.ringIp = sys.argv[1].strip()
@@ -53,6 +57,7 @@ class Node(AsyncService):
         add_P2PServicer_to_server(self.chord, server)
         server.add_insecure_port("0.0.0.0:" + self.port)
         server.start()
+        self.build_finger_table.start()
         try:
             print("I'm listen in chord!")
             while not self.stopEvent.isSet():
@@ -75,3 +80,7 @@ class Node(AsyncService):
     def fromID(self, id):
         m2 = (1 << self.mBits)
         return floor(-(((id * self.number)+1) - (self.number * m2)) / m2) - 1
+
+    def sched_build_finger_table(self):
+        s = sched.scheduler(time, sleep)
+

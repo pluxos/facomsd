@@ -29,6 +29,11 @@ class P2PStub(object):
         request_serializer=server__side__pb2.ServerInfo.SerializeToString,
         response_deserializer=server__side__pb2.ServerInfo.FromString,
         )
+    self.build_finger_table = channel.unary_unary(
+        '/server_side.P2P/build_finger_table',
+        request_serializer=server__side__pb2.FingerTable.SerializeToString,
+        response_deserializer=server__side__pb2.FingerTable.FromString,
+        )
 
 
 class P2PServicer(object):
@@ -56,6 +61,13 @@ class P2PServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def build_finger_table(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_P2PServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -73,6 +85,11 @@ def add_P2PServicer_to_server(servicer, server):
           servicer.join,
           request_deserializer=server__side__pb2.ServerInfo.FromString,
           response_serializer=server__side__pb2.ServerInfo.SerializeToString,
+      ),
+      'build_finger_table': grpc.unary_unary_rpc_method_handler(
+          servicer.build_finger_table,
+          request_deserializer=server__side__pb2.FingerTable.FromString,
+          response_serializer=server__side__pb2.FingerTable.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

@@ -1,10 +1,10 @@
 import configparser
 import os
 from grpc import insecure_channel
-from server_side_pb2 import ServerInfo, ServerID
+from server_side_pb2 import ServerInfo, ServerID, FingerTable
 from server_side_pb2_grpc import P2PServicer, P2PStub
 from sd_work_pb2_grpc import ServerStub
-
+from math import log2, ceil
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
@@ -74,6 +74,32 @@ class Chord(P2PServicer):
         print("]")
         return ServerInfo(serverID=self.node.id, source=self.thisHost)
 
+    def build_finger_table(self, request, context):
+
+        if request.source.id == self.node.id:
+            return request
+
+        this = ServerID(host=self.thisHost, id=self.node.id)
+
+        for i in range(1, ceil(log2(self.node.number))):
+            ith = ((1 << i-1) % self.node.number)
+            ith = self.node.number if ith == 0 else ith
+
+            if ith == self.node.id:
+                request.table.extend([this])
+                break
+
+        if len(self.node.fingerTable) > 1:
+            nextStub = self.node.fingerTable[1][2]
+            try:
+                result = nextStub.build_finger_table(request)
+                result = result.result()
+                request = result
+            except Exception:
+                pass
+
+        return request
+
 
     def doJoin(self, destiny,  serverInfo):
         channel = insecure_channel(destiny + ":" + self.port)
@@ -126,3 +152,23 @@ class Chord(P2PServicer):
             return self.node.fingerTable[1][3]
         else:
             return self.node.fingerTable[1][2]
+
+    def fill_finger_table(self):
+        this = ServerID(host=self.thisHost, id=self.node.id)
+        ft = FingerTable(source=this)
+
+        if len(self.node.fingerTable) > 1:
+            newFt = self.node.fingerTable[1][2].build_finger_table(ft)
+
+            position = 1
+            for i in newFt.table:
+
+                entry = self.server_id_to_finger_table(i)
+
+                if len(self.node.fingerTable) > position:
+                    self.node.fingerTable[position] = entry
+                else:
+                    self.node.fingerTable.append(entry)
+                position += 1
+            # if len(self.node.fingerTable) > position:
+            #     self.node.fingerTable = self.node.fingerTable[0:position]
