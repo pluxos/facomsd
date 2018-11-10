@@ -47,7 +47,7 @@ class ReloadDatabase(AsyncService):
             os.mkdir(dir)
 
     def saveSnapshot(self):
-        print("Make the snapshot!")
+        # print("Make the snapshot!")
         self.pauseSplit.set()
         while not self.toPersist.empty() or not self.toLog.empty():
             print("Wait to process snapshot")
@@ -67,7 +67,7 @@ class ReloadDatabase(AsyncService):
 
         self.clearOldBackups()
         self.pauseSplit.clear()
-        print("Snapshot are done!")
+        # print("Snapshot are done!")
 
     def load(self):
         try:

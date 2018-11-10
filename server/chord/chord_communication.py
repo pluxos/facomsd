@@ -3,6 +3,7 @@ import os
 from grpc import insecure_channel
 from server_side_pb2 import ServerInfo, ServerID
 from server_side_pb2_grpc import P2PServicer, P2PStub
+from sd_work_pb2_grpc import ServerStub
 
 
 CONFIG = configparser.ConfigParser()
@@ -13,6 +14,7 @@ class Chord(P2PServicer):
     def __init__(self, node):
         self.node = node
         self.port = str(CONFIG.getint('p2p', 'PORT'))
+        self.client_port = str(CONFIG.getint('all', 'PORT'))
         self.thisHost = self.node.host
 
     def getNeighbors(self, request, context):
@@ -64,10 +66,11 @@ class Chord(P2PServicer):
 
         print("[", end="")
         for i in self.node.fingerTable:
-            if i is not None:
-                print(i[0],i[1], end=" ,")
-            else:
-                print(i, end=" ,")
+            print(self.node.fingerTable)
+            # if i is not None:
+            #     print(i[0],i[1], end=" ,")
+            # else:
+            #     print(i, end=" ,")
         print("]")
         return ServerInfo(serverID=self.node.id, source=self.thisHost)
 
@@ -79,13 +82,13 @@ class Chord(P2PServicer):
         near = stub.getNeighbors(serverInfo)
 
         print(near)
-        stubNext = self.getStub(near.next)
-        n = stubNext.join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
-        next = (n.serverID, n.source, stubNext)
+        next = self.server_id_to_finger_table(near.next)
+        next[2].join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
+        #next = (n.serverID, n.source, stubNext)
 
-        stubBack = self.getStub(near.back)
-        b = stubBack.join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id))
-        back = (b.serverID, b.source, stubBack)
+        back = self.server_id_to_finger_table(near.back)
+        back[2].join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id))
+        #back = (b.serverID, b.source, stubBack)
 
         self.node.fingerTable = [back, next]
 
@@ -96,18 +99,30 @@ class Chord(P2PServicer):
         stub = P2PStub(channel)
         return stub
 
+    def getClientStub(self, server):
+        host = server.host.split(':')[0] + ':' + self.client_port
+        channel = insecure_channel(host)
+        stub = ServerStub(channel)
+        return stub
+
     def server_id_to_finger_table(self, server):
         stub = self.getStub(server)
-        return (server.id, server.host, stub)
+        clientStub = self.getClientStub(server)
+        return (server.id, server.host, stub, clientStub)
 
     def doExit(self, ServerInfo):
         pass
 
-    def search_by_id(self, target):
+    def search_by_id(self, target, client_interface=False):
         for i in range(1, len(self.node.fingerTable) + 1):
             if self.node.fingerTable[-i][0] < target:
-                print("Search_by_id found: ",self.node.fingerTable[-i][0])
-                return self.node.fingerTable[-i][2]
-        return self.node.fingerTable[1][2]
-
-        
+                print("Search_by_id found -i : ",self.node.fingerTable[-i][0])
+                if client_interface:
+                    return self.node.fingerTable[-i][3]
+                else:
+                    return self.node.fingerTable[-i][2]
+        print("Search_by_id found: ",self.node.fingerTable[1][0])
+        if client_interface:
+            return self.node.fingerTable[1][3]
+        else:
+            return self.node.fingerTable[1][2]

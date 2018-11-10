@@ -10,6 +10,7 @@ from listener   import Listener
 from splitter   import Splitter
 from logger     import Logger
 from asyncService import AsyncService
+from redirector import Redirector
 
 from node import Node
 
@@ -22,12 +23,16 @@ class Server(AsyncService):
         self.requests = Queue()
         self.waitLog = Queue()
         self.waitPersist = Queue()
+        self.waitRedirect = Queue()
 
         self.setName(threadName)
 
         self.node = Node(threadName)
 
-        self.splitter = Splitter(self.requests, self.waitLog, self.waitPersist, threadName)
+        self.splitter = Splitter(self.node, self.requests,
+                                 self.waitLog, self.waitPersist,
+                                 self.waitRedirect, threadName
+                        )
 
         self.persistent = Persistent(self.waitPersist, threadName)
 
@@ -35,6 +40,7 @@ class Server(AsyncService):
 
         self.logger = Logger(self.waitLog, threadName, self.reloadDatabase)
 
+        self.redirector = Redirector(self.node, self.waitRedirect, threadName)
 
         self.listener = Listener(self.requests, threadName)
 
@@ -44,6 +50,7 @@ class Server(AsyncService):
             sleep(0.1)
         self.node.start()
         self.splitter.start()
+        self.redirector.start()
         self.logger.start()
         self.persistent.start()
         self.listener.start()
@@ -60,6 +67,7 @@ class Server(AsyncService):
         self.logger.join()
         self.splitter.join()
         self.listener.join()
+        self.redirector.join()
 
 
 

@@ -4,6 +4,7 @@ import os
 import socket
 from concurrent import futures
 from time import sleep
+from math import ceil, floor
 from grpc import server as grpc_server
 
 from chord_communication import Chord
@@ -30,15 +31,15 @@ class Node(AsyncService):
 
         if len(sys.argv) == 5:
             self.ringIp = sys.argv[1].strip()
-            self.mBits  = sys.argv[2].strip()
+            self.mBits  = int(sys.argv[2].strip())
             self.number  = int(sys.argv[3])
             self.id     = int(sys.argv[4])
 
             self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.id, source=self.host))
 
         elif len(sys.argv) == 4:
-            self.mBits  = sys.argv[1]
-            self.number = sys.argv[2]
+            self.mBits  = int(sys.argv[1])
+            self.number = int(sys.argv[2])
             self.id     = int(sys.argv[3])
         else:
             print("Arguments Invalid ([IP] M N ID) '0 < ID <= N'")
@@ -60,3 +61,17 @@ class Node(AsyncService):
             server.stop(0)
         self.stopEvent.clear()
         self.stopFinish.set()
+
+    def verify_responsibility(self, id):
+        print("Range entre: ",self.toID(self.id-1), id,self.toID(self.id))
+        if self.toID(self.id-1) <= id < self.toID(self.id):
+            return True
+        return False
+
+
+    def toID(self, i):
+        return ceil((i * ((1 << self.mBits) / self.number)))
+
+    def fromID(self, id):
+        m2 = (1 << self.mBits)
+        return floor(-(((id * self.number)+1) - (self.number * m2)) / m2) - 1
