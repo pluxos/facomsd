@@ -16,11 +16,11 @@ syntax = "proto3";
 
 // Definição dos serviços oferecidos pelo servidor.
 service Requisicao {
-    rpc Conectado (Hello) returns (Resultado) {}
-    rpc Create (CreateUpdate) returns (Resultado) {}
-    rpc Read (ReadDelete) returns (Resultado) {}
-    rpc Update (CreateUpdate) returns (Resultado) {}
-    rpc Delete (ReadDelete) returns (Resultado) {}
+    rpc Conectado (stream Hello) returns (stream Resultado) {}
+    rpc Create (stream CreateUpdate) returns (stream Resultado) {}
+    rpc Read (stream ReadDelete) returns (stream Resultado) {}
+    rpc Update (stream CreateUpdate) returns (stream Resultado) {}
+    rpc Delete (stream ReadDelete) returns (stream Resultado) {}
 }
 
 message Hello {
