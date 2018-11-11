@@ -47,7 +47,6 @@ class Chord(P2PServicer):
 
     def join(self, request, context):
         if len(request.next.host) > 0:
-            print("\n\n\nJOIN:", request.next, "\n\n\n")
             next = self.server_id_to_finger_table(request.next)
             if len(self.node.fingerTable) >= 2:
                 self.node.fingerTable[1] = next
@@ -55,48 +54,50 @@ class Chord(P2PServicer):
                 self.node.fingerTable = [None, next]
 
         if len(request.back.host) > 0:
-            print("\n\n\nJOIN:", request.back, "\n\n\n")
             back = self.server_id_to_finger_table(request.back)
             if len(self.node.fingerTable) >= 2:
                 self.node.fingerTable[0] = back
             else:
                 self.node.fingerTable = [back, None]
 
-        print("My fingerTable Updated: ")
-
-        print("[", end="")
-        for i in self.node.fingerTable:
-            print(self.node.fingerTable)
-            # if i is not None:
-            #     print(i[0],i[1], end=" ,")
-            # else:
-            #     print(i, end=" ,")
-        print("]")
+        # print("My fingerTable Updated: ")
+        #
+        # print("[", end="")
+        # for i in self.node.fingerTable:
+        #     print(self.node.fingerTable)
+        #     # if i is not None:
+        #     #     print(i[0],i[1], end=" ,")
+        #     # else:
+        #     #     print(i, end=" ,")
+        # print("]")
         return ServerInfo(serverID=self.node.id, source=self.thisHost)
 
     def build_finger_table(self, request, context):
 
+        # if len(request.table) >= ceil(log2(self.node.number)):
+        #     return request
         if request.source.id == self.node.id:
             return request
 
         this = ServerID(host=self.thisHost, id=self.node.id)
 
-        for i in range(1, ceil(log2(self.node.number))):
-            ith = ((1 << i-1) % self.node.number)
+        for i in range(1, ceil(log2(self.node.number))+1):
+            ith = ((request.source.id + (1 << (i-1))) % self.node.number)
             ith = self.node.number if ith == 0 else ith
 
+            print("FROM", request.source.id, "Ith - my ID:", ith, " - ", self.node.id)
             if ith == self.node.id:
                 request.table.extend([this])
                 break
 
         if len(self.node.fingerTable) > 1:
+            print("Call next!!")
             nextStub = self.node.fingerTable[1][2]
             try:
                 result = nextStub.build_finger_table(request)
-                result = result.result()
                 request = result
-            except Exception:
-                pass
+            except Exception as e:
+                print("Exception", e)
 
         return request
 
@@ -159,6 +160,9 @@ class Chord(P2PServicer):
 
         if len(self.node.fingerTable) > 1:
             newFt = self.node.fingerTable[1][2].build_finger_table(ft)
+
+
+            print("This is My new FINGER TABLE:", newFt)
 
             position = 1
             for i in newFt.table:

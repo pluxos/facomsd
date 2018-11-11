@@ -59,7 +59,6 @@ def get_response_handler(_connection):
     def response_handler(response, connection=_connection):
         try:
             r = response.result()
-            print("Answer:", response)
             connection.put(r)
         except Exception as e:
             connection.put(e.code())
