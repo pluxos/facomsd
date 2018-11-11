@@ -6,7 +6,7 @@ import java.util.List;
 
 class FileStorageHelper {
 
-    private static final String FILE_NAME = "server_log.txt";
+    private static final String FILE_NAME = "C:\\Users\\Kim\\Desktop\\Trab\\facomsd\\TrabalhoSD\\src\\server\\server_log.txt";
 
     private File file;
     private static FileStorageHelper fileStorageHelper;
