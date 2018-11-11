@@ -11,4 +11,4 @@
 4 - Delete&nbsp; Ex: 4 123<br/>
 5 - Sair&nbsp; &nbsp; &nbsp;Ex: 5</ul>
 4 - Para reiniciar o servidor execute o arquivo restart_server.py
-<ul>4.1 - Inserir o número da porta do servidor a ser reinicciado.</ul>
+<ul>4.1 - Inserir o número da porta do servidor a ser reiniciado.</ul>
