@@ -2,7 +2,7 @@
 <h3>Entrega 2</h3>
 <h3>Passos</h3>
 1 - Iniciar o chord.py
-<ul>1.1 - Inserir os valore desejados</ul>
+<ul>1.1 - Inserir os valores desejados</ul>
 2 - Inserir o número da porta do servidor ao qual deseja-se conectar.<br/>
 3 - Inserir os comandos:
 <ul>1 - Create Ex: 1 123 456789<br/>
