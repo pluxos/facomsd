@@ -1,7 +1,7 @@
 package servidor;
 
-import com.stackleader.training.grpc.helloworld.api.Reply;
-import com.stackleader.training.grpc.helloworld.api.Request;
+import com.servidor.grpc.aplicationGRPC.api.Reply;
+import com.servidor.grpc.aplicationGRPC.api.Request;
 
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
@@ -21,7 +21,7 @@ public class HandlerThreadServer extends Thread {
       this.queueCommand = queueCommand;
       this.data = data;
       this.req = req;
-      System.out.println(">>>>> Cliente conectado");
+//      System.out.println(">>>>> Cliente conectado");
     } catch (Exception e) {
       e.printStackTrace();
     }

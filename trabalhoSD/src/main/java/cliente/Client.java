@@ -6,9 +6,9 @@ import java.util.concurrent.TimeUnit;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
-import com.stackleader.training.grpc.helloworld.api.GreeterGrpc;
-import com.stackleader.training.grpc.helloworld.api.Reply;
-import com.stackleader.training.grpc.helloworld.api.Request;
+import com.servidor.grpc.aplicationGRPC.api.GreeterGrpc;
+import com.servidor.grpc.aplicationGRPC.api.Reply;
+import com.servidor.grpc.aplicationGRPC.api.Request;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

@@ -1,6 +1,6 @@
 package servidor;
 
-import com.stackleader.training.grpc.helloworld.api.Reply;
+import com.servidor.grpc.aplicationGRPC.api.Reply;
 
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;

@@ -9,10 +9,9 @@ import org.osgi.service.component.annotations.Deactivate;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import utils.Constant;
-import utils.GrpcServer;
 
 @Component(immediate = true)
-public class HandlerServer implements GrpcServer {
+public class HandlerServer {
 //  private final int port = 5000;
   private Server server;
 //  private BindableService greeterService;

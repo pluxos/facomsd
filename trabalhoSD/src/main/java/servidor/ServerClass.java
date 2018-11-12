@@ -2,9 +2,9 @@ package servidor;
 
 import java.util.concurrent.Semaphore;
 
-import com.stackleader.training.grpc.helloworld.api.GreeterGrpc;
-import com.stackleader.training.grpc.helloworld.api.Reply;
-import com.stackleader.training.grpc.helloworld.api.Request;
+import com.servidor.grpc.aplicationGRPC.api.GreeterGrpc;
+import com.servidor.grpc.aplicationGRPC.api.Reply;
+import com.servidor.grpc.aplicationGRPC.api.Request;
 
 import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
@@ -36,12 +36,13 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void send(Request req, StreamObserver<Reply> responseObserver) {
-    System.out.println("iniciando thread cliente conectado");
+//    System.out.println("iniciando thread cliente conectado");
     HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
     h.run();
-    System.out.println("thread finalizada");
+
     try {
       h.join();
+//    System.out.println("thread finalizada");
     } catch (InterruptedException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
