@@ -18,6 +18,11 @@
 
 - Para visualizar o log de um servidor bastar utilizar o comando `docker logs <nome do servidor>`, por padrão o script `startContainer.sh` nomeia cada servidor como `node_N_i` onde N é a quantidade de servidores no anel e i é o id do servidor
 
+***Client***
+- O client agora recebe um ip para conectar aos servidores, ou seja, para iniciar um client basta entrar na pasta `./cliente` e executar python3 `__init__.py <IP de um dos servidores>`
+
+***Server***
+- A inicialização de um servidor é feito na pasta `./server` utilizando `python3 __init__.py [IP] M N id` se o ip não é passado aquele servidor irá inicializar um novo anel. Este é o processo realizado pelo script `startContainer.sh`
 
 ***Pontos Importantes***
 
