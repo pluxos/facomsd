@@ -1,7 +1,38 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
+## Informações Gerais
+A aplicação roda em Python3, não foi testada em Python2.
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome 2018_2_X, onde X é um identificador atribuído pelo professor para o seu grupo de trabalho. 
+Todos os requisitos do professor estão nos comentários do arquivo common.py segundo slides
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+# Instalação
+Para rodar a aplicação, é necessário ter as bibliotecas python: termcolor, pytest, pyyaml e gRPC
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+```bash
+sudo -H pip3 install --upgrade pip
+sudo pip3 install termcolor
+sudo pip3 install pytest
+sudo pip3 install pyyaml
+sudo pip3 install grpcio grpcio-tools
+sudo pip3 install numpy
+```
+
+# Geração de stubs
+```
+python3 -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. interface.proto
+```
+
+# Execução
+Para iniciar os servidores:
+```bash
+python3 inicia_servidores.py 4 4 --bash gnome-terminal
+```
+
+Para corretude da aplicação, é necessário definir um M que serão os bits possíveis da chave, e o N: número de servidores, sendo M o primeiro parâmetro e N o segundo.
+Se precisar de ajuda:
+
+```bash
+python3 inicia_servidores.py -h
+```
+
+## Testes
+<!-- Para rodar os testes, em um terminal, digite: `pytest test_cliente.py -vv`: dessa forma, os testes serão executados em ordem de aparecimento no código. (_Importante para a primeira sequencia de tests_)
+ -->
