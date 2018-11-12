@@ -4,7 +4,7 @@ from grpc import insecure_channel
 from server_side_pb2 import ServerInfo, ServerID, FingerTable
 from server_side_pb2_grpc import P2PServicer, P2PStub
 from sd_work_pb2_grpc import ServerStub
-from math import log2, ceil
+from math import log2, ceil, floor
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
@@ -22,7 +22,9 @@ class Chord(P2PServicer):
         this = ServerID(host=self.thisHost, id=self.node.id)
         if len(self.node.fingerTable) == 0:
             response = ServerInfo(next=this, back=this)
-
+        elif request.serverID == ft[1][0]:
+            next = ServerID(host=ft[2][1], id=ft[2][0])
+            response = ServerInfo(next=next, back=this)
         elif self.node.id < request.serverID < ft[1][0]:
             next = ServerID(host=ft[1][1], id=ft[1][0])
             response = ServerInfo(next=next, back=this)
@@ -40,7 +42,7 @@ class Chord(P2PServicer):
             response = ServerInfo(next=this, back=back)
         else:
             near = self.search_by_id(request.serverID)
-            print("forward search neighbor call from: ", request.serverID)
+            # print("forward search neighbor call from: ", request.serverID)
             response = near.getNeighbors(request)
 
         return response
@@ -81,17 +83,17 @@ class Chord(P2PServicer):
 
         this = ServerID(host=self.thisHost, id=self.node.id)
 
-        for i in range(1, ceil(log2(self.node.number))+1):
+        for i in range(1, floor(log2(self.node.number))+1):
             ith = ((request.source.id + (1 << (i-1))) % self.node.number)
             ith = self.node.number if ith == 0 else ith
 
-            print("FROM", request.source.id, "Ith - my ID:", ith, " - ", self.node.id)
+            # print("FROM", request.source.id, "Ith - my ID:", ith, " - ", self.node.id)
             if ith == self.node.id:
                 request.table.extend([this])
                 break
 
         if len(self.node.fingerTable) > 1:
-            print("Call next!!")
+            # print("Call next!!")
             nextStub = self.node.fingerTable[1][2]
             try:
                 result = nextStub.build_finger_table(request)
@@ -119,7 +121,7 @@ class Chord(P2PServicer):
 
         self.node.fingerTable = [back, next]
 
-        print("My fingerTable: ", self.node.fingerTable)
+        # print("My fingerTable: ", self.node.fingerTable)
 
     def getStub(self, server):
         channel = insecure_channel(server.host)
@@ -140,19 +142,30 @@ class Chord(P2PServicer):
     def doExit(self, ServerInfo):
         pass
 
+
+    def link_sorted(self, ft):
+        sorted_ft = []
+
+        for i in range(len(ft)):
+            sorted_ft.append( (ft[i][0], i) )
+
+        sorted_ft.sort()
+        return sorted_ft
     def search_by_id(self, target, client_interface=False):
-        for i in range(1, len(self.node.fingerTable) + 1):
-            if self.node.fingerTable[-i][0] < target:
-                print("Search_by_id found -i : ",self.node.fingerTable[-i][0])
+        ft_sorted = self.link_sorted(self.node.fingerTable)
+        ft = self.node.fingerTable
+        for i in range(1, len(ft_sorted) + 1):
+            if ft_sorted[-i][0] <= target:
+                # print("Search_by_id found -i : ",self.node.fingerTable[-i][0])
                 if client_interface:
-                    return self.node.fingerTable[-i][3]
+                    return ft[ft_sorted[-i][1]][3]
                 else:
-                    return self.node.fingerTable[-i][2]
-        print("Search_by_id found: ",self.node.fingerTable[1][0])
+                    return ft[ft_sorted[-i][1]][2]
+        # print("Search_by_id found: ",self.node.fingerTable[1][0])
         if client_interface:
-            return self.node.fingerTable[1][3]
+            return ft[ft_sorted[1][1]][3]
         else:
-            return self.node.fingerTable[1][2]
+            return ft[ft_sorted[1][1]][2]
 
     def fill_finger_table(self):
         this = ServerID(host=self.thisHost, id=self.node.id)
@@ -162,7 +175,7 @@ class Chord(P2PServicer):
             newFt = self.node.fingerTable[1][2].build_finger_table(ft)
 
 
-            print("This is My new FINGER TABLE:", newFt)
+            # print("This is My new FINGER TABLE:", newFt)
 
             position = 1
             for i in newFt.table:

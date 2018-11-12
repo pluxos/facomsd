@@ -52,7 +52,7 @@ class Redirector(AsyncService):
         self.stopFinish.set()
 
     def return_not_found(self, connection):
-        connection.put(StatusCode.OUT_OF_RANG)
+        connection.put(StatusCode.OUT_OF_RANGE)
 
 
 def get_response_handler(_connection):

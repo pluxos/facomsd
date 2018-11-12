@@ -31,7 +31,7 @@ class Listener(AsyncService):
         self.setName(threadName)
 
     def run(self):
-        server = grpc_server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
         add_ServerServicer_to_server(Server(self.requests), server)
         server.add_insecure_port("0.0.0.0:" + self.port)
         server.start()

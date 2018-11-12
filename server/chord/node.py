@@ -32,7 +32,7 @@ class Node(AsyncService):
         self.chord = Chord(self)
 
         self.build_finger_table = Build_finger_table(self)
-
+        print(sys.argv)
         if len(sys.argv) == 5:
             self.ringIp = sys.argv[1].strip()
             self.mBits  = int(sys.argv[2].strip())
@@ -49,11 +49,10 @@ class Node(AsyncService):
             print("Arguments Invalid ([IP] M N ID) '0 < ID <= N'")
             sys.exit(1)
 
-        # print(self.__dict__)
-
+        print("My range is: [", self.toID(self.id-1),",", self.toID(self.id),")")
 
     def run(self):
-        server = grpc_server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
         add_P2PServicer_to_server(self.chord, server)
         server.add_insecure_port("0.0.0.0:" + self.port)
         server.start()
@@ -68,7 +67,7 @@ class Node(AsyncService):
         self.stopFinish.set()
 
     def verify_responsibility(self, id):
-        print("Range entre: ",self.toID(self.id-1), id,self.toID(self.id))
+        print("Range entre: ",self.toID(self.id-1), id, self.toID(self.id))
         if self.toID(self.id-1) <= id < self.toID(self.id):
             return True
         return False
@@ -79,7 +78,8 @@ class Node(AsyncService):
 
     def fromID(self, id):
         m2 = (1 << self.mBits)
-        return floor(-(((id * self.number)+1) - (self.number * m2)) / m2) - 1
+        return ceil((self.number * id) / m2)
+        # return floor(-(((id * self.number)) - (self.number * m2)) / m2)
 
     def sched_build_finger_table(self):
         s = sched.scheduler(time, sleep)

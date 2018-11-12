@@ -3,20 +3,26 @@
 
 ***Execução***
 
-`python3 --version`
-`Python 3.6.6`
+`Docker version 18.05.0-ce, build f150324`
+
+- Entre no pasta raiz do projeto
+- Antes da execução precisamos realizar o build da imagem docker do projeto com `./build_container.sh`
+- Para inicializar os servidores execute `./startContainer.sh`
+    - Será perguntado os seguintes pontos:
+        - Quantos nós deve ser inicializados
+        - Quantos bits a key do banco terá
+        - Se deseja destruir os containers se já existirem **(Muita atenção aqui pois por padrão é escolhido por remover, para não remover digite 'n' sem as aspas)**
 
 
-- Para execução dos testes basta executar tests.py `python3 tests.py`
-- Para executar cada modulo separado basta entrar na respectiva pasta e executar o `__init__.py` com `python3 __init__.py`
+***LOGS***
+
+- Para visualizar o log de um servidor bastar utilizar o comando `docker logs <nome do servidor>`, por padrão o script `startContainer.sh` nomeia cada servidor como `node_N_i` onde N é a quantidade de servidores no anel e i é o id do servidor
 
 
-***Testes***
+***Pontos Importantes***
 
-- Os no teste de ordem de execução como não há forma de esperar a thread de listen do client receber todas as respostas do servidor foi adicionado um input() para bloquear, basta digitar enter para continuar
-- na pasta `logs/` estão todos os logs gerados pelos clients e servidor, os clients estão separados como:
-    - clientUnico -> teste com um unico cliente
-    - client-X    -> teste com multiplos clients onde X é o id do client
+- Para restartar o servidor basta executar o script `startContainer.sh` **tomando cuidado de utilizar a mesma quantidade de servidores e escolhendo 'n' para a não destruição dos containers**
+- Os arquivos de snapshot e logs criados pelos servidores são guardados dentro de seus devidos containers, por este motivo temos que ter cuidado ao destruir um container.
 
 
 ***Participantes***

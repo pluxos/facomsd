@@ -18,11 +18,31 @@ class Build_finger_table(AsyncService):
 
     def run(self):
         while not self.stopEvent.isSet():
-            sleep(10)
-            print("Building finger table...")
+            sleep(self.wait_time)
+            # print("Building finger table...")
             self.node.chord.fill_finger_table()
-            print(self.node.fingerTable)
+            self.print_table()
+            self.wait_time += 5
 
         self.stopEvent.clear()
         self.stopFinish.set()
         print("Exiting build finger table...")
+
+    def print_table(self):
+
+        ft = self.node.fingerTable
+        if len(ft) > 1:
+            print("\n")
+            print("My predecessor is ", ft[0][0])
+            print("My successor is   ", ft[1][0])
+
+            if len(ft) > 2:
+                print("My finger table is [",end="")
+                for i in range(1,len(ft)):
+                    print(ft[i][0],end="")
+                    if i != len(ft)-1:
+                        print(', ', end="")
+                print("]")
+            else:
+                print("Finger Table empty")
+            print("\n")
