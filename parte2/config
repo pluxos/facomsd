@@ -1,0 +1,5 @@
+numero bits da chave:4
+numero maximo de servidores:5
+host:localhost
+porta inicial: 50000
+#NÃO MUDE ESTE ARQUIVO DE CONFIGURACACAO, PORQUE O SISTEMA PARA DE FUNCIONAR

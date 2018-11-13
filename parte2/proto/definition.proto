@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+// definição do serviço de CRUD ao banco de dados
+//
+service Operacao {
+        // realiza uma operação no banco de dados
+     rpc Create (CreateUpdateRequest) returns (ResultReply) {}
+     rpc Read (ReadDeleteRequest) returns (ResultReply) {}
+     rpc Update (CreateUpdateRequest) returns (ResultReply) {}
+     rpc Delete (ReadDeleteRequest) returns (ResultReply) {}
+
+}
+
+message CreateUpdateRequest {
+    string chave = 1;
+    string dados = 2;
+}
+
+message ReadDeleteRequest{
+    string chave = 1;
+}
+
+message ResultReply {
+    string resposta = 1;
+}
