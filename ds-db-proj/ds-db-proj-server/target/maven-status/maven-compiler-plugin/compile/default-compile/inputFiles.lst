@@ -1,0 +1,15 @@
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/CreateCommandOrBuilder.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/src/main/java/br/com/jvitoraa/ServerApplication.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/ResponseOrBuilder.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/DeleteCommand.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/UpdateCommand.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/DeleteCommandOrBuilder.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/CreateCommand.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/Command.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/ReadCommand.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/Response.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/ReadCommandOrBuilder.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/grpc-java/com/ufu/jvitoraa/interaction/CommandServiceGrpc.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/src/main/java/br/com/jvitoraa/server/GrpcServer.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/src/main/java/br/com/jvitoraa/grpc/service/CommandServiceGrpcImpl.java
+/home/joao/sd/repoSD/facomsd/ds-db-proj/ds-db-proj-server/target/generated-sources/protobuf/java/com/ufu/jvitoraa/interaction/UpdateCommandOrBuilder.java

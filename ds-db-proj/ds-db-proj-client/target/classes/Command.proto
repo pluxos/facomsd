@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package com.ufu.jvitoraa.interaction;
+
+message CreateCommand {
+    int64 id = 1;
+    string value = 2;
+}
+
+message ReadCommand {
+    int64 readVal = 1;
+}
+
+message UpdateCommand {
+    int64 id = 1;
+    string value = 2;
+}
+
+message DeleteCommand {
+    int64 deleteVal = 1;
+}
+
+message Response {
+	string responseText = 1;
+}
+
+service CommandService {
+	rpc create (CreateCommand) returns (Response);
+	rpc read (ReadCommand) returns (Response);
+	rpc update (UpdateCommand) returns (Response);
+	rpc delete (DeleteCommand) returns (Response);
+}
