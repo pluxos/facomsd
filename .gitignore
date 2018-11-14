@@ -21,3 +21,20 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/.metadata/
+/.recommenders/
+
+#SonarLint Files #
+##################
+.sonarlint
+
+#Recomenders do Eclipse#
+########################
+.recommenders
+
+# eclipse specific git ignore
+*.pydevproject
+.project
+.metadata
+.classpath
+.settings/

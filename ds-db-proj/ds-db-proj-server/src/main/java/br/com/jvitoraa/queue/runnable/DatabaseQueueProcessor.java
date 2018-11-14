@@ -38,9 +38,9 @@ public class DatabaseQueueProcessor implements Runnable {
 			case "CREATE":
 				LOGGER.info("Creating register with Id: " + command.getId());
 				if (database.create(BigInteger.valueOf(command.getId()), command.getValue())) {
-					response = Response.newBuilder().setResponseText("SUCESSO NA CRIACAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Register created!").build();
 				} else {
-					response = Response.newBuilder().setResponseText("ERRO NA CRIACAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Cannot create, Id alredy exists!").build();
 				}
 
 				this.setObserver(command, response);
@@ -53,7 +53,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				if (StringUtils.isNotBlank(readValue)) {
 					response = Response.newBuilder().setResponseText(readValue).build();
 				} else {
-					response = Response.newBuilder().setResponseText("ERRO NA CONSULTA DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Register not found!").build();
 				}
 
 				this.setObserver(command, response);
@@ -62,9 +62,9 @@ public class DatabaseQueueProcessor implements Runnable {
 				LOGGER.info("Updating register with Id: " + command.getId());
 
 				if (database.update(BigInteger.valueOf(command.getId()), command.getValue())) {
-					response = Response.newBuilder().setResponseText("SUCESSO NA ALTERACAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Register updated sucessfully!").build();
 				} else {
-					response = Response.newBuilder().setResponseText("ERRO NA ALTERACAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Register not found!").build();
 				}
 
 				this.setObserver(command, response);
@@ -73,9 +73,9 @@ public class DatabaseQueueProcessor implements Runnable {
 				LOGGER.info("Deleting register with Id: " + command.getId());
 
 				if (database.delete(BigInteger.valueOf(command.getId()))) {
-					response = Response.newBuilder().setResponseText("SUCESSO NA EXCLUSAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Register deleted!").build();
 				} else {
-					response = Response.newBuilder().setResponseText("ERRO NA EXCLUSAO DO REGISTRO").build();
+					response = Response.newBuilder().setResponseText("Regiser not found!").build();
 				}
 
 				this.setObserver(command, response);
