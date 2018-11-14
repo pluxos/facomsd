@@ -20,6 +20,7 @@ public class SnapshotProcessor implements Runnable {
 	private LogSnapshotIndexService logSnapshotService;
 	private DatabaseRepository database;
 	private Integer timer;
+	private String filePath;
 	private static final Logger LOGGER = Logger.getLogger(SnapshotProcessor.class.getName());
 
 	@Override
@@ -36,7 +37,8 @@ public class SnapshotProcessor implements Runnable {
 	private void process() throws IOException, InterruptedException {
 		Thread.sleep(timer);
 		LOGGER.info("Snapshoting!");
-		SnapshotController snapshotController = new SnapshotController("snap." + logSnapshotService.getSnapshotIndex());
+		SnapshotController snapshotController = new SnapshotController(this.filePath,
+				"snap." + logSnapshotService.getSnapshotIndex());
 		database.getDatabase().entrySet().stream().forEach(entry -> {
 			try {
 				snapshotController.getWriter().write(entry.getKey().toString() + StringUtils.SPACE + entry.getValue());

@@ -19,14 +19,17 @@ import lombok.Data;
 @Data
 public class LogQueueProcessor implements Runnable {
 
-	public LogQueueProcessor(QueueController queueController, LogSnapshotIndexService logSnapshotService) {
+	public LogQueueProcessor(QueueController queueController, LogSnapshotIndexService logSnapshotService,
+			String filePath) {
 		this.queueController = queueController;
 		this.logSnapshotService = logSnapshotService;
+		this.filePath = filePath;
 	}
 
 	private LogSnapshotIndexService logSnapshotService;
 	private QueueController queueController;
 	private LogController logController;
+	private String filePath;
 	private static final Logger LOGGER = Logger.getLogger(LogQueueProcessor.class.getName());
 
 	@Override
@@ -45,7 +48,7 @@ public class LogQueueProcessor implements Runnable {
 		CommandDto command = this.queueController.getSndQueue().poll();
 
 		try {
-			this.logController = new LogController("log." + logSnapshotService.getLogIndex());
+			this.logController = new LogController(this.filePath, "log." + logSnapshotService.getLogIndex());
 		} catch (IOException e) {
 			LOGGER.warning(e.getMessage());
 		}

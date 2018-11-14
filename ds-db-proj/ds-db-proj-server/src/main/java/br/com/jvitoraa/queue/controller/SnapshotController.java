@@ -12,9 +12,9 @@ public class SnapshotController {
 	private FileWriter writer;
 	private String filePath;
 
-	public SnapshotController(String fileName) throws IOException {
-		this.filePath = "./db/recover/snap/";
-        File file = new File("./db/recover/snap/" + fileName + ".txt");
+	public SnapshotController(String filePath, String fileName) throws IOException {
+		this.filePath = filePath;
+        File file = new File(filePath + fileName + ".txt");
         file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
 	}

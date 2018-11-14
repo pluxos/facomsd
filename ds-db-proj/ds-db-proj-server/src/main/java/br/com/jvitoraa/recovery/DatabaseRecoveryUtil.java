@@ -22,6 +22,8 @@ public class DatabaseRecoveryUtil {
 
 	private DatabaseRepository databaseRepository;
 	private LogSnapshotIndexService logSnapshotIndexService;
+	private String logPath;
+	private String snapPath;
 	private static final Logger LOGGER = Logger.getLogger(DatabaseRecoveryUtil.class.getName());
 
 	public void executeRecovery() throws IOException {
@@ -31,7 +33,7 @@ public class DatabaseRecoveryUtil {
 
 	private void recoverFromSnap() throws IOException {
 
-		File snapFilesPath = new File("./db/recover/snap/");
+		File snapFilesPath = new File(snapPath);
 
 		if (!snapFilesPath.exists()) {
 			snapFilesPath.mkdirs();
@@ -63,7 +65,7 @@ public class DatabaseRecoveryUtil {
 
 	private void recoverFromLog() throws IOException {
 
-		File logFilesPath = new File("./db/recover/log/");
+		File logFilesPath = new File(logPath);
 
 		if (!logFilesPath.exists()) {
 			logFilesPath.mkdirs();

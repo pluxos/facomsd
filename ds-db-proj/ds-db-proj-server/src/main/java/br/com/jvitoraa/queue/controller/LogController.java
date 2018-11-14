@@ -14,9 +14,9 @@ public class LogController {
 	private FileWriter writer;
 	private String filePath;
 
-	public LogController(String fileName) throws IOException {
-		this.filePath = "./db/recover/log/";
-        File file = new File("./db/recover/log/" + fileName + ".txt");
+	public LogController(String filePath, String fileName) throws IOException {
+		this.filePath = filePath;
+        File file = new File(filePath + fileName + ".txt");
         file.getParentFile().mkdirs();
         writer = new FileWriter(file, true);
 	}
