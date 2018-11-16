@@ -1,4 +1,4 @@
-package br.com.jvitoraa;
+package br.com.jvitoraa.grpc.facade;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;

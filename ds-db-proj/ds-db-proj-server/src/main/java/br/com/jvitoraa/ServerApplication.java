@@ -7,7 +7,7 @@ import br.com.jvitoraa.server.GrpcServer;
 public class ServerApplication {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		GrpcServer server = new GrpcServer();
+		GrpcServer server = new GrpcServer(args[0]);
 		server.start();
 	}
 

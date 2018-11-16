@@ -12,11 +12,13 @@ public class QueueController {
 	private BlockingQueue<CommandDto> fstQueue;
 	private BlockingQueue<CommandDto> sndQueue;
 	private BlockingQueue<CommandDto> trdQueue;
+	private BlockingQueue<CommandDto> fthQueue;
 	
 	public QueueController() {
 		this.fstQueue = new ArrayBlockingQueue<CommandDto>(10);
 		this.sndQueue = new ArrayBlockingQueue<CommandDto>(10);
 		this.trdQueue = new ArrayBlockingQueue<CommandDto>(10);
+		this.fthQueue = new ArrayBlockingQueue<CommandDto>(10);
 	}
 	
 	public void receiveCommand(CommandDto command) {

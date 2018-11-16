@@ -15,7 +15,7 @@ public class GrpcObserver implements StreamObserver<Response> {
 	private static final Logger LOGGER = Logger.getLogger(GrpcObserver.class.getName());
 	
 	private String responseText;
-
+	
 	@Override
 	public void onNext(Response value) {
 		this.responseText = value.getResponseText();
