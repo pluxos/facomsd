@@ -24,6 +24,7 @@ import lombok.Setter;
 
 public class GrpcServer {
 
+	private static final String P_QUEUE_SIZE = "queue.size";
 	private static final String P_M_VALUE = "m.value";
 	private static final String APPLICATION_PROPERTIES_PATH = "./src/main/resources/application.properties";
 	private static final String P_SNAPSHOT_TIMER = "snapshot.timer";
@@ -74,7 +75,7 @@ public class GrpcServer {
 
 	private void startUp() throws IOException, InterruptedException {
 		this.databaseRepository = new DatabaseRepository();
-		this.queueController = new QueueController();
+		this.queueController = new QueueController(Integer.valueOf(this.properties.getProperty(P_QUEUE_SIZE)));
 
 		LOGGER.info("Server starting on port: " + this.serverPort);
 		this.logSnapshotService = new LogSnapshotIndexService();
