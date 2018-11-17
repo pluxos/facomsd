@@ -7,15 +7,15 @@ import servidor.dataBase.Data;
 
 public class ClientData {
   private String comando;
-  private Data data;
+//  private Data data;
   StreamObserver<Reply> responseObserver;
-  public Data getData() {
-    return data;
-  }
-  
-  public void setData(Data data) {
-    this.data = data;
-  }
+//  public Data getData() {
+//    return data;
+//  }
+//  
+//  public void setData(Data data) {
+//    this.data = data;
+//  }
   
   public  StreamObserver<Reply> getOut() {
     return responseObserver;

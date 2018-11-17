@@ -25,10 +25,10 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
       dataBase = new Data();
       // serverSocket = new ServerSocket(Constant.SERVER_PORT);
       queueCommand = new QueueCommand();
-      queue = new Queue(queueCommand);
-      queue.run();
       RecoveryData recovery = new RecoveryData();
       recovery.recovery(dataBase);
+      queue = new Queue(queueCommand,dataBase);
+      queue.run();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -51,7 +51,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void create(Request req, StreamObserver<Reply> responseObserver) {
-    HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+    HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver);
     h.run();
     try {
       h.join();
@@ -62,7 +62,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void delete(Request req, StreamObserver<Reply> responseObserver) {
-	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver);
 	    h.run();
 	    try {
 	      h.join();
@@ -73,7 +73,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void update(Request req, StreamObserver<Reply> responseObserver) {
-	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver);
 	    h.run();
 	    try {
 	      h.join();
@@ -84,7 +84,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void read(Request req, StreamObserver<Reply> responseObserver) {
-	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, req, responseObserver);
 	    h.run();
 	    try {
 	      h.join();
