@@ -89,7 +89,8 @@ public class GrpcServer {
 	}
 
 	private void startThreads() throws InterruptedException {
-		Thread tMaster = new Thread(new MasterQueueProcessor(this.queueController, this.range));
+		Thread tMaster = new Thread(
+				new MasterQueueProcessor(this.queueController, this.range, Integer.valueOf(this.serverId)));
 		Thread tDatabase = new Thread(new DatabaseQueueProcessor(this.queueController, this.databaseRepository));
 		Thread tLog = new Thread(new LogQueueProcessor(this.queueController, this.logSnapshotService, this.logPath));
 		Thread tSnap = new Thread(new SnapshotProcessor(this.logSnapshotService, this.databaseRepository,

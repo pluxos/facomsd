@@ -5,9 +5,9 @@ import java.io.IOException;
 import br.com.jvitoraa.client.GrpcClient;
 
 public class ClientApplication {
-	
+
 	public static void main(String[] args) throws IOException, InterruptedException {
-		GrpcClient client = new GrpcClient();
+		GrpcClient client = new GrpcClient(Integer.valueOf(args[0]));
 		client.start();
 	}
 

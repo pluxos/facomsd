@@ -2,8 +2,6 @@ package br.com.jvitoraa.queue.runnable;
 
 import java.util.Objects;
 
-import org.apache.commons.lang3.Range;
-
 import br.com.jvitoraa.grpc.dto.CommandDto;
 import br.com.jvitoraa.grpc.vo.RangeVO;
 import br.com.jvitoraa.queue.controller.QueueController;
@@ -12,8 +10,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MasterQueueProcessor implements Runnable {
 
-	QueueController queueController;
-	RangeVO range;
+	private QueueController queueController;
+	private RangeVO range;
+	private Integer serverN;
 
 	@Override
 	public void run() {
@@ -35,7 +34,7 @@ public class MasterQueueProcessor implements Runnable {
 	}
 
 	private boolean inRange(CommandDto command) {
-		return Range.between(range.getMinVal(), range.getMaxVal()).contains(command.getId().intValue());
+		return this.range.getListOfRanges().get(serverN).getRange().contains(command.getId().intValue());
 	}
 
 }

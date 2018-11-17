@@ -1,17 +1,33 @@
 package br.com.jvitoraa.grpc.vo;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import br.com.jvitoraa.grpc.dto.RangeDto;
 import lombok.Data;
 
 @Data
 public class RangeVO {
 
-	public RangeVO(Integer nValue, Integer mValue, Integer index) {
+	private static final String MOVE_RIGHT = "RIGHT";
+	private static final String MOVE_LEFT = "LEFT";
+
+	public RangeVO(Integer nValue, Integer mValue, Integer serverN) {
+
+		this.serverN = serverN;
 
 		Integer baseMinVal = NumberUtils.INTEGER_ZERO;
 		Integer baseMaxVal = NumberUtils.INTEGER_ZERO;
 
+		List<RangeDto> ranges = new ArrayList<RangeDto>();
 		for (Integer i = NumberUtils.INTEGER_ZERO; i < nValue; i++) {
 
 			if (i == NumberUtils.INTEGER_ZERO) {
@@ -21,83 +37,62 @@ public class RangeVO {
 			}
 			baseMinVal = (int) ((int) baseMaxVal - Math.floor(Math.pow(2, mValue) / nValue) + NumberUtils.INTEGER_ONE);
 
-			if (i == index) {
-				break;
-			}
+			Range<Integer> range = Range.between(baseMinVal, baseMaxVal);
+			RangeDto rangeDto = new RangeDto(i, range);
+			ranges.add(rangeDto);
 		}
 
-		Integer leftBaseIndex = null;
-		Integer rightBaseIndex = null;
-
-		if (index == NumberUtils.INTEGER_ZERO) {
-			// 4 <- 0 -> 1
-			leftBaseIndex = nValue;
-			rightBaseIndex = index + NumberUtils.INTEGER_ONE;
-		} else if (index == nValue) {
-			// 3 <- 4 -> 0
-			leftBaseIndex = index + NumberUtils.INTEGER_MINUS_ONE;
-			rightBaseIndex = NumberUtils.INTEGER_ZERO;
-		} else {
-			// 2 <- 3 -> 4
-			leftBaseIndex = index + NumberUtils.INTEGER_MINUS_ONE;
-			rightBaseIndex = index + NumberUtils.INTEGER_ONE;
-		}
-
-		this.calcAdjacentRange(nValue, mValue, leftBaseIndex, true);
-		this.calcAdjacentRange(nValue, mValue, rightBaseIndex, false);
-
-		if (baseMinVal < NumberUtils.INTEGER_ZERO) {
-			this.minVal = NumberUtils.INTEGER_ZERO;
-		} else {
-			this.minVal = baseMinVal;
-		}
-		this.maxVal = baseMaxVal;
-	}
-
-	private void calcAdjacentRange(Integer nValue, Integer mValue, Integer baseIndex, Boolean rightOrLeft) {
-		Integer adjBaseMinVal = NumberUtils.INTEGER_ZERO;
-		Integer adjBaseMaxVal = NumberUtils.INTEGER_ZERO;
-
-		for (Integer i = NumberUtils.INTEGER_ZERO; i < nValue; i++) {
-
-			if (i == NumberUtils.INTEGER_ZERO) {
-				adjBaseMaxVal = (int) Math.pow(2, mValue) - NumberUtils.INTEGER_ONE;
-			} else {
-				adjBaseMaxVal = adjBaseMinVal - NumberUtils.INTEGER_ONE;
-			}
-			adjBaseMinVal = (int) ((int) adjBaseMaxVal - Math.floor(Math.pow(2, mValue) / nValue)
-					+ NumberUtils.INTEGER_ONE);
-
-			if (i == baseIndex) {
-				break;
-			}
-		}
-
-		if (rightOrLeft) {
-			this.leftMaxVal = adjBaseMaxVal;
-			if (adjBaseMinVal < NumberUtils.INTEGER_ZERO) {
-				adjBaseMinVal = NumberUtils.INTEGER_ZERO;
-			} else {
-				this.leftMinVal = adjBaseMinVal;
-			}
-		} else {
-			this.rightMaxVal = adjBaseMaxVal;
-			if (adjBaseMinVal < NumberUtils.INTEGER_ZERO) {
-				adjBaseMinVal = NumberUtils.INTEGER_ZERO;
-			} else {
-				this.rightMinVal = adjBaseMinVal;
-			}
-		}
+		this.listOfRanges = ranges;
 
 	}
 
-	private Integer minVal;
-	private Integer maxVal;
+	private List<RangeDto> listOfRanges;
+	private Integer serverN;
 
-	private Integer leftMinVal;
-	private Integer leftMaxVal;
+	public String moveLeftOrRight(Integer number) {
 
-	private Integer rightMinVal;
-	private Integer rightMaxVal;
+		RangeDto destinationRange = listOfRanges.stream().filter(r -> r.getRange().contains(number)).findFirst().get();
+	
+		Iterator<RangeDto> it = Iterables.cycle(listOfRanges).iterator();
+		Integer rightSteps = null;
+		
+		while(it.hasNext()) {
+			RangeDto serverRange = (RangeDto) it.next();
+			Integer insideN = serverRange.getServerN();
+			
+			if (insideN == this.serverN) {
+				rightSteps = NumberUtils.INTEGER_ZERO;
+			} else if (Objects.nonNull(rightSteps)) {
+				rightSteps++;
+				if (insideN == destinationRange.getServerN()) {
+					break;
+				}
+			}
+		}
+		
+		Iterator<RangeDto> itReversed = Iterables.cycle(Lists.reverse(listOfRanges)).iterator();
+		Integer leftSteps = null;
+		
+		while(itReversed.hasNext()) {
+			RangeDto serverRange = (RangeDto) itReversed.next();
+			Integer insideN = serverRange.getServerN();
+			
+			if (insideN == this.serverN) {
+				leftSteps = NumberUtils.INTEGER_ZERO;
+			} else if (Objects.nonNull(leftSteps)) {
+				leftSteps++;
+				if (insideN == destinationRange.getServerN()) {
+					break;
+				}
+			}
+		}
+		
+		if (leftSteps < rightSteps) {
+			return MOVE_LEFT;
+		} else {
+			return MOVE_RIGHT;
+		}
+	} 
+	
 
 }

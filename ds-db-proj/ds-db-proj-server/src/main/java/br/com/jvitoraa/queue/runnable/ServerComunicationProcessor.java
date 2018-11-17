@@ -2,8 +2,6 @@ package br.com.jvitoraa.queue.runnable;
 
 import java.util.Objects;
 
-import org.apache.commons.lang3.Range;
-
 import br.com.jvitoraa.grpc.dto.CommandDto;
 import br.com.jvitoraa.grpc.facade.ClientFacade;
 import br.com.jvitoraa.grpc.vo.RangeVO;
@@ -44,10 +42,9 @@ public class ServerComunicationProcessor implements Runnable {
 		if (Objects.nonNull(command)) {
 			GrpcObserver observer = new GrpcObserver();
 			observer.setPreviousObserver(command.getObserver());
-			Range<Integer> leftRange = Range.between(range.getLeftMinVal(), range.getLeftMaxVal());
-			Range<Integer> rightRange = Range.between(range.getRightMinVal(), range.getRightMaxVal());
+			String leftOrRight = this.range.moveLeftOrRight(command.getId().intValue());
 
-			if (leftRange.contains(command.getId().intValue())) {
+			if (leftOrRight.equals("LEFT")) {
 				switch (command.getTypeOfCommand()) {
 				case "CREATE":
 					leftClientFacade.create(command.getId(), command.getValue(), observer);
@@ -62,7 +59,7 @@ public class ServerComunicationProcessor implements Runnable {
 					leftClientFacade.delete(command.getId(), observer);
 					break;
 				}
-			} else if (rightRange.contains(command.getId().intValue())) {
+			} else if (leftOrRight.equals("RIGHT")) {
 				switch (command.getTypeOfCommand()) {
 				case "CREATE":
 					rightClientFacade.create(command.getId(), command.getValue(), observer);
