@@ -47,7 +47,7 @@ public class Client {
 	@SuppressWarnings("deprecation")
 	@Activate
 	public void activate() {
-		channel = ManagedChannelBuilder.forAddress(Constant.HOST, Constant.SERVER_PORT).usePlaintext(true).build();
+		channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8850).usePlaintext(true).build();
 		asyncStub = GreeterGrpc.newStub(channel);
 		s = new Scanner(System.in);
 		commandHandler = new CommandHandler();
@@ -63,6 +63,7 @@ public class Client {
 						break;
 					} else
 						System.out.println("Comando invalido, digite um comando valido");
+						greet("print");
 				}
 			}
 			System.out.println("finalizando");
@@ -97,6 +98,9 @@ public class Client {
 
 			else if (tipo.equals("delete")) {
 				asyncStub.delete(request, responseObserver);
+			}
+			else if (tipo.equals("print")) {
+				asyncStub.send(request, responseObserver);
 			}
 
 			// asyncStub.send(request, responseObserver);

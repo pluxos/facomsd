@@ -1,5 +1,7 @@
 package servidor;
 
+import java.math.BigInteger;
+
 import com.servidor.grpc.aplicationGRPC.api.Reply;
 
 import io.grpc.stub.StreamObserver;
@@ -31,6 +33,10 @@ public class ClientData {
   
   public void setComando(String comando) {
     this.comando = comando;
+  }
+  
+  public BigInteger getKey() {
+	  return new BigInteger(this.comando.split(" ")[1].split(":")[0]);
   }
   
   public void sendReply(String s) {

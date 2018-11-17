@@ -10,7 +10,6 @@ public class QueueF3 extends Queue implements Runnable {
   
   public QueueF3(QueueCommand queue,Data data) {
     super(queue,data);
-    this.data = data;
   }
   
   ExecuteCommand execute = new ExecuteCommand();

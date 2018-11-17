@@ -1,6 +1,5 @@
 package servidor.command;
 
-import servidor.ClientData;
 import servidor.dataBase.Data;
 
 public class ExecuteCommand {
