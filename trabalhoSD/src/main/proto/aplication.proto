@@ -11,6 +11,10 @@ package aplicationGRPC;
 service Greeter {
   // Sends a greeting
   rpc Send (Request) returns (Reply) {}
+  rpc Create (Request) returns (Reply) {}
+  rpc Delete (Request) returns (Reply) {}
+  rpc Update (Request) returns (Reply) {}
+  rpc Read (Request) returns (Reply) {}
 }
 
 // The request message containing the user's name.

@@ -35,6 +35,7 @@ public class Client {
 		@Override
 		public void onError(Throwable t) {
 			// TODO Auto-generated method stub
+			t.printStackTrace();
 		}
 
 		@Override
@@ -65,7 +66,7 @@ public class Client {
 				}
 			}
 			System.out.println("finalizando");
-			Thread.sleep(5000);//espera 5 segundos antes de finalizar recebimento de mensagens
+			Thread.sleep(5000);// espera 5 segundos antes de finalizar recebimento de mensagens
 			shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,8 +82,24 @@ public class Client {
 	 */
 	public void greet(String name) {
 		Request request = Request.newBuilder().setName(name).build();
+		String tipo = name.split(" ")[0].toLowerCase();
 		try {
-			asyncStub.send(request, responseObserver);
+			if (tipo.equals("create")) {
+				asyncStub.create(request, responseObserver);
+
+			} else if (tipo.equals("read")) {
+				asyncStub.read(request, responseObserver);
+			}
+
+			else if (tipo.equals("update")) {
+				asyncStub.update(request, responseObserver);
+			}
+
+			else if (tipo.equals("delete")) {
+				asyncStub.delete(request, responseObserver);
+			}
+
+			// asyncStub.send(request, responseObserver);
 		} catch (StatusRuntimeException e) {
 			e.printStackTrace();
 			return;

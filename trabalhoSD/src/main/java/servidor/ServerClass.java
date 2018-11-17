@@ -36,16 +36,60 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
   
   @Override
   public void send(Request req, StreamObserver<Reply> responseObserver) {
-//    System.out.println("iniciando thread cliente conectado");
+////    System.out.println("iniciando thread cliente conectado");
+//    HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+//    h.run();
+//
+//    try {
+//      h.join();
+////    System.out.println("thread finalizada");
+//    } catch (InterruptedException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
+  }
+  
+  @Override
+  public void create(Request req, StreamObserver<Reply> responseObserver) {
     HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
     h.run();
-
     try {
       h.join();
-//    System.out.println("thread finalizada");
     } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
+  }
+  
+  @Override
+  public void delete(Request req, StreamObserver<Reply> responseObserver) {
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	    h.run();
+	    try {
+	      h.join();
+	    } catch (InterruptedException e) {
+	      e.printStackTrace();
+	    }
+  }
+  
+  @Override
+  public void update(Request req, StreamObserver<Reply> responseObserver) {
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	    h.run();
+	    try {
+	      h.join();
+	    } catch (InterruptedException e) {
+	      e.printStackTrace();
+	    }
+  }
+  
+  @Override
+  public void read(Request req, StreamObserver<Reply> responseObserver) {
+	  HandlerThreadServer h = new HandlerThreadServer(queueCommand, dataBase, req, responseObserver);
+	    h.run();
+	    try {
+	      h.join();
+	    } catch (InterruptedException e) {
+	      e.printStackTrace();
+	    }
   }
 }
