@@ -21,31 +21,18 @@ public class QueueF4 extends Queue implements Runnable {
 	ExecuteCommand execute = new ExecuteCommand();
 	ManagedChannel channel;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
 		try {
 			System.out.println("Iniciando F4");
-			
+
 			while (true) {
 				ClientData elemento = super.queue.consumeF4();
-				
-				if(elemento.getKey().compareTo(super.finger.getMaxKey()) > 0) {
-					//passa direita
-					System.out.println("esta a direita");
-					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getSucessor()).usePlaintext(true)
-							.build();
-				}
-				else if(elemento.getKey().compareTo(super.finger.getMinKey()) < 0) {
-					// passa esquerda
-					System.out.println("esta a esquerda");
-					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getAntecessor()).usePlaintext(true)
-							.build();
-				}
-				
-				
 				StreamObserver<Reply> responseObserver = new StreamObserver<Reply>() {
 					@Override
 					public void onNext(Reply value) {
+						System.out.println(">>Resposta recebida");
 						elemento.sendReply(value.getMessage());
 					}
 
@@ -60,7 +47,19 @@ public class QueueF4 extends Queue implements Runnable {
 						// TODO Auto-generated method stub
 					}
 				};
-				
+
+				if (elemento.getKey().compareTo(super.finger.getMaxKey()) > 0) {
+					// passa direita
+					System.out.println("Key esta a direita");
+					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getSucessor())
+							.usePlaintext(true).build();
+				} else if (elemento.getKey().compareTo(super.finger.getMinKey()) < 0) {
+					// passa esquerda
+					System.out.println("Key esta a esquerda");
+					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getAntecessor())
+							.usePlaintext(true).build();
+				}
+
 				GreeterGrpc.GreeterStub asyncStub = GreeterGrpc.newStub(channel);
 				Request request = Request.newBuilder().setName(elemento.getComando()).build();
 				asyncStub.send(request, responseObserver);

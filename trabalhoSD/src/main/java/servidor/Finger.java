@@ -23,15 +23,15 @@ public class Finger {
 		this.sucessor = sucessor;
 	}
 
-	public Finger(String andress, int port, BigInteger id, BigInteger minKey, BigInteger maxKey) {
-		this.andress = andress;
-		this.port = port;
-		this.id = id;
-		this.maxKey = maxKey;
-		this.minKey = minKey;
-		this.antecessor = port;
-		this.sucessor = port;
-	}
+//	public Finger(String andress, int port, BigInteger id, BigInteger minKey, BigInteger maxKey) {
+//		this.andress = andress;
+//		this.port = port;
+//		this.id = id;
+//		this.maxKey = maxKey;
+//		this.minKey = minKey;
+//		this.antecessor = port;
+//		this.sucessor = port;
+//	}
 
 	public String getAddress() {
 		return this.andress;

@@ -24,9 +24,20 @@ public class Node {
 	public void start(String andress, int port, BigInteger id, BigInteger minKey, BigInteger maxKey, int antecessor,
 			int sucessor) throws InterruptedException {
 		try {
-			System.out.println("iniciando");
-			Server server = ServerBuilder.forPort(port)
-					.addService(new ServerClass(andress, port, id, minKey, maxKey, antecessor, sucessor)).build();
+			ServerClass serverClass = new ServerClass(andress, port, id, minKey, maxKey, antecessor, sucessor);
+			Server server = ServerBuilder.forPort(serverClass.getFinger().getPort())
+					.addService(serverClass).build();
+			server.start();
+			System.out.println("Server iniciado");
+			server.awaitTermination();
+		} catch (IOException ex) {
+		}
+	}
+
+	public void start(BigInteger id) throws InterruptedException {
+		try {
+			ServerClass serverClass = new ServerClass(id);
+			Server server = ServerBuilder.forPort(serverClass.getFinger().getPort()).addService(serverClass).build();
 			server.start();
 			System.out.println("Server iniciado");
 			server.awaitTermination();
@@ -42,7 +53,7 @@ public class Node {
 	@Deactivate
 	public void deactivate() {
 		if (server != null) {
-			server.shutdown();
+			server.shutdownNow();
 		}
 	}
 }
