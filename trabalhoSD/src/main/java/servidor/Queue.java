@@ -34,7 +34,7 @@ public class Queue {
 
 	public void run() throws InterruptedException {
 		Thread f1 = new Thread(new QueueF1(queue));
-		Thread f2 = new Thread(new QueueF2(queue));
+		Thread f2 = new Thread(new QueueF2(queue, finger));
 		Thread f3 = new Thread(new QueueF3(queue, data));
 		Thread f4 = new Thread(new QueueF4(queue, finger));
 		f1.start();

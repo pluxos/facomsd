@@ -1,5 +1,6 @@
 package servidor;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.concurrent.Semaphore;
 
@@ -28,10 +29,22 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			finger = new Finger(andress, port, id, minKey, maxKey, antecessor, sucessor);
 			finger.print();
 			dataBase = new Data();
+			RecoveryData recovery = new RecoveryData();
+			File diretorio = new File("logs\\"+finger.getId().toString());
+			if(diretorio.exists()) {
+				// recupera chaves
+				System.out.println("Recuperando chaves");
+				
+				recovery.recovery(dataBase,finger);
+				
+			}
+			else {
+				diretorio.mkdirs();
+			}
 			// serverSocket = new ServerSocket(Constant.SERVER_PORT);
 			queueCommand = new QueueCommand();
-			RecoveryData recovery = new RecoveryData();
-			recovery.recovery(dataBase);
+			
+			
 			queue = new Queue(queueCommand, dataBase, finger);
 			queue.run();
 		} catch (Exception e) {
@@ -48,7 +61,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			// serverSocket = new ServerSocket(Constant.SERVER_PORT);
 			queueCommand = new QueueCommand();
 			RecoveryData recovery = new RecoveryData();
-			recovery.recovery(dataBase);
+			recovery.recovery(dataBase,finger);
 			queue = new Queue(queueCommand, dataBase, finger);
 			queue.run();
 		} catch (Exception e) {
