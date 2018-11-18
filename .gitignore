@@ -1,8 +1,12 @@
 # Compiled class file
 *.class
 
+# properties
+*.properties
+
 # Log file
 *.log
+logs/
 
 # BlueJ files
 *.ctxt
