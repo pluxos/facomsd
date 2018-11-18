@@ -62,7 +62,24 @@ public class QueueF4 extends Queue implements Runnable {
 
 				GreeterGrpc.GreeterStub asyncStub = GreeterGrpc.newStub(channel);
 				Request request = Request.newBuilder().setName(elemento.getComando()).build();
-				asyncStub.send(request, responseObserver);
+				//asyncStub.send(request, responseObserver);
+
+				String tipo = elemento.getComando().split(" ")[0].toLowerCase();
+				if (tipo.equals("create")) {
+					asyncStub.create(request, responseObserver);
+
+				} else if (tipo.equals("read")) {
+					asyncStub.read(request, responseObserver);
+				}
+
+				else if (tipo.equals("update")) {
+					asyncStub.update(request, responseObserver);
+				}
+
+				else if (tipo.equals("delete")) {
+					asyncStub.delete(request, responseObserver);
+				}
+
 			}
 
 		} catch (Exception e) {
