@@ -1,9 +1,0 @@
-insert//1
-insert/01/01
-select/01/
-select/02/
-update/03/12
-update/01/00
-select/01/
-delete/01/
-select/01/

@@ -7,4 +7,4 @@ Quando estiver pronto para submeter a versao final, faca um pull request para es
 Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
 
 Integrantes do grupo:
-Vaanessa Fernandes / Luana Paula
+Vanessa Fernandes / Luana Paula
