@@ -9,7 +9,6 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import servidor.ClientData;
 import servidor.Finger;
-import servidor.Queue;
 import servidor.command.ExecuteCommand;
 
 public class QueueF4 extends Queue implements Runnable {

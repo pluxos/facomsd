@@ -15,6 +15,7 @@ import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
 import servidor.dataBase.Data;
 import servidor.dataBase.RecoveryData;
+import servidor.queue.Queue;
 import servidor.queue.QueueCommand;
 
 public class ServerClass extends GreeterGrpc.GreeterImplBase implements BindableService {
@@ -44,7 +45,6 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			} else {
 				diretorio.mkdirs();
 				finger = new Finger(andress, port, id, minKey, maxKey, antecessor, sucessor);
-				finger.print();
 				// criar arquivo properties
 				Properties props = new Properties();
 				File f = new File("logs\\" + id.toString() + "\\server.properties");
@@ -56,11 +56,11 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 				props.setProperty("antecessor", Integer.toString(antecessor));
 				props.setProperty("sucessor", Integer.toString(sucessor));
 				props.store(new FileOutputStream(f), "propertiesServer");
-
 			}
 
 			queueCommand = new QueueCommand();
-			queue = new Queue(queueCommand, dataBase, finger);
+			queue = new Queue(queueCommand, dataBase, finger, mutex_f1, mutex); 
+			finger.print();
 			queue.run();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,8 +79,9 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			}
 			recovery.recovery(dataBase, finger);
 			queueCommand = new QueueCommand();
-			queue = new Queue(queueCommand, dataBase, finger);
+			queue = new Queue(queueCommand, dataBase, finger,  mutex_f1, mutex);
 			queue.run();
+			finger.print();
 
 		} catch (Exception e) {
 			e.printStackTrace();

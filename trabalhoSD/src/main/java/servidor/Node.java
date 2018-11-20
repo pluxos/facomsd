@@ -25,11 +25,10 @@ public class Node {
 			int sucessor) throws InterruptedException {
 		try {
 			ServerClass serverClass = new ServerClass(andress, port, id, minKey, maxKey, antecessor, sucessor);
-			Server server = ServerBuilder.forPort(serverClass.getFinger().getPort())
-					.addService(serverClass).build();
+			server = ServerBuilder.forPort(serverClass.getFinger().getPort()).addService(serverClass).build();
 			server.start();
 			System.out.println("Server iniciado");
-			server.awaitTermination();
+			// server.awaitTermination();
 		} catch (IOException ex) {
 		}
 	}

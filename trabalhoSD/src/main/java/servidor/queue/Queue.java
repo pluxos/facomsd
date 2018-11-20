@@ -1,16 +1,16 @@
-package servidor;
+package servidor.queue;
 
+import java.util.concurrent.Semaphore;
+
+import servidor.Finger;
 import servidor.dataBase.Data;
-import servidor.queue.QueueCommand;
-import servidor.queue.QueueF1;
-import servidor.queue.QueueF2;
-import servidor.queue.QueueF3;
-import servidor.queue.QueueF4;
 
 public class Queue {
 	protected QueueCommand queue;
 	protected Data data;
 	protected Finger finger;
+	protected Semaphore mutex_f1;
+	protected Semaphore mutex;
 
 	public Queue(QueueCommand queue) {
 		this.queue = queue;
@@ -26,10 +26,12 @@ public class Queue {
 		this.finger = finger;
 	}
 
-	public Queue(QueueCommand queue, Data data, Finger finger) {
+	public Queue(QueueCommand queue, Data data, Finger finger, Semaphore mutex_f1, Semaphore mutex) {
 		this.data = data;
 		this.queue = queue;
 		this.finger = finger;
+		this.mutex_f1 = mutex_f1;
+		this.mutex = mutex;
 	}
 
 	public void run() throws InterruptedException {

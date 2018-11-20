@@ -35,9 +35,12 @@ public class HandlerThreadServer extends Thread {
 			clientComand.setOut(responseObserver);
 			if (HandlerCommandClient.checkComand(comando)) {
 				clientComand.setComando(comando);
-				if (clientComand.getKey().compareTo(finger.getMinKey()) >= 0 && clientComand.getKey().compareTo(finger.getMaxKey()) <= 0) {
+				if (clientComand.getKey().compareTo(finger.getMinKey()) >= 0
+						&& clientComand.getKey().compareTo(finger.getMaxKey()) <= 0) {
+					System.out.println("########## Key encontrada no server: " + finger.getId());
 					queueCommand.produceF1(clientComand);
-				} else if (finger.getPort() == finger.getAntecessor() || finger.getPort() == finger.getSucessor() || !isViable(clientComand)) {// é unico no do anel
+				} else if (finger.getPort() == finger.getAntecessor() || finger.getPort() == finger.getSucessor()
+						|| !isViable(clientComand)) {// é unico no do anel
 					clientComand.sendReply("Erro, verifique a key informada");
 				} else {
 					System.out.println("adicionando em f4");
@@ -51,13 +54,15 @@ public class HandlerThreadServer extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Verifica se a chave esta dentro do intervalo de chave minima e maxima do anel
+	 * 
 	 * @return true caso esteja no intervalo e false caso contrario
 	 */
 	private boolean isViable(ClientData clientComand) {
-		if(clientComand.getKey().compareTo(Constant.maxKey) > 0 || clientComand.getKey().compareTo(Constant.minKey) < 0) {
+		if (clientComand.getKey().compareTo(Constant.maxKey) > 0
+				|| clientComand.getKey().compareTo(Constant.minKey) < 0) {
 			return false;
 		}
 		return true;

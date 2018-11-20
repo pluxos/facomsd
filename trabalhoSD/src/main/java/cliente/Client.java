@@ -47,7 +47,7 @@ public class Client {
 	@SuppressWarnings("deprecation")
 	@Activate
 	public void activate() {
-		channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8852).usePlaintext(true).build();
+		channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8801).usePlaintext(true).build();
 		asyncStub = GreeterGrpc.newStub(channel);
 		s = new Scanner(System.in);
 		commandHandler = new CommandHandler();
