@@ -61,13 +61,13 @@ public class QueueF4 extends Queue implements Runnable {
 //					channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), super.finger.getAntecessor())
 //							.usePlaintext(true).build();
 //				}
-				
+
 				channel = ManagedChannelBuilder.forAddress(super.finger.getAddress(), checkWay(elemento))
 						.usePlaintext(true).build();
 
 				GreeterGrpc.GreeterStub asyncStub = GreeterGrpc.newStub(channel);
 				Request request = Request.newBuilder().setName(elemento.getComando()).build();
-				//asyncStub.send(request, responseObserver);
+				// asyncStub.send(request, responseObserver);
 
 				String tipo = elemento.getComando().split(" ")[0].toLowerCase();
 				if (tipo.equals("create")) {
@@ -91,24 +91,39 @@ public class QueueF4 extends Queue implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int checkWay(ClientData elemento) {
+
+		/*
+		 //maior passa direita e menor para esquerda
 		BigInteger antecessor, sucessor, key;
 		key = elemento.getKey();
+
+		if (key.compareTo(super.finger.getMaxKey()) == 1) {
+			return finger.getSucessor();
+		}
+		return finger.getAntecessor();
+		*/
+
+		BigInteger antecessor, sucessor, key;
+		key = elemento.getKey();
+		
         if (key.compareTo(super.finger.getMaxKey()) == 1) {   // key maior
-            antecessor = key.subtract(super.finger.getMaxKey());
-            sucessor = super.finger.getMaxKey().add(Constant.maxKey.subtract(key));
+        	sucessor = key.subtract(super.finger.getMaxKey());
+            antecessor = super.finger.getMaxKey().add(Constant.maxKey.subtract(key));
         } else {
             antecessor = Constant.maxKey.subtract(super.finger.getMaxKey().add(key));
             sucessor = super.finger.getMaxKey().subtract(key);
         }
         
-        if (sucessor.compareTo(antecessor) <= 0) {
+        if (antecessor.compareTo(sucessor) <= 0) {
         	// server da esquerda
+        	System.out.println("antecessor");
         	return finger.getAntecessor();
         }
         else {
         	// server da direita
+        	System.out.println("sucessor");
         	return finger.getSucessor();
         }
 	}
