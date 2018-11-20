@@ -1,10 +1,11 @@
-package cliente;
+package facomSD.facom.com;
 
-import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
 
 import com.servidor.grpc.aplicationGRPC.api.GreeterGrpc;
 import com.servidor.grpc.aplicationGRPC.api.Reply;
@@ -16,20 +17,22 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import utils.Constant;
 
-@Component(immediate = true)
-public class Client {
-//	private final String host = "localhost";
-//	private final int port = 9877;
+public class ClientTests {
+
 	private ManagedChannel channel;
 	private GreeterGrpc.GreeterStub asyncStub;
-	private String input = "";
-	private Scanner s;
-	private CommandHandler commandHandler;
 
 	StreamObserver<Reply> responseObserver = new StreamObserver<Reply>() {
 		@Override
 		public void onNext(Reply value) {
 			System.out.println(">>>>>  " + value.getMessage());
+			try {
+				PrintStream fileStream = new PrintStream(new FileOutputStream("respostas.log", true));
+				fileStream.append(value.getMessage() + System.getProperty("line.separator"));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		@Override
@@ -47,27 +50,9 @@ public class Client {
 	@SuppressWarnings("deprecation")
 	@Activate
 	public void activate() {
-		channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8800).usePlaintext(true).build();
-		asyncStub = GreeterGrpc.newStub(channel);
-		s = new Scanner(System.in);
-		commandHandler = new CommandHandler();
 		try {
-			System.out.println("\n-------------------------------------\nDigite o comando ou 'sair' para sair ");
-			while (!input.toLowerCase().equals("sair")) {
-				while (true) {
-					input = s.nextLine();
-					if (input.toLowerCase().equals("sair"))
-						break;
-					if (commandHandler.checkComand(input)) {
-						greet(input);
-						break;
-					} else
-						System.out.println("Comando invalido, digite um comando valido");
-				}
-			}
-			System.out.println("finalizando");
-			Thread.sleep(5000);// espera 5 segundos antes de finalizar recebimento de mensagens
-			shutdown();
+			channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8800).usePlaintext(true).build();
+			asyncStub = GreeterGrpc.newStub(channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -109,4 +94,5 @@ public class Client {
 //	public void setGrpcServer(GrpcServer grpcServer) {
 //		// ensures the server has started before we attempt to connect
 //	}
+
 }

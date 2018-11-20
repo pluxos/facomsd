@@ -1,5 +1,6 @@
 package servidor;
 
+import java.io.File;
 import java.math.BigInteger;
 
 import utils.Constant;
@@ -8,8 +9,8 @@ public class BuildRing {
 
 	public void buildRing(int n, int m) {
 		try {
-//			File diretorio = new File("logs");
-//			diretorio.delete();
+			File diretorio = new File("logs");
+			remover(diretorio);
 //			System.out.println("pow: " + Integer.toString((int) Math.pow(2, m)));
 			Constant.setMaxKey(Integer.toString((int) Math.pow(2, m)));
 			BigInteger intervalo;
@@ -58,5 +59,15 @@ public class BuildRing {
 			e.printStackTrace();
 		}
 	}
-
+	
+    public void remover (File f) {
+        if (f.isDirectory()) {
+            File[] files = f.listFiles();
+            for (int i = 0; i < files.length; ++i) {
+                remover (files[i]);
+            }
+        }
+        f.delete();
+    
+    }
 }

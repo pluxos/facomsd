@@ -63,6 +63,7 @@ public class Finger {
 	
 	public void print() {
 		System.out.println("---------------------------------");
+		System.out.println("id= "+this.id);
 		System.out.println("andress= "+this.andress);
 		System.out.println("porta= "+this.port);
 		System.out.println("minKey= "+this.minKey);

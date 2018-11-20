@@ -14,7 +14,7 @@ public class QueueCommand {
   
   public void produceF1(ClientData elemento) {
     producer(f1, elemento);
-    System.out.println(elemento.getComando() + " adicionado em f1");
+//    System.out.println(elemento.getComando() + " adicionado em f1");
   }
   
   public void produceF2(ClientData elemento) {
