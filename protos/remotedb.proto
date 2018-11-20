@@ -1,0 +1,70 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.remotedb";
+option java_outer_classname = "RemoteDBProto";
+option objc_class_prefix = "RDB";
+
+package remotedb;
+
+service RemoteDB {
+    // create
+    // ------
+    // Cria uma nova entrada no banco de dados associando uma entrada a
+    // uma chave inteira.
+    rpc create (CreateRequest) returns (ServerReply) {}
+
+    // read
+    // ----
+    // Le um registro do banco. Dado uma chave, retorna um registro
+    // associado a chave ou null.
+    rpc read (ReadRequest) returns (ServerReply) {}
+
+    // update
+    // ------
+    // Atualiza um registro no banco de dados. Dado uma chave e um novo
+    // valor, a aplicacao deve atualizar o valor, se ele existir.
+    rpc update (UpdateRequest) returns (ServerReply) {}
+
+    // delete
+    // ------
+    // Apaga um registro do banco de dados.
+    rpc delete (DeleteRequest) returns (ServerReply) {}
+}
+
+// Definindo mensagens de requisicao e resposta.
+message CreateRequest {
+    int32 chave = 1;
+    string valor = 2;
+}
+
+message ReadRequest {
+    int32 chave = 1;
+}
+
+message UpdateRequest {
+    int32 chave = 1;
+    string valor = 2;
+}
+
+message DeleteRequest {
+    int32 chave = 1;
+}
+
+message ServerReply {
+    string mensagem = 1;
+}

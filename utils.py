@@ -1,167 +1,109 @@
-import os
 import threading
+import remotedb_pb2
 
 
-class Consumidor(threading.Thread):
-    """
-    Consome itens armazenados em uma fila associado a uma Thread e copia
-    os itens para uma ou mais filas de destino.
-    """
+class ConsumerThread(threading.Thread):
+    '''
+    Consome os elementos de uma fila e transfere uma copia para uma ou mais
+    filas destino.
+    '''
 
-    def __init__(self, queue, targets, thread_name="consumidor"):
-        super().__init__(name=thread_name) # nome da thread
-        self.queue = queue                 # fila associada a thread
-        self.targets = targets             # filas destino
-
-    def run(self):
-        """
-        Copia os itens de uma fila de origem para uma ou mais filas de
-        destino.
-        """
-        while True:
-            # retira um item de uma fila e copia para as temais filas
-            # associadas a esta thread
-            item = self.queue.get()
-
-            for tg in self.targets:
-                tg.put(item)
-
-
-class Logger(threading.Thread):
-    """
-    Grava as operacoes realizadas por um ou mais usuarios em um arquivo
-    de log para fins de recuperacao de falhas.
-    """        
-
-    def __init__(self, queue, log_fd, thread_name="logger"):
-        super().__init__(name=thread_name)
-        self.queue = queue
-        self.log_fd = log_fd
+    def __init__(self, origem, destinos):
+        super().__init__()
+        self.origem = origem
+        self.destinos = destinos
 
     def run(self):
-        """
-        Retira as requisicoes da fila de requests e as grava em disco
-        """
         while True:
-            item = self.queue.get()
-            self.log_fd.write(item[0] + "\n")
-            self.log_fd.flush()
-            os.fsync(self.log_fd.fileno)
+            # Remove o item da fila
+            item = self.origem.get()
+
+            # Copia para os demais
+            for d in self.destinos:
+                d.put(item)
 
 
-class Processamento(threading.Thread):
-    """
-    Processa as requisicoes armazenadas na fila de requisicoes e depois
-    gera as devidas respostas ou alteracoes no banco de dados da
-    aplicacao.
-    """
+class DatabaseThread(threading.Thread):
 
-    def __init__(self, queue, db, thread_name="processamento"):
-        super().__init__(name=thread_name)
-        self.queue = queue
+    def __init__(self, db, fila, mensagens):
+        super().__init__()
         self.db = db
+        self.fila = fila
+        self.mensagens = mensagens
 
     def run(self):
-        """
-        Processa as requisicoes na fila de requisicoes na fila do
-        servidor
-        """
+        # Processa os elementos da fila de requisicoes e gera as devidas
+        # mensagens
         while True:
-            # retira um item da fila de requisicoes. Um item esta no formato
-            # (tokens, socket)
-            toks, conn = self.queue.get()
-            comando = toks[0]
+            item = self.fila.get()
 
-            if comando.lower() == "create":
-                chave = int(toks[1])
-                valor = toks[2]
+            operacao = item[0]
+            identificador = item[1]
+            chave = item[2]
 
-                # a chave ja existe no registro?
-                if self.db.get(chave) is not None:
-                    resposta = "ERRO: A chave {0} ja existe no banco de dados!".format(chave)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
-                else:
+            if operacao == 'create':
+                # Verifica se o item nao existe no banco de dados
+                if not self.db.get(chave):
+                    valor = item[3]
                     self.db.setdefault(chave, valor)
-                    resposta = "MENSAGEM: Registro {0}->{1} criado com exito!".format(chave, valor)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
-            
-            elif comando.lower() == "read":
-                chave = int(toks[1])
-                valor = self.db.get(chave)
-
-                # checa se o valor retornado eh "null"
-                if valor is None:
-                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
+                    self.mensagens.get(identificador).put('Registro inserido com sucesso!')
                 else:
-                    resposta = "MENSAGEM: Registro {0}->{1}!".format(chave, valor)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
+                    self.mensagens.get(identificador).put('Erro: Ja existe um registro associado a esta chave!')
 
-            elif comando.lower() == "update":
-                chave = int(toks[1])
-                valor = toks[2]
+            elif operacao == 'read':
+                # Verifica se o item existe no banco de dados
+                if self.db.get(chave):
+                    valor = self.db.get(chave, 'null')
+                    self.mensagens.get(identificador).put('Registro: %d -> %s' % (chave, valor))
 
-                # se o valor retornado for "nulo" entao nao existe nada para atualizar
-                if self.db.get(chave) is None:
-                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
-                else:
+            elif operacao == 'update':
+                # Verifica se o item existe no banco
+                if self.db.get(chave):
+                    valor = item[3]
                     self.db.update({chave: valor})
-                    resposta = "MENSAGEM: Registro {0}->{1} atualizado!".format(chave, valor)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
-
-            elif comando.lower() == "delete":
-                chave = int(toks[1])
-                valor = self.db.get(chave)
-
-                # se o valor for "null" entao nao existe nada para apagar
-                if valor is None:
-                    resposta = "ERRO: Nao existe registro associado a chave {0}!".format(chave)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
+                    self.mensagens.get(identificador).put('Registro atualizado com sucesso!')
                 else:
+                    self.mensagens.get(identificador).put('Erro: nao existe registro com essa chave!')                    
+
+            elif operacao == 'delete':
+                # Verifica se o item existe no banco
+                if self.db.get(chave):
                     del(self.db[chave])
-                    resposta = "MENSAGEM: Registro {0}->{1} apagado!".format(chave, valor)
-                    # retorna a mensagem para o devido socket associado a requisicao
-                    conn.send(bytes(resposta, "utf-8"))
-            elif comando.lower() == "exit":
-                conn.send(bytes("EXIT", "utf-8"))
-                conn.close()
+                    self.mensagens.get(identificador).put('Registro apagado com sucesso!')
+                else:
+                    self.mensagens.get(identificador).put('Erro: nao existe registro com essa chave!')
 
 
-class Requisicoes(threading.Thread):
+class ForwardThread(threading.Thread):
 
-    def __init__(self, client_sock, addr, queue, thread_name="requisicoes"):
-        super().__init__(name=thread_name, daemon=True)
-        self.client_sock = client_sock
-        self.addr = addr
-        self.queue = queue
+    def __init__(self, stub, fila, mensagens):
+        super().__init__()
+        self.stub = stub
+        self.fila = fila
+        self.mensagens = mensagens
 
     def run(self):
-        """
-        Processa as requisicoes de um usuario conectado ao servidor enquanto
-        ele nao der o sinal para finalizar a thread. As mensagens sao
-        verificadas no lado do cliente, portanto todas mensagens processadas
-        aqui estao corretas.
-        """
-        keep_alive = True
+        # Repassa as requisicoes para os demais servidores
+        while True:
+            item = self.fila.get()
+            operacao = item[0]
+            identificador = item[1]
+            chave = item[2]
 
-        while keep_alive:
-            # recebe uma mensagem do usuario
-            mensagem = self.client_sock.recv(4096).decode("utf-8")
-            # print(mensagem)
-            # quebra a mensagem do cliente em tokens
-            toks = mensagem.split(" ")
+            if operacao == 'create':
+                valor = item[3]
+                mensagem = self.stub.create(remotedb_pb2.CreateRequest(chave=chave, valor=valor)).mensagem
+            
+            elif operacao == 'read':
+                mensagem = self.stub.read(remotedb_pb2.ReadRequest(chave=chave)).mensagem
 
-            # se o cliente deseja sair, entao a thread deve morrer
-            if toks[0].lower() == "exit":
-                keep_alive = False
-            # armazenando a nova requisicao na fila de requisicoes
-            item = toks, self.client_sock
-            self.queue.put(item)
+            elif operacao == 'update':
+                valor = item[3]
+                mensagem = self.stub.update(remotedb_pb2.UpdateRequest(chave=chave, valor=valor)).mensagem
+
+            elif operacao == 'delete':
+                mensagem = self.stub.delete(remotedb_pb2.DeleteRequest(chave=chave)).mensagem
+
+            self.mensagens.get(identificador).put(mensagem)
+                
+

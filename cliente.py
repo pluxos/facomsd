@@ -1,88 +1,86 @@
-import socket
-import threading
-import time
+# Copyright 2018 - Luis Carlos Silva Junior
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+'''
+--------------------------------------------------------------------------
+* Aplicacao cliente. Implementacao do cliente do banco de dados remoto.  *
+* O cliente deve obter um ID antes ded se comunicar com o servidor.      *
+--------------------------------------------------------------------------
+'''
+from __future__ import print_function
+
+import grpc
+import random
+import remotedb_pb2
+import remotedb_pb2_grpc
 
 
-class Receiver(threading.Thread):
-    """
-    Recebe mensagens do servidor e depois exibe a mensagem para o usuario
-    """
+def run():
+    # Abrindo o arquivo de configuracoes
+    arquivo = open('.\\configs.ini', 'r')
+    configs = dict(eval(arquivo.read()))
+    arquivo.close()
 
-    def __init__(self, conn_socket, thread_name="receiver"):
-        super().__init__(name=thread_name)
-        self.conn_socket = conn_socket
+    servidores = configs.get('servidores')
+    pid = random.randint(0, servidores - 1)
+    print('Conectado a %d!' % (pid))
 
-    def run(self):
-        """
-        Recebe as mensagens do servidor e depois exibe para o usuario.
-        """
-        keep_alive = True
+    addr, port = configs.get(pid)
 
-        while keep_alive:
-            resposta = self.conn_socket.recv(4096).decode("utf-8")
-            print(resposta)
+    # Criando um stub e um channel para o servidor de banco de dados
+    # remoto.
+    db_channel = grpc.insecure_channel('%s:%d' % (addr, port))
+    db_stub = remotedb_pb2_grpc.RemoteDBStub(db_channel)
 
-            if resposta.lower() == "exit":
-                keep_alive = False
+    print(':.:.: Banco de dados remoto V2.0 :.:.:')
 
+    keep_alive = True
 
-arquivo = open("C:\\Users\\Luis Carlos\\Documents\\GitHub\\sd\\facomsd\\configs.ini", "r")
-configs = eval(arquivo.read())
-arquivo.close()
+    while keep_alive:
+        print('Digite um comando ou \\? para obter ajuda')
+        entrada = str(input('> '))
+        comando = entrada.split(' ')
+        operacao = comando[0]
 
-host = socket.gethostname()
-port = configs.get("port", 12345)
+        if operacao.lower() == 'create':
+            chave = int(comando[1])
+            valor = comando[2]
+            mensagem = db_stub.create(remotedb_pb2.CreateRequest(chave=chave, valor=valor)).mensagem
+            print(mensagem)
 
-cli_socket = socket.socket()
-cli_socket.connect((host, port))
+        elif operacao.lower() == 'read':
+            chave = int(comando[1])
+            mensagem = db_stub.read(remotedb_pb2.ReadRequest(chave=chave)).mensagem
+            print(mensagem)
 
-# instanciando as duas threads do cliente
-receiver = Receiver(cli_socket)
+        elif operacao.lower() == 'update':
+            chave = int(comando[1])
+            valor = comando[2]
+            mensagem = db_stub.update(remotedb_pb2.UpdateRequest(chave=chave, valor=valor)).mensagem
+            print(mensagem)
 
-# inicializando as threads do cliente
-receiver.start()
+        elif operacao.lower() == 'delete':
+            chave = int(comando[1])
+            mensagem = db_stub.delete(remotedb_pb2.DeleteRequest(chave=chave)).mensagem
+            print(mensagem)
 
-keep_alive = True
-
-# a thread principal sera o sender
-while keep_alive:
-    print("Digite um comando ( CREATE | READ | UPDATE | DELETE | EXIT ):")
-    sentence = input("> ")
-    toks = sentence.split(" ")
-
-    if toks[0].lower() == "create":
-        if len(toks) == 3 and toks[1].isdigit():
-            cli_socket.send(bytes(sentence, "utf-8"))
+        elif operacao.lower() == 'sair':
+            print('Saindo...')
+            keep_alive = False
+        
         else:
-            print("ERRO: Sintaxe incorreta -> CREATE chave valor")
-            print("chave: INTEGER")
-            print("valor: STRING")
-    elif toks[0].lower() == "read":
-        if len(toks) == 2 and toks[1].isdigit():
-            cli_socket.send(bytes(sentence, "utf-8"))
-        else:
-            print("ERRO: Sintaxe incorreta -> READ chave")
-            print("chave: INTEGER")
-    elif toks[0].lower() == "update":
-        if len(toks) == 3 and toks[1].isdigit():
-            cli_socket.send(bytes(sentence, "utf-8"))
-        else:
-            print("ERRO: sintaxe incorreta -> UPDATE chave valor")
-            print("chave: INTEGER")
-            print("valor: STRING")
-    elif toks[0].lower() == "delete":
-        if len(toks) == 2 and toks[1].isdigit():
-            cli_socket.send(bytes(sentence, "utf-8"))
-        else:
-            print("ERRO: sintaxe incorreta -> DELETE chave")
-            print("chave: INTEGER")
-    elif toks[0].lower() == "exit":
-        cli_socket.send(bytes(sentence, "utf-8"))
-        keep_alive = False
-    else:
-        print("Comando desconhecido!!!")
+            print('Comando invalido...')
 
-print("Encerrando...")
 
-receiver.join()
-cli_socket.close()
+if __name__ == '__main__':
+    run()
