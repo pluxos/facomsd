@@ -7,10 +7,8 @@ import com.ufu.jvitoraa.interaction.Response;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class CommandDto {
 

@@ -59,5 +59,6 @@ public class ClientFacade {
 	
 	public void stop() throws InterruptedException {
 		channel.shutdown().awaitTermination(5000, TimeUnit.MILLISECONDS);
+		System.out.println("Closing channel!");
 	}
 }

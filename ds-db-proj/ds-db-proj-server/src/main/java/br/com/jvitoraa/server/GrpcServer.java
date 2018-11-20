@@ -32,6 +32,7 @@ public class GrpcServer {
 	private static final String P_RECOVER_SNAP_PATH = "recover.snap.path";
 	private static final String P_RECOVER_LOG_PATH = "recover.log.path";
 
+	@Getter
 	private DatabaseRepository databaseRepository;
 	private QueueController queueController;
 	private DatabaseRecoveryUtil databaseRecoveryUtil;

@@ -43,6 +43,11 @@
 			<artifactId>grpc-stub</artifactId>
 			<version>1.15.1</version>
 		</dependency>
+		<dependency>
+			<groupId>br.com.jvitoraa</groupId>
+			<artifactId>ds-db-proj-client</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 
