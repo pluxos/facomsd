@@ -104,6 +104,8 @@ class RemoteDB(remotedb_pb2_grpc.RemoteDBServicer):
         # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
         del(self.mensagens[identificador])
+        # Removendo o identificador da mensagem
+        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
@@ -131,6 +133,8 @@ class RemoteDB(remotedb_pb2_grpc.RemoteDBServicer):
         # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
         del(self.mensagens[identificador])
+        # Removendo o identificador da mensagem
+        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
@@ -159,6 +163,8 @@ class RemoteDB(remotedb_pb2_grpc.RemoteDBServicer):
         # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
         del(self.mensagens[identificador])
+        # Removendo o identificador da mensagem
+        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
@@ -186,6 +192,8 @@ class RemoteDB(remotedb_pb2_grpc.RemoteDBServicer):
         # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
         del(self.mensagens[identificador])
+        # Removendo o identificador da mensagem
+        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
