@@ -82,7 +82,7 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			File pasta = new File("logs\\" + id.toString() + "\\");
 			File[] listaArquivos = pasta.listFiles();
 			
-			Integer lastSnap = 0;
+			Integer lastSnap = -1;
 			
 			for (int i = 0; i < listaArquivos.length; i++) {
 				  if (listaArquivos[i].isFile()) {
@@ -99,9 +99,9 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 				System.out.println("Erro ao recuperar informacoes do servidor, verifique se o id esta correto");
 				System.exit(1);
 			}
-			finger.setLogNumber(lastSnap);
+			finger.setLogNumber(lastSnap == -1 ? 0 : lastSnap);
 			recovery.recovery(dataBase, finger);
-			finger.incrementLog();
+			if(lastSnap > -1)  finger.incrementLog();
 			queueCommand = new QueueCommand();
 			queue = new Queue(queueCommand, dataBase, finger,  mutex_f1, mutex);
 			queue.run();
