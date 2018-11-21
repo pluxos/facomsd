@@ -99,8 +99,8 @@ public class QueueF4 extends Queue implements Runnable {
             antecessor = key.subtract(super.finger.getMaxKey());
             sucessor = super.finger.getMaxKey().add(Constant.maxKey.subtract(key));
         } else {
-            antecessor = Constant.maxKey.subtract(super.finger.getMaxKey().add(key));
-            sucessor = super.finger.getMaxKey().subtract(key);
+        	sucessor = Constant.maxKey.subtract(super.finger.getMaxKey().add(key));
+        	 antecessor = super.finger.getMaxKey().subtract(key);
         }
         
         if (sucessor.compareTo(antecessor) <= 0) {

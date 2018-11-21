@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 
+import com.google.common.io.Files;
 import com.servidor.grpc.aplicationGRPC.api.GreeterGrpc;
 import com.servidor.grpc.aplicationGRPC.api.Reply;
 import com.servidor.grpc.aplicationGRPC.api.Request;
@@ -25,7 +26,8 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 	private Queue queue = null;
 	private Data dataBase;
 	private Finger finger;
-
+	private Snapshot snapshot;
+	
 	public ServerClass(String andress, int port, BigInteger id, BigInteger minKey, BigInteger maxKey, int antecessor,
 			int sucessor) {
 		try {
@@ -62,9 +64,13 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			queue = new Queue(queueCommand, dataBase, finger, mutex_f1, mutex); 
 			finger.print();
 			queue.run();
+			this.snapshot = new Snapshot(finger,dataBase);
+			Thread snap = new Thread(this.snapshot);
+			snap.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	public ServerClass(BigInteger id) {
@@ -72,16 +78,37 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 			RecoveryData recovery = new RecoveryData();
 			dataBase = new Data();
 			System.out.println("Recuperando dados finger");
+			
+			File pasta = new File("logs\\" + id.toString() + "\\");
+			File[] listaArquivos = pasta.listFiles();
+			
+			Integer lastSnap = 0;
+			
+			for (int i = 0; i < listaArquivos.length; i++) {
+				  if (listaArquivos[i].isFile()) {
+					  if(Files.getFileExtension(listaArquivos[i].getName()).equals("snap")) {
+						  Integer snap = Integer.parseInt(Files.getNameWithoutExtension(listaArquivos[i].getName()));
+						  lastSnap = lastSnap < snap ? snap : lastSnap;
+						  System.out.println("File " + listaArquivos[i].getName());
+					  }  
+				  }
+			}
+			
 			finger = recuperaDadosFinger(id);
 			if (finger == null) {
 				System.out.println("Erro ao recuperar informacoes do servidor, verifique se o id esta correto");
 				System.exit(1);
 			}
+			finger.setLogNumber(lastSnap);
 			recovery.recovery(dataBase, finger);
+			finger.incrementLog();
 			queueCommand = new QueueCommand();
 			queue = new Queue(queueCommand, dataBase, finger,  mutex_f1, mutex);
 			queue.run();
 			finger.print();
+			this.snapshot = new Snapshot(finger,dataBase);
+			Thread snap = new Thread(this.snapshot);
+			snap.start();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,4 +189,5 @@ public class ServerClass extends GreeterGrpc.GreeterImplBase implements Bindable
 	public Finger getFinger() {
 		return this.finger;
 	}
+	
 }

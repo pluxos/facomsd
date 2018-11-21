@@ -8,18 +8,46 @@ import servidor.command.ExecuteCommand;
 
 public class RecoveryData {
   public void recovery(Data data, Finger finger) {
-    try {
+	  
+	  Integer tentativas = 0;
+	  Boolean deuCerto = false;
+	  Integer ultimoTentado = finger.getLogNumber();
+	  
       System.out.println("Recuperando banco de dados");
+      
       ExecuteCommand execute = new ExecuteCommand();
-      BufferedReader br = new BufferedReader(new FileReader("logs\\"+finger.getId().toString()+"\\operacoes.log"));
-      String linha;
-      while ((linha = br.readLine()) != null) {
-        execute.execute(linha, data);
-      }
-      br.close();
-    } catch (Exception erro) {
-      System.out.println(erro.getMessage());
-    }
+	  
+	  while(tentativas <= 3 && deuCerto == false) {
+
+	      System.out.println("Recuperando banco de dados do snapshot" + ultimoTentado);
+		  try {
+		      BufferedReader brSnap = new BufferedReader(
+		    		  new FileReader("logs\\"+ finger.getId() +"\\" + ultimoTentado +".snap"));
+		      BufferedReader brLog = new BufferedReader(
+		    		  new FileReader("logs\\"+ finger.getId() + "\\" + (ultimoTentado + 1) + ".log"));
+		      String linha;
+		      while ((linha = brSnap.readLine()) != null) {
+		        execute.execute(linha, data);
+		      }
+		      while((linha = brLog.readLine()) != null) {
+			        execute.execute(linha, data);
+		      }
+		      
+		      brSnap.close();
+		      brLog.close();
+		      
+		      deuCerto = true;
+		    } catch (Exception erro) {
+		    	deuCerto = false;
+		    	tentativas++;
+		      System.out.println(erro.getMessage());
+		    }
+	  }
+	  
+	  if(deuCerto == false) {
+		  System.out.println("Erro ao recuperar banco de dados!");
+		  System.exit(1);
+	  }
   }
   
 }

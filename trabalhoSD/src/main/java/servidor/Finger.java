@@ -12,6 +12,8 @@ public class Finger {
 	private int sucessor;
 	private int antecessor;
 
+	private Integer logNumber = 0;
+
 	public Finger(String address, int port, BigInteger id, BigInteger minKey, BigInteger maxKey, int antecessor,
 			int sucessor) {
 		this.andress = address;
@@ -61,6 +63,18 @@ public class Finger {
 		return antecessor;
 	}
 	
+	public Integer getLogNumber() {
+		return logNumber;
+	}
+	
+	public void setLogNumber(Integer logNumber) {
+		this.logNumber = logNumber;
+	}
+	
+	public void incrementLog() {
+		this.logNumber = this.logNumber + 1;
+	}
+
 	public void print() {
 		System.out.println("---------------------------------");
 		System.out.println("id= "+this.id);
