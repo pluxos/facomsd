@@ -17,7 +17,7 @@ import io.grpc.stub.StreamObserver;
 import utils.Constant;
 
 @Component(immediate = true)
-public class Client {
+public class Client implements Runnable {
 //	private final String host = "localhost";
 //	private final int port = 9877;
 	private ManagedChannel channel;
@@ -46,31 +46,9 @@ public class Client {
 
 	@SuppressWarnings("deprecation")
 	@Activate
-	public void activate() {
-		channel = ManagedChannelBuilder.forAddress(Constant.HOST, 8800).usePlaintext(true).build();
+	public void activate(int port) {
+		channel = ManagedChannelBuilder.forAddress(Constant.HOST, port).usePlaintext(true).build();
 		asyncStub = GreeterGrpc.newStub(channel);
-		s = new Scanner(System.in);
-		commandHandler = new CommandHandler();
-		try {
-			System.out.println("\n-------------------------------------\nDigite o comando ou 'sair' para sair ");
-			while (!input.toLowerCase().equals("sair")) {
-				while (true) {
-					input = s.nextLine();
-					if (input.toLowerCase().equals("sair"))
-						break;
-					if (commandHandler.checkComand(input)) {
-						greet(input);
-						break;
-					} else
-						System.out.println("Comando invalido, digite um comando valido");
-				}
-			}
-			System.out.println("finalizando");
-			Thread.sleep(5000);// espera 5 segundos antes de finalizar recebimento de mensagens
-			shutdown();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void shutdown() throws InterruptedException {
@@ -103,6 +81,37 @@ public class Client {
 			e.printStackTrace();
 			return;
 		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		commandHandler = new CommandHandler();
+		s = new Scanner(System.in);
+
+		System.out.println("\n-------------------------------------\nDigite o comando ou 'sair' para sair ");
+		while (!input.toLowerCase().equals("sair")) {
+			while (true) {
+				input = s.nextLine();
+				if (input.toLowerCase().equals("sair"))
+					break;
+				if (commandHandler.checkComand(input)) {
+					greet(input);
+					break;
+				} else
+					System.out.println("Comando invalido, digite um comando valido");
+			}
+
+		}
+		System.out.println("finalizando");
+		try {
+			Thread.sleep(5000);
+			shutdown();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 //	@Reference
