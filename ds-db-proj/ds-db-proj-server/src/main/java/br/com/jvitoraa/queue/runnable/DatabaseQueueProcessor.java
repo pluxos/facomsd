@@ -51,7 +51,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				String readValue = database.read(BigInteger.valueOf(command.getId()));
 
 				if (StringUtils.isNotBlank(readValue)) {
-					response = Response.newBuilder().setResponseText(readValue).build();
+					response = Response.newBuilder().setResponseText("Valor lido: " + readValue).build();
 				} else {
 					response = Response.newBuilder().setResponseText("Register not found!").build();
 				}
@@ -64,7 +64,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				if (database.update(BigInteger.valueOf(command.getId()), command.getValue())) {
 					response = Response.newBuilder().setResponseText("Register updated sucessfully!").build();
 				} else {
-					response = Response.newBuilder().setResponseText("Register not found!").build();
+					response = Response.newBuilder().setResponseText("Cannot update, Register not found!").build();
 				}
 
 				this.setObserver(command, response);
@@ -75,7 +75,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				if (database.delete(BigInteger.valueOf(command.getId()))) {
 					response = Response.newBuilder().setResponseText("Register deleted!").build();
 				} else {
-					response = Response.newBuilder().setResponseText("Regiser not found!").build();
+					response = Response.newBuilder().setResponseText("Cannot delete, Regiser not found!").build();
 				}
 
 				this.setObserver(command, response);

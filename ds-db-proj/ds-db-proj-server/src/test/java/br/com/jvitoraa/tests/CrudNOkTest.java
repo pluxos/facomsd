@@ -15,8 +15,8 @@ import lombok.Data;
 
 @Data
 @RunWith(MockitoJUnitRunner.class)
-public class CrudOkTest {
-	
+public class CrudNOkTest {
+
 	private GrpcClient client1;
 
 	private GrpcServer server1;
@@ -58,7 +58,7 @@ public class CrudOkTest {
 	}
 
 	@Test
-	public void crudOkTest() throws InterruptedException {
+	public void crudNokTest() throws InterruptedException {
 
 		this.client1 = new GrpcClient(8001);
 		
@@ -71,16 +71,21 @@ public class CrudOkTest {
 		Thread.sleep(8000);
 		assertEquals("Register created!", client1.getObserver().getResponseText());
 		
+		client1.getClientFacade().create(213L, "JOAOV", client1.getObserver());
+		Thread.sleep(5000);
+		assertEquals("Cannot create, Id alredy exists!", client1.getObserver().getResponseText());
+		client1.getClientFacade().delete(213L, client1.getObserver());
+		
 		Thread.sleep(5000);
 		client1.getClientFacade().read(213L, client1.getObserver());
 		Thread.sleep(5000);
-		assertEquals("Valor lido: JOAO", client1.getObserver().getResponseText());
+		assertEquals("Register not found!", client1.getObserver().getResponseText());
 		client1.getClientFacade().update(213L, "AAA", client1.getObserver());
 		Thread.sleep(5000);
-		assertEquals("Register updated sucessfully!", client1.getObserver().getResponseText());
+		assertEquals("Cannot update, Register not found!", client1.getObserver().getResponseText());
 		client1.getClientFacade().delete(213L, client1.getObserver());
 		Thread.sleep(5000);
-		assertEquals("Register deleted!", client1.getObserver().getResponseText());
+		assertEquals("Cannot delete, Regiser not found!", client1.getObserver().getResponseText());
 		
 		
 	}
@@ -104,5 +109,4 @@ public class CrudOkTest {
 			}
 		});
 	}
-
 }

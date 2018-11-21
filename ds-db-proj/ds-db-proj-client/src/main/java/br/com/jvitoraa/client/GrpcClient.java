@@ -22,6 +22,10 @@ public class GrpcClient {
 	private Integer serverPort;
 	@Getter
 	private Scanner scanner;
+	@Getter
+	private ClientFacade clientFacade;
+	@Getter
+	private GrpcObserver observer;
 	
 	Thread tInput;
 	
@@ -30,8 +34,8 @@ public class GrpcClient {
 	public void start() throws InterruptedException {
 		
 		LOGGER.info("Starting up client");
-		ClientFacade clientFacade = new ClientFacade(this.serverPort);
-		GrpcObserver observer = new GrpcObserver();
+		clientFacade = new ClientFacade(this.serverPort);
+		observer = new GrpcObserver();
 		
 		tInput = new Thread(new ClientInputThread(clientFacade, observer, scanner, this));
 		tInput.start();
