@@ -54,6 +54,10 @@ public class Recuperacao {
 			c.greet("create 15:teste15");
 			resposta = getResposta(arquivo, 3);
 			assertTrue(resposta.equals("Dados criados com sucesso"));
+			t.stop();
+			if(!t.isAlive()) {
+				System.out.println(" 	---------------------- Interrompida -------------------------");
+			}
 			// t.destroy();
 			// Thread.sleep(4000);
 //		*/		
@@ -67,8 +71,8 @@ public class Recuperacao {
 			
 			/* Bloco 2 */
 			
-			/*			
-			Constant.setMaxKey("15"); //se comentar a primeira parte é preciso setar maxKey
+//			/*			
+//			Constant.setMaxKey("15"); //se comentar a primeira parte é preciso setar maxKey
 			Thread t0 = new Thread(new ThreadStartServerExistente(BigInteger.valueOf(0)));
 			Thread t1 = new Thread(new ThreadStartServerExistente(BigInteger.valueOf(1)));
 			Thread t2 = new Thread(new ThreadStartServerExistente(BigInteger.valueOf(2)));
@@ -84,15 +88,15 @@ public class Recuperacao {
 			System.out.println("iniciando testes");
 			// READ EM CADA SERVER
 			c2.greet("read 5");
-			resposta2 = getResposta(arquivo, 1);//4 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, 4);//4 se nao comentar aprimeira parte
 			assertTrue(resposta2.equals("teste5"));
 			c2.greet("read 10");
-			resposta2 = getResposta(arquivo, 2);//5 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, 5);//5 se nao comentar aprimeira parte
 			assertTrue(resposta2.equals("teste10"));
 			c2.greet("read 15");
-			resposta2 = getResposta(arquivo, 3);//6 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, 6);//6 se nao comentar aprimeira parte
 			assertTrue(resposta2.equals("teste15"));
-			*/		
+//			*/		
 			
 
 		} catch (InterruptedException e) {
