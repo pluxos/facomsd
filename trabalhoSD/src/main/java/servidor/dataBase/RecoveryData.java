@@ -18,80 +18,85 @@ public class RecoveryData {
       
       ExecuteCommand execute = new ExecuteCommand();
       
-      if(ultimoTentado == 0) {
-    	  
-    	  File tempFile = new File("logs\\" + finger.getId() + "\\" + ultimoTentado + ".snap");
-    	  if(tempFile.exists()) {
-    		  try {
-    		      BufferedReader brSnap = new BufferedReader(
-    		    		  new FileReader("logs\\"+ finger.getId() +"\\" + ultimoTentado +".snap"));
-    		      BufferedReader brLog = new BufferedReader(
-    		    		  new FileReader("logs\\"+ finger.getId() + "\\" + (ultimoTentado + 1) + ".log"));
-    		      String linha;
-    		      while ((linha = brSnap.readLine()) != null) {
-    		        execute.execute(linha, data);
-    		      }
-    		      while((linha = brLog.readLine()) != null) {
-    			        execute.execute(linha, data);
-    		      }
-    		      
-    		      brSnap.close();
-    		      brLog.close();
-    		      
-    		      deuCerto = true;
-    		    } catch (Exception erro) {
-    		    	deuCerto = false;
-    		    	tentativas++;
-    		      System.out.println(erro.getMessage());
-    		    }
-    	  }
-    	  
-    	  else {
-    		  try {
-    		      BufferedReader brLog = new BufferedReader(
-    		    		  new FileReader("logs\\"+ finger.getId() + "\\" + ultimoTentado  + ".log"));
-    		      String linha;
-    		      while((linha = brLog.readLine()) != null) {
-    			        execute.execute(linha, data);
-    		      }
-    		      brLog.close();
-    		      deuCerto = true;
-    		    } catch (Exception erro) {
-    		    	deuCerto = false;
-    		    	tentativas++;
-    		      System.out.println(erro.getMessage());
-    		    }
-    	  }
-    	  
-      }
-      else {
     	  while(tentativas <= 3 && deuCerto == false) {
+    		  
+    		  System.out.println("Recuperando banco de dados do snapshot" + ultimoTentado);
+    		  
+    		  if(ultimoTentado == 0) {
+    	    	  
+    	    	  File tempFile = new File("logs\\" + finger.getId() + "\\" + ultimoTentado + ".snap");
+    	    	  if(tempFile.exists()) {
+    	    		  try {
+    	    		      BufferedReader brSnap = new BufferedReader(
+    	    		    		  new FileReader("logs\\"+ finger.getId() +"\\" + ultimoTentado +".snap"));
+    	    		      BufferedReader brLog = new BufferedReader(
+    	    		    		  new FileReader("logs\\"+ finger.getId() + "\\" + (ultimoTentado + 1) + ".log"));
+    	    		      String linha;
+    	    		      while ((linha = brSnap.readLine()) != null) {
+    	    		        execute.execute(linha, data);
+    	    		      }
+    	    		      while((linha = brLog.readLine()) != null) {
+    	    			        execute.execute(linha, data);
+    	    		      }
+    	    		      
+    	    		      brSnap.close();
+    	    		      brLog.close();
+    	    		      
+    	    		      deuCerto = true;
+    	    		    } catch (Exception erro) {
+    	    		    	deuCerto = false;
+    	    		      System.out.println(erro.getMessage());
+    	    		      break;
+    	    		    }
+    	    	  }
+    	    	  
+    	    	  else {
+    	    		  try {
+    	    		      BufferedReader brLog = new BufferedReader(
+    	    		    		  new FileReader("logs\\"+ finger.getId() + "\\" + ultimoTentado  + ".log"));
+    	    		      String linha;
+    	    		      while((linha = brLog.readLine()) != null) {
+    	    			        execute.execute(linha, data);
+    	    		      }
+    	    		      brLog.close();
+    	    		      deuCerto = true;
+    	    		    } catch (Exception erro) {
+    	    		    	deuCerto = false;
+    	    		      System.out.println(erro.getMessage());
+    	    		      break;
+    	    		    }
+    	    	  }
+    	    	  
+    	      }
+    		  
+    		  else {
+        		  try {
+        		      BufferedReader brSnap = new BufferedReader(
+        		    		  new FileReader("logs\\"+ finger.getId() +"\\" + ultimoTentado +".snap"));
+        		      BufferedReader brLog = new BufferedReader(
+        		    		  new FileReader("logs\\"+ finger.getId() + "\\" + (ultimoTentado + 1) + ".log"));
+        		      String linha;
+        		      while ((linha = brSnap.readLine()) != null) {
+        		        execute.execute(linha, data);
+        		      }
+        		      while((linha = brLog.readLine()) != null) {
+        			        execute.execute(linha, data);
+        		      }
+        		      
+        		      brSnap.close();
+        		      brLog.close();
+        		      
+        		      deuCerto = true;
+        		    } catch (Exception erro) {
+        		    	deuCerto = false;
+        		    	tentativas++;
+        		    	ultimoTentado--;
+        		      System.out.println(erro.getMessage());
+        		    }
+    		  }
 
-    	      System.out.println("Recuperando banco de dados do snapshot" + ultimoTentado);
-    		  try {
-    		      BufferedReader brSnap = new BufferedReader(
-    		    		  new FileReader("logs\\"+ finger.getId() +"\\" + ultimoTentado +".snap"));
-    		      BufferedReader brLog = new BufferedReader(
-    		    		  new FileReader("logs\\"+ finger.getId() + "\\" + (ultimoTentado + 1) + ".log"));
-    		      String linha;
-    		      while ((linha = brSnap.readLine()) != null) {
-    		        execute.execute(linha, data);
-    		      }
-    		      while((linha = brLog.readLine()) != null) {
-    			        execute.execute(linha, data);
-    		      }
-    		      
-    		      brSnap.close();
-    		      brLog.close();
-    		      
-    		      deuCerto = true;
-    		    } catch (Exception erro) {
-    		    	deuCerto = false;
-    		    	tentativas++;
-    		      System.out.println(erro.getMessage());
-    		    }
+    	   
     	  }
-      }
 	  
 	  
 	  if(deuCerto == false) {
