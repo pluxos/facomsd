@@ -32,8 +32,9 @@ public class Snapshot implements Runnable {
 			
 			
 			try {
-				Thread.sleep(6*10000);
+				Thread.sleep(5000);
 				System.out.println("Gravando Snapshot do Servidor " + this.finger.getId());
+				
 				this.finger.incrementLog();
 				
 				File log = new File("logs\\" + this.finger.getId() + "\\" + this.finger.getLogNumber() + ".log");
@@ -55,13 +56,13 @@ public class Snapshot implements Runnable {
 				}
 				fileStream.close();
 				
-				if(this.finger.getLogNumber() > 3) {
+				if(this.finger.getLogNumber() >= 3) {
 					File snapDeletar = new File("logs\\" + this.finger.getId() + "\\" + (this.finger.getLogNumber() - 4) + ".snap");
 					if (snapDeletar.exists()) {
 						snapDeletar.delete();
 					}
 					
-					File logDeletar = new File("logs\\" + this.finger.getId() + "\\" + (this.finger.getLogNumber() - 4) + ".log");
+					File logDeletar = new File("logs\\" + this.finger.getId() + "\\" + (this.finger.getLogNumber() - 3) + ".log");
 					if (logDeletar.exists()) {
 						logDeletar.delete();
 					}
