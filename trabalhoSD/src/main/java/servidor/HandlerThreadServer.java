@@ -34,17 +34,21 @@ public class HandlerThreadServer extends Thread {
 			System.out.println("## Recebido: " + comando + " no server "+finger.getId());
 			clientComand.setOut(responseObserver);
 			if (HandlerCommandClient.checkComand(comando)) {
+				
 				clientComand.setComando(comando);
 				if (clientComand.getKey().compareTo(finger.getMinKey()) >= 0
 						&& clientComand.getKey().compareTo(finger.getMaxKey()) <= 0) {
 					System.out.println("######## Key encontrada no server: " + finger.getId());
 					queueCommand.produceF1(clientComand);
-				} else if (finger.getPort() == finger.getAntecessor() || finger.getPort() == finger.getSucessor()
+				} else { 
+					
+					if (finger.getPort() == finger.getAntecessor() || finger.getPort() == finger.getSucessor()
 						|| !isViable(clientComand)) {// é unico no do anel
 					clientComand.sendReply("Erro, verifique a key informada");
 				} else {
 //					System.out.println("adicionando em f4");
 					queueCommand.produceF4(clientComand);
+				}
 				}
 			} else {
 				System.out.println("Syntaxe ou comando incorreto!");
