@@ -2,11 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/server/server_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ant.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/FileStorageHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/FileStorageHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/.idea/dictionaries/Kim.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/GrpcImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/ThreadServerGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/ThreadServerMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/configuration/ApplicationProperties.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/helper/DataStorage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/helper/ExecuteHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/helper/FileStorageHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/helper/SerializeState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/model/ArrivingGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/model/Operation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/threads/ThreadLogger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/java/org/kim/grpc/server/threads/ThreadProcessGrpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/proto/Service.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../trabalho2/trabalho2.iml" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,11 +115,12 @@
     <session id="-2108919">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.43" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.67" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.spring.boot.run.usages" />
@@ -138,7 +155,7 @@
     <favorites_list name="JavaFxApplication" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -185,8 +202,8 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1612" />
-    <option name="height" value="876" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectReloadState">
@@ -197,8 +214,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -210,6 +227,12 @@
               <item name="TrabalhoSD" type="b2602c69:ProjectViewProjectNode" />
               <item name="TrabalhoSD" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TrabalhoSD" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TrabalhoSD" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TrabalhoSD" type="b2602c69:ProjectViewProjectNode" />
@@ -236,7 +259,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541780344573" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542757946285" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="recentsLimit" value="5" />
@@ -253,7 +276,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Main (1)">
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -366,11 +389,12 @@
       <workItem from="1541637440805" duration="596000" />
       <workItem from="1541648259897" duration="598000" />
       <workItem from="1541778294948" duration="2017000" />
+      <workItem from="1542757822701" duration="657000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15697000" />
+    <option name="totallyTimeSpent" value="16354000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
