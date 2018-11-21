@@ -6,7 +6,7 @@ import java.util.List;
 
 class FileStorageHelper {
 
-    private static final String FILE_NAME = "C:\\Users\\Kim\\Desktop\\Trab\\facomsd\\TrabalhoSD\\src\\server\\server_log.txt";
+    private static final String FILE_NAME = "D:\\Faculdade\\6º Período\\sd\\facomsd\\TrabalhoSD\\src\\server\\server_log.txt";
 
     private File file;
     private static FileStorageHelper fileStorageHelper;
@@ -38,7 +38,7 @@ class FileStorageHelper {
                 objectOutputStream.close();
                 fileOutputStream.close();
 
-            } catch (IOException e) { e.printStackTrace(); }
+            } catch (IOException e) { System.out.println("SAVE DATA ERROR: " + e.getMessage()); }
         }
     }
 
@@ -67,7 +67,7 @@ class FileStorageHelper {
 
             objectInputStream.close();
             fileInputStream.close();
-        } catch (IOException | ClassNotFoundException e) { e.printStackTrace(); }
+        } catch (IOException | ClassNotFoundException e) { System.out.println("RECOVER DATA ERROR: " + e.getMessage()); }
 
         return list;
     }

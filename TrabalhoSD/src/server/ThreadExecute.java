@@ -72,7 +72,7 @@ public class ThreadExecute extends Thread {
                     sendPacket = new DatagramPacket( response, response.length, InetAddress.getByName( "localhost" ), port );
             }
             serverSocket.send( sendPacket );
-        } catch ( IOException e ) { e.printStackTrace(); }
+        } catch ( IOException e ) { System.out.println(e.getMessage()); }
     }
 
     static void executeOperation( Operation operation ){

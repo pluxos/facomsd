@@ -39,6 +39,6 @@ public class ThreadProcess extends Thread{
             System.out.println("Response from server: " + data1);
 
             clientSocket.close();
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) { System.out.println(e.getMessage()); }
     }
 }
