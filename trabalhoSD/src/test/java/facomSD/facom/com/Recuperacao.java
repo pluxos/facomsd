@@ -24,6 +24,7 @@ public class Recuperacao {
 	@Test
 	public void testRun() {
 		try {
+		  int i = 1;
 			ClientTests c = new ClientTests();
 			File arquivo = new File("respostas.log");//nao comentar
 			try {
@@ -44,20 +45,24 @@ public class Recuperacao {
 			t.start();
 			Thread.sleep(4000);
 			c.activate(); 
+			
 			//CREATE EM CADA SERVER
+			c.greet("create 1:teste1");
+      String resposta = getResposta(arquivo, i); i++;
+      assertTrue(resposta.equals("Dados criados com sucesso"));
 			c.greet("create 5:teste5");
-			String resposta = getResposta(arquivo, 1);
+			resposta = getResposta(arquivo, i);i++;
 			assertTrue(resposta.equals("Dados criados com sucesso"));
 			c.greet("create 10:teste10");
-			resposta = getResposta(arquivo, 2);
+			resposta = getResposta(arquivo, i); i++;
 			assertTrue(resposta.equals("Dados criados com sucesso"));
 			c.greet("create 15:teste15");
-			resposta = getResposta(arquivo, 3);
+			resposta = getResposta(arquivo, i); i++;
 			assertTrue(resposta.equals("Dados criados com sucesso"));
 			t.stop();
-			if(!t.isAlive()) {
+			while(t.isAlive()) {}
+			
 				System.out.println(" 	---------------------- Interrompida -------------------------");
-			}
 			// t.destroy();
 			// Thread.sleep(4000);
 //		*/		
@@ -66,7 +71,7 @@ public class Recuperacao {
 			
 			
 			
-			
+			System.out.println("---------------------------------- Recuperando servidores -------------------------");
 			
 			
 			/* Bloco 2 */
@@ -87,14 +92,17 @@ public class Recuperacao {
 			c2.activate();
 			System.out.println("iniciando testes");
 			// READ EM CADA SERVER
+			c2.greet("read 1");
+      resposta2 = getResposta(arquivo, i); i++;//5 se nao comentar a primeira parte
+      assertTrue(resposta2.equals("teste1"));
 			c2.greet("read 5");
-			resposta2 = getResposta(arquivo, 4);//4 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, i); i++;//6 se nao comentar a primeira parte
 			assertTrue(resposta2.equals("teste5"));
 			c2.greet("read 10");
-			resposta2 = getResposta(arquivo, 5);//5 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, i); i++;//7 se nao comentar a primeira parte
 			assertTrue(resposta2.equals("teste10"));
 			c2.greet("read 15");
-			resposta2 = getResposta(arquivo, 6);//6 se nao comentar aprimeira parte
+			resposta2 = getResposta(arquivo, i); i++;//8 se nao comentar a primeira parte
 			assertTrue(resposta2.equals("teste15"));
 //			*/		
 			
