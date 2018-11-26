@@ -9,8 +9,5 @@
         <module name="gsi028-grp19" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="gsi028-grp19" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

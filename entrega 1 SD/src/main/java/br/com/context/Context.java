@@ -44,14 +44,6 @@ public class Context {
 		}
 	}
 	
-	public String stringfy() {
-		String toString = "";
-		for( Map.Entry< BigInteger, Object > entry : context.entrySet() ) {
-			toString = toString.concat( "(" + entry.getKey().toString() + "," + entry.getValue().toString() + ")" );
-		}
-		return toString;
-	}
-	
 	public String get( BigInteger key ) {
 		if( context.get( key ) != null ) {
 			return "(" + key + "," + context.get( key ) + ")";

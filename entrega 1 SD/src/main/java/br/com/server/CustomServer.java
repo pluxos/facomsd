@@ -14,11 +14,7 @@ import br.com.configuration.Configuration;
 import br.com.configuration.SocketSetting;
 import br.com.context.Context;
 import br.com.proto.ContextProto.SubscribeResponse;
-import br.com.thread.ExecutorThread;
-import br.com.thread.GrpcThread;
-import br.com.thread.LogThread;
-import br.com.thread.ServerRecieveThread;
-import br.com.thread.SnapshotThread;
+import br.com.thread.*;
 import io.grpc.stub.StreamObserver;
 
 public class CustomServer {
@@ -26,24 +22,24 @@ public class CustomServer {
     private static ServerSocket serverSocket;
     private static SocketSetting mySettings;
     private static SocketSetting grpcServerSettings;
-    private static Queue< String > logQueue = new LinkedList< String >();
-    private static Queue< String > executeQueue = new LinkedList< String >();
-    private static Map< String, List< StreamObserver< SubscribeResponse > > > observers = new HashMap< String, List< StreamObserver< SubscribeResponse > > >();
+    private static Queue<String> logQueue = new LinkedList<String>();
+    private static Queue<String> Queue = new LinkedList<String>();
+    private static Map<String, List<StreamObserver<SubscribeResponse>>> observers = new HashMap<String, List<StreamObserver<SubscribeResponse>>>();
     private static Context context;
     private static ExecutorService executor;
     private static Boolean semaphore;
 
 
-    public static void main( String args[] ) throws Exception {
+    public static void main(String args[]) throws Exception {
 
         /**
          * Externalizacoes das configuracoes
          */
         context = new Context();
-        context.load( Paths.get( "src/main/resources/snapshot/snapshot.txt" ), Paths.get( "src/main/resources/log/log.txt" ) );
+        context.load(Paths.get("src/main/resources/snapshot/snapshot.txt"), Paths.get("src/main/resources/log/log.txt"));
         mySettings = Configuration.serverSettings();
         grpcServerSettings = Configuration.grpcServerSettings();
-        serverSocket = new ServerSocket( mySettings.getPort() );
+        serverSocket = new ServerSocket(mySettings.getPort());
 
         executor = Executors.newFixedThreadPool(50);
         semaphore = false;
@@ -51,24 +47,26 @@ public class CustomServer {
         /**
          * Declaracao das Threads
          */
-        LogThread logThread = new LogThread( logQueue, semaphore );
+        LogThread logThread = new LogThread(logQueue, semaphore);
 
-        ExecutorThread executorThread = new ExecutorThread( serverSocket, logQueue, executeQueue, context, observers, semaphore );
+        ExecutorThread executorThread = new ExecutorThread(serverSocket, logQueue, context, observers, semaphore);
 
-        ServerRecieveThread recieveThread = new ServerRecieveThread( serverSocket, executeQueue );
+        ServerRecieveThread recieveThread = new ServerRecieveThread(serverSocket, Queue);
 
-        GrpcThread grpcServerThread = new GrpcThread( logQueue, executeQueue, context, grpcServerSettings, observers );
+        GrpcThread grpcServerThread = new GrpcThread(logQueue, Queue, context, grpcServerSettings, observers);
 
-        SnapshotThread snapshotThread = new SnapshotThread( context, semaphore );
+        SnapshotThread snapshotThread = new SnapshotThread(context, semaphore);
 
         /**
          * Execucao das Threads
          */
-        executor.execute( logThread );
-        executor.execute( executorThread );
-        executor.execute( recieveThread );
-        executor.execute( grpcServerThread );
-        executor.execute( snapshotThread );
+        SplitThread splitThread = new SplitThread();
+        splitThread.start();
+        executor.execute(logThread);
+        executor.execute(executorThread);
+        executor.execute(recieveThread);
+        executor.execute(grpcServerThread);
+        executor.execute(snapshotThread);
 
     }
 

@@ -1,5 +1,6 @@
 package br.com.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -20,16 +21,16 @@ public class ContextService extends ContextServiceGrpc.ContextServiceImplBase {
 
 	private Queue< String > logQueue;
 
-	private Queue< String > executeQueue;
+	private Queue< String > Queue;
 
 	private Context context;
-	
+
 	private Map< String, List< StreamObserver< SubscribeResponse > > > observers;
 
-	public ContextService( Queue< String > logQueue, Queue< String > executeQueue, Context context, Map< String, List< StreamObserver< SubscribeResponse > > > observers ) {
+	public ContextService( Queue< String > logQueue, Queue< String > Queue, Context context, Map< String, List< StreamObserver< SubscribeResponse > > > observers ) {
 		super();
 		this.logQueue = logQueue;
-		this.executeQueue = executeQueue;
+		this.Queue = Queue;
 		this.context = context;
 		this.observers = observers;
 	}
@@ -60,12 +61,14 @@ public class ContextService extends ContextServiceGrpc.ContextServiceImplBase {
 
 	@Override
 	public void find( ContextRequest request, StreamObserver< ContextResponse > responseObserver ) {
-		String stringify = context.stringfy();
+		String instruction = request.getInstruction();
+		List< String > params = Arrays.asList( instruction.split( " " ) );
+		String stringify = context.get( new BigInteger( params.get( 1 ) ));
 		ContextResponse response = ContextResponse.newBuilder().setMessage( stringify ).build();
 		responseObserver.onNext( response );
 		responseObserver.onCompleted();
 	}
-	
+
 	@Override
 	public void subscribe( SubscribeRequest request, StreamObserver< SubscribeResponse > responseObserver ) {
 		List< StreamObserver< SubscribeResponse > > registry = observers.get( request.getKey() );
@@ -83,7 +86,7 @@ public class ContextService extends ContextServiceGrpc.ContextServiceImplBase {
 
 	/**
 	 * Trata a mensagem e adiciona na fila de log
-	 * 
+	 *
 	 * @param message
 	 */
 	private void messageToQueue( String message ) {
@@ -96,13 +99,13 @@ public class ContextService extends ContextServiceGrpc.ContextServiceImplBase {
 		list.remove( 0 );
 
 		if ( Operation.DELETE.name().equals( operation ) ) {
-			executeQueue.add( operation.toUpperCase() + ";" + header );
+			Queue.add( operation.toUpperCase() + ";" + header );
 		} else {
 			String log = "";
 			for ( String current : list ) {
 				log = log.concat( current + " " );
 			}
-			executeQueue.add( operation.toUpperCase() + ";" + header + ";" + log.substring( 0, log.length() - 1 ) );
+			Queue.add( operation.toUpperCase() + ";" + header + ";" + log.substring( 0, log.length() - 1 ) );
 		}
 
 	}
