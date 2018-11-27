@@ -7,7 +7,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-from google.protobuf import descriptor_pb2
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -19,7 +18,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='remotedb.proto',
   package='remotedb',
   syntax='proto3',
-  serialized_pb=_b('\n\x0eremotedb.proto\x12\x08remotedb\"-\n\rCreateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1c\n\x0bReadRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"-\n\rUpdateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1e\n\rDeleteRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"\x1f\n\x0bServerReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t2\xf6\x01\n\x08RemoteDB\x12:\n\x06\x63reate\x12\x17.remotedb.CreateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x36\n\x04read\x12\x15.remotedb.ReadRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06update\x12\x17.remotedb.UpdateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06\x64\x65lete\x12\x17.remotedb.DeleteRequest\x1a\x15.remotedb.ServerReply\"\x00\x42)\n\x10io.grpc.remotedbB\rRemoteDBProtoP\x01\xa2\x02\x03RDBb\x06proto3')
+  serialized_options=_b('\n\020io.grpc.remotedbB\rRemoteDBProtoP\001\242\002\003RDB'),
+  serialized_pb=_b('\n\x0eremotedb.proto\x12\x08remotedb\"-\n\rCreateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1c\n\x0bReadRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"-\n\rUpdateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1e\n\rDeleteRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"\x1f\n\x0bServerReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t2\xf6\x01\n\x08RemoteDB\x12:\n\x06\x43reate\x12\x17.remotedb.CreateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x36\n\x04Read\x12\x15.remotedb.ReadRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06Update\x12\x17.remotedb.UpdateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06\x44\x65lete\x12\x17.remotedb.DeleteRequest\x1a\x15.remotedb.ServerReply\"\x00\x42)\n\x10io.grpc.remotedbB\rRemoteDBProtoP\x01\xa2\x02\x03RDBb\x06proto3')
 )
 
 
@@ -38,21 +38,21 @@ _CREATEREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='valor', full_name='remotedb.CreateRequest.valor', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -76,14 +76,14 @@ _READREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -107,21 +107,21 @@ _UPDATEREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='valor', full_name='remotedb.UpdateRequest.valor', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -145,14 +145,14 @@ _DELETEREQUEST = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -176,14 +176,14 @@ _SERVERREPLY = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
   ],
-  options=None,
+  serialized_options=None,
   is_extendable=False,
   syntax='proto3',
   extension_ranges=[],
@@ -236,53 +236,52 @@ ServerReply = _reflection.GeneratedProtocolMessageType('ServerReply', (_message.
 _sym_db.RegisterMessage(ServerReply)
 
 
-DESCRIPTOR.has_options = True
-DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('\n\020io.grpc.remotedbB\rRemoteDBProtoP\001\242\002\003RDB'))
+DESCRIPTOR._options = None
 
 _REMOTEDB = _descriptor.ServiceDescriptor(
   name='RemoteDB',
   full_name='remotedb.RemoteDB',
   file=DESCRIPTOR,
   index=0,
-  options=None,
+  serialized_options=None,
   serialized_start=218,
   serialized_end=464,
   methods=[
   _descriptor.MethodDescriptor(
-    name='create',
-    full_name='remotedb.RemoteDB.create',
+    name='Create',
+    full_name='remotedb.RemoteDB.Create',
     index=0,
     containing_service=None,
     input_type=_CREATEREQUEST,
     output_type=_SERVERREPLY,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='read',
-    full_name='remotedb.RemoteDB.read',
+    name='Read',
+    full_name='remotedb.RemoteDB.Read',
     index=1,
     containing_service=None,
     input_type=_READREQUEST,
     output_type=_SERVERREPLY,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='update',
-    full_name='remotedb.RemoteDB.update',
+    name='Update',
+    full_name='remotedb.RemoteDB.Update',
     index=2,
     containing_service=None,
     input_type=_UPDATEREQUEST,
     output_type=_SERVERREPLY,
-    options=None,
+    serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='delete',
-    full_name='remotedb.RemoteDB.delete',
+    name='Delete',
+    full_name='remotedb.RemoteDB.Delete',
     index=3,
     containing_service=None,
     input_type=_DELETEREQUEST,
     output_type=_SERVERREPLY,
-    options=None,
+    serialized_options=None,
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_REMOTEDB)

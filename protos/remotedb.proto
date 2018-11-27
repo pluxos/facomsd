@@ -22,31 +22,12 @@ option objc_class_prefix = "RDB";
 package remotedb;
 
 service RemoteDB {
-    // create
-    // ------
-    // Cria uma nova entrada no banco de dados associando uma entrada a
-    // uma chave inteira.
-    rpc create (CreateRequest) returns (ServerReply) {}
-
-    // read
-    // ----
-    // Le um registro do banco. Dado uma chave, retorna um registro
-    // associado a chave ou null.
-    rpc read (ReadRequest) returns (ServerReply) {}
-
-    // update
-    // ------
-    // Atualiza um registro no banco de dados. Dado uma chave e um novo
-    // valor, a aplicacao deve atualizar o valor, se ele existir.
-    rpc update (UpdateRequest) returns (ServerReply) {}
-
-    // delete
-    // ------
-    // Apaga um registro do banco de dados.
-    rpc delete (DeleteRequest) returns (ServerReply) {}
+    rpc Create (CreateRequest) returns (ServerReply) {}
+    rpc Read (ReadRequest) returns (ServerReply) {}
+    rpc Update (UpdateRequest) returns (ServerReply) {}
+    rpc Delete (DeleteRequest) returns (ServerReply) {}
 }
 
-// Definindo mensagens de requisicao e resposta.
 message CreateRequest {
     int32 chave = 1;
     string valor = 2;

@@ -55,23 +55,23 @@ def run():
         if operacao.lower() == 'create':
             chave = int(comando[1])
             valor = comando[2]
-            mensagem = db_stub.create(remotedb_pb2.CreateRequest(chave=chave, valor=valor)).mensagem
+            mensagem = db_stub.Create(remotedb_pb2.CreateRequest(chave=chave, valor=valor)).mensagem
             print(mensagem)
 
         elif operacao.lower() == 'read':
             chave = int(comando[1])
-            mensagem = db_stub.read(remotedb_pb2.ReadRequest(chave=chave)).mensagem
+            mensagem = db_stub.Read(remotedb_pb2.ReadRequest(chave=chave)).mensagem
             print(mensagem)
 
         elif operacao.lower() == 'update':
             chave = int(comando[1])
             valor = comando[2]
-            mensagem = db_stub.update(remotedb_pb2.UpdateRequest(chave=chave, valor=valor)).mensagem
+            mensagem = db_stub.Update(remotedb_pb2.UpdateRequest(chave=chave, valor=valor)).mensagem
             print(mensagem)
 
         elif operacao.lower() == 'delete':
             chave = int(comando[1])
-            mensagem = db_stub.delete(remotedb_pb2.DeleteRequest(chave=chave)).mensagem
+            mensagem = db_stub.Delete(remotedb_pb2.DeleteRequest(chave=chave)).mensagem
             print(mensagem)
 
         elif operacao.lower() == 'sair':

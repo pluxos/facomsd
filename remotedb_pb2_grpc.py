@@ -14,23 +14,23 @@ class RemoteDBStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.create = channel.unary_unary(
-        '/remotedb.RemoteDB/create',
+    self.Create = channel.unary_unary(
+        '/remotedb.RemoteDB/Create',
         request_serializer=remotedb__pb2.CreateRequest.SerializeToString,
         response_deserializer=remotedb__pb2.ServerReply.FromString,
         )
-    self.read = channel.unary_unary(
-        '/remotedb.RemoteDB/read',
+    self.Read = channel.unary_unary(
+        '/remotedb.RemoteDB/Read',
         request_serializer=remotedb__pb2.ReadRequest.SerializeToString,
         response_deserializer=remotedb__pb2.ServerReply.FromString,
         )
-    self.update = channel.unary_unary(
-        '/remotedb.RemoteDB/update',
+    self.Update = channel.unary_unary(
+        '/remotedb.RemoteDB/Update',
         request_serializer=remotedb__pb2.UpdateRequest.SerializeToString,
         response_deserializer=remotedb__pb2.ServerReply.FromString,
         )
-    self.delete = channel.unary_unary(
-        '/remotedb.RemoteDB/delete',
+    self.Delete = channel.unary_unary(
+        '/remotedb.RemoteDB/Delete',
         request_serializer=remotedb__pb2.DeleteRequest.SerializeToString,
         response_deserializer=remotedb__pb2.ServerReply.FromString,
         )
@@ -40,41 +40,30 @@ class RemoteDBServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def create(self, request, context):
-    """create
-    ------
-    Cria uma nova entrada no banco de dados associando uma entrada a
-    uma chave inteira.
-    """
+  def Create(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def read(self, request, context):
-    """read
-    ----
-    Le um registro do banco. Dado uma chave, retorna um registro
-    associado a chave ou null.
-    """
+  def Read(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def update(self, request, context):
-    """update
-    ------
-    Atualiza um registro no banco de dados. Dado uma chave e um novo
-    valor, a aplicacao deve atualizar o valor, se ele existir.
-    """
+  def Update(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def delete(self, request, context):
-    """delete
-    ------
-    Apaga um registro do banco de dados.
-    """
+  def Delete(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -82,23 +71,23 @@ class RemoteDBServicer(object):
 
 def add_RemoteDBServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'create': grpc.unary_unary_rpc_method_handler(
-          servicer.create,
+      'Create': grpc.unary_unary_rpc_method_handler(
+          servicer.Create,
           request_deserializer=remotedb__pb2.CreateRequest.FromString,
           response_serializer=remotedb__pb2.ServerReply.SerializeToString,
       ),
-      'read': grpc.unary_unary_rpc_method_handler(
-          servicer.read,
+      'Read': grpc.unary_unary_rpc_method_handler(
+          servicer.Read,
           request_deserializer=remotedb__pb2.ReadRequest.FromString,
           response_serializer=remotedb__pb2.ServerReply.SerializeToString,
       ),
-      'update': grpc.unary_unary_rpc_method_handler(
-          servicer.update,
+      'Update': grpc.unary_unary_rpc_method_handler(
+          servicer.Update,
           request_deserializer=remotedb__pb2.UpdateRequest.FromString,
           response_serializer=remotedb__pb2.ServerReply.SerializeToString,
       ),
-      'delete': grpc.unary_unary_rpc_method_handler(
-          servicer.delete,
+      'Delete': grpc.unary_unary_rpc_method_handler(
+          servicer.Delete,
           request_deserializer=remotedb__pb2.DeleteRequest.FromString,
           response_serializer=remotedb__pb2.ServerReply.SerializeToString,
       ),

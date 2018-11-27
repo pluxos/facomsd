@@ -11,22 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-'''
+"""
 --------------------------------------------------------------------------
 * Servidor da aplicacao. Esse servidor armazena parte do banco de dados  *
 * distribuido entre outros servidores.                                   *
 --------------------------------------------------------------------------
-'''
+"""
 from concurrent import futures
 from multiprocessing.context import Process
-from threading import Lock
 
 import grpc
+import os
 import queue
 import random
 import remotedb_pb2
 import remotedb_pb2_grpc
-import sys
+import threading
 import time
 import utils
 
@@ -35,253 +35,351 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 
 class IDGenerator(object):
-    '''
-    Gera e mantem controle dos identificadores gerados de forma aleatoria
-    para o programa.
-    '''
+    """
+    Gera ID's de forma automatica para ser usado na troca de mensagens
+    entre threads.
+    """
+
 
     def __init__(self):
-        self.gerados = set([])
+        self.identificadores = set()
+
 
     def get_id(self):
-        '''
-        Gera um novo identificador aleatorio,
-        '''
-        lck = Lock()
-        lck.acquire()
-        i = random.randint(0, 2**32 - 1)
+        """
+        Gera um identificador unico para identificar uma mensagem de forma
+        unica no canal de mensagens.
+        """
+        lock = threading.Lock()
+        lock.acquire()
+        
+        identificador = random.randint(0, 2**32 - 1)
 
-        while i in self.gerados:
-            i = random.randint(0, 2**32 - 1)
+        while identificador in self.identificadores:
+            identificador = random.randint(0, 2**32 - 1)
 
-        self.gerados.add(i)
-        lck.release()
+        self.identificadores.add(identificador)
 
-        return i
+        lock.release()
+
 
     def remove_id(self, identificador):
-        if identificador in self.gerados:
-            self.gerados.remove(identificador)
+        """
+        Remove um identificador do conjunto de identificadores do objeto.
+        Se o Identificador nao existe, nada acontece.
+        @param identificador: um identificador previamente gerado.
+        """
+        lock = threading.Lock()
+        lock.acquire()
+
+        if identificador in self.identificadores:
+            self.identificadores.remove(identificador)
+
+        lock.release()
 
 
-# Implementacao concreta da interface definida em 'remotedb.proto'. Os
-# metodos e suas devidas respostas estao implementados abaixo de acordo
-# com a interface.
+_ID_GENERATOR = IDGenerator()
+
+
 class RemoteDB(remotedb_pb2_grpc.RemoteDBServicer):
+    """
+    Implementacao concreta da interface definida em remotedb.proto.
+    """
 
-    def __init__(self, requisicoes, inicio, fim, repasse, mensagens, gerador_id):
+
+    def __init__(self, requisicoes, repasse, intervalo, mensagens):
+        super().__init__()
         self.requisicoes = requisicoes
-        self.inicio = inicio
-        self.fim = fim
         self.repasse = repasse
+        self.intervalo = intervalo
         self.mensagens = mensagens
-        self.gerador_id = gerador_id
 
-    def create(self, request, context):
-        '''
-        Cria uma nova entrada no banco de dados remoto.
-        '''
+
+    def Create(self, request, context):
+        """
+        Cria uma nova entrada no banco de dados.
+        """
         chave = request.chave
         valor = request.valor
 
-        # Criando um identificador unico para a requisicao
-        identificador = self.gerador_id.get_id()
-        print('AQUI????')
+        identificador = _ID_GENERATOR.get_id()
+        inicio, fim = self.intervalo
 
-        item = ('create', identificador, chave, valor)
+        self.mensagens.setdefault(identificador, queue.Queue())
 
-        print(item)
-        # Criando uma celula para ser a fila de mensagens de respostas dos
-        # clientes.
-        self.mensagens.setdefault(identificador, queue.Queue(maxsize=1))
+        item = (identificador, 'create', chave, valor)
 
-        # Verifica se a chave pertence ao intervalo de chaves do servidor.
-        if chave in range(self.inicio, self.fim + 1):
+        # Verifica se a chave pertence ao intervalo do servidor
+        if chave in range(inicio, fim + 1):
             self.requisicoes.put(item)
         else:
             self.repasse.put(item)
 
-        # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
+
+        _ID_GENERATOR.remove_id(identificador)
         del(self.mensagens[identificador])
-        # Removendo o identificador da mensagem
-        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
-    def read(self, request, context):
-        '''
-        Le um registro do banco de dados.
-        '''
+
+    def Read(self, request, context):
+        """
+        Le um registro no banco de dados.
+        """
         chave = request.chave
 
-        # Criando um identificador unico para a requisicao
-        identificador = self.gerador_id.get_id()
+        identificador = _ID_GENERATOR.get_id()
+        inicio, fim = self.intervalo
 
-        item = ('read', identificador, chave)
+        self.mensagens[identificador] = queue.Queue()
 
-        # Criando uma celula para ser a fila de mensagens de respostas dos
-        # clientes.
-        self.mensagens.setdefault(identificador, queue.Queue(maxsize=1))
+        item = (identificador, '', chave)
 
-        # Verifica se a chave pertence ao intervalo de chaves do servidor.
-        if chave in range(self.inicio, self.fim + 1):
+        # Verifica se a chave pertence ao intervalo do servidor
+        if chave in range(inicio, fim + 1):
             self.requisicoes.put(item)
         else:
             self.repasse.put(item)
 
-        # Se nao houver mensagens, a thread atual fica bloqueada
-        mensagem = self.mensagens.get(identificador).get()
-        del(self.mensagens[identificador])
-        # Removendo o identificador da mensagem
-        self.gerador_id.remove_id(identificador)
+        mensagem = self.mensagens[identificador].get()
+
+        _ID_GENERATOR.remove_id(identificador)
+        del(mensagem[identificador])
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
-    def update(self, request, context):
-        '''
-        Atualiza um registro no banco.
-        '''
+
+    def Update(self, request, context):
+        """
+        Atualiza um registro no banco de dados.
+        """
         chave = request.chave
         valor = request.valor
 
-        # Criando um identificador unico para a requisicao
-        identificador = self.gerador_id.get_id()
+        identificador = _ID_GENERATOR.get_id()
+        inicio, fim = self.intervalo
 
-        item = ('update', identificador, chave, valor)
+        self.mensagens.setdefault(identificador, queue.Queue())
 
-        # Criando uma celula para ser a fila de mensagens de respostas dos
-        # clientes.
-        self.mensagens.setdefault(identificador, queue.Queue(maxsize=1))
+        item = (identificador, 'update', chave, valor)
 
-        # Verifica se a chave pertence ao intervalo de chaves do servidor.
-        if chave in range(self.inicio, self.fim + 1):
+        # Verifica se a chave pertence ao intervalo do servidor
+        if chave in range(inicio, fim + 1):
             self.requisicoes.put(item)
         else:
             self.repasse.put(item)
 
-        # Se nao houver mensagens, a thread atual fica bloqueada
         mensagem = self.mensagens.get(identificador).get()
+
+        _ID_GENERATOR.remove_id(identificador)
         del(self.mensagens[identificador])
-        # Removendo o identificador da mensagem
-        self.gerador_id.remove_id(identificador)
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
 
-    def delete(self, request, context):
-        '''
-        Apaga um registro no banco.
-        '''
+
+    def Delete(self, request, context):
+        """
+        Apaga um registro do banco de dados.
+        """
         chave = request.chave
 
-        # Criando um identificador unico para a requisicao
-        identificador = self.gerador_id.get_id()
+        identificador = _ID_GENERATOR.get_id()
+        inicio, fim = self.intervalo
 
-        item = ('delete', identificador, chave)
+        self.mensagens[identificador] = queue.Queue()
 
-        # Criando uma celula para ser a fila de mensagens de respostas dos
-        # clientes.
-        self.mensagens.setdefault(identificador, queue.Queue(maxsize=1))
+        item = (identificador, '', chave)
 
-        # Verifica se a chave pertence ao intervalo de chaves do servidor.
-        if chave in range(self.inicio, self.fim + 1):
+        # Verifica se a chave pertence ao intervalo do servidor
+        if chave in range(inicio, fim + 1):
             self.requisicoes.put(item)
         else:
             self.repasse.put(item)
 
-        # Se nao houver mensagens, a thread atual fica bloqueada
-        mensagem = self.mensagens.get(identificador).get()
-        del(self.mensagens[identificador])
-        # Removendo o identificador da mensagem
-        self.gerador_id.remove_id(identificador)
+        mensagem = self.mensagens[identificador].get()
+
+        _ID_GENERATOR.remove_id(identificador)
+        del(mensagem[identificador])
 
         return remotedb_pb2.ServerReply(mensagem=mensagem)
+
+
+def recupera_banco(caminho_log, caminho_snaps):
+    """
+    Recupera o banco de dados a partir dos ultimos logs e snapshots
+    mantidos em disco.
+    """
+    banco = {}
+
+    # Listando os arquivos nas pastas de log e de snapthots
+    logs = os.listdir(caminho_log)
+    snaps = os.listdir(caminho_snaps)
+    i = len(snaps) - 1
+
+    if len(logs) == len(snaps) and len(logs) > 0:
+        # Abrindo os arquivos de log
+        for arquivo in reversed(snaps):
+            try:
+                snap = open('%s/%s' % (caminho_snaps, arquivo), 'r')
+                banco = dict(eval(snap.read()))
+                snap.close()
+                break
+            except Exception:
+                i -= 1
+
+        for arquivo in logs[i:]:
+            try:
+                log = open('%s/%s' % (caminho_snaps, arquivo), 'r')
+                
+                # Aplicando as alteracoes conforme determinado pelo
+                # arquivo de log.
+                for linha in log:
+                    comando = linha.split(' ')
+                    nome = linha[0]
+
+                    if nome == 'create':
+                        chave = int(comando[1])
+                        valor = comando[2]
+
+                        if not banco.get(chave):
+                            banco.setdefault(chave, valor)
+
+                    elif nome == 'update':
+                        chave = int(comando[1])
+                        valor = comando[2]
+
+                        if banco.get(chave):
+                            banco.update({chave: valor})
+
+                    elif nome == 'delete':
+                        chave = int(comando[1])
+
+                        if banco.get(chave):
+                            del(banco[chave])
+
+                log.close()
+            except Exception:
+                pass
+
+    return banco
 
 
 def serve(*args):
-    pid = args[0]
-    inicio = args[1]
-    fim = args[2]
+    # Parametros de inicializacao do processo servidor
+    pid = int(args[0])
+    inicio = int(args[1])
+    fim = int(args[2])
 
-    print('Iniciando o processo...')
-    print('ID: %d' % (pid))
-    print('Faixa: [%d, %d]' % (inicio, fim))
-
-    # Abrindo o arquivo de configuracoes do servidor.
-    arquivo = open('.\\configs.ini', 'r')
+    # Arquivo de configuracao do servidor
+    arquivo = open('./configs.ini', 'r')
     configs = dict(eval(arquivo.read()))
     arquivo.close()
 
-    addr, port = configs.get(pid)
+    # Criando um stub para trocar mensagens com o servidor vizinho
+    channel_prox = grpc.insecure_channel('%s:%d' % (configs.get((pid + 1) % configs.get('servidores'))))
+    stub_prox = remotedb_pb2_grpc.RemoteDBStub(channel_prox)
 
-    # Criando stubs para o proximo servidor
-    if pid == configs.get('servidores') - 1:
-        channel_prox = grpc.insecure_channel('%s:%d' % (configs.get(0)))
-    else:
-        channel_prox = grpc.insecure_channel('%s:%d' % (configs.get(pid + 1)))
+    # Carregando o banco de dados em memoria ou criando ele inicialmente
+    # vazio
+    banco = recupera_banco('./log/%d' % (pid), './snapshots/%d' % (pid))
+  
+    # Esvaziando as pastas de logs e de snapshots
+    for arquivo in os.listdir('./log/%d' % (pid)):
+        os.remove('./log/%d/%s' % (pid, arquivo))
 
-    prox_stub = remotedb_pb2_grpc.RemoteDBStub(channel_prox)
+    for arquivo in os.listdir('./snapshots/%d' % (pid)):
+        os.remove('./snapshots/%d/%s' % (pid, arquivo))
 
-    # Criando o banco de dados em memoria inicialmente vazio
-    banco = {}
+    # Realizando o snapshot inicial e gravando o primeiro arquivo de log
+    snap = open('./snapshots/%d/snap.0' % (pid), 'w')
+    snap.write(str(banco) + '\n')
+    snap.close()
+    log = open('./log/%d/log.0' % (pid), 'w')
+    log.write('\n')
+    log.close()
 
-    # Filas para processamento de requisicoes
-    requisicoes = queue.Queue() # F1 -> requisicoes
-    log = queue.Queue()         # F2 -> guardar no log
-    database = queue.Queue()    # F3 -> guardar no banco de dados
-    repasse = queue.Queue()     # F4 -> repassar para outros servidores
+    # Outros recursos alocados usados nas threads
+    versao = 0
+    log_fd = open('./log/%d/log.%d' % (pid, versao), 'w')
 
-    # Criando um canal de mensagens para o servidor
+    # Filas para processamento de requisicao
+    fila_requisicoes = queue.Queue()  # F1
+    fila_log = queue.Queue()          # F2
+    fila_banco = queue.Queue()        # F3
+    fila_repasse = queue.Queue()      # F4
+
+    # Canal de troca de mensagens entre threads do servidor
     mensagens = {}
 
-    # Instanciando as threads do servidor
-    consumidor = utils.ConsumerThread(requisicoes, [log, database])
-    db = utils.DatabaseThread(banco, database, mensagens)
-    fwd = utils.ForwardThread(prox_stub, repasse, mensagens)
+    # Instanciando threads para processar os comandos das filas
+    consumidor = utils.Consumidor(fila_requisicoes, (fila_log, fila_banco))
+    logger = utils.Logger(fila_log, log_fd)
+    processador = utils.Processador(fila_banco, banco, mensagens)
+    repasse = utils.Repasse(fila_repasse, stub_prox, mensagens)
 
+    # Iniciando as threads
     consumidor.start()
-    db.start()
-    fwd.start()
+    logger.start()
+    processador.start()
+    repasse.start()
 
-    # Instanciando e inicializando o servidor
+    # Carregando o servidor
     servidor = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    remotedb_pb2_grpc.add_RemoteDBServicer_to_server(RemoteDB(requisicoes, inicio, fim, repasse, mensagens, IDGenerator()), servidor)
-    servidor.add_insecure_port('%s:%d' % (addr, port))
+    remotedb_pb2_grpc.add_RemoteDBServicer_to_server(RemoteDB(fila_requisicoes, fila_repasse, (inicio, fim), mensagens), servidor)
+    servidor.add_insecure_port('%s:%d' % (configs.get(pid)))
     servidor.start()
+
+    try:
+        while True:
+            # Incrementa a versao do novo snapshot e log
+            versao += 1
+            versao_antiga = versao - 3
+
+            logger.pause()
+            processador.pause()
+            
+            # time.sleep(_ONE_DAY_IN_SECONDS)
+            time.sleep(5)
+            snap = open('./snapshots/%d/snap.%d' % (pid, versao), 'w')
+            snap.write(str(banco) + '\n')
+            snap.close()
+
+            log_antigo = log_fd
+            log_fd = open('./log/%d/log.%d' % (pid, versao), 'w')
+            log_antigo.close()
+
+            # Excluindo as versoes mais antigas
+            if versao_antiga >= 0:
+                os.remove('./log/%d/log.%d' % (pid, versao_antiga))
+                os.remove('./snapshots/%d/snap.%d' % (pid, versao_antiga))
+
+            time.sleep(2)
+            processador.cont()
+            logger.cont()
+    except KeyboardInterrupt:
+        print('Matando o servidor %d...' % (pid))
+        servidor.stop(0)
+
+
+
+if __name__ == '__main__':
+    launcher = open('./launcher', 'r')
+    processos = []
+
+    for linha in launcher:
+        processos.append(Process(target=serve, args=linha.split(' ')))
+
+    for p in processos:
+        p.start()
 
     try:
         while True:
             time.sleep(_ONE_DAY_IN_SECONDS)
     except KeyboardInterrupt:
-        servidor.stop()
+        print('Finalizando processos...')
 
-
-if __name__ == '__main__':
-    # Inicializando multiplos processos simultaneamente
-    launcher = open('.\\launcher', 'r')
-    processos = []
-
-    for linha in launcher:
-        args = linha.split(' ')
-
-        pid = int(args[0])
-        inicio = int(args[1])
-        fim = int(args[2])
-
-        # Instanciando os processos dos servidores
-        processos.append(Process(target=serve, args=(pid, inicio, fim)))
-
-    # Instanciando diferentes processos servidores
-    for p in processos:
-        p.start()
-
-    print('Iniciando processos!')
-
-    try:
-        while True: pass
-    except KeyboardInterrupt:
-        print('Finalizando processos!')
-
-        # Matando todos os processos
         for p in processos:
             p.kill()
+
+    launcher.close()
