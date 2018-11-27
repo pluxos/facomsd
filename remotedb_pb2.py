@@ -19,28 +19,28 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='remotedb',
   syntax='proto3',
   serialized_options=_b('\n\020io.grpc.remotedbB\rRemoteDBProtoP\001\242\002\003RDB'),
-  serialized_pb=_b('\n\x0eremotedb.proto\x12\x08remotedb\"-\n\rCreateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1c\n\x0bReadRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"-\n\rUpdateRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x1e\n\rDeleteRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"\x1f\n\x0bServerReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t2\xf6\x01\n\x08RemoteDB\x12:\n\x06\x43reate\x12\x17.remotedb.CreateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x36\n\x04Read\x12\x15.remotedb.ReadRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06Update\x12\x17.remotedb.UpdateRequest\x1a\x15.remotedb.ServerReply\"\x00\x12:\n\x06\x44\x65lete\x12\x17.remotedb.DeleteRequest\x1a\x15.remotedb.ServerReply\"\x00\x42)\n\x10io.grpc.remotedbB\rRemoteDBProtoP\x01\xa2\x02\x03RDBb\x06proto3')
+  serialized_pb=_b('\n\x0eremotedb.proto\x12\x08remotedb\")\n\tKVRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\x12\r\n\x05valor\x18\x02 \x01(\t\"\x19\n\x08KRequest\x12\r\n\x05\x63have\x18\x01 \x01(\x05\"\t\n\x07Request\"\x1f\n\x0bServerReply\x12\x10\n\x08mensagem\x18\x01 \x01(\t2\x9f\x02\n\x08RemoteDB\x12\x36\n\x06\x63reate\x12\x13.remotedb.KVRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x33\n\x04read\x12\x12.remotedb.KRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x36\n\x06update\x12\x13.remotedb.KVRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x35\n\x06\x64\x65lete\x12\x12.remotedb.KRequest\x1a\x15.remotedb.ServerReply\"\x00\x12\x37\n\tget_range\x12\x11.remotedb.Request\x1a\x15.remotedb.ServerReply\"\x00\x42)\n\x10io.grpc.remotedbB\rRemoteDBProtoP\x01\xa2\x02\x03RDBb\x06proto3')
 )
 
 
 
 
-_CREATEREQUEST = _descriptor.Descriptor(
-  name='CreateRequest',
-  full_name='remotedb.CreateRequest',
+_KVREQUEST = _descriptor.Descriptor(
+  name='KVRequest',
+  full_name='remotedb.KVRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='chave', full_name='remotedb.CreateRequest.chave', index=0,
+      name='chave', full_name='remotedb.KVRequest.chave', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='valor', full_name='remotedb.CreateRequest.valor', index=1,
+      name='valor', full_name='remotedb.KVRequest.valor', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -59,19 +59,19 @@ _CREATEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=28,
-  serialized_end=73,
+  serialized_end=69,
 )
 
 
-_READREQUEST = _descriptor.Descriptor(
-  name='ReadRequest',
-  full_name='remotedb.ReadRequest',
+_KREQUEST = _descriptor.Descriptor(
+  name='KRequest',
+  full_name='remotedb.KRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='chave', full_name='remotedb.ReadRequest.chave', index=0,
+      name='chave', full_name='remotedb.KRequest.chave', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -89,32 +89,18 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=75,
-  serialized_end=103,
+  serialized_start=71,
+  serialized_end=96,
 )
 
 
-_UPDATEREQUEST = _descriptor.Descriptor(
-  name='UpdateRequest',
-  full_name='remotedb.UpdateRequest',
+_REQUEST = _descriptor.Descriptor(
+  name='Request',
+  full_name='remotedb.Request',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
-    _descriptor.FieldDescriptor(
-      name='chave', full_name='remotedb.UpdateRequest.chave', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='valor', full_name='remotedb.UpdateRequest.valor', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -127,39 +113,8 @@ _UPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=105,
-  serialized_end=150,
-)
-
-
-_DELETEREQUEST = _descriptor.Descriptor(
-  name='DeleteRequest',
-  full_name='remotedb.DeleteRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='chave', full_name='remotedb.DeleteRequest.chave', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=152,
-  serialized_end=182,
+  serialized_start=98,
+  serialized_end=107,
 )
 
 
@@ -189,44 +144,36 @@ _SERVERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=184,
-  serialized_end=215,
+  serialized_start=109,
+  serialized_end=140,
 )
 
-DESCRIPTOR.message_types_by_name['CreateRequest'] = _CREATEREQUEST
-DESCRIPTOR.message_types_by_name['ReadRequest'] = _READREQUEST
-DESCRIPTOR.message_types_by_name['UpdateRequest'] = _UPDATEREQUEST
-DESCRIPTOR.message_types_by_name['DeleteRequest'] = _DELETEREQUEST
+DESCRIPTOR.message_types_by_name['KVRequest'] = _KVREQUEST
+DESCRIPTOR.message_types_by_name['KRequest'] = _KREQUEST
+DESCRIPTOR.message_types_by_name['Request'] = _REQUEST
 DESCRIPTOR.message_types_by_name['ServerReply'] = _SERVERREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-CreateRequest = _reflection.GeneratedProtocolMessageType('CreateRequest', (_message.Message,), dict(
-  DESCRIPTOR = _CREATEREQUEST,
+KVRequest = _reflection.GeneratedProtocolMessageType('KVRequest', (_message.Message,), dict(
+  DESCRIPTOR = _KVREQUEST,
   __module__ = 'remotedb_pb2'
-  # @@protoc_insertion_point(class_scope:remotedb.CreateRequest)
+  # @@protoc_insertion_point(class_scope:remotedb.KVRequest)
   ))
-_sym_db.RegisterMessage(CreateRequest)
+_sym_db.RegisterMessage(KVRequest)
 
-ReadRequest = _reflection.GeneratedProtocolMessageType('ReadRequest', (_message.Message,), dict(
-  DESCRIPTOR = _READREQUEST,
+KRequest = _reflection.GeneratedProtocolMessageType('KRequest', (_message.Message,), dict(
+  DESCRIPTOR = _KREQUEST,
   __module__ = 'remotedb_pb2'
-  # @@protoc_insertion_point(class_scope:remotedb.ReadRequest)
+  # @@protoc_insertion_point(class_scope:remotedb.KRequest)
   ))
-_sym_db.RegisterMessage(ReadRequest)
+_sym_db.RegisterMessage(KRequest)
 
-UpdateRequest = _reflection.GeneratedProtocolMessageType('UpdateRequest', (_message.Message,), dict(
-  DESCRIPTOR = _UPDATEREQUEST,
+Request = _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), dict(
+  DESCRIPTOR = _REQUEST,
   __module__ = 'remotedb_pb2'
-  # @@protoc_insertion_point(class_scope:remotedb.UpdateRequest)
+  # @@protoc_insertion_point(class_scope:remotedb.Request)
   ))
-_sym_db.RegisterMessage(UpdateRequest)
-
-DeleteRequest = _reflection.GeneratedProtocolMessageType('DeleteRequest', (_message.Message,), dict(
-  DESCRIPTOR = _DELETEREQUEST,
-  __module__ = 'remotedb_pb2'
-  # @@protoc_insertion_point(class_scope:remotedb.DeleteRequest)
-  ))
-_sym_db.RegisterMessage(DeleteRequest)
+_sym_db.RegisterMessage(Request)
 
 ServerReply = _reflection.GeneratedProtocolMessageType('ServerReply', (_message.Message,), dict(
   DESCRIPTOR = _SERVERREPLY,
@@ -244,42 +191,51 @@ _REMOTEDB = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=218,
-  serialized_end=464,
+  serialized_start=143,
+  serialized_end=430,
   methods=[
   _descriptor.MethodDescriptor(
-    name='Create',
-    full_name='remotedb.RemoteDB.Create',
+    name='create',
+    full_name='remotedb.RemoteDB.create',
     index=0,
     containing_service=None,
-    input_type=_CREATEREQUEST,
+    input_type=_KVREQUEST,
     output_type=_SERVERREPLY,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='Read',
-    full_name='remotedb.RemoteDB.Read',
+    name='read',
+    full_name='remotedb.RemoteDB.read',
     index=1,
     containing_service=None,
-    input_type=_READREQUEST,
+    input_type=_KREQUEST,
     output_type=_SERVERREPLY,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='Update',
-    full_name='remotedb.RemoteDB.Update',
+    name='update',
+    full_name='remotedb.RemoteDB.update',
     index=2,
     containing_service=None,
-    input_type=_UPDATEREQUEST,
+    input_type=_KVREQUEST,
     output_type=_SERVERREPLY,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='Delete',
-    full_name='remotedb.RemoteDB.Delete',
+    name='delete',
+    full_name='remotedb.RemoteDB.delete',
     index=3,
     containing_service=None,
-    input_type=_DELETEREQUEST,
+    input_type=_KREQUEST,
+    output_type=_SERVERREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_range',
+    full_name='remotedb.RemoteDB.get_range',
+    index=4,
+    containing_service=None,
+    input_type=_REQUEST,
     output_type=_SERVERREPLY,
     serialized_options=None,
   ),

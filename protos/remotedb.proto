@@ -22,30 +22,49 @@ option objc_class_prefix = "RDB";
 package remotedb;
 
 service RemoteDB {
-    rpc Create (CreateRequest) returns (ServerReply) {}
-    rpc Read (ReadRequest) returns (ServerReply) {}
-    rpc Update (UpdateRequest) returns (ServerReply) {}
-    rpc Delete (DeleteRequest) returns (ServerReply) {}
+    // create
+    // ------
+    // Cria uma nova entrada no banco de dados distribuidos.
+    rpc create(KVRequest) returns (ServerReply) {}
+
+    // read
+    // ----
+    // Le um registro no banco de dados distribuidos.
+    rpc read(KRequest) returns (ServerReply) {}
+
+    // update
+    // ------
+    // Atualiza um registro no banco de dados distribuido.
+    rpc update(KVRequest) returns (ServerReply) {}
+
+    // delete
+    // ------
+    // Apaga um registro no banco de dados distribuido.
+    rpc delete(KRequest) returns (ServerReply) {}
+
+    // get_range
+    // Pergunta para um servidor qual o intervalo de chaves que ele eh
+    // responsavel.
+    rpc get_range(Request) returns (ServerReply) {}
 }
 
-message CreateRequest {
+// Uma requisicao que carrega chave e valor
+message KVRequest {
     int32 chave = 1;
     string valor = 2;
 }
 
-message ReadRequest {
+// Uma requisicao que carrega apenas uma chave
+message KRequest {
     int32 chave = 1;
 }
 
-message UpdateRequest {
-    int32 chave = 1;
-    string valor = 2;
+// Uma requisicao vazia.
+message Request {
+
 }
 
-message DeleteRequest {
-    int32 chave = 1;
-}
-
+// Resposta do servidor
 message ServerReply {
     string mensagem = 1;
 }
