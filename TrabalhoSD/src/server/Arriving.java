@@ -14,7 +14,6 @@ public class Arriving {
     }
 
     public Integer getmPort() {
-
         return mPort;
     }
 

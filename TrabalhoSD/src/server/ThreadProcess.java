@@ -45,7 +45,7 @@ public class ThreadProcess extends Thread {
                     getInstance().addToRun( thread.getId() );
                     thread.start();
                 }
-            } catch ( IOException e ) { e.printStackTrace(); }
+            } catch ( IOException e ) { System.out.println(e.getMessage()); }
         }
     }
 }
