@@ -20,11 +20,20 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
     public void create(DataRequest request, StreamObserver<ServerResponse> responseObserver) {
         System.out.println("Request CREATE received from client");
 
-        data.put(request.getKey(), request.getData());
+        ServerResponse response;
 
-        ServerResponse response = ServerResponse.newBuilder()
-                .setResponse("Data saved!")
-                .build();
+        if (data.containsKey(request.getKey())) {
+            response = ServerResponse.newBuilder()
+                    .setResponse("Key already exists!")
+                    .build();
+        }
+        else {
+            data.put(request.getKey(), request.getData());
+
+            response = ServerResponse.newBuilder()
+                    .setResponse("Data saved! Key: " + request.getKey())
+                    .build();
+        }
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -59,8 +68,10 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
         ServerResponse response;
 
         if (checkIfExists(request.getKey())) {
+            data.put(request.getKey(), request.getData());
+
             response = ServerResponse.newBuilder()
-                    .setResponse(data.put(request.getKey(), request.getData()))
+                    .setResponse("Data updated!")
                     .build();
         }
 

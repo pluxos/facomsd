@@ -1,0 +1,23 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package org.kim.grpc;
+
+message KeyRequest {
+    int64 key = 1;
+}
+
+message DataRequest {
+    int64 Key = 1;
+    string data = 2;
+}
+
+message ServerResponse {
+    string response = 1;
+}
+
+service Service {
+    rpc create(DataRequest) returns (ServerResponse) {}
+    rpc read(KeyRequest)     returns (ServerResponse) {}
+    rpc update(DataRequest) returns (ServerResponse) {}
+    rpc delete(KeyRequest)   returns (ServerResponse) {}
+}
