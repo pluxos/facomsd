@@ -60,6 +60,7 @@ public class ThreadQueueProcess extends Thread {
                         F2.add(command);
                         F3.add(command);
 
+
                         executeCommands();
                     }
 
