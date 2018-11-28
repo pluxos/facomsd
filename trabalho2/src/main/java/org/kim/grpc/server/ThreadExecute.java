@@ -33,99 +33,97 @@ public class ThreadExecute extends Thread {
         while (true) {
             ServerResponse response;
             try {
-                StreamObserver<ServerResponse> responseObserver = F3.take().getObserver();
                 System.out.println("Starting resolving commands...");
-                System.out.println(F3.take().toString());
+                Command commands = F3.take();
+                StreamObserver<ServerResponse> responseObserver = commands.getObserver();
 
-                for (Command commands: F3) {
-                    switch (commands.getType()) {
-                        case "CREATE":
-                            System.out.println("Resolving request CREATE received from client");
+                switch (commands.getType()) {
+                    case "CREATE":
+                        System.out.println("Resolving request CREATE received from client");
 
-                            if (dataStorage.getData().containsKey(commands.getKey())) {
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("Key already exists!")
-                                        .build();
-                            }
+                        if (dataStorage.getData().containsKey(commands.getKey())) {
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("Key already exists!")
+                                    .build();
+                        }
 
-                            else {
-                                dataStorage.setData(commands.getKey(), commands.getData());
+                        else {
+                            dataStorage.setData(commands.getKey(), commands.getData());
 
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("DataStorage saved! Key: " + commands.getKey())
-                                        .build();
-                            }
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("DataStorage saved! Key: " + commands.getKey())
+                                    .build();
+                        }
 
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
 
-                            System.out.println("Commands resolved");
+                        System.out.println("Commands resolved");
 
-                            break;
+                        break;
 
-                        case "READ":
-                            System.out.println("Resolving request READ received from client");
+                    case "READ":
+                        System.out.println("Resolving request READ received from client");
 
-                            if (dataStorage.getData().containsKey(commands.getKey())) {
-                                response = ServerResponse.newBuilder()
-                                        .setResponse(dataStorage.getData().get(commands.getKey()))
-                                        .build();
-                            }
+                        if (dataStorage.getData().containsKey(commands.getKey())) {
+                            response = ServerResponse.newBuilder()
+                                    .setResponse(dataStorage.getData().get(commands.getKey()))
+                                    .build();
+                        }
 
-                            else {
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("Key not found!")
-                                        .build();
-                            }
+                        else {
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("Key not found!")
+                                    .build();
+                        }
 
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
 
-                            break;
+                        break;
 
-                        case "UPDATE":
-                            System.out.println("Resolving request UPDATE received from client");
+                    case "UPDATE":
+                        System.out.println("Resolving request UPDATE received from client");
 
-                            if (dataStorage.getData().containsKey(commands.getKey())) {
-                                dataStorage.setData(commands.getKey(), commands.getData());
+                        if (dataStorage.getData().containsKey(commands.getKey())) {
+                            dataStorage.setData(commands.getKey(), commands.getData());
 
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("DataStorage updated!")
-                                        .build();
-                            }
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("DataStorage updated!")
+                                    .build();
+                        }
 
-                            else {
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("Key not found!")
-                                        .build();
-                            }
+                        else {
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("Key not found!")
+                                    .build();
+                        }
 
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
 
-                            break;
+                        break;
 
-                        case "DELETE":
-                            System.out.println("Resolving request DELETE received from client");
+                    case "DELETE":
+                        System.out.println("Resolving request DELETE received from client");
 
-                            if (dataStorage.getData().containsKey(commands.getKey())) {
-                                dataStorage.removeData(commands.getKey());
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("DataStorage deleted!")
-                                        .build();
-                            }
+                        if (dataStorage.getData().containsKey(commands.getKey())) {
+                            dataStorage.removeData(commands.getKey());
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("DataStorage deleted!")
+                                    .build();
+                        }
 
-                            else {
-                                response = ServerResponse.newBuilder()
-                                        .setResponse("Key not found!")
-                                        .build();
-                            }
+                        else {
+                            response = ServerResponse.newBuilder()
+                                    .setResponse("Key not found!")
+                                    .build();
+                        }
 
-                            responseObserver.onNext(response);
-                            responseObserver.onCompleted();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
 
-                            break;
-                    }
+                        break;
                 }
             }
             catch (InterruptedException e) { System.out.println("Thread Execute Error: " + e.getMessage()); }

@@ -23,7 +23,7 @@ public class ThreadMain extends Thread {
 
     private static void serverIdentify() {
 
-        String fileName = "C:\\Users\\Kim\\Desktop\\trab\\facomsd\\trabalho2\\src\\main\\java\\org\\kim\\grpc\\server\\servers_routes.txt";
+        String fileName = "C:\\Users\\kimr\\Desktop\\facomsd\\trabalho2\\src\\main\\java\\org\\kim\\grpc\\server\\servers_routes.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 
