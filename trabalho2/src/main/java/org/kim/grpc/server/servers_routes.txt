@@ -1,4 +1,2 @@
 Server;1
 Port;8080
-Server;2
-Port;8081

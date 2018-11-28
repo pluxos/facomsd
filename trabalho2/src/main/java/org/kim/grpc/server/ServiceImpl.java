@@ -6,19 +6,26 @@ import org.kim.grpc.KeyRequest;
 import org.kim.grpc.ServerResponse;
 import org.kim.grpc.ServiceGrpc;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 
 public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
 
-    private static Map<Long, String> data = new HashMap<>();
+    private BlockingQueue<Command> F1;
 
-    @org.jetbrains.annotations.Contract(pure = true)
-    private synchronized static boolean checkIfExists(Long key) { return data.containsKey(key); }
+    public ServiceImpl(BlockingQueue<Command> f1) {
+        F1 = f1;
+    }
 
     @Override
     public void create(DataRequest request, StreamObserver<ServerResponse> responseObserver) {
         System.out.println("Request CREATE received from client");
+
+        Command command = new Command("CREATE", request.getKey(), request.getData(), responseObserver);
+
+        F1.add(command);
+
+
+        /*System.out.println("Request CREATE received from client");
 
         ServerResponse response;
 
@@ -31,17 +38,24 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
             data.put(request.getKey(), request.getData());
 
             response = ServerResponse.newBuilder()
-                    .setResponse("Data saved! Key: " + request.getKey())
+                    .setResponse("DataStorage saved! Key: " + request.getKey())
                     .build();
         }
 
         responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        responseObserver.onCompleted();*/
     }
 
     @Override
     public void read(KeyRequest request, StreamObserver<ServerResponse> responseObserver) {
         System.out.println("Request READ received from client");
+
+        Command command = new Command("READ", request.getKey(), responseObserver);
+
+        F1.add(command);
+
+
+        /*System.out.println("Request READ received from client");
 
         ServerResponse response;
 
@@ -58,12 +72,19 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
         }
 
         responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        responseObserver.onCompleted();*/
     }
 
     @Override
     public void update(DataRequest request, StreamObserver<ServerResponse> responseObserver) {
         System.out.println("Request UPDATE received from client");
+
+        Command command = new Command("UPDATE", request.getKey(), request.getData(), responseObserver);
+
+        F1.add(command);
+
+
+        /*System.out.println("Request UPDATE received from client");
 
         ServerResponse response;
 
@@ -71,7 +92,7 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
             data.put(request.getKey(), request.getData());
 
             response = ServerResponse.newBuilder()
-                    .setResponse("Data updated!")
+                    .setResponse("DataStorage updated!")
                     .build();
         }
 
@@ -82,19 +103,26 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
         }
 
         responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        responseObserver.onCompleted();*/
     }
 
     @Override
     public void delete(KeyRequest request, StreamObserver<ServerResponse> responseObserver) {
         System.out.println("Request DELETE received from client");
 
+        Command command = new Command("DELETE", request.getKey(), responseObserver);
+
+        F1.add(command);
+
+
+        /*System.out.println("Request DELETE received from client");
+
         ServerResponse response;
 
         if (checkIfExists(request.getKey())) {
             data.remove(request.getKey());
             response = ServerResponse.newBuilder()
-                    .setResponse("Data deleted!")
+                    .setResponse("DataStorage deleted!")
                     .build();
         }
 
@@ -105,6 +133,6 @@ public class ServiceImpl extends ServiceGrpc.ServiceImplBase {
         }
 
         responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        responseObserver.onCompleted();*/
     }
 }

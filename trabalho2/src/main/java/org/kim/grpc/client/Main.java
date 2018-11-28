@@ -44,7 +44,7 @@ public class Main {
                     key = random.nextInt((MAX - MIN) + 1) + MIN;
 
                     serverResponse = serviceBlockingStub.create(DataRequest.newBuilder()
-                            .setKey(key)
+                            .setKey(2)
                             .setData(value)
                             .build());
                 } while (serverResponse.equals("Key already exists!"));

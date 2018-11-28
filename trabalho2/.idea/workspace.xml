@@ -2,13 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ea19728f-a4df-4b89-8099-2d492dc3c8be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/MenuOptions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TrabalhoSD/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TrabalhoSD/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/DataStorage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadExecute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadQueueProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../TrabalhoSD/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TrabalhoSD/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Kim.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Kim.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/kim/grpc/ServiceOuterClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/kim/grpc/ServiceOuterClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/kim/grpc/server/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/kim/grpc/server/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/kim/grpc/server/ServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/kim/grpc/server/ServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/protobuf/java/org/kim/grpc/ServiceOuterClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/protobuf/java/org/kim/grpc/ServiceOuterClass.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -20,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="94" selection-start-line="19" selection-start-column="94" selection-end-line="19" selection-end-column="94" />
+            <state relative-caret-position="901">
+              <caret line="109" column="92" selection-start-line="109" selection-start-column="92" selection-end-line="109" selection-end-column="92" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#read#0;class#ServiceImpl#0" />
@@ -36,12 +45,46 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
+            <state relative-caret-position="359">
+              <caret line="118" column="39" selection-start-line="118" selection-start-column="39" selection-end-line="118" selection-end-column="39" />
               <folding>
-                <element signature="method#serverIdentify#0;class#Main#0" />
+                <element signature="imports" expanded="true" />
+                <element signature="method#serverIdentify#0;class#ThreadMain#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadQueueProcess.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1130">
+              <caret line="34" column="59" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="526">
+              <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+              <folding>
+                <element signature="method#showMenuOptions#0;class#Main#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadExecute.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="382">
+              <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -54,8 +97,8 @@
       <list>
         <option value="Proto" />
         <option value="Tag Library Descriptor" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -90,11 +133,19 @@
         <option value="$PROJECT_DIR$/src/main/proto/Service.proto" />
         <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
         <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/MenuOptions.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/QueueF1.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/QueueMain.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/DataStorage.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadQueueProcess.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Command.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadMain.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadExecute.java" />
       </list>
     </option>
   </component>
@@ -117,8 +168,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -181,12 +230,15 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543339762515" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543376758922" />
     <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/Novo" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -211,7 +263,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Main (1)">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.kim.grpc.client.Main" />
       <module name="trabalho2" />
@@ -244,8 +296,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main (1)" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -270,6 +322,7 @@
       <workItem from="1543325783203" duration="4830000" />
       <workItem from="1543334891810" duration="4701000" />
       <workItem from="1543348717940" duration="2419000" />
+      <workItem from="1543354393172" duration="14993000" />
     </task>
     <task id="LOCAL-00001" summary="projeto quase pronto">
       <created>1542765920663</created>
@@ -296,21 +349,22 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37647000" />
+    <option name="totallyTimeSpent" value="52640000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1296875" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14322917" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Duplicate detector" weight="0.32910052" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32944915" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32910052" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32910052" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -394,59 +448,126 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/generated-sources/protobuf/grpc-java/org/kim/grpc/ServiceGrpc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
+        <state relative-caret-position="614">
           <caret line="91" column="29" selection-start-line="91" selection-start-column="29" selection-end-line="91" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/QueueMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="9" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="9" />
+        <state relative-caret-position="391">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#573#574#0" expanded="true" />
+            <element signature="e#598#599#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/DataStorage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-140">
-          <caret line="45" column="88" lean-forward="true" selection-start-line="45" selection-start-column="88" selection-end-line="45" selection-end-column="88" />
+        <state relative-caret-position="357">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
           <folding>
-            <element signature="method#showMenuOptions#0;class#Main#0" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#208#209#0" expanded="true" />
+            <element signature="e#235#236#0" expanded="true" />
+            <element signature="e#293#294#0" expanded="true" />
+            <element signature="e#325#326#0" expanded="true" />
+            <element signature="e#362#363#0" expanded="true" />
+            <element signature="e#381#382#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/generated-sources/protobuf/grpc-java/org/kim/grpc/ServiceGrpc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="239" selection-start-line="239" selection-end-line="239" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
-          <folding>
-            <element signature="method#serverIdentify#0;class#Main#0" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="94" selection-start-line="19" selection-start-column="94" selection-end-line="19" selection-end-column="94" />
+        <state relative-caret-position="901">
+          <caret line="109" column="92" selection-start-line="109" selection-start-column="92" selection-end-line="109" selection-end-column="92" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#read#0;class#ServiceImpl#0" />
             <element signature="method#update#0;class#ServiceImpl#0" />
             <element signature="method#delete#0;class#ServiceImpl#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="778">
+          <caret line="49" column="5" lean-forward="true" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#672#673#0" expanded="true" />
+            <element signature="e#699#700#0" expanded="true" />
+            <element signature="e#727#728#0" expanded="true" />
+            <element signature="e#753#754#0" expanded="true" />
+            <element signature="e#784#785#0" expanded="true" />
+            <element signature="e#811#812#0" expanded="true" />
+            <element signature="e#870#871#0" expanded="true" />
+            <element signature="e#901#902#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/client/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+          <folding>
+            <element signature="method#showMenuOptions#0;class#Main#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/servers_routes.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="118" column="39" selection-start-line="118" selection-start-column="39" selection-end-line="118" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#serverIdentify#0;class#ThreadMain#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadQueueProcess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1130">
+          <caret line="34" column="59" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/kim/grpc/server/ThreadExecute.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

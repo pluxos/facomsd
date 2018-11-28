@@ -73,7 +73,7 @@ public final class ServiceOuterClass {
     internal_static_org_kim_grpc_DataRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_kim_grpc_DataRequest_descriptor,
-        new java.lang.String[] { "Key", "Data", });
+        new java.lang.String[] { "Key", "DataStorage", });
     internal_static_org_kim_grpc_ServerResponse_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_org_kim_grpc_ServerResponse_fieldAccessorTable = new
