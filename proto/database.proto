@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+
+service DatabaseOperation {
+        // grpc database operations
+     rpc Create (CrUpRequest) returns (Reply) {}
+     rpc Read (RdDelRequest) returns (Reply) {}
+     rpc Update (CrUpRequest) returns (Reply) {}
+     rpc Delete (RdDelRequest) returns (Reply) {}
+
+}
+
+message CrUpRequest {
+    string chave = 1;
+    string dados = 2;
+}
+
+message RdDelRequest{
+    string chave = 1;
+}
+
+message Reply {
+    string resposta = 1;
+}
