@@ -1,19 +1,21 @@
+from __future__ import absolute_import
 import os
-import configparser
+import ConfigParser
 
 from asyncService import AsyncService
 from time import sleep
+import sys
 
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../../config.py')
 
 class Build_finger_table(AsyncService):
 
     def __init__(self, node):
         AsyncService.__init__(self)
         self.node = node
-        self.wait_time = CONFIG.getint('p2p', 'SLEEP_BUILD_FT')
+        self.wait_time = CONFIG.getint(u'p2p', u'SLEEP_BUILD_FT')
 
 
     def run(self):
@@ -26,23 +28,23 @@ class Build_finger_table(AsyncService):
 
         self.stopEvent.clear()
         self.stopFinish.set()
-        print("Exiting build finger table...")
+        print u"Exiting build finger table..."
 
     def print_table(self):
 
         ft = self.node.fingerTable
         if len(ft) > 1:
-            print("\n")
-            print("My predecessor is ", ft[0][0])
-            print("My successor is   ", ft[1][0])
+            print u"\n"
+            print u"My predecessor is ", ft[0][0]
+            print u"My successor is   ", ft[1][0]
 
             if len(ft) > 2:
-                print("My finger table is [",end="")
-                for i in range(1,len(ft)):
-                    print(ft[i][0],end="")
+                print u"My finger table is [",; sys.stdout.write(u"")
+                for i in xrange(1,len(ft)):
+                    print ft[i][0],; sys.stdout.write(u"")
                     if i != len(ft)-1:
-                        print(', ', end="")
-                print("]")
+                        print u', ',; sys.stdout.write(u"")
+                print u"]"
             else:
-                print("Finger Table empty")
-            print("\n")
+                print u"Finger Table empty"
+            print u"\n"

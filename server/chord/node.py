@@ -1,5 +1,7 @@
+from __future__ import division
+from __future__ import absolute_import
 import sys
-import configparser
+import ConfigParser
 import os
 import socket
 import sched
@@ -14,8 +16,8 @@ from server_side_pb2_grpc import add_P2PServicer_to_server
 from asyncService import AsyncService
 from build_finger_table_task import Build_finger_table
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../../config.py')
 
 timeToSleep = 2
 
@@ -24,15 +26,15 @@ class Node(AsyncService):
     def __init__(self, threadName):
         AsyncService.__init__(self)
 
-        self.port = str(CONFIG.getint('p2p', 'PORT'))
+        self.port = unicode(CONFIG.getint(u'p2p', u'PORT'))
         self.fingerTable = []
         self.setName(threadName)
-        self.host = socket.gethostbyname(socket.getfqdn()) + ":" + self.port
+        self.host = socket.gethostbyname(socket.getfqdn()) + u":" + self.port
 
         self.chord = Chord(self)
 
         self.build_finger_table = Build_finger_table(self)
-        print(sys.argv)
+        print sys.argv
         if len(sys.argv) == 5:
             self.ringIp = sys.argv[1].strip()
             self.mBits  = int(sys.argv[2].strip())
@@ -46,19 +48,19 @@ class Node(AsyncService):
             self.number = int(sys.argv[2])
             self.id     = int(sys.argv[3])
         else:
-            print("Arguments Invalid ([IP] M N ID) '0 < ID <= N'")
+            print u"Arguments Invalid ([IP] M N ID) '0 < ID <= N'"
             sys.exit(1)
 
-        print("My range is: [", self.toID(self.id-1),",", self.toID(self.id),")")
+        print u"My range is: [", self.toID(self.id-1),u",", self.toID(self.id),u")"
 
     def run(self):
         server = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
         add_P2PServicer_to_server(self.chord, server)
-        server.add_insecure_port("0.0.0.0:" + self.port)
+        server.add_insecure_port(u"0.0.0.0:" + self.port)
         server.start()
         self.build_finger_table.start()
         try:
-            print("I'm listen in chord!")
+            print u"I'm listen in chord!"
             while not self.stopEvent.isSet():
                 sleep(timeToSleep)
         except KeyboardInterrupt:
@@ -67,7 +69,7 @@ class Node(AsyncService):
         self.stopFinish.set()
 
     def verify_responsibility(self, id):
-        print("Range entre: ",self.toID(self.id-1), id, self.toID(self.id))
+        print u"Range entre: ",self.toID(self.id-1), id, self.toID(self.id)
         if self.toID(self.id-1) <= id < self.toID(self.id):
             return True
         return False

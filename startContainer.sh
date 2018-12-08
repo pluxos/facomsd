@@ -46,7 +46,7 @@ if [ ! "$stop" == "true" ]; then
             -v `pwd`/grpcDefinitions/:/workspace/grpcDefinitions \
             -v `pwd`/client:/workspace/client \
             facomsd-server:0.1 \
-            python3 -u __init__.py ${M} ${N} 1
+            python   -u __init__.py ${M} ${N} 1
     else
         docker start ${name}
     fi
@@ -55,6 +55,36 @@ fi
 ring_ip=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${name}`
 echo ${name} ' ip is ' ${ring_ip}
 
+echo "Call stop containers"
+for i in `seq 2 ${N}`
+do
+    name="${name_base}_${N}_${i}"
+#    node=false;
+    if [ ! -z "$(docker ps -aq -f name=${name})" ]; then
+#        node=true;
+        echo "I'm here"
+        if [ ! "$(docker ps -aq -f status=exited -f name=${name})" ]; then
+            echo "stopping Container" ${name}
+            docker stop ${name} &
+        fi
+    fi
+done;
+echo "stop containers called!"
+
+echo "Waiting containers stop!"
+while true
+do
+
+    stops=`jobs`
+
+    if [ "$stops" == "" ]; then
+        break;
+    fi
+
+done;
+echo "all containers stopped!"
+
+echo "Starting containers!"
 for i in `seq 2 ${N}`
 do
     name="${name_base}_${N}_${i}"
@@ -68,14 +98,11 @@ do
         fi
 
         if [ "$remove" = true ]; then
-            node=false
-            echo "I'm removing Container" ${name}
-            docker rm ${name}
+                node=false
+                echo "I'm removing Container" ${name}
+                docker rm ${name}
         fi
     fi
-
-    echo $name
-
     if [ ! "$stop" == "true" ]; then
         if [ "$node" = false ]; then
             # run your container
@@ -85,14 +112,14 @@ do
                 -v `pwd`/grpcDefinitions/:/workspace/grpcDefinitions \
                 -v `pwd`/client:/workspace/client \
                 facomsd-server:0.1 \
-                python3 -u __init__.py ${ring_ip} ${M} ${N} ${i}
+                python -u __init__.py ${ring_ip} ${M} ${N} ${i}
         else
             docker start ${name}
         fi
     fi
-    sleep 0.5
-done;
 
+    echo $name
+done;
 #
 #
 #

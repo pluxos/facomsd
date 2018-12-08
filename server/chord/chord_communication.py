@@ -1,20 +1,21 @@
-import configparser
+from __future__ import absolute_import
+import ConfigParser
 import os
 from grpc import insecure_channel
 from server_side_pb2 import ServerInfo, ServerID, FingerTable
 from server_side_pb2_grpc import P2PServicer, P2PStub
 from sd_work_pb2_grpc import ServerStub
-from math import log2, ceil, floor
+from math import log, ceil, floor
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(__file__) + '/../../config.py')
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../../config.py')
 
 class Chord(P2PServicer):
 
     def __init__(self, node):
         self.node = node
-        self.port = str(CONFIG.getint('p2p', 'PORT'))
-        self.client_port = str(CONFIG.getint('all', 'PORT'))
+        self.port = unicode(CONFIG.getint(u'p2p', u'PORT'))
+        self.client_port = unicode(CONFIG.getint(u'all', u'PORT'))
         self.thisHost = self.node.host
 
     def getNeighbors(self, request, context):
@@ -83,7 +84,7 @@ class Chord(P2PServicer):
 
         this = ServerID(host=self.thisHost, id=self.node.id)
 
-        for i in range(1, floor(log2(self.node.number))+1):
+        for i in xrange(1, floor(log(self.node.number, 2))+1):
             ith = ((request.source.id + (1 << (i-1))) % self.node.number)
             ith = self.node.number if ith == 0 else ith
 
@@ -98,19 +99,20 @@ class Chord(P2PServicer):
             try:
                 result = nextStub.build_finger_table(request)
                 request = result
-            except Exception as e:
-                print("Exception", e)
+            except Exception, e:
+                print u"Exception", e
 
         return request
 
 
     def doJoin(self, destiny,  serverInfo):
-        channel = insecure_channel(destiny + ":" + self.port)
+        channel = insecure_channel(destiny + u":" + self.port)
         this = ServerID(host=self.thisHost, id=self.node.id)
         stub = P2PStub(channel)
+        print serverInfo
         near = stub.getNeighbors(serverInfo)
 
-        print(near)
+        print near
         next = self.server_id_to_finger_table(near.next)
         next[2].join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
         #next = (n.serverID, n.source, stubNext)
@@ -129,7 +131,7 @@ class Chord(P2PServicer):
         return stub
 
     def getClientStub(self, server):
-        host = server.host.split(':')[0] + ':' + self.client_port
+        host = server.host.split(u':')[0] + u':' + self.client_port
         channel = insecure_channel(host)
         stub = ServerStub(channel)
         return stub
@@ -146,7 +148,7 @@ class Chord(P2PServicer):
     def link_sorted(self, ft):
         sorted_ft = []
 
-        for i in range(len(ft)):
+        for i in xrange(len(ft)):
             sorted_ft.append( (ft[i][0], i) )
 
         sorted_ft.sort()
@@ -154,7 +156,7 @@ class Chord(P2PServicer):
     def search_by_id(self, target, client_interface=False):
         ft_sorted = self.link_sorted(self.node.fingerTable)
         ft = self.node.fingerTable
-        for i in range(1, len(ft_sorted) + 1):
+        for i in xrange(1, len(ft_sorted) + 1):
             if ft_sorted[-i][0] <= target:
                 # print("Search_by_id found -i : ",self.node.fingerTable[-i][0])
                 if client_interface:

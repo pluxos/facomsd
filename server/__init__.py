@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import sys
-sys.path.append('../grpcDefinitions')
-sys.path.append('./chord')
+sys.path.append(u'../grpcDefinitions')
+sys.path.append(u'./chord')
 
-from queue import Queue
+from Queue import Queue
 
 from reloadDatabase import ReloadDatabase
 from persistent import Persistent
@@ -18,7 +19,7 @@ from time import sleep
 
 class Server(AsyncService):
 
-    def __init__(self, threadName="Server"):
+    def __init__(self, threadName=u"Server"):
         AsyncService.__init__(self)
         self.requests = Queue()
         self.waitLog = Queue()
@@ -57,7 +58,7 @@ class Server(AsyncService):
         self.reloadDatabase.start()
 
         while not self.stopEvent.isSet():
-            sleep(1)
+            sleep(2)
         self.stop()
         self.stopEvent.clear()
         self.stopFinish.set()
@@ -71,7 +72,8 @@ class Server(AsyncService):
 
 
 
-if __name__ == "__main__":
+if __name__ == u"__main__":
     Server().start()
     while True:
+        sleep(24*60*60)
         pass

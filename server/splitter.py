@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import threading
 
-from queue import Empty
+from Queue import Empty
 from asyncService import AsyncService
 from threading import Event
 from time import sleep
@@ -24,18 +25,18 @@ class Splitter(AsyncService):
                 while self.pause.isSet():
                     # print("I'm Paused!")
                     sleep(0.1)
-                connection, request = self.requests.get(True, 1)
+                connection, request = self.requests.get(True, 2)
 
                 id = int(request[1].id.decode())
 
                 if self.node.verify_responsibility(id):
                     self.toPersist.put((connection, request))
-                    if request[0].upper() != "READ" and connection is not None:
+                    if request[0].upper() != u"READ" and connection is not None:
                         self.toLog.put(request)
                 else:
                     self.toRedirect.put((connection, request))
             except Empty:
                 continue
-        print("Exiting Splitter")
+        print u"Exiting Splitter"
         self.stopEvent.clear()
         self.stopFinish.set()

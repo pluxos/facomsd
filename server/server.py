@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 from sd_work_pb2_grpc import ServerServicer
 from sd_work_pb2 import Id, Data, ServerResponse
 
 from grpc import StatusCode
-from queue import Queue
+from Queue import Queue
 
 class Server(ServerServicer):
 
@@ -10,16 +11,16 @@ class Server(ServerServicer):
         self.requests = requests
 
     def create(self, request, context):
-        return self.enqueue_request(request, 'CREATE', context)
+        return self.enqueue_request(request, u'CREATE', context)
 
     def read(self, request, context):
-        return self.enqueue_request(request, 'READ', context)
+        return self.enqueue_request(request, u'READ', context)
 
     def update(self, request, context):
-        return self.enqueue_request(request, 'UPDATE', context)
+        return self.enqueue_request(request, u'UPDATE', context)
 
     def delete(self, request, context):
-        return self.enqueue_request(request, 'DELETE', context)
+        return self.enqueue_request(request, u'DELETE', context)
 
     def enqueue_request(self, request, _type, context):
         pipe = Queue()

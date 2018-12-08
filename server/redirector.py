@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from asyncService import AsyncService
-from queue import Empty
+from Queue import Empty
 from grpc import StatusCode
 
 class Redirector(AsyncService):
@@ -18,7 +19,7 @@ class Redirector(AsyncService):
         while not self.stopEvent.isSet():
 
             try:
-                connection, request = self.toRedirect.get(True, 1)
+                connection, request = self.toRedirect.get(True, 2)
 
                 id = int(request[1].id.decode())
 
@@ -28,16 +29,16 @@ class Redirector(AsyncService):
 
                 responsible_server_id = self.node.fromID(id)
 
-                print("Responsable for", id, "is the node", responsible_server_id)
+                print u"Responsable for", id, u"is the node", responsible_server_id
 
                 stub = self.chord.search_by_id(responsible_server_id, True)
 
                 request_type = request[0]
-                if request_type == 'READ':
+                if request_type == u'READ':
                     result = stub.read.future(request[1])
-                elif request_type == 'CREATE':
+                elif request_type == u'CREATE':
                     result = stub.create.future(request[1])
-                elif request_type == 'UPDATE':
+                elif request_type == u'UPDATE':
                     result = stub.update.future(request[1])
                 else:
                     result = stub.delete.future(request[1])
@@ -47,7 +48,7 @@ class Redirector(AsyncService):
             except Empty:
                 continue
 
-        print("Exiting Redirector")
+        print u"Exiting Redirector"
         self.stopEvent.clear()
         self.stopFinish.set()
 
@@ -60,6 +61,6 @@ def get_response_handler(_connection):
         try:
             r = response.result()
             connection.put(r)
-        except Exception as e:
+        except Exception, e:
             connection.put(e.code())
     return response_handler

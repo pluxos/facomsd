@@ -1,10 +1,13 @@
-import configparser
+from __future__ import with_statement
+from __future__ import absolute_import
+import ConfigParser
 import os
 from asyncService import AsyncService
-from queue import Empty
+from Queue import Empty
+from io import open
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(__file__) + '/../config.py')
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../config.py')
 
 class Logger(AsyncService):
 
@@ -13,31 +16,31 @@ class Logger(AsyncService):
         self.toLog = toLog
         self.setName(threadName)
         self.reloadDB = reloadDB
-        self.digitSize = CONFIG.getint('backup', 'digitSize')
+        self.digitSize = CONFIG.getint(u'backup', u'digitSize')
 
     def run(self):
 
         while not self.stopEvent.isSet():
             try:
-                request = self.toLog.get(True, 1)
+                request = self.toLog.get(True, 2)
                 version = self.reloadDB.snapshot_version
-                a = '0' * (self.digitSize - len(str(version)))
-                with open('../logs/log.' + a + str(version - 1), 'a') as logFile:
+                a = u'0' * (self.digitSize - len(unicode(version)))
+                with open(u'../logs/log.' + a + unicode(version - 1), u'a') as logFile:
                     request = self.getRequest(request)
-                    logFile.write(request + '\n')
+                    logFile.write(request + u'\n')
             except Empty:
                 continue
 
-        print("Exiting logger")
+        print u"Exiting logger"
         self.stopEvent.clear()
         self.stopFinish.set()
 
     def getRequest(self, request):
 
         type = request[0].upper()
-        if type == "DELETE":
-            return 'DELETE ' + request[1].id.decode()
-        elif type == "CREATE":
-            return 'CREATE ' + request[1].id.decode() + ' ' + request[1].data
-        elif type == "UPDATE":
-            return 'UPDATE ' + request[1].id.decode() + ' ' + request[1].data
+        if type == u"DELETE":
+            return u'DELETE ' + request[1].id.decode()
+        elif type == u"CREATE":
+            return u'CREATE ' + request[1].id.decode() + u' ' + request[1].data
+        elif type == u"UPDATE":
+            return u'UPDATE ' + request[1].id.decode() + u' ' + request[1].data

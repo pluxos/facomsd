@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from asyncService import AsyncService
 import socket
 
@@ -13,7 +14,7 @@ class Receptor(AsyncService):
 
     def run(self):
         BUFFERSIZE = 1024
-        buffer = ""
+        buffer = u""
         try:
             while not self.stopEvent.isSet():
                 try:
@@ -24,18 +25,18 @@ class Receptor(AsyncService):
                         break
                     else:
                         buffer += msg.decode()
-                        buffer = buffer.split('$\n')
+                        buffer = buffer.split(u'$\n')
                         for b in buffer:
                             if len(b) > 0:
-                                b = b.replace('\n', '')
+                                b = b.replace(u'\n', u'')
                                 #print("receive : " + b)
                                 self.requests.put((b, self.connection))
-                        buffer = ""
+                        buffer = u""
                 except socket.timeout:
                     continue
         finally:
             self.connection.close()
-            print("Close Connection with ", self.address)
-        print("Exiting Receptor")
+            print u"Close Connection with ", self.address
+        print u"Exiting Receptor"
         self.stopEvent.clear()
         self.stopFinish.set()

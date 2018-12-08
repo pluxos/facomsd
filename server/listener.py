@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import sys
-import configparser
+import ConfigParser
 import os
 
-sys.path.append('../grpcDefinitions')
+sys.path.append(u'../grpcDefinitions')
 
 from concurrent import futures
 from grpc import server as grpc_server
@@ -13,8 +14,8 @@ from server import Server
 from sd_work_pb2_grpc import ServerServicer, add_ServerServicer_to_server
 
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(__file__) + '/../config.py')
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../config.py')
 timeToSleep = 2
 
 
@@ -22,8 +23,8 @@ class Listener(AsyncService):
 
     def __init__(self, requests, threadName):
         AsyncService.__init__(self)
-        self.host = CONFIG.get('all', 'host')
-        self.port = str(CONFIG.getint('all', 'PORT'))
+        self.host = CONFIG.get(u'all', u'host')
+        self.port = unicode(CONFIG.getint(u'all', u'PORT'))
 
         self.requests = requests
 
@@ -33,10 +34,10 @@ class Listener(AsyncService):
     def run(self):
         server = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
         add_ServerServicer_to_server(Server(self.requests), server)
-        server.add_insecure_port("0.0.0.0:" + self.port)
+        server.add_insecure_port(u"0.0.0.0:" + self.port)
         server.start()
         try:
-            print("I'm going sleep")
+            print u"I'm going sleep"
             while not self.stopEvent.isSet():
                 sleep(timeToSleep)
         except KeyboardInterrupt:

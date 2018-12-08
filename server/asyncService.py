@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from time import sleep
 
 import threading
@@ -13,4 +14,5 @@ class AsyncService(threading.Thread):
     def join(self, timeout=None):
         self.stopEvent.set()
         while not self.stopFinish.isSet():
+            sleep(2)
             pass
