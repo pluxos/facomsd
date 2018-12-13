@@ -112,6 +112,8 @@ public class Server {
         f3ListenerThread.join();
         f4ListenerThread.join();
         snapshotSchedule.join();
+        f4Listener.getLeftServer().shutdown();
+        f4Listener.getRightServer().shutdown();
         serverConnect.shutdown();
     }
 

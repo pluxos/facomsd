@@ -14,9 +14,9 @@ public class AtomixCluster {
 
     public static void main(String[] args){
         List<Address> cluster = Arrays.asList(
-                new Address("localhost", 4445),
-                new Address("localhost", 4446),
-                new Address("localhost", 4447)
+                new Address("127.0.0.1", 4446),
+                new Address("127.0.0.1", 4445),
+                new Address("127.0.0.1", 4447)
         );
 
         Storage storage = Storage.builder()

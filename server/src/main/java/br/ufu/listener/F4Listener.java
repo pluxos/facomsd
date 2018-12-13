@@ -53,6 +53,14 @@ public class F4Listener extends FxListener {
         }
     }
 
+    public ClientConnection getLeftServer() {
+        return leftServer;
+    }
+
+    public ClientConnection getRightServer() {
+        return rightServer;
+    }
+
     @Override
     protected void listen() {
         try {
