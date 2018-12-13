@@ -1,0 +1,1 @@
+gnome-terminal -e "bash -c \"python3 server_grpc.py 0; exec bash\"" && gnome-terminal -e "bash -c \"python3 server_grpc.py 1; exec bash\"" && gnome-terminal -e "bash -c \"python3 server_grpc.py 2; exec bash\"" && gnome-terminal -e "bash -c \"python3 server_grpc.py 3; exec bash\"" && gnome-terminal -e "bash -c \"python3 server_grpc.py 4; exec bash\""
