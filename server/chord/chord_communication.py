@@ -18,6 +18,8 @@ class Chord(P2PServicer):
         self.client_port = unicode(CONFIG.getint(u'all', u'PORT'))
         self.thisHost = self.node.host
 
+    ###################### RPC methods #########################
+
     def getNeighbors(self, request, context):
         ft = self.node.fingerTable
         this = ServerID(host=self.thisHost, id=self.node.id)
@@ -73,6 +75,7 @@ class Chord(P2PServicer):
         #     # else:
         #     #     print(i, end=" ,")
         # print("]")
+        self.node.cluster.build_finger_to_cluster()
         return ServerInfo(serverID=self.node.id, source=self.thisHost)
 
     def build_finger_table(self, request, context):
@@ -84,7 +87,7 @@ class Chord(P2PServicer):
 
         this = ServerID(host=self.thisHost, id=self.node.id)
 
-        for i in xrange(1, floor(log(self.node.number, 2))+1):
+        for i in xrange(1, int(floor(log(self.node.number, 2))+1)):
             ith = ((request.source.id + (1 << (i-1))) % self.node.number)
             ith = self.node.number if ith == 0 else ith
 
@@ -103,7 +106,10 @@ class Chord(P2PServicer):
                 print u"Exception", e
 
         return request
+    
+    ##########################################################################
 
+    ########################## Class methods #################################
 
     def doJoin(self, destiny,  serverInfo):
         channel = insecure_channel(destiny + u":" + self.port)
@@ -123,6 +129,7 @@ class Chord(P2PServicer):
 
         self.node.fingerTable = [back, next]
 
+        self.node.cluster.build_finger_to_cluster()
         # print("My fingerTable: ", self.node.fingerTable)
 
     def getStub(self, server):
@@ -189,5 +196,6 @@ class Chord(P2PServicer):
                 else:
                     self.node.fingerTable.append(entry)
                 position += 1
+            self.node.cluster.build_finger_to_cluster()
             # if len(self.node.fingerTable) > position:
             #     self.node.fingerTable = self.node.fingerTable[0:position]

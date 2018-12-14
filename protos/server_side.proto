@@ -7,6 +7,7 @@ service P2P {
     rpc exit(ServerInfo) returns (ServerInfo) {}
     rpc join(ServerInfo) returns (ServerInfo) {}
     rpc build_finger_table(FingerTable) returns (FingerTable) {}
+    rpc notify_cluster(FingerTable) returns (Void) {}
 }
 
 message ServerID {
@@ -26,3 +27,7 @@ message FingerTable {
     repeated ServerID table = 2;
 }
 
+
+message Void {
+
+}

@@ -2,6 +2,9 @@ from __future__ import absolute_import
 import os
 import ConfigParser
 
+from grpc import insecure_channel
+from server_side_pb2_grpc import P2PStub
+
 from asyncService import AsyncService
 from time import sleep
 import sys
@@ -19,6 +22,7 @@ class Build_finger_table(AsyncService):
 
 
     def run(self):
+        self.build_cluster_stubs()
         while not self.stopEvent.isSet():
             sleep(self.wait_time)
             # print("Building finger table...")
@@ -29,6 +33,16 @@ class Build_finger_table(AsyncService):
         self.stopEvent.clear()
         self.stopFinish.set()
         print u"Exiting build finger table..."
+
+    def build_cluster_stubs(self):
+        if not self.node.is_cluster_builded:
+            aux = []
+            for ip in self.node.ip_cluster:
+                channel = insecure_channel(ip + ':' + self.node.cluster_port)
+                stub = P2PStub(channel)
+                aux.append(stub)
+            self.node.cluster_table = aux
+            self.node.is_cluster_builded = True
 
     def print_table(self):
 

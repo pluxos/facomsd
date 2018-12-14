@@ -26,6 +26,8 @@ else
 fi
 
 function stopContainers {
+    jobs_legacy=`jobs | wc -l`
+    echo 'Jobs: '${jobs_legacy};
     echo "Call stop containers"
     for i in `seq 1 ${replica_number}`
     do
@@ -43,12 +45,13 @@ function stopContainers {
     echo "stop containers called!"
 
     echo "Waiting containers stop!"
+
     while true
     do
 
-        stops=`jobs`
+        stops=`jobs | wc -l`
 
-        if [ "$stops" == "" ]; then
+        if [ "$stops" -le "$jobs_legacy" ]; then
             break;
         fi
 

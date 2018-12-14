@@ -34,6 +34,11 @@ class P2PStub(object):
         request_serializer=server__side__pb2.FingerTable.SerializeToString,
         response_deserializer=server__side__pb2.FingerTable.FromString,
         )
+    self.notify_cluster = channel.unary_unary(
+        '/server_side.P2P/notify_cluster',
+        request_serializer=server__side__pb2.FingerTable.SerializeToString,
+        response_deserializer=server__side__pb2.Void.FromString,
+        )
 
 
 class P2PServicer(object):
@@ -68,6 +73,13 @@ class P2PServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def notify_cluster(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_P2PServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -90,6 +102,11 @@ def add_P2PServicer_to_server(servicer, server):
           servicer.build_finger_table,
           request_deserializer=server__side__pb2.FingerTable.FromString,
           response_serializer=server__side__pb2.FingerTable.SerializeToString,
+      ),
+      'notify_cluster': grpc.unary_unary_rpc_method_handler(
+          servicer.notify_cluster,
+          request_deserializer=server__side__pb2.FingerTable.FromString,
+          response_serializer=server__side__pb2.Void.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

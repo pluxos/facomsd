@@ -7,5 +7,8 @@ FILENAME=log.requests
 PORT=50052
 SLEEP_BUILD_FT=10
 
+[cluster]
+PORT=14001
+
 [backup]
 digitSize=20

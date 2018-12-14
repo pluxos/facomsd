@@ -11,6 +11,7 @@ from math import ceil, floor
 from grpc import server as grpc_server
 
 from chord_communication import Chord
+from node_cluster import Cluster
 from server_side_pb2 import ServerInfo
 from server_side_pb2_grpc import add_P2PServicer_to_server
 from asyncService import AsyncService
@@ -29,13 +30,22 @@ class Node(AsyncService):
         AsyncService.__init__(self)
 
         self.port = unicode(CONFIG.getint(u'p2p', u'PORT'))
+        self.cluster_port = unicode(CONFIG.getint(u'cluster', u'PORT'))
         self.fingerTable = []
+        self.cluster_table = []
+        self.is_cluster_builded = True
         self.setName(threadName)
         self.host = socket.gethostbyname(socket.getfqdn()) + u":" + self.port
 
         self.chord = Chord(self)
+        self.cluster = Cluster(self)
 
         self.build_finger_table = Build_finger_table(self)
+
+        cluster = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
+        add_P2PServicer_to_server(self.cluster, cluster)
+        cluster.add_insecure_port(u"0.0.0.0:" + self.cluster_port)
+        cluster.start()
 
         parse = argparse.ArgumentParser()
         parse.add_argument('--ring', dest='ringIp', default=None)
@@ -51,13 +61,19 @@ class Node(AsyncService):
         self.number = int(args.number)
         self.id     = int(args.id)
         self.ip_replica = args.ip_replica
+
+        aux = []
+        for e in self.ip_replica.split(', '):
+            aux.append( e.split(':')[0] )
+
+        self.ip_cluster = aux
+        self.is_cluster_builded = False
+        print self.ip_cluster
         print 'My replica IP is %s' %(self.ip_replica)
 
 
         if self.ringIp is not None and len(self.ringIp) > 0:
             self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.id, source=self.host))
-        else:
-            print "RINGIP NOT FOUND!!!"
 
         # print sys.argv
         # if len(sys.argv) == 5:
@@ -82,6 +98,9 @@ class Node(AsyncService):
         add_P2PServicer_to_server(self.chord, server)
         server.add_insecure_port(u"0.0.0.0:" + self.port)
         server.start()
+
+
+
         self.build_finger_table.start()
         try:
             print u"I'm listen in chord!"
