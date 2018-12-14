@@ -31,8 +31,8 @@ class Splitter(AsyncService):
 
                 if self.node.verify_responsibility(id):
                     self.toPersist.put((connection, request))
-                    if request[0].upper() != u"READ" and connection is not None:
-                        self.toLog.put(request)
+                    # if request[0].upper() != u"READ" and connection is not None:
+                    #     self.toLog.put(request)
                 else:
                     self.toRedirect.put((connection, request))
             except Empty:

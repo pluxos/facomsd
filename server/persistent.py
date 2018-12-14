@@ -10,15 +10,16 @@ from Queue import Empty
 from grpc import StatusCode
 from sd_work_pb2 import Data, ServerResponse
 from threading import Event
+from my_dictproxy import MyDict
 
 class Persistent(AsyncService):
 
-    def __init__(self, toPersist, threadName):
+    def __init__(self, toPersist, ip_replica, threadName):
         AsyncService.__init__(self)
         self.isLoaded = Event()
         self.pause = Event()
         self.toPersist = toPersist
-        self.data = {}
+        self.data = MyDict(ip_replica) #{}
         self.setName(threadName)
 
     def run(self):
@@ -52,14 +53,14 @@ class Persistent(AsyncService):
         if connection is not None:
             id = int(request.id.decode())
             if self.data.get(id) is not None:
-                connection.put(ServerResponse(data=Data(id=unicode(id).encode(), data=self.data[id]), message=u"Data Found!"))
+                connection.put(ServerResponse(data=Data(id=unicode(id).encode(), data=self.data.get(id)), message=u"Data Found!"))
             else:
                 connection.put(StatusCode.NOT_FOUND)
 
     def create(self, request, connection):
         id = int(request.id.decode())
         if self.data.get(id) is None:
-            self.data[id] = request.data
+            self.data.put(id, request.data)
             if connection is not None:
                 connection.put(ServerResponse(message=u"Data created"))
             else:
@@ -73,7 +74,7 @@ class Persistent(AsyncService):
     def update(self, request, connection):
         id = int(request.id.decode())
         if self.data.get(id) is not None:
-            self.data[id] = request.data
+            self.data.put(id, request.data)
             if connection is not None:
                 connection.put(ServerResponse(message=u"Data Updated!"))
             else:

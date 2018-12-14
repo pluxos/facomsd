@@ -35,7 +35,7 @@ class Server(AsyncService):
                                  self.waitRedirect, threadName
                         )
 
-        self.persistent = Persistent(self.waitPersist, threadName)
+        self.persistent = Persistent(self.waitPersist, self.node.ip_replica, threadName)
 
         self.reloadDatabase = ReloadDatabase(self.persistent, self.splitter)
 

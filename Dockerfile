@@ -10,7 +10,11 @@ COPY requirements.txt /workspace
 
 WORKDIR /workspace
 
+ENV PYTHONPATH /workspace/server
+
 RUN pip install -r requirements.txt
+
+RUN apt-get update && apt-get install net-tools
 
 WORKDIR /workspace/server
 #CMD ["python3", "__init__.py", ${M}, ${N}]

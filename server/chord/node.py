@@ -15,6 +15,8 @@ from server_side_pb2 import ServerInfo
 from server_side_pb2_grpc import add_P2PServicer_to_server
 from asyncService import AsyncService
 from build_finger_table_task import Build_finger_table
+import argparse
+
 
 CONFIG = ConfigParser.ConfigParser()
 CONFIG.read(os.path.dirname(__file__) + u'/../../config.py')
@@ -34,22 +36,44 @@ class Node(AsyncService):
         self.chord = Chord(self)
 
         self.build_finger_table = Build_finger_table(self)
-        print sys.argv
-        if len(sys.argv) == 5:
-            self.ringIp = sys.argv[1].strip()
-            self.mBits  = int(sys.argv[2].strip())
-            self.number  = int(sys.argv[3])
-            self.id     = int(sys.argv[4])
 
+        parse = argparse.ArgumentParser()
+        parse.add_argument('--ring', dest='ringIp', default=None)
+        parse.add_argument('-m', dest='mBits')
+        parse.add_argument('-n', dest='number')
+        parse.add_argument('--id', dest='id')
+        parse.add_argument('--ip-replica', dest='ip_replica')
+
+        args = parse.parse_args()
+
+        self.ringIp = args.ringIp
+        self.mBits  = int(args.mBits)
+        self.number = int(args.number)
+        self.id     = int(args.id)
+        self.ip_replica = args.ip_replica
+        print 'My replica IP is %s' %(self.ip_replica)
+
+
+        if self.ringIp is not None and len(self.ringIp) > 0:
             self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.id, source=self.host))
-
-        elif len(sys.argv) == 4:
-            self.mBits  = int(sys.argv[1])
-            self.number = int(sys.argv[2])
-            self.id     = int(sys.argv[3])
         else:
-            print u"Arguments Invalid ([IP] M N ID) '0 < ID <= N'"
-            sys.exit(1)
+            print "RINGIP NOT FOUND!!!"
+
+        # print sys.argv
+        # if len(sys.argv) == 5:
+        #     self.ringIp = sys.argv[1].strip()
+        #     self.mBits  = int(sys.argv[2].strip())
+        #     self.number  = int(sys.argv[3])
+        #     self.id     = int(sys.argv[4])
+        #
+        #
+        # elif len(sys.argv) == 4:
+        #     self.mBits  = int(sys.argv[1])
+        #     self.number = int(sys.argv[2])
+        #     self.id     = int(sys.argv[3])
+        # else:
+        #     print u"Arguments Invalid ([IP] M N ID) '0 < ID <= N'"
+        #     sys.exit(1)
 
         print u"My range is: [", self.toID(self.id-1),u",", self.toID(self.id),u")"
 

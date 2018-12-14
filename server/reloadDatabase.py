@@ -37,15 +37,16 @@ class ReloadDatabase(AsyncService):
         self.load()
 
     def run(self):
-        init = time()
-        while not self.stopEvent.isSet():
-            if (time() - init) > self.time_inter_snap:
-                self.saveSnapshot()
-                init = time()
-            sleep(1)
-
-        self.stopEvent.clear()
-        self.stopFinish.set()
+        pass
+        # init = time()
+        # while not self.stopEvent.isSet():
+        #     if (time() - init) > self.time_inter_snap:
+        #         self.saveSnapshot()
+        #         init = time()
+        #     sleep(1)
+        #
+        # self.stopEvent.clear()
+        # self.stopFinish.set()
 
     def createIfNotFound(self, dir):
         try:
