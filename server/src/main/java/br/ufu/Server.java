@@ -1,5 +1,6 @@
 package br.ufu;
 
+import br.ufu.connection.AtomixConnection;
 import br.ufu.connection.ServerConnection;
 import br.ufu.listener.*;
 import br.ufu.repository.CrudRepository;
@@ -26,6 +27,7 @@ public class Server {
     private UserParameters userParameters;
     private SnapshotSchedule snapshotSchedule;
     private ServerConnection serverConnect;
+    private AtomixConnection atomixConnection;
 
     public Server(String[] args) {
         userParameters = new UserParameters(args);
@@ -36,12 +38,14 @@ public class Server {
         BigInteger smallerKey = new BigInteger(userParameters.get(PROPERTY_SMALLER_KEY));
         BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
         Integer serverPort = userParameters.getInt(PROPERTY_SERVER_PORT);
+        Integer serverAtomixPort = userParameters.getInt(PROPERTY_SERVER_ATOMIX_PORT);
         String logPath = userParameters.get(PROPERTY_LOG_PATH);
         String snapPath = userParameters.get(PROPERTY_SNAP_PATH);
         Integer snapTime = userParameters.getInt(PROPERTY_SNAP_TIME);
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
         printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
+        int[] clusterAddresses = new int[]{};
 
         crudRepository = new CrudRepository();
         queueService = new QueueService();
@@ -53,6 +57,7 @@ public class Server {
         f3Listener = new F3Listener(getQueueService(), getCrudService());
         f4Listener = new F4Listener(getQueueService(), leftServer, rightServer, serverId, maxKey);
         snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, serverId);
+        atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
     }
 
     public CrudRepository getCrudRepository() {
@@ -123,6 +128,7 @@ public class Server {
         getF2Listener().startLogNumber(numbers[0]);
         getSnapshotSchedule().startSnapNumber(numbers[1]);
 
+        atomixConnection.connect();
         serverConnect.start();
         startListeners();
     }
