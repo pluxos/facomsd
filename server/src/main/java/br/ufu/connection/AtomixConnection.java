@@ -1,5 +1,6 @@
 package br.ufu.connection;
 
+import io.atomix.Atomix;
 import io.atomix.AtomixReplica;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
@@ -14,6 +15,7 @@ public class AtomixConnection {
 
     private int port;
     private List<Address> cluster;
+    private Atomix atomixReplica;
 
     public AtomixConnection(int port, int[] addresses) {
         this.port = port;
@@ -34,11 +36,11 @@ public class AtomixConnection {
                 .build();
 
         if(cluster.isEmpty()) {
-            replica.bootstrap().join();
+            atomixReplica = replica.bootstrap().join();
         } else if(cluster.size() == 1) {
-            replica.join(cluster.get(0)).join();
+            atomixReplica = replica.join(cluster.get(0)).join();
         } else {
-            replica.join(cluster).join();
+            atomixReplica = replica.join(cluster).join();
         }
     }
 
@@ -49,4 +51,9 @@ public class AtomixConnection {
         }
         return cluster;
     }
+
+    public Atomix getAtomixReplica() {
+        return atomixReplica;
+    }
+
 }

@@ -24,6 +24,7 @@ public class Server {
     private F2Listener f2Listener;
     private F3Listener f3Listener;
     private F4Listener f4Listener;
+    private F5Listener f5Listener;
     private UserParameters userParameters;
     private SnapshotSchedule snapshotSchedule;
     private ServerConnection serverConnect;
@@ -45,19 +46,22 @@ public class Server {
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
         printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
+//        int[] clusterAddresses = new int[]{};
+//        int[] clusterAddresses = new int[]{5446};
         int[] clusterAddresses = new int[]{5446, 5447};
 
+        atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
         startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, serverId);
         serverConnect = new ServerConnection(getQueueService(), serverPort, maxKey);
-        f1Listener = new F1Listener(getQueueService(), serverId, smallerKey);
+        f1Listener = new F1Listener(getQueueService(), serverId, smallerKey, atomixConnection);
         f2Listener = new F2Listener(getQueueService(), logPath , serverId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
         f4Listener = new F4Listener(getQueueService(), leftServer, rightServer, serverId, maxKey);
+        f5Listener = new F5Listener(atomixConnection, queueService);
         snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, serverId);
-        atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
     }
 
     public CrudRepository getCrudRepository() {
@@ -130,6 +134,7 @@ public class Server {
 
         atomixConnection.connect();
         serverConnect.start();
+        f5Listener.startDistributedQueueListener();
         startListeners();
     }
 
