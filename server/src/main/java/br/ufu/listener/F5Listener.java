@@ -36,12 +36,11 @@ public class F5Listener {
             System.out.println("replica is null");
         }
         atomixConnection.getAtomixReplica().getQueue("commands")
-                .thenCompose(m -> m.onAdd(event -> System.out.println("msg chegou"))).join();
+                .thenCompose(m -> m.onAdd(event -> printCommand(event.value()))).join();
     }
 
     protected void printCommand(Object command) {
-        System.out.println("MSG CHEGOU");
-        System.out.println(command);
+        log.info("Received message from Distributed Queue: {}", command.toString());
 //        Command item = new Command(command, null);
 //        queueService.produceF2(item);
 //        queueService.produceF3(item);

@@ -46,9 +46,9 @@ public class Server {
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
         printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
-//        int[] clusterAddresses = new int[]{};
-//        int[] clusterAddresses = new int[]{5446};
-        int[] clusterAddresses = new int[]{5446, 5447};
+        int[] clusterAddresses = new int[]{};
+//        int[] clusterAddresses = new int[]{5445};
+//        int[] clusterAddresses = new int[]{5445, 5446};
 
         atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
         crudRepository = new CrudRepository();
@@ -132,8 +132,8 @@ public class Server {
         getF2Listener().startLogNumber(numbers[0]);
         getSnapshotSchedule().startSnapNumber(numbers[1]);
 
-        atomixConnection.connect();
         serverConnect.start();
+        atomixConnection.connect();
         f5Listener.startDistributedQueueListener();
         startListeners();
     }
