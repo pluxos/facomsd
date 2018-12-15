@@ -35,6 +35,8 @@ public class AtomixConnection {
 
         if(cluster.isEmpty()) {
             replica.bootstrap().join();
+        } else if(cluster.size() == 1) {
+            replica.join(cluster.get(0)).join();
         } else {
             replica.join(cluster).join();
         }

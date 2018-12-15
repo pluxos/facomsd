@@ -45,7 +45,7 @@ public class Server {
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
         printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
-        int[] clusterAddresses = new int[]{};
+        int[] clusterAddresses = new int[]{5446, 5447};
 
         crudRepository = new CrudRepository();
         queueService = new QueueService();
