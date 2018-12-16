@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @SuppressWarnings("squid:S2142")
 public class F4Listener extends FxListener {
@@ -17,22 +18,44 @@ public class F4Listener extends FxListener {
     private static final String LOCALHOST = "127.0.0.1";
 
     private final QueueService queueService;
-    private final ClientConnection leftServer;
-    private final ClientConnection rightServer;
+    private ClientConnection leftServer;
+    private ClientConnection rightServer;
     private final BigInteger serverId;
     private final BigInteger maxKey;
+    private final List<Integer> leftServerList;
+    private final List<Integer> rightServerList;
 
-    public F4Listener(QueueService queueService, Integer leftServer,
-                      Integer rightServer, BigInteger serverId, BigInteger maxKey) {
+    public F4Listener(QueueService queueService, List<Integer> leftServerList,
+                      List<Integer> rightServerList, BigInteger serverId, BigInteger maxKey) {
 
         this.queueService = queueService;
         this.serverId =  serverId;
         this.maxKey = maxKey;
-        this.leftServer = new ClientConnection(LOCALHOST, leftServer);
-        this.rightServer = new ClientConnection(LOCALHOST, rightServer);
+        this.leftServerList = leftServerList;
+        this.rightServerList = rightServerList;
+        this.leftServer = new ClientConnection(LOCALHOST, leftServerList.get(0));
+        this.rightServer = new ClientConnection(LOCALHOST, rightServerList.get(0));
     }
 
-    private void passResponsability(Command item) {
+    private void changeLeftServer() throws InterruptedException {
+        int currentIndex = leftServerList.indexOf(this.leftServer.getPort());
+        int index = currentIndex == leftServerList.size() - 1
+                ? 0 : currentIndex + 1;
+        leftServer.shutdown();
+        leftServer = new ClientConnection(LOCALHOST, leftServerList.get(index));
+        log.info("Left server changed to port : {}", leftServer.getPort());
+    }
+
+    private void changeRightServer() throws InterruptedException {
+        int currentIndex = rightServerList.indexOf(this.rightServer.getPort());
+        int index = currentIndex == rightServerList.size() - 1
+                ? 0 : currentIndex + 1;
+        rightServer.shutdown();
+        rightServer = new ClientConnection(LOCALHOST, rightServerList.get(index));
+        log.info("Right server changed to port : {}", leftServer.getPort());
+    }
+
+    private void passResponsability(Command item) throws InterruptedException {
         BigInteger key = new BigInteger(CommandUtil.getKey(item.getExecuteCommand()));
         BigInteger right, left;
         if (key.compareTo(serverId) == 1) {     // key bigger than server
@@ -43,11 +66,15 @@ public class F4Listener extends FxListener {
             left = serverId.subtract(key);
         }
         if (left.compareTo(right) <= 0) {
-            leftServer.send(item.getExecuteCommand(), item.getObserver());
+            while (!leftServer.send(item.getExecuteCommand(), item.getObserver())) {
+                changeLeftServer();
+            }
             log.info("Command '" +item.getExecuteCommand()+ "' sent to server on left. Port: {}",
                     leftServer.getPort());
         } else {
-            rightServer.send(item.getExecuteCommand(), item.getObserver());
+            while (!rightServer.send(item.getExecuteCommand(), item.getObserver())) {
+                changeRightServer();
+            }
             log.info("Command '" +item.getExecuteCommand()+ "' sent to server on right. Port: {}",
                     rightServer.getPort());
         }

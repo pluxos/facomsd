@@ -11,6 +11,9 @@ import br.ufu.util.UserParameters;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static br.ufu.util.Constants.*;
@@ -47,9 +50,15 @@ public class Server {
         Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
         Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
         printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
+
 //        int[] clusterAddresses = new int[]{};
-//        int[] clusterAddresses = new int[]{5445};
-        int[] clusterAddresses = new int[]{5445, 5446};
+//        int[] clusterAddresses = new int[]{5444};
+        int[] clusterAddresses = new int[]{5444, 5445};
+
+        List<Integer> leftServerList = Arrays.asList(leftServer, leftServer+1, leftServer+2);
+        List<Integer> rightServerList = Arrays.asList(rightServer, rightServer+1, rightServer+2);
+        System.out.println(leftServerList.get(2));
+
 
         atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
         crudRepository = new CrudRepository();
@@ -60,7 +69,7 @@ public class Server {
         f1Listener = new F1Listener(getQueueService(), serverId, smallerKey, atomixConnection, serverPort);
         f2Listener = new F2Listener(getQueueService(), logPath , serverId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
-        f4Listener = new F4Listener(getQueueService(), leftServer, rightServer, serverId, maxKey);
+        f4Listener = new F4Listener(getQueueService(), leftServerList, rightServerList, serverId, maxKey);
         f5Listener = new F5Listener(atomixConnection, queueService, serverPort);
         snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, serverId);
     }
