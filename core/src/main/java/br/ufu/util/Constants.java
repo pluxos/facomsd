@@ -23,9 +23,10 @@ public class Constants {
     public static final String PROPERTY_LOG_PATH = "log.path";
     public static final String PROPERTY_SMALLER_KEY = "smaller.key";
     public static final String PROPERTY_SERVER_ID = "server.id";
-    public static final String PROPERTY_RIGHT_SERVER = "right.server";
-    public static final String PROPERTY_LEFT_SERVER = "left.server";
     public static final String PROPERTY_MAX_KEY = "max.key";
+    public static final String PROPERTY_RIGHT_SERVERS = "right.servers";
+    public static final String PROPERTY_LEFT_SERVERS = "left.servers";
+    public static final String PROPERTY_CLUSTER_ADDRESSES = "cluster.addresses";
     public static final Parser<BigInteger> BIG_INTEGER_PARSER = new BigIntegerParser();
     public static final String MESSAGE_PARAMETROS_INSUFICIENTES = "Parâmetros insuficientes";
     public static final Parser<String> STRING_PARSER = new StringParser();

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Optional.ofNullable;
@@ -53,6 +54,10 @@ public class UserParameters {
 
     public String get(String s) {
         return configuration.getString(s);
+    }
+
+    public List<Object> getList(String property) {
+        return configuration.getList(property);
     }
 
     private void init(String[] args) {

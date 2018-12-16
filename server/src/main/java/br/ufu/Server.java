@@ -38,7 +38,7 @@ public class Server {
         userParameters = new UserParameters(args);
     }
 
-    private void init() throws IOException {
+    private void init() {
         BigInteger serverId = new BigInteger(userParameters.get(PROPERTY_SERVER_ID));
         BigInteger smallerKey = new BigInteger(userParameters.get(PROPERTY_SMALLER_KEY));
         BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
@@ -47,17 +47,10 @@ public class Server {
         String logPath = userParameters.get(PROPERTY_LOG_PATH);
         String snapPath = userParameters.get(PROPERTY_SNAP_PATH);
         Integer snapTime = userParameters.getInt(PROPERTY_SNAP_TIME);
-        Integer leftServer = userParameters.getInt(PROPERTY_LEFT_SERVER);
-        Integer rightServer = userParameters.getInt(PROPERTY_RIGHT_SERVER);
-        printServerInfo(serverPort, serverId, smallerKey, leftServer, rightServer);
-
-//        int[] clusterAddresses = new int[]{};
-//        int[] clusterAddresses = new int[]{5444};
-        int[] clusterAddresses = new int[]{5444, 5445};
-
-        List<Integer> leftServerList = Arrays.asList(leftServer, leftServer+1, leftServer+2);
-        List<Integer> rightServerList = Arrays.asList(rightServer, rightServer+1, rightServer+2);
-        System.out.println(leftServerList.get(2));
+        List<Integer> leftServerList = getParameterList(userParameters.getList(PROPERTY_LEFT_SERVERS));
+        List<Integer> rightServerList = getParameterList(userParameters.getList(PROPERTY_RIGHT_SERVERS));
+        List<Integer> clusterAddresses = getParameterList(userParameters.getList(PROPERTY_CLUSTER_ADDRESSES));
+        printServerInfo(serverPort, serverId, smallerKey, leftServerList, rightServerList, clusterAddresses);
 
 
         atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
@@ -155,16 +148,29 @@ public class Server {
     }
 
     private void printServerInfo(Integer port,  BigInteger biggerKey , BigInteger smallerKey,
-                                 Integer leftServer, Integer rightServer) {
+                                 List<Integer> leftServer, List<Integer> rightServer, List<Integer> cluster) {
         System.out.println("----------------------");
         System.out.println("Server Port -> " + port );
         System.out.println("Server on Left -> " + leftServer);
         System.out.println("Server on Right -> " + rightServer);
         System.out.println("Key range -> [ "+ smallerKey +" , "+ biggerKey +" ]" );
+        System.out.println("Servers already in cluster -> " + cluster);
         System.out.println("----------------------");
     }
 
     public void shutdown() throws InterruptedException {
         serverConnect.shutdown();
+    }
+
+    private List<Integer> getParameterList(List<Object> portsList) {
+        List<Integer> list = new ArrayList<>();
+        String stringList[] = String.valueOf(portsList)
+                .replace("[", "").replace("]","").split(",");
+
+        for(String port : stringList) {
+            if (port.equals("")) return list;
+            list.add( Integer.valueOf(port));
+        }
+        return list;
     }
 }

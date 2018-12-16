@@ -17,7 +17,7 @@ public class AtomixConnection {
     private List<Address> cluster;
     private Atomix atomixReplica;
 
-    public AtomixConnection(int port, int[] addresses) {
+    public AtomixConnection(int port, List<Integer> addresses) {
         this.port = port;
         this.cluster = getCluster(addresses);
     }
@@ -44,7 +44,7 @@ public class AtomixConnection {
         }
     }
 
-    private List<Address> getCluster(int[] addresses) {
+    private List<Address> getCluster(List<Integer> addresses) {
         List<Address> cluster = new ArrayList<>();
         for (int address: addresses) {
             cluster.add(new Address("localhost", address));
