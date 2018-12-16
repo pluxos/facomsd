@@ -38,8 +38,9 @@ public class F5Listener {
 
         int index = stringValue.lastIndexOf(" ");
         String command = stringValue.substring(0, index);
+        System.out.println("----------------------"+command);
 
-        if (!checkResponsability(index, command)) {
+        if (!checkResponsability(index, stringValue)) {
             Command item = new Command(command, null);
             queueService.produceF2(item);
             queueService.produceF3(item);
@@ -47,7 +48,7 @@ public class F5Listener {
     }
 
     public boolean checkResponsability(int index, String value) {
-        Integer port = Integer.parseInt(value.substring(index));
+        Integer port = Integer.parseInt(value.substring(index+1));
         return port == serverPort;
     }
 

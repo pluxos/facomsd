@@ -39,10 +39,11 @@ public class F4Listener extends FxListener {
 
     private void changeLeftServer() throws InterruptedException {
         int currentIndex = leftServerList.indexOf(this.leftServer.getPort());
-        int index = currentIndex == leftServerList.size() - 1
+        int index = (currentIndex == leftServerList.size() - 1)
                 ? 0 : currentIndex + 1;
         leftServer.shutdown();
         leftServer = new ClientConnection(LOCALHOST, leftServerList.get(index));
+        Thread.sleep(9000);
         log.info("Left server changed to port : {}", leftServer.getPort());
     }
 
@@ -52,7 +53,8 @@ public class F4Listener extends FxListener {
                 ? 0 : currentIndex + 1;
         rightServer.shutdown();
         rightServer = new ClientConnection(LOCALHOST, rightServerList.get(index));
-        log.info("Right server changed to port : {}", leftServer.getPort());
+        Thread.sleep(5000);
+        log.info("Right server changed to port : {}", rightServer.getPort());
     }
 
     private void passResponsability(Command item) throws InterruptedException {
@@ -66,15 +68,17 @@ public class F4Listener extends FxListener {
             left = serverId.subtract(key);
         }
         if (left.compareTo(right) <= 0) {
-            while (!leftServer.send(item.getExecuteCommand(), item.getObserver())) {
-                changeLeftServer();
-            }
+//            while (!leftServer.serverOn()) {
+//                changeLeftServer();
+//            }
+            leftServer.send(item.getExecuteCommand(), item.getObserver());
             log.info("Command '" +item.getExecuteCommand()+ "' sent to server on left. Port: {}",
                     leftServer.getPort());
         } else {
-            while (!rightServer.send(item.getExecuteCommand(), item.getObserver())) {
-                changeRightServer();
-            }
+//            while (!rightServer.serverOn()) {
+//                changeRightServer();
+//            }
+            rightServer.send(item.getExecuteCommand(), item.getObserver());
             log.info("Command '" +item.getExecuteCommand()+ "' sent to server on right. Port: {}",
                     rightServer.getPort());
         }

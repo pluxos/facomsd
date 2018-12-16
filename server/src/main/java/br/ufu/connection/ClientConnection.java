@@ -1,6 +1,7 @@
 package br.ufu.connection;
 
 import br.ufu.communication.RequestKeyValue;
+import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import br.ufu.communication.GreeterGrpc;
@@ -29,6 +30,15 @@ public class ClientConnection {
         this.channel = channel;
         asyncStub = GreeterGrpc.newStub(channel);
         this.port = port;
+        System.out.println(channel.getState(false));
+////        Runnable notif = new Runnable() {
+////            @Override public void run() {
+////                ConnectivityState currentState = channel.getState(false);
+////                System.out.println(currentState);
+////                channel.notifyWhenStateChanged(ConnectivityState.READY, this);
+////            }
+////        };
+//        notif.run();
     }
 
     public Integer getPort() {
@@ -39,65 +49,67 @@ public class ClientConnection {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public boolean send(String message, StreamObserver<Response> observer) {
+    public boolean serverOn() {
+        System.out.println(channel.getState(true));
+        return channel.getState(true).equals(ConnectivityState.READY);
+    }
+
+    public void send(String message, StreamObserver<Response> observer) {
+        System.out.println(channel.getState(true));
+        System.out.println(channel.getState(true));
         String[] msg = message.split(" ");
 
         switch (msg[0]) {
             case "CREATE":
-                return sendCreate(msg[1], msg[2], observer);
+                sendCreate(msg[1], msg[2], observer);
+                break;
             case "READ":
-                return sendRead(msg[1], observer);
+                sendRead(msg[1], observer);
+                break;
             case "UPDATE":
-                return sendUpdate(msg[1], msg[2], observer);
+                sendUpdate(msg[1], msg[2], observer);
+                break;
             case "DELETE":
-                return sendDelete(msg[1], observer);
+                sendDelete(msg[1], observer);
+                break;
             default:
                 log.error("Invalid CRUD operation!");
-                return false;
         }
     }
 
-    private boolean sendCreate(String key, String value, StreamObserver<Response> observer) {
+    private void sendCreate(String key, String value, StreamObserver<Response> observer) {
         RequestKeyValue request = RequestKeyValue.newBuilder().setKey(key).setValue(value).build();
         try {
             asyncStub.create(request, new ResponseObserver(log, observer));
-            return true;
         } catch (StatusRuntimeException e) {
             log.error("Create RPC failed: {}", e.getStatus());
-            return false;
         }
     }
 
-    private boolean sendRead(String key, StreamObserver<Response> observer) {
+    private void sendRead(String key, StreamObserver<Response> observer) {
         Request request = Request.newBuilder().setKey(key).build();
         try {
             asyncStub.read(request, new ResponseObserver(log, observer));
-            return true;
         } catch (StatusRuntimeException e) {
             log.error("Read RPC failed: {}", e.getStatus());
-            return false;
         }
     }
 
-    private boolean sendUpdate(String key, String value, StreamObserver<Response> observer) {
+    private void sendUpdate(String key, String value, StreamObserver<Response> observer) {
         RequestKeyValue request = RequestKeyValue.newBuilder().setKey(key).setValue(value).build();
         try {
             asyncStub.update(request, new ResponseObserver(log, observer));
-            return true;
         } catch (StatusRuntimeException e) {
             log.error("Update RPC failed: {}", e.getStatus());
-            return false;
         }
     }
 
-    private boolean sendDelete(String key, StreamObserver<Response> observer) {
+    private void sendDelete(String key, StreamObserver<Response> observer) {
         Request request = Request.newBuilder().setKey(key).build();
         try {
             asyncStub.delete(request, new ResponseObserver(log, observer));
-            return true;
         } catch (StatusRuntimeException e) {
             log.error("Delete RPC failed: {}", e.getStatus());
-            return false;
         }
     }
 }
