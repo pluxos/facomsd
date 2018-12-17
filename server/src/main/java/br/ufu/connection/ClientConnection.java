@@ -1,6 +1,7 @@
 package br.ufu.connection;
 
 import br.ufu.communication.RequestKeyValue;
+import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import br.ufu.communication.GreeterGrpc;
@@ -29,6 +30,15 @@ public class ClientConnection {
         this.channel = channel;
         asyncStub = GreeterGrpc.newStub(channel);
         this.port = port;
+        System.out.println(channel.getState(false));
+////        Runnable notif = new Runnable() {
+////            @Override public void run() {
+////                ConnectivityState currentState = channel.getState(false);
+////                System.out.println(currentState);
+////                channel.notifyWhenStateChanged(ConnectivityState.READY, this);
+////            }
+////        };
+//        notif.run();
     }
 
     public Integer getPort() {
@@ -39,7 +49,14 @@ public class ClientConnection {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
+    public boolean serverOn() {
+        System.out.println(channel.getState(true));
+        return channel.getState(true).equals(ConnectivityState.READY);
+    }
+
     public void send(String message, StreamObserver<Response> observer) {
+        System.out.println(channel.getState(true));
+        System.out.println(channel.getState(true));
         String[] msg = message.split(" ");
 
         switch (msg[0]) {

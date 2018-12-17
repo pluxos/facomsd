@@ -31,8 +31,11 @@ public class F3Listener extends FxListener {
             item = queueService.consumeF3();
             action = CommandUtil.getAction(item.getExecuteCommand());
             log.info("F3 Listener take command [{}]", item.getExecuteCommand());
-            String response = crudService.execute(item.getExecuteCommand());
-            sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "OK", response), item.getObserver());
+            if (item.getObserver() != null) {
+                String response = crudService.execute(item.getExecuteCommand());
+                String formattedResponse = String.format("Command RESPONSE: %s %s - %s", action, "OK", response);
+                sendResponse(formattedResponse, item.getObserver());
+            }
         } catch (InterruptedException | InvalidCommandException e) {
             if (item != null) {
                 sendResponse(String.format("Command RESPONSE: %s %s - %s", action, "NOK", e.getMessage()), item.getObserver());
