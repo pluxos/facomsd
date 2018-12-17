@@ -14,12 +14,14 @@ import io.atomix.copycat.server.storage.StorageLevel;
 public class AtomixController {
 	
     private int port;
+    private int position;
     private List<Address> cluster;
     private Atomix atomixReplica;
 
-    public AtomixController(int port, List<Integer> addresses) {
+    public AtomixController(int port, List<Integer> addresses, int position) {
         this.port = port;
         this.cluster = setupCluster(addresses);
+        this.position = position;
     }
 
     public void connect() {
@@ -35,10 +37,10 @@ public class AtomixController {
                 .withTransport(new NettyTransport())
                 .build();
 
-        if(cluster.isEmpty()) {
-            atomixReplica = replica.bootstrap().join() ;
-        }  else {
-            atomixReplica = replica.join(cluster).join();
+        if (Math.floorMod(this.position, 3) == 1) {
+        	atomixReplica = replica.bootstrap(cluster).join();
+        } else { 
+        	atomixReplica = replica.join(cluster).join();
         }
         
         System.out.println("Replica initialized");

@@ -2,12 +2,14 @@ package br.com.jvitoraa.queue.runnable;
 
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.ufu.jvitoraa.interaction.Response;
 
+import br.com.jvitoraa.atomix.AtomixController;
 import br.com.jvitoraa.grpc.dto.CommandDto;
 import br.com.jvitoraa.queue.controller.QueueController;
 import br.com.jvitoraa.repository.DatabaseRepository;
@@ -20,6 +22,7 @@ public class DatabaseQueueProcessor implements Runnable {
 	
 	private QueueController queueController;
 	private DatabaseRepository database;
+	private AtomixController atomixController;
 	
 	@Override
 	public void run() {
@@ -30,7 +33,6 @@ public class DatabaseQueueProcessor implements Runnable {
 	
 	private void process() {
 		CommandDto command = this.queueController.getTrdQueue().poll();
-		
 		Response response;
 		
 		if (Objects.nonNull(command)) {
@@ -39,6 +41,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				LOGGER.info("Creating register with Id: " + command.getId());
 				if (database.create(BigInteger.valueOf(command.getId()), command.getValue())) {
 					response = Response.newBuilder().setResponseText("Register created!").build();
+					this.atomixInsertCall(BigInteger.valueOf(command.getId()), command.getValue());
 				} else {
 					response = Response.newBuilder().setResponseText("Cannot create, Id alredy exists!").build();
 				}
@@ -63,6 +66,7 @@ public class DatabaseQueueProcessor implements Runnable {
 
 				if (database.update(BigInteger.valueOf(command.getId()), command.getValue())) {
 					response = Response.newBuilder().setResponseText("Register updated sucessfully!").build();
+					this.atomixInsertCall(BigInteger.valueOf(command.getId()), command.getValue());
 				} else {
 					response = Response.newBuilder().setResponseText("Cannot update, Register not found!").build();
 				}
@@ -73,6 +77,7 @@ public class DatabaseQueueProcessor implements Runnable {
 				LOGGER.info("Deleting register with Id: " + command.getId());
 
 				if (database.delete(BigInteger.valueOf(command.getId()))) {
+					this.atomixDeleteCall(BigInteger.valueOf(command.getId()));
 					response = Response.newBuilder().setResponseText("Register deleted!").build();
 				} else {
 					response = Response.newBuilder().setResponseText("Cannot delete, Regiser not found!").build();
@@ -90,5 +95,31 @@ public class DatabaseQueueProcessor implements Runnable {
 		command.getObserver().onCompleted();
 	}
 	
+	private void atomixInsertCall(BigInteger key, String value) {
+		atomixController
+			.getAtomixReplica()
+			.getMap("commands")
+			.thenCompose(m -> m.put(key, value));
+	}
+	
+	private void atomixDeleteCall(BigInteger key) {
+		atomixController
+			.getAtomixReplica()
+			.getMap("commands")
+			.thenCompose(m -> m.remove(key));
+	}
+	
+	private String atomixReadCall(BigInteger key) {
+		
+		try {
+			return atomixController.getAtomixReplica().getMap("commands").thenCompose(m -> m.get(key))
+					.thenApply(a -> (String) a).get();
+
+		} catch (InterruptedException | ExecutionException e) {
+			LOGGER.info(e.getMessage());
+		}
+		
+		return null;
+	}
 	
 }

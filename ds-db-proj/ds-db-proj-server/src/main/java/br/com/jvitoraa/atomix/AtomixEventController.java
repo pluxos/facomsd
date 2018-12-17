@@ -1,14 +1,15 @@
 package br.com.jvitoraa.atomix;
 
-import br.com.jvitoraa.grpc.dto.CommandDto;
-import br.com.jvitoraa.queue.controller.QueueController;
+import java.math.BigInteger;
+
+import br.com.jvitoraa.repository.DatabaseRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AtomixEventController {
 	
 	private AtomixController atomixController; 
-	private QueueController queueController;
+	private DatabaseRepository database;
 	
 	
 	public void startController() { 
@@ -19,28 +20,20 @@ public class AtomixEventController {
 		
 		atomixController.getAtomixReplica().getMap("commands")
 		.thenCompose(m -> m.onAdd(event -> {
-			
-			System.out.println(event.entry().getValue());
-			
-			CommandDto command = new CommandDto((String) event.entry().getValue());
-			queueController.getSndQueue().offer(command);
-			queueController.getTrdQueue().offer(command);
-			
+			System.out.println("Creating Id: " + event.entry().getKey());
+			database.create((BigInteger) event.entry().getKey(), (String) event.entry().getValue());
 		}));
 		
 		atomixController.getAtomixReplica().getMap("commands")
 		.thenCompose(m -> m.onUpdate(event -> {
-			
-			System.out.println(event.entry().getValue());
-			
-			CommandDto command = new CommandDto((String) event.entry().getValue());
-			queueController.getSndQueue().offer(command);
-			queueController.getTrdQueue().offer(command);
-			
-			if (command.getTypeOfCommand().equals("DELETE")) {
-				m.remove(command.getId());
-			}
-			
+			System.out.println("Updating Id: " +event.entry().getKey());
+			database.update((BigInteger) event.entry().getKey(), (String) event.entry().getValue());
+		}));
+		
+		atomixController.getAtomixReplica().getMap("commands")
+		.thenCompose(m -> m.onRemove(event -> {
+			System.out.println("Deleting Id: " + event.entry().getKey());
+			database.delete((BigInteger) event.entry().getKey());
 		}));
 		
 		

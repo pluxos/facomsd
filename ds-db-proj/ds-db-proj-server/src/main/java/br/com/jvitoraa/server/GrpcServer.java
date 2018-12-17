@@ -58,6 +58,9 @@ public class GrpcServer {
 	private String serverId;
 	@Getter
 	@Setter
+	private Integer clusterPosition;
+	@Getter
+	@Setter
 	private Integer serverPosId;
 	@Getter
 	@Setter
@@ -102,13 +105,13 @@ public class GrpcServer {
 		this.queueController = new QueueController(Integer.valueOf(this.properties.getProperty(P_QUEUE_SIZE)));
 		
 		List<Integer> arrayOfCluster = setupCluster();
-		this.atomixController = new AtomixController(Integer.valueOf(this.clusterServer), arrayOfCluster);
+		this.atomixController = new AtomixController(Integer.valueOf(this.clusterServer), arrayOfCluster, this.clusterPosition);
 		
 		LOGGER.info("Server starting on port: " + this.serverPort);
 		this.logSnapshotService = new LogSnapshotIndexService();
 		this.databaseRecoveryUtil = new DatabaseRecoveryUtil(this.databaseRepository, this.logSnapshotService,
 				this.logPath, this.snapPath);
-		this.atomixEventController = new AtomixEventController(atomixController, queueController);
+		this.atomixEventController = new AtomixEventController(atomixController, this.databaseRepository);
 		this.databaseRecoveryUtil.executeRecovery();
 		ServerFacade serverFacade = new ServerFacade(Integer.valueOf(this.serverPort), this.queueController);
 		serverFacade.startUp();
@@ -119,8 +122,9 @@ public class GrpcServer {
 
 	private void startThreads() throws InterruptedException {
 		Thread tMaster = new Thread(
-				new MasterQueueProcessor(this.queueController, this.range, this.serverPosId, atomixController));
-		Thread tDatabase = new Thread(new DatabaseQueueProcessor(this.queueController, this.databaseRepository));
+				new MasterQueueProcessor(this.queueController, this.range, this.serverPosId));
+		Thread tDatabase = new Thread(
+				new DatabaseQueueProcessor(this.queueController, this.databaseRepository, this.atomixController));
 		Thread tLog = new Thread(new LogQueueProcessor(this.queueController, this.logSnapshotService, this.logPath));
 		Thread tSnap = new Thread(new SnapshotProcessor(this.logSnapshotService, this.databaseRepository,
 				Integer.valueOf(this.properties.getProperty(P_SNAPSHOT_TIMER)), this.snapPath));
@@ -207,9 +211,13 @@ public class GrpcServer {
 	
 	private List<Integer> setupCluster() {
 		
-		List<String> listCluster = Arrays
-				.asList(this.properties.getProperty(P_CLUSTER_PORT + this.serverPort).split(","));
+		List<String> listCluster = new ArrayList<String>(
+				Arrays.asList(this.properties.getProperty(P_CLUSTER_PORT + this.serverPort).split(",")));
 		List<Integer> arrayOfCluster = new ArrayList<>();
+		
+		this.clusterPosition = Integer.valueOf(listCluster.get(NumberUtils.INTEGER_ZERO));
+		listCluster.remove(NumberUtils.INTEGER_ZERO.intValue());
+		
 		for (String s : listCluster)
 			arrayOfCluster.add(Integer.valueOf(s));
 		
