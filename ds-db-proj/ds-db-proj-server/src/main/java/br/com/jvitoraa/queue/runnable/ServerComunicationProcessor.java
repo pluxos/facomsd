@@ -1,5 +1,6 @@
 package br.com.jvitoraa.queue.runnable;
 
+import java.util.List;
 import java.util.Objects;
 
 import br.com.jvitoraa.grpc.dto.CommandDto;
@@ -8,6 +9,7 @@ import br.com.jvitoraa.grpc.service.NewConnectionService;
 import br.com.jvitoraa.grpc.vo.RangeVO;
 import br.com.jvitoraa.observer.GrpcObserver;
 import br.com.jvitoraa.queue.controller.QueueController;
+import io.grpc.ConnectivityState;
 
 public class ServerComunicationProcessor implements Runnable {
 
@@ -48,6 +50,7 @@ public class ServerComunicationProcessor implements Runnable {
 			String leftOrRight = this.range.moveLeftOrRight(command.getId().intValue());
 
 			if (leftOrRight.equals("LEFT")) {
+				this.checkConnectionIfMissing(leftClientFacade, leftServerPort);
 				switch (command.getTypeOfCommand()) {
 				case "CREATE":
 					leftClientFacade.create(command.getId(), command.getValue(), observer);
@@ -63,6 +66,7 @@ public class ServerComunicationProcessor implements Runnable {
 					break;
 				}
 			} else if (leftOrRight.equals("RIGHT")) {
+				this.checkConnectionIfMissing(rightClientFacade, rightServerPort);
 				switch (command.getTypeOfCommand()) {
 				case "CREATE":
 					rightClientFacade.create(command.getId(), command.getValue(), observer);
@@ -82,4 +86,23 @@ public class ServerComunicationProcessor implements Runnable {
 		}
 
 	}
-}
+
+	private void checkConnectionIfMissing(ClientFacade facade, Integer port) {
+		int counter = 0;
+		while (!this.testConnection(facade)) {
+			List<String> replicas = newConnectionService.getReplicasList(String.valueOf(port));
+			facade = new ClientFacade(Integer.valueOf(replicas.get(counter)));
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+			System.out.println("Changed Facade!");
+		}
+		
+	}
+	
+	private boolean testConnection(ClientFacade conn) {
+		return conn.getChannel().getState(true).equals(ConnectivityState.READY);
+	}
+ }

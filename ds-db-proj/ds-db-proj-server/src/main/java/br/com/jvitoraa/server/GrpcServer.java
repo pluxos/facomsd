@@ -137,6 +137,7 @@ public class GrpcServer {
 		tCommunication.start();
 		atomixController.connect();
 		this.atomixEventController.startController();
+		this.atomixEventController.recoverFromMap();
 		tMaster.join();
 		tDatabase.join();
 		tLog.join();

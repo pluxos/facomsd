@@ -1,6 +1,7 @@
 package br.com.jvitoraa.atomix;
 
 import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
 
 import br.com.jvitoraa.repository.DatabaseRepository;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,15 @@ public class AtomixEventController {
 		
 		
 		
+	} 
+	
+	public void recoverFromMap() {
+		try {
+			atomixController.getAtomixReplica().getMap("commands").get().entrySet().get().stream()
+					.forEach(m -> database.create((BigInteger) m.getKey(), (String) m.getValue()));
+		} catch (InterruptedException | ExecutionException e) {
+			System.out.println("Erro ao recuperar do mapa!");
+		}
 	}
 
 }
