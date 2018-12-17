@@ -16,6 +16,8 @@ public class F4Listener extends FxListener {
 
     private static final Logger log = LogManager.getLogger(F4Listener.class);
     private static final String LOCALHOST = "127.0.0.1";
+    private static final String RIGHT = "RIGHT";
+    private static final String LEFT = "LEFT";
 
     private final QueueService queueService;
     private ClientConnection leftServer;
@@ -37,24 +39,52 @@ public class F4Listener extends FxListener {
         this.rightServer = new ClientConnection(LOCALHOST, rightServerList.get(0));
     }
 
-    private void changeLeftServer() throws InterruptedException {
+    public void changeLeftServerAndSendAgain(Command item) {
         int currentIndex = leftServerList.indexOf(this.leftServer.getPort());
         int index = (currentIndex == leftServerList.size() - 1)
                 ? 0 : currentIndex + 1;
-        leftServer.shutdown();
+        shutdownServerOn(LEFT);
+
         leftServer = new ClientConnection(LOCALHOST, leftServerList.get(index));
-        Thread.sleep(9000);
         log.info("Left server changed to port : {}", leftServer.getPort());
+
+        sendToLeftServer(item);
     }
 
-    private void changeRightServer() throws InterruptedException {
+    public void changeRightServerAndSendAgain(Command item) {
         int currentIndex = rightServerList.indexOf(this.rightServer.getPort());
         int index = currentIndex == rightServerList.size() - 1
                 ? 0 : currentIndex + 1;
-        rightServer.shutdown();
+        shutdownServerOn(RIGHT);
+
         rightServer = new ClientConnection(LOCALHOST, rightServerList.get(index));
-        Thread.sleep(5000);
         log.info("Right server changed to port : {}", rightServer.getPort());
+
+        sendToRightServer(item);
+    }
+
+    private void shutdownServerOn(String server) {
+        try {
+            if (server.equals(RIGHT)) {
+                rightServer.shutdown();
+            } else {
+                leftServer.shutdown();
+            }
+        } catch (InterruptedException e) {
+            log.warn("Old server on "+ server.toLowerCase() +" failed to shutdown: {}", e);
+        }
+    }
+
+    private void sendToLeftServer(Command item) {
+        leftServer.send(item, this, LEFT);
+        log.info("Command '" +item.getExecuteCommand()+ "' sent to server on left. Port: {}",
+                leftServer.getPort());
+    }
+
+    private void sendToRightServer(Command item) {
+        rightServer.send(item, this, RIGHT);
+        log.info("Command '" +item.getExecuteCommand()+ "' sent to server on right. Port: {}",
+                rightServer.getPort());
     }
 
     private void passResponsability(Command item) throws InterruptedException {
@@ -68,19 +98,9 @@ public class F4Listener extends FxListener {
             left = serverId.subtract(key);
         }
         if (left.compareTo(right) <= 0) {
-//            while (!leftServer.serverOn()) {
-//                changeLeftServer();
-//            }
-            leftServer.send(item.getExecuteCommand(), item.getObserver());
-            log.info("Command '" +item.getExecuteCommand()+ "' sent to server on left. Port: {}",
-                    leftServer.getPort());
+            sendToLeftServer(item);
         } else {
-//            while (!rightServer.serverOn()) {
-//                changeRightServer();
-//            }
-            rightServer.send(item.getExecuteCommand(), item.getObserver());
-            log.info("Command '" +item.getExecuteCommand()+ "' sent to server on right. Port: {}",
-                    rightServer.getPort());
+            sendToRightServer(item);
         }
     }
 
