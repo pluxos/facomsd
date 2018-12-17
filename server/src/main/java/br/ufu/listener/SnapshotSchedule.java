@@ -21,15 +21,15 @@ public class SnapshotSchedule implements Runnable {
     private final CrudRepository crudRepository;
     private BigInteger snapshotNumber = new BigInteger("0");
     private Integer snapTime;
-    private BigInteger serverId;
+    private BigInteger clusterId;
     private String snapPath;
     private F2Listener f2;
 
-    public SnapshotSchedule(CrudRepository crudRepository, F2Listener f2, Integer snapTime, String snapPath, BigInteger serverId) {
+    public SnapshotSchedule(CrudRepository crudRepository, F2Listener f2, Integer snapTime, String snapPath, BigInteger clusterId) {
         this.crudRepository = crudRepository;
         this.snapTime = snapTime;
         this.snapPath = snapPath;
-        this.serverId = serverId;
+        this.clusterId = clusterId;
         this.f2 = f2;
     }
 
@@ -50,14 +50,13 @@ public class SnapshotSchedule implements Runnable {
         return snapshotNumber;
     }
 
-    public String getSnapshotPath() {
-        return snapPath + "snaps-server-" + serverId.toString();
+    private String getSnapshotPath() {
+        return snapPath + "snaps-cluster-" + clusterId.toString();
     }
 
     private SnapshotWriter createSnapshot() throws IOException {
         BigInteger snapshotNumber = getSnapshotNumber();
-        SnapshotWriter snapshot = new SnapshotWriter(getSnapshotPath(), snapshotNumber);
-        return snapshot;
+        return new SnapshotWriter(getSnapshotPath(), snapshotNumber);
     }
 
     private static void controlSnapNumber(String snapPath) {

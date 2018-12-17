@@ -12,7 +12,6 @@ import br.ufu.util.UserParameters;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -28,7 +27,7 @@ public class Server {
     private F2Listener f2Listener;
     private F3Listener f3Listener;
     private F4Listener f4Listener;
-    private F5Listener f5Listener;
+    private DistributedQueueListener distributedQueueListener;
     private UserParameters userParameters;
     private SnapshotSchedule snapshotSchedule;
     private ServerConnection serverConnect;
@@ -40,6 +39,7 @@ public class Server {
 
     private void init() {
         BigInteger serverId = new BigInteger(userParameters.get(PROPERTY_SERVER_ID));
+        BigInteger clusterId = new BigInteger(userParameters.get(PROPERTY_CLUSTER_ID));
         BigInteger smallerKey = new BigInteger(userParameters.get(PROPERTY_SMALLER_KEY));
         BigInteger maxKey = new BigInteger(userParameters.get(PROPERTY_MAX_KEY));
         Integer serverPort = userParameters.getInt(PROPERTY_SERVER_PORT);
@@ -57,14 +57,14 @@ public class Server {
         crudRepository = new CrudRepository();
         queueService = new QueueService();
         crudService = new CrudService(getCrudRepository());
-        startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, serverId);
+        startupRecoverService = new StartupRecoverService(getCrudService(), userParameters, clusterId);
         serverConnect = new ServerConnection(getQueueService(), serverPort, maxKey);
         f1Listener = new F1Listener(getQueueService(), serverId, smallerKey, atomixConnection, serverPort);
-        f2Listener = new F2Listener(getQueueService(), logPath , serverId);
+        f2Listener = new F2Listener(getQueueService(), logPath , clusterId);
         f3Listener = new F3Listener(getQueueService(), getCrudService());
         f4Listener = new F4Listener(getQueueService(), leftServerList, rightServerList, serverId, maxKey);
-        f5Listener = new F5Listener(atomixConnection, queueService, serverPort);
-        snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, serverId);
+        distributedQueueListener = new DistributedQueueListener(atomixConnection, queueService, serverPort);
+        snapshotSchedule = new SnapshotSchedule(getCrudRepository(), getF2Listener(), snapTime, snapPath, clusterId);
     }
 
     public CrudRepository getCrudRepository() {
@@ -139,7 +139,7 @@ public class Server {
 
         serverConnect.start();
         atomixConnection.connect();
-        f5Listener.startDistributedQueueListener();
+        distributedQueueListener.startDistributedQueueListener();
         startListeners();
     }
 

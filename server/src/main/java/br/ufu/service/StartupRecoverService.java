@@ -23,17 +23,17 @@ public class StartupRecoverService {
     private static final Logger log = LogManager.getLogger(StartupRecoverService.class);
     private final CrudService crudService;
     private final UserParameters userParameters;
-    private final BigInteger serverId;
+    private final BigInteger clusterId;
 
-    public StartupRecoverService(CrudService crudService, UserParameters userParameters, BigInteger serverId) {
+    public StartupRecoverService(CrudService crudService, UserParameters userParameters, BigInteger clusterId) {
         this.crudService = crudService;
         this.userParameters = userParameters;
-        this.serverId = serverId;
+        this.clusterId = clusterId;
     }
 
     private String getSnap() {
         File path = new File(userParameters.get(PROPERTY_SNAP_PATH)
-                + "snaps-server-" + serverId.toString());
+                + "snaps-cluster-" + clusterId.toString());
         if (!path.exists()) {
             path.mkdirs();
         }
@@ -52,7 +52,7 @@ public class StartupRecoverService {
 
     private String getLog() {
         File path = new File(userParameters.get(PROPERTY_LOG_PATH)
-                + "logs-server-" + serverId);
+                + "logs-cluster-" + clusterId);
         if (!path.exists()) {
             path.mkdirs();
         }

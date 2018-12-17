@@ -87,7 +87,7 @@ public class F4Listener extends FxListener {
                 rightServer.getPort());
     }
 
-    private void passResponsability(Command item) throws InterruptedException {
+    private void passResponsibility(Command item) {
         BigInteger key = new BigInteger(CommandUtil.getKey(item.getExecuteCommand()));
         BigInteger right, left;
         if (key.compareTo(serverId) == 1) {     // key bigger than server
@@ -117,7 +117,7 @@ public class F4Listener extends FxListener {
         try {
             Command item = queueService.consumeF4();
             log.info("F4 Listener take command [{}]", item.getExecuteCommand());
-            passResponsability(item);
+            passResponsibility(item);
         } catch (InterruptedException e) {
             log.warn(e.getMessage(), e);
             throw new ListenerException(e);

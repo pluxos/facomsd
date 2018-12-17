@@ -19,17 +19,17 @@ public class F2Listener extends FxListener {
     private static final Logger log = LogManager.getLogger(F2Listener.class);
     private static final String FILE_SEPARATOR = "\n";
     private BigInteger logNumber = new BigInteger("0");
-    private final BigInteger serverId;
+    private final BigInteger clusterId;
     private final String logPath;
 
     private final QueueService queueService;
 
     private LogWriter logWriter;
 
-    public F2Listener(QueueService queueService, String logPath, BigInteger serverId) {
+    public F2Listener(QueueService queueService, String logPath, BigInteger clusterId) {
         this.queueService = queueService;
         this.logPath = logPath;
-        this.serverId = serverId;
+        this.clusterId = clusterId;
     }
 
     public void startLogNumber(String logN) {
@@ -67,8 +67,8 @@ public class F2Listener extends FxListener {
         controlLogNumber(getLogPath());
     }
 
-    public String getLogPath() {
-        return logPath + "logs-server-" + serverId.toString();
+    private String getLogPath() {
+        return logPath + "logs-cluster-" + clusterId.toString();
     }
 
     private static void controlLogNumber(String logPath) {
