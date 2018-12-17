@@ -38,7 +38,7 @@ public class AtomixController {
                 .build();
 
         if (Math.floorMod(this.position, 3) == 1) {
-        	atomixReplica = replica.bootstrap(cluster).join();
+        	atomixReplica = replica.bootstrap().join();
         } else { 
         	atomixReplica = replica.join(cluster).join();
         }

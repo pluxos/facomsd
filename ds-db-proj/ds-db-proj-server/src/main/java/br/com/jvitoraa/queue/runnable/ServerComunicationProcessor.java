@@ -89,7 +89,7 @@ public class ServerComunicationProcessor implements Runnable {
 
 	private void checkConnectionIfMissing(ClientFacade facade, Integer port) {
 		int counter = 0;
-		while (!this.testConnection(facade)) {
+		while (this.testConnection(facade)) {
 			List<String> replicas = newConnectionService.getReplicasList(String.valueOf(port));
 			facade = new ClientFacade(Integer.valueOf(replicas.get(counter)));
 			try {
@@ -103,6 +103,6 @@ public class ServerComunicationProcessor implements Runnable {
 	}
 	
 	private boolean testConnection(ClientFacade conn) {
-		return conn.getChannel().getState(true).equals(ConnectivityState.READY);
+		return conn.getChannel().getState(true).equals(ConnectivityState.SHUTDOWN);
 	}
  }
