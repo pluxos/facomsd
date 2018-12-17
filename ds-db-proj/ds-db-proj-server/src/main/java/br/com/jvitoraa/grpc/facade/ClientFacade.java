@@ -12,12 +12,14 @@ import com.ufu.jvitoraa.interaction.UpdateCommand;
 import br.com.jvitoraa.observer.GrpcObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import lombok.Getter;
 
 public class ClientFacade {
 	
 	private static final Logger LOGGER = Logger.getLogger(ClientFacade.class.getName());
 	
 	private CommandServiceGrpc.CommandServiceStub stub;
+	@Getter
 	private ManagedChannel channel;
 	
 	public ClientFacade(Integer port) {

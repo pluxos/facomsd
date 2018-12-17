@@ -2,6 +2,7 @@ package br.com.jvitoraa.queue.runnable;
 
 import java.util.Objects;
 
+import br.com.jvitoraa.atomix.AtomixController;
 import br.com.jvitoraa.grpc.dto.CommandDto;
 import br.com.jvitoraa.grpc.vo.RangeVO;
 import br.com.jvitoraa.queue.controller.QueueController;
@@ -13,6 +14,7 @@ public class MasterQueueProcessor implements Runnable {
 	private QueueController queueController;
 	private RangeVO range;
 	private Integer serverN;
+	private AtomixController atomixController;
 
 	@Override
 	public void run() {
@@ -25,6 +27,12 @@ public class MasterQueueProcessor implements Runnable {
 		CommandDto command = this.queueController.getFstQueue().poll();
 		if (Objects.nonNull(command)) {
 			if (this.inRange(command)) {
+				
+				atomixController.getAtomixReplica().getMap("commands")
+	                .thenCompose(m -> 
+	                				m.put(command.getId(), command.generateLogString()
+	                			));
+				
 				this.queueController.getSndQueue().offer(command);
 				this.queueController.getTrdQueue().offer(command);
 			} else {

@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import br.com.jvitoraa.grpc.dto.CommandDto;
 import br.com.jvitoraa.grpc.facade.ClientFacade;
+import br.com.jvitoraa.grpc.service.NewConnectionService;
 import br.com.jvitoraa.grpc.vo.RangeVO;
 import br.com.jvitoraa.observer.GrpcObserver;
 import br.com.jvitoraa.queue.controller.QueueController;
@@ -11,11 +12,12 @@ import br.com.jvitoraa.queue.controller.QueueController;
 public class ServerComunicationProcessor implements Runnable {
 
 	public ServerComunicationProcessor(Integer leftServerPort, Integer rightServerPort, RangeVO range,
-			QueueController queueController) {
+			QueueController queueController, NewConnectionService newConnectionService) {
 		this.leftServerPort = leftServerPort;
 		this.rightServerPort = rightServerPort;
 		this.range = range;
 		this.queueController = queueController;
+		this.newConnectionService = newConnectionService;
 	}
 
 	private Integer leftServerPort;
@@ -23,6 +25,7 @@ public class ServerComunicationProcessor implements Runnable {
 	private QueueController queueController;
 	private ClientFacade leftClientFacade;
 	private ClientFacade rightClientFacade;
+	private NewConnectionService newConnectionService;
 
 	private RangeVO range;
 
