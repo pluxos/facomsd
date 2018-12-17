@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 import ConfigParser
 import os
+from time import time
+from datetime import datetime
 from grpc import insecure_channel
 from server_side_pb2 import ServerInfo, ServerID, FingerTable, Void
 from server_side_pb2_grpc import P2PServicer, P2PStub
@@ -33,7 +35,7 @@ class Cluster(P2PServicer):
             else:
                 self.node.fingerTable.append(entry)
             position += 1
-
+        self.node.build_finger_table.print_table()
         return Void()
 
     def finger_table_to_server_id(self, entry):
@@ -49,10 +51,19 @@ class Cluster(P2PServicer):
             else:
                 entry = ServerID()
             response.table.extend([entry])
+        self.node.build_finger_table.print_table()
+        while True:
+            try:
+                self.node.build_finger_table.build_cluster_stubs()
+                for stub in self.node.cluster_table:
+                    stub.notify_cluster(response)
+                print '\n\nsuccess in notify!!!\n\n'
+                self.node.build_finger_table.print_table()
+                break
+            except Exception as e:
+                # print 'Fault in notify_cluster' + str(e)
+                print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + 'Fault in notify_cluster' + str(e)
 
-        self.node.build_finger_table.build_cluster_stubs()
-        for stub in self.node.cluster_table:
-            stub.notify_cluster(response)
 
 
 

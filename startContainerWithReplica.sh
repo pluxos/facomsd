@@ -126,12 +126,29 @@ function startServers {
             is_bootstrap=0
         fi
 
-        echo "docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} '${replica_ips}' ${bootstrap} ${ring} > output_${name} &"
-        docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} "${replica_ips}" ${bootstrap} ${ring} > output_${name} &
+        echo "docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} '${replica_ips}' ${name} ${bootstrap} ${ring} > output_${name} 2>&1 &"
+        docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} "${replica_ips}" ${name} ${bootstrap} ${ring} > output_${name} 2>&1 &
 
     done;
 
 }
+
+for j in `seq 1 ${N}`
+do
+    for i in `seq 1 ${replica_number}`
+        do
+            name="${name_base}_${N}_${j}_${i}"
+        #    node=false;
+            if [ ! -z "$(docker ps -aq -f name=${name})" ]; then
+        #        node=true;
+                echo "I'm here"
+                if [ ! "$(docker ps -aq -f status=exited -f name=${name})" ]; then
+                    echo "stopping Container" ${name}
+                    docker stop ${name} &
+                fi
+            fi
+    done;
+done;
 
 ring='';
 for j in `seq 1 ${N}`;
@@ -140,9 +157,11 @@ do
     replica_ips='';
     bootstrap='';
 
-    startContainers;
+    if [ "$stop" != "stop" ]; then
+        startContainers;
 
-    startServers;
+        startServers;
+    fi
 
     if [ "${j}" == "1" ]; then
         ring=${bootstrap};

@@ -35,29 +35,37 @@ class Build_finger_table(AsyncService):
         print u"Exiting build finger table..."
 
     def build_cluster_stubs(self):
-        if not self.node.is_cluster_builded:
-            aux = []
-            for ip in self.node.ip_cluster:
+        # if not self.node.is_cluster_builded:
+        aux = []
+        my_ip = self.node.host.split(':')[0]
+        for ip in self.node.ip_cluster:
+            print '\n\n' + my_ip + ' --  ' + ip + '\n\n'
+            if my_ip != ip:
+                print ip + ':' + self.node.cluster_port
                 channel = insecure_channel(ip + ':' + self.node.cluster_port)
                 stub = P2PStub(channel)
                 aux.append(stub)
-            self.node.cluster_table = aux
-            self.node.is_cluster_builded = True
+        self.node.cluster_table = aux
+        self.node.is_cluster_builded = True
+        # print self.node.cluster_table
 
     def print_table(self):
 
         ft = self.node.fingerTable
         if len(ft) > 1:
             print u"\n"
-            print u"My predecessor is ", ft[0][0]
-            print u"My successor is   ", ft[1][0]
+            if ft[0] is not None:
+                print u"My predecessor is ", ft[0][0]
+            if ft[1] is not None:
+                print u"My successor is   ", ft[1][0]
 
             if len(ft) > 2:
                 print u"My finger table is [",; sys.stdout.write(u"")
                 for i in xrange(1,len(ft)):
-                    print ft[i][0],; sys.stdout.write(u"")
-                    if i != len(ft)-1:
-                        print u', ',; sys.stdout.write(u"")
+                    if ft[i] is not None:
+                        print ft[i][0],; sys.stdout.write(u"")
+                        if i != len(ft)-1:
+                            print u', ',; sys.stdout.write(u"")
                 print u"]"
             else:
                 print u"Finger Table empty"

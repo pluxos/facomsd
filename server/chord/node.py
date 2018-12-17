@@ -5,6 +5,8 @@ import ConfigParser
 import os
 import socket
 import sched
+from time import time
+from datetime import datetime
 from concurrent import futures
 from time import sleep, time
 from math import ceil, floor
@@ -35,7 +37,8 @@ class Node(AsyncService):
         self.cluster_table = []
         self.is_cluster_builded = True
         self.setName(threadName)
-        self.host = socket.gethostbyname(socket.getfqdn()) + u":" + self.port
+        self.ip = socket.gethostbyname(socket.getfqdn())
+        self.host = self.ip + u":" + self.port
 
         self.chord = Chord(self)
         self.cluster = Cluster(self)
@@ -44,8 +47,10 @@ class Node(AsyncService):
 
         cluster = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
         add_P2PServicer_to_server(self.cluster, cluster)
-        cluster.add_insecure_port(u"0.0.0.0:" + self.cluster_port)
+        cluster.add_insecure_port(self.ip + u":" + self.cluster_port)
         cluster.start()
+
+        print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + ' --- cluster grpc started!'
 
         parse = argparse.ArgumentParser()
         parse.add_argument('--ring', dest='ringIp', default=None)
@@ -53,6 +58,7 @@ class Node(AsyncService):
         parse.add_argument('-n', dest='number')
         parse.add_argument('--id', dest='id')
         parse.add_argument('--ip-replica', dest='ip_replica')
+        parse.add_argument('--name', dest='name')
 
         args = parse.parse_args()
 
@@ -61,6 +67,7 @@ class Node(AsyncService):
         self.number = int(args.number)
         self.id     = int(args.id)
         self.ip_replica = args.ip_replica
+        self.name   = args.name
 
         aux = []
         for e in self.ip_replica.split(', '):
@@ -68,6 +75,7 @@ class Node(AsyncService):
 
         self.ip_cluster = aux
         self.is_cluster_builded = False
+        self.build_finger_table.build_cluster_stubs()
         print self.ip_cluster
         print 'My replica IP is %s' %(self.ip_replica)
 
@@ -106,7 +114,8 @@ class Node(AsyncService):
             print u"I'm listen in chord!"
             while not self.stopEvent.isSet():
                 sleep(timeToSleep)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt as e:
+            print 'KeyboardInterrupt --> ' + str(e)
             server.stop(0)
         self.stopEvent.clear()
         self.stopFinish.set()
