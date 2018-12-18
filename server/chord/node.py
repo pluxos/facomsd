@@ -1,11 +1,8 @@
 from __future__ import division
 from __future__ import absolute_import
-import sys
 import ConfigParser
 import os
 import socket
-import sched
-from time import time
 from datetime import datetime
 from concurrent import futures
 from time import sleep, time
@@ -46,8 +43,6 @@ class Node(AsyncService):
         self.build_finger_table = Build_finger_table(self)
 
         self.start_services()
-        print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + ' --- cluster grpc started!'
-
         self.get_arguments()
 
         aux = []
@@ -123,7 +118,4 @@ class Node(AsyncService):
         m2 = (1 << self.mBits)
         return ceil((self.number * id) / m2)
         # return floor(-(((id * self.number)) - (self.number * m2)) / m2)
-
-    def sched_build_finger_table(self):
-        s = sched.scheduler(time, sleep)
 

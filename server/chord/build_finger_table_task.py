@@ -27,7 +27,7 @@ class Build_finger_table(AsyncService):
             sleep(self.wait_time)
             # print("Building finger table...")
             self.node.chord.fill_finger_table()
-            self.print_table()
+            # self.print_table()
             self.wait_time += 5
 
         self.stopEvent.clear()
@@ -35,19 +35,14 @@ class Build_finger_table(AsyncService):
         print u"Exiting build finger table..."
 
     def build_cluster_stubs(self):
-        # if not self.node.is_cluster_builded:
         aux = []
         my_ip = self.node.host.split(':')[0]
         for ip in self.node.ip_cluster:
-            print '\n\n' + my_ip + ' --  ' + ip + '\n\n'
             if my_ip != ip:
-                print ip + ':' + self.node.cluster_port
                 channel = insecure_channel(ip + ':' + self.node.cluster_port)
                 stub = P2PStub(channel)
                 aux.append(stub)
         self.node.cluster_table = aux
-        self.node.is_cluster_builded = True
-        # print self.node.cluster_table
 
     def print_table(self):
 
