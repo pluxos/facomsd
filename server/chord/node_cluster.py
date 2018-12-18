@@ -57,8 +57,16 @@ class Cluster(P2PServicer):
         while attemps < 3:
             try:
                 self.node.build_finger_table.build_cluster_stubs()
+                fault = None
                 for stub in self.node.cluster_table:
-                    stub.notify_cluster(response, timeout=self.timeout_request)
+                    try:
+                        stub.notify_cluster(response, timeout=self.timeout_request)
+                    except Exception, e:
+                        fault = e
+
+                if fault is not None:
+                    raise fault
+
                 break
             except Exception as e:
                 attemps += 1
