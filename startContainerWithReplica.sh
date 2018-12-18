@@ -27,18 +27,14 @@ fi
 
 function stopContainers {
     jobs_legacy=`jobs | wc -l`
-    echo 'Jobs: '${jobs_legacy};
     echo "Call stop containers"
     for i in `seq 1 ${replica_number}`
     do
         name="${name_base}_${N}_${j}_${i}"
-    #    node=false;
         if [ ! -z "$(docker ps -aq -f name=${name})" ]; then
-    #        node=true;
-            echo "I'm here"
             if [ ! "$(docker ps -aq -f status=exited -f name=${name})" ]; then
                 echo "stopping Container" ${name}
-                docker stop ${name} &
+                docker stop ${name} > /dev/null &
             fi
         fi
     done;
@@ -63,29 +59,27 @@ function stopRemoveAndStartContainer {
     node1=false;
     if [ ! -z "$(docker ps -aq -f name=${name})" ]; then
         node1=true;
-        echo "I'm here"
         if [ ! "$(docker ps -aq -f status=exited -f name=${name})" ]; then
             echo "stopping Container" ${name}
-            docker stop ${name};
+            docker stop ${name} > /dev/null ;
         fi
 
         if [ "$remove" = true ]; then
             node1=false
             echo "I'm removing Container" ${name}
-            docker rm ${name}
+            docker rm ${name} > /dev/null
         fi
     fi
 
     if [ ! "$stop" == "true" ]; then
         if [ "$node1" = false ]; then
-            # run your container
             docker run -d --name=${name} \
                 -v `pwd`/server:/workspace/server \
                 -v `pwd`/config.py:/workspace/config.py \
                 -v `pwd`/grpcDefinitions/:/workspace/grpcDefinitions \
                 -v `pwd`/client:/workspace/client \
                 facomsd-server:0.1 \
-                tail -f /dev/null
+                tail -f /dev/null > /dev/null
         else
             docker start ${name}
         fi
@@ -126,12 +120,27 @@ function startServers {
             is_bootstrap=0
         fi
 
-        echo "docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} '${replica_ips}' ${bootstrap} ${ring} > output_${name} &"
-        docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} "${replica_ips}" ${bootstrap} ${ring} > output_${name} &
+        echo "docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} '${replica_ips}' ${name} ${bootstrap} ${ring} > output_${name} 2>&1 &"
+        docker exec ${name} /bin/bash ./startServer.sh ${is_bootstrap} ${replica_port} ${N} ${M} ${j} "${replica_ips}" ${name} ${bootstrap} ${ring} > output_${name} 2>&1 &
 
     done;
 
 }
+
+echo "Call stop all to fast process!"
+for j in `seq 1 ${N}`
+do
+    for i in `seq 1 ${replica_number}`
+        do
+            name="${name_base}_${N}_${j}_${i}"
+            if [ ! -z "$(docker ps -aq -f name=${name})" ]; then
+                if [ ! "$(docker ps -aq -f status=exited -f name=${name})" ]; then
+                    docker stop ${name} > /dev/null &
+                fi
+            fi
+    done;
+done;
+echo "Call stop all done!"
 
 ring='';
 for j in `seq 1 ${N}`;
@@ -140,9 +149,11 @@ do
     replica_ips='';
     bootstrap='';
 
-    startContainers;
+    if [ "$stop" != "stop" ]; then
+        startContainers;
 
-    startServers;
+        startServers;
+    fi
 
     if [ "${j}" == "1" ]; then
         ring=${bootstrap};

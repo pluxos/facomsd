@@ -28,6 +28,7 @@ class Server(ServerServicer):
         response = pipe.get()
         del pipe
 
+        print 'Response to: ' + str(request) + '\n is: ' + str(response)
         if type(response) != ServerResponse:
             context.set_code(response)
             response = ServerResponse(message=response.name)

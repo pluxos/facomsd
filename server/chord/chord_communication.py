@@ -65,16 +65,6 @@ class Chord(P2PServicer):
             else:
                 self.node.fingerTable = [back, None]
 
-        # print("My fingerTable Updated: ")
-        #
-        # print("[", end="")
-        # for i in self.node.fingerTable:
-        #     print(self.node.fingerTable)
-        #     # if i is not None:
-        #     #     print(i[0],i[1], end=" ,")
-        #     # else:
-        #     #     print(i, end=" ,")
-        # print("]")
         self.node.cluster.build_finger_to_cluster()
         return ServerInfo(serverID=self.node.id, source=self.thisHost)
 
@@ -112,6 +102,7 @@ class Chord(P2PServicer):
     ########################## Class methods #################################
 
     def doJoin(self, destiny,  serverInfo):
+        print destiny + u":" + self.port
         channel = insecure_channel(destiny + u":" + self.port)
         this = ServerID(host=self.thisHost, id=self.node.id)
         stub = P2PStub(channel)
@@ -130,7 +121,7 @@ class Chord(P2PServicer):
         self.node.fingerTable = [back, next]
 
         self.node.cluster.build_finger_to_cluster()
-        # print("My fingerTable: ", self.node.fingerTable)
+        print("My fingerTable: ", self.node.fingerTable)
 
     def getStub(self, server):
         channel = insecure_channel(server.host)
@@ -172,9 +163,9 @@ class Chord(P2PServicer):
                     return ft[ft_sorted[-i][1]][2]
         # print("Search_by_id found: ",self.node.fingerTable[1][0])
         if client_interface:
-            return ft[ft_sorted[1][1]][3]
+            return ft[1][3]
         else:
-            return ft[ft_sorted[1][1]][2]
+            return ft[1][2]
 
     def fill_finger_table(self):
         this = ServerID(host=self.thisHost, id=self.node.id)
@@ -182,9 +173,6 @@ class Chord(P2PServicer):
 
         if len(self.node.fingerTable) > 1:
             newFt = self.node.fingerTable[1][2].build_finger_table(ft)
-
-
-            # print("This is My new FINGER TABLE:", newFt)
 
             position = 1
             for i in newFt.table:
@@ -196,6 +184,7 @@ class Chord(P2PServicer):
                 else:
                     self.node.fingerTable.append(entry)
                 position += 1
+
             self.node.cluster.build_finger_to_cluster()
             # if len(self.node.fingerTable) > position:
             #     self.node.fingerTable = self.node.fingerTable[0:position]

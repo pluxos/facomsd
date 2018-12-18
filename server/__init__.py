@@ -62,6 +62,7 @@ class Server(AsyncService):
         self.stop()
         self.stopEvent.clear()
         self.stopFinish.set()
+        print 'Im Finish here!'
 
     def stop(self):
         self.persistent.join()

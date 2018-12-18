@@ -40,7 +40,8 @@ class Listener(AsyncService):
             print u"I'm going sleep"
             while not self.stopEvent.isSet():
                 sleep(timeToSleep)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt as e:
+            print 'KeyboardInterrupt --> ' + str(e)
             server.stop(0)
         self.stopEvent.clear()
         self.stopFinish.set()
