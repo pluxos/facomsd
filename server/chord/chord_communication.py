@@ -52,7 +52,7 @@ class Chord(P2PServicer):
                     response = stub.getNeighbors(request, timeout=self.timeout_request)
                     break
                 except RpcError, e:
-                    if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                    if e.code() != StatusCode.DEADLINE_EXCEEDED and e.code() != StatusCode.UNAVAILABLE:
                         raise e
                     print 'Retrying redirect getNeighbors()'
 
@@ -125,7 +125,7 @@ class Chord(P2PServicer):
                 stub.join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id), timeout=self.timeout_request)
                 break
             except RpcError, e:
-                if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                if e.code() != StatusCode.DEADLINE_EXCEEDED and e.code() != StatusCode.UNAVAILABLE:
                     raise e
                 print 'Retrying execute join...'
                 attempts += 1
@@ -142,7 +142,7 @@ class Chord(P2PServicer):
                 stub.join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id), timeout=self.timeout_request)
                 break
             except RpcError, e:
-                if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                if e.code() != StatusCode.DEADLINE_EXCEEDED and e.code() != StatusCode.UNAVAILABLE:
                     raise e
                 print 'Retrying execute join...'
                 attempts += 1
