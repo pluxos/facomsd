@@ -1,7 +1,12 @@
 from __future__ import absolute_import
 from asyncService import AsyncService
 from Queue import Empty
-from grpc import StatusCode
+from grpc import StatusCode, RpcError
+import ConfigParser
+import os
+
+CONFIG = ConfigParser.ConfigParser()
+CONFIG.read(os.path.dirname(__file__) + u'/../config.py')
 
 class Redirector(AsyncService):
 
@@ -12,6 +17,7 @@ class Redirector(AsyncService):
         self.toRedirect = toRedirect
         self.node = node
         self.chord = node.chord
+        self.timeout_request = CONFIG.getint(u'p2p', u'TIMEOUT_REQUEST')
 
 
 
@@ -31,19 +37,34 @@ class Redirector(AsyncService):
 
                 print u"Responsable for", id, u"is the node", responsible_server_id
 
-                stub = self.chord.search_by_id(responsible_server_id, True)
+                clients = self.chord.search_by_id(responsible_server_id, True)
 
                 request_type = request[0]
-                if request_type == u'READ':
-                    result = stub.read.future(request[1])
-                elif request_type == u'CREATE':
-                    result = stub.create.future(request[1])
-                elif request_type == u'UPDATE':
-                    result = stub.update.future(request[1])
-                else:
-                    result = stub.delete.future(request[1])
+                result = None
+                for stub in clients:
+                    try:
+                        if request_type == u'READ':
+                            result = stub.read(request[1],   timeout=self.timeout_request)
+                        elif request_type == u'CREATE':
+                            result = stub.create(request[1], timeout=self.timeout_request)
+                        elif request_type == u'UPDATE':
+                            result = stub.update(request[1], timeout=self.timeout_request)
+                        else:
+                            result = stub.delete(request[1], timeout=self.timeout_request)
+                        break
+                    except RpcError as e:
+                        if e.code() != StatusCode.DEADLINE_EXCEEDED and e.code() != StatusCode.UNAVAILABLE:
+                            result = e.code()
+                            break
+                        print 'retrying redirect the request: ' + str(request)
 
-                result.add_done_callback(get_response_handler(connection))
+                if result is None:
+                    result = StatusCode.INTERNAL
+                    response_request(connection, result)
+                    raise Exception('Fault in redirect to responsable node, cannot connect with the node!')
+
+                response_request(connection, result)
+                # result.add_done_callback(get_response_handler(connection))
 
             except Empty:
                 continue
@@ -55,6 +76,9 @@ class Redirector(AsyncService):
     def return_not_found(self, connection):
         connection.put(StatusCode.OUT_OF_RANGE)
 
+
+def response_request(connection, response):
+    connection.put(response)
 
 def get_response_handler(_connection):
     def response_handler(response, connection=_connection):

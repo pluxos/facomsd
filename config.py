@@ -6,6 +6,7 @@ FILENAME=log.requests
 [p2p]
 PORT=50052
 SLEEP_BUILD_FT=10
+TIMEOUT_REQUEST=5
 
 [cluster]
 PORT=14001

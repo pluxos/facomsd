@@ -27,6 +27,7 @@ class Node(AsyncService):
 
     def __init__(self, threadName):
         AsyncService.__init__(self)
+        self.get_arguments()
 
         self.port = unicode(CONFIG.getint(u'p2p', u'PORT'))
         self.cluster_port = unicode(CONFIG.getint(u'cluster', u'PORT'))
@@ -35,7 +36,7 @@ class Node(AsyncService):
         self.is_cluster_builded = True
         self.setName(threadName)
         self.ip = socket.gethostbyname(socket.getfqdn())
-        self.host = self.ip + u":" + self.port
+        self.host = self.get_hosts_in_cluster() #self.ip + u":" + self.port
 
         self.chord = Chord(self)
         self.cluster = Cluster(self)
@@ -43,14 +44,7 @@ class Node(AsyncService):
         self.build_finger_table = Build_finger_table(self)
 
         self.start_services()
-        self.get_arguments()
 
-        aux = []
-        for e in self.ip_replica.split(', '):
-            aux.append( e.split(':')[0] )
-
-        self.ip_cluster = aux
-        self.is_cluster_builded = False
         self.build_finger_table.build_cluster_stubs()
         print self.ip_cluster
         print 'My replica IP is %s' %(self.ip_replica)
@@ -60,6 +54,16 @@ class Node(AsyncService):
             self.chord.doJoin(self.ringIp, ServerInfo(serverID=self.id, source=self.host))
 
         print u"My range is: [", self.toID(self.id-1),u",", self.toID(self.id),u")"
+
+    def get_hosts_in_cluster(self):
+
+        hosts = []
+
+        for ip in self.ip_cluster:
+            hosts.append(ip + ':' + self.port)
+
+        return hosts
+
 
     def get_arguments(self):
 
@@ -79,6 +83,12 @@ class Node(AsyncService):
         self.id = int(args.id)
         self.ip_replica = args.ip_replica
         self.name = args.name
+
+        aux = []
+        for e in self.ip_replica.split(', '):
+            aux.append( e.split(':')[0] )
+
+        self.ip_cluster = aux
 
     def start_services(self):
         self._server = grpc_server(futures.ThreadPoolExecutor(max_workers=100))
