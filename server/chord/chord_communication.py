@@ -70,8 +70,6 @@ class Chord(P2PServicer):
 
     def build_finger_table(self, request, context):
 
-        # if len(request.table) >= ceil(log2(self.node.number)):
-        #     return request
         if request.source.id == self.node.id:
             return request
 
@@ -87,7 +85,6 @@ class Chord(P2PServicer):
                 break
 
         if len(self.node.fingerTable) > 1:
-            # print("Call next!!")
             nextStub = self.node.fingerTable[1][2]
             try:
                 result = nextStub.build_finger_table(request)
@@ -102,26 +99,20 @@ class Chord(P2PServicer):
     ########################## Class methods #################################
 
     def doJoin(self, destiny,  serverInfo):
-        print destiny + u":" + self.port
         channel = insecure_channel(destiny + u":" + self.port)
         this = ServerID(host=self.thisHost, id=self.node.id)
         stub = P2PStub(channel)
-        print serverInfo
         near = stub.getNeighbors(serverInfo)
 
-        print near
         next = self.server_id_to_finger_table(near.next)
         next[2].join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
-        #next = (n.serverID, n.source, stubNext)
 
         back = self.server_id_to_finger_table(near.back)
         back[2].join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id))
-        #back = (b.serverID, b.source, stubBack)
 
         self.node.fingerTable = [back, next]
 
         self.node.cluster.build_finger_to_cluster()
-        print("My fingerTable: ", self.node.fingerTable)
 
     def getStub(self, server):
         channel = insecure_channel(server.host)
@@ -186,5 +177,3 @@ class Chord(P2PServicer):
                 position += 1
 
             self.node.cluster.build_finger_to_cluster()
-            # if len(self.node.fingerTable) > position:
-            #     self.node.fingerTable = self.node.fingerTable[0:position]
