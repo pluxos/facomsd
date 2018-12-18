@@ -53,14 +53,16 @@ class Cluster(P2PServicer):
                 entry = ServerID()
             response.table.extend([entry])
         self.node.build_finger_table.print_table()
-        while True:
+        attemps = 0
+        while attemps < 3:
             try:
                 self.node.build_finger_table.build_cluster_stubs()
                 for stub in self.node.cluster_table:
                     stub.notify_cluster(response, timeout=self.timeout_request)
                 break
             except Exception as e:
-                print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + 'Fault in notify_cluster'
+                attemps += 1
+                print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + ' ---- Fault in notify_cluster'
 
 
 
