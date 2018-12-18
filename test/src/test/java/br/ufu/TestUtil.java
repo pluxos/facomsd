@@ -19,7 +19,7 @@ public class TestUtil {
     }
 
     public static String[] getServerArgs(int port, String id, String smallerKey, int snapTime,
-                            int rightServer, int leftServer, String maxKey) {
+         int[] rightServers, int[] leftServers, String maxKey, int[] clusterAddresses, int clusterId) {
         return new String[]{
                 "--log.path=/tmp/sd-snaps/",
                 "--server.host=127.0.0.1",
@@ -28,9 +28,11 @@ public class TestUtil {
                 "--smaller.key=" + smallerKey,
                 "--snap.path=/tmp/sd-snaps/",
                 "--snap.time=" + snapTime,
-                "--right.server=" + rightServer,
-                "--left.server=" + leftServer,
-                "--max.key=" + maxKey
+                "--max.key=" + maxKey,
+                "--right.servers=" + getStringFromArray(rightServers),
+                "--left.servers=" + getStringFromArray(leftServers),
+                "--cluster.addresses=" + getStringFromArray(clusterAddresses),
+                "--cluster.id=" + clusterId
         };
     }
 
@@ -41,21 +43,38 @@ public class TestUtil {
         };
     }
 
-    public static List<Thread> initServers(Integer m, Integer n, Integer initialPort, Integer snapTime) {
+    private static String getStringFromArray(int[] array) {
+        if (array.length == 0) return "";
+        StringBuilder stringFromArray = new StringBuilder();
+        for (int item : array) {
+            stringFromArray.append(item).append(",");
+        }
+        return stringFromArray.toString();
+    }
+
+    public static List<Thread> initServers(Integer m, Integer n, Integer initialPort, Integer snapTime,
+                                           Integer numOfNodesPerCluster) {
         Integer port = initialPort;
-        Integer lastPort = initialPort + n - 1;
+        Integer lastPort = (initialPort + n - 1) * numOfNodesPerCluster;
         BigInteger initialId = new BigInteger("2").pow(m).subtract(BigInteger.ONE);
         BigInteger id = initialId;
         BigInteger band = new BigInteger("2").pow(m).divide(new BigInteger(n.toString()));
 
         List<Thread> servers = new ArrayList<>();
 
-        Integer rightPort, leftPort;
+        Integer rightPort, leftPort, aux, clusterId = 0;
         String serverId;
         String maxId = initialId.toString();
         BigInteger smallerKey;
 
-        for (;port <= lastPort; port++, id = id.subtract(band)){
+        while (port <= lastPort) {
+            aux = numOfNodesPerCluster;
+            clusterId++;
+            while(aux-- > 0) {
+
+            }
+            port++;
+            id = id.subtract(band);
             serverId = id.toString();
             rightPort = port - 1;
             leftPort = port + 1;
@@ -76,6 +95,13 @@ public class TestUtil {
 
     public static void deleteLogsAndSnapshots() throws IOException {
         File directory = new File("/tmp/sd-snaps");
+        if (directory .isDirectory()) {
+            FileUtils.deleteDirectory(directory);
+        }
+    }
+
+    public static void deleteAtomixLogs() throws IOException {
+        File directory = new File("/tmp/atomix-logs");
         if (directory .isDirectory()) {
             FileUtils.deleteDirectory(directory);
         }
