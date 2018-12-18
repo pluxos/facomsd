@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import ConfigParser
 import os
-from grpc import insecure_channel
+from grpc import insecure_channel, StatusCode, RpcError
 from server_side_pb2 import ServerInfo, ServerID, FingerTable
 from server_side_pb2_grpc import P2PServicer, P2PStub
 from sd_work_pb2_grpc import ServerStub
@@ -17,6 +17,7 @@ class Chord(P2PServicer):
         self.port = unicode(CONFIG.getint(u'p2p', u'PORT'))
         self.client_port = unicode(CONFIG.getint(u'all', u'PORT'))
         self.thisHost = self.node.host
+        self.timeout_request = CONFIG.getint(u'p2p', u'TIMEOUT_REQUEST')
 
     ###################### RPC methods #########################
 
@@ -46,7 +47,14 @@ class Chord(P2PServicer):
         else:
             near = self.search_by_id(request.serverID)
             # print("forward search neighbor call from: ", request.serverID)
-            response = near.getNeighbors(request)
+            for stub in near:
+                try:
+                    response = stub.getNeighbors(request, timeout=self.timeout_request)
+                    break
+                except RpcError, e:
+                    if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                        raise e
+                    print 'Retrying redirect getNeighbors()'
 
         return response
 
@@ -86,11 +94,17 @@ class Chord(P2PServicer):
 
         if len(self.node.fingerTable) > 1:
             nextStub = self.node.fingerTable[1][2]
-            try:
-                result = nextStub.build_finger_table(request)
-                request = result
-            except Exception, e:
-                print u"Exception", e
+            attemps = 0
+            for stub in nextStub:
+                try:
+                    result = stub.build_finger_table(request, timeout=self.timeout_request)
+                    request = result
+                    break
+                except RpcError:
+                    print 'Retrying build_finger_table!'
+                    attemps += 1
+            if attemps == len(nextStub):
+                raise Exception('Cannot pass to next build_finger_table, cannot connect')
 
         return request
     
@@ -105,34 +119,62 @@ class Chord(P2PServicer):
         near = stub.getNeighbors(serverInfo)
 
         next = self.server_id_to_finger_table(near.next)
-        next[2].join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id))
+        attempts = 0
+        for stub in next[2]:
+            try:
+                stub.join(ServerInfo(back=this, source=self.node.host, serverID=self.node.id), timeout=self.timeout_request)
+                break
+            except RpcError, e:
+                if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                    raise e
+                print 'Retrying execute join...'
+                attempts += 1
+
+        if len(next[2]) == attempts:
+            raise Exception('Cannot do join in next')
+
 
         back = self.server_id_to_finger_table(near.back)
-        back[2].join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id))
+
+        attempts = 0
+        for stub in back[2]:
+            try:
+                stub.join(ServerInfo(next=this, source=self.node.host, serverID=self.node.id), timeout=self.timeout_request)
+                break
+            except RpcError, e:
+                if e.code() != StatusCode.DEADLINE_EXCEEDED:
+                    raise e
+                print 'Retrying execute join...'
+                attempts += 1
+
+        if len(back[2]) == attempts:
+            raise Exception('Cannot do join in back')
 
         self.node.fingerTable = [back, next]
 
         self.node.cluster.build_finger_to_cluster()
 
     def getStub(self, server):
-        channel = insecure_channel(server.host)
-        stub = P2PStub(channel)
+        stub = []
+        for h in server.host:
+            channel = insecure_channel(h)
+            s = P2PStub(channel)
+            stub.append(s)
         return stub
 
     def getClientStub(self, server):
-        host = server.host.split(u':')[0] + u':' + self.client_port
-        channel = insecure_channel(host)
-        stub = ServerStub(channel)
+        stub = []
+        for h in server.host:
+            host = h.split(u':')[0] + u':' + self.client_port
+            channel = insecure_channel(host)
+            s = ServerStub(channel)
+            stub.append(s)
         return stub
 
     def server_id_to_finger_table(self, server):
         stub = self.getStub(server)
         clientStub = self.getClientStub(server)
         return (server.id, server.host, stub, clientStub)
-
-    def doExit(self, ServerInfo):
-        pass
-
 
     def link_sorted(self, ft):
         sorted_ft = []
@@ -163,7 +205,17 @@ class Chord(P2PServicer):
         ft = FingerTable(source=this)
 
         if len(self.node.fingerTable) > 1:
-            newFt = self.node.fingerTable[1][2].build_finger_table(ft)
+            attemps = 0
+            for stub in self.node.fingerTable[1][2]:
+                try:
+                    newFt = stub.build_finger_table(ft, timeout=self.timeout_request)
+                    break
+                except RpcError, e:
+                    print 'Retrying init the build_finger_table'
+                    attemps += 1
+
+            if attemps == len(self.node.fingerTable[1][2]):
+                raise Exception('Fault in init the build finger table, cannot connect to next node!')
 
             position = 1
             for i in newFt.table:

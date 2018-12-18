@@ -20,6 +20,7 @@ class Cluster(P2PServicer):
         self.port = unicode(CONFIG.getint(u'cluster', u'PORT'))
         self.client_port = unicode(CONFIG.getint(u'all', u'PORT'))
         self.thisHost = self.node.host
+        self.timeout_request = CONFIG.getint(u'p2p', u'TIMEOUT_REQUEST')
 
     def notify_cluster(self, request, context):
 
@@ -56,10 +57,10 @@ class Cluster(P2PServicer):
             try:
                 self.node.build_finger_table.build_cluster_stubs()
                 for stub in self.node.cluster_table:
-                    stub.notify_cluster(response)
+                    stub.notify_cluster(response, timeout=self.timeout_request)
                 break
             except Exception as e:
-                print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + 'Fault in notify_cluster' + str(e)
+                print datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S') + 'Fault in notify_cluster'
 
 
 

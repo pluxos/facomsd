@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='server_side',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x11server_side.proto\x12\x0bserver_side\"$\n\x08ServerID\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x03\"x\n\nServerInfo\x12\x0e\n\x06source\x18\x01 \x01(\t\x12#\n\x04next\x18\x02 \x01(\x0b\x32\x15.server_side.ServerID\x12#\n\x04\x62\x61\x63k\x18\x03 \x01(\x0b\x32\x15.server_side.ServerID\x12\x10\n\x08serverID\x18\x04 \x01(\x03\"Z\n\x0b\x46ingerTable\x12%\n\x06source\x18\x01 \x01(\x0b\x32\x15.server_side.ServerID\x12$\n\x05table\x18\x02 \x03(\x0b\x32\x15.server_side.ServerID\"\x06\n\x04Void2\xce\x02\n\x03P2P\x12\x42\n\x0cgetNeighbors\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04\x65xit\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04join\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12J\n\x12\x62uild_finger_table\x12\x18.server_side.FingerTable\x1a\x18.server_side.FingerTable\"\x00\x12?\n\x0enotify_cluster\x12\x18.server_side.FingerTable\x1a\x11.server_side.Void\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x11server_side.proto\x12\x0bserver_side\"$\n\x08ServerID\x12\x0c\n\x04host\x18\x01 \x03(\t\x12\n\n\x02id\x18\x02 \x01(\x03\"x\n\nServerInfo\x12\x0e\n\x06source\x18\x01 \x03(\t\x12#\n\x04next\x18\x02 \x01(\x0b\x32\x15.server_side.ServerID\x12#\n\x04\x62\x61\x63k\x18\x03 \x01(\x0b\x32\x15.server_side.ServerID\x12\x10\n\x08serverID\x18\x04 \x01(\x03\"Z\n\x0b\x46ingerTable\x12%\n\x06source\x18\x01 \x01(\x0b\x32\x15.server_side.ServerID\x12$\n\x05table\x18\x02 \x03(\x0b\x32\x15.server_side.ServerID\"\x06\n\x04Void2\xce\x02\n\x03P2P\x12\x42\n\x0cgetNeighbors\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04\x65xit\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12:\n\x04join\x12\x17.server_side.ServerInfo\x1a\x17.server_side.ServerInfo\"\x00\x12J\n\x12\x62uild_finger_table\x12\x18.server_side.FingerTable\x1a\x18.server_side.FingerTable\"\x00\x12?\n\x0enotify_cluster\x12\x18.server_side.FingerTable\x1a\x11.server_side.Void\"\x00\x62\x06proto3')
 )
 
 
@@ -34,8 +34,8 @@ _SERVERID = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='host', full_name='server_side.ServerID.host', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -72,8 +72,8 @@ _SERVERINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='source', full_name='server_side.ServerInfo.source', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

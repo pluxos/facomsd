@@ -4,19 +4,18 @@ package server_side;
 
 service P2P {
     rpc getNeighbors(ServerInfo) returns (ServerInfo) {}
-    rpc exit(ServerInfo) returns (ServerInfo) {}
     rpc join(ServerInfo) returns (ServerInfo) {}
     rpc build_finger_table(FingerTable) returns (FingerTable) {}
     rpc notify_cluster(FingerTable) returns (Void) {}
 }
 
 message ServerID {
-    string host = 1;
+    repeated string host = 1;
     int64 id = 2;
 }
 
 message ServerInfo {
-    string source = 1;
+    repeated string source = 1;
     ServerID next = 2;
     ServerID back = 3;
     int64  serverID = 4;

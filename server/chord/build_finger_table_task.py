@@ -26,7 +26,11 @@ class Build_finger_table(AsyncService):
         while not self.stopEvent.isSet():
             sleep(self.wait_time)
             # print("Building finger table...")
-            self.node.chord.fill_finger_table()
+            try:
+                self.node.chord.fill_finger_table()
+            except Exception, e:
+                print 'Fault in build finger table'
+                print e
             # self.print_table()
             self.wait_time += 5
 
@@ -36,7 +40,7 @@ class Build_finger_table(AsyncService):
 
     def build_cluster_stubs(self):
         aux = []
-        my_ip = self.node.host.split(':')[0]
+        my_ip = self.node.ip
         for ip in self.node.ip_cluster:
             if my_ip != ip:
                 channel = insecure_channel(ip + ':' + self.node.cluster_port)
