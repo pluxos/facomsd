@@ -113,17 +113,17 @@ public class TestUtil {
         for (int i=1; i<=n; i++) {
             for (int j=1; j<=numOfNodesPerCluster; j++) {
                 if (i == 1) {
-                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(n));
-                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i+1));
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i+1));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(n));
                     interactor++;
                 } else if (i == n) {
-                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i-1));
-                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(1));
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(1));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i-1));
                     serverConfigs.get(interactor).setSmallerKey(BigInteger.ZERO.toString());
                     interactor++;
                 } else {
-                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i-1));
-                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i+1));
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i+1));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i-1));
                     interactor++;
                 }
             }

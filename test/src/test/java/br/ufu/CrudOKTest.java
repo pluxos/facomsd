@@ -25,10 +25,14 @@ public class CrudOKTest extends BaseTest {
 
         List<Thread> servers =  initServers(6, 6, 4444, 100000, 3);
 
+
         for (Thread thread: servers) {
             thread.start();
             thread.sleep(3000);
         }
+
+        servers.get(6).stop();
+        servers.get(9).stop();
 
         String[] commands = getClientArgs(4449);
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -54,11 +58,11 @@ public class CrudOKTest extends BaseTest {
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenAnswer((Answer<Boolean>) invocation -> true);
         when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
+            Thread.sleep(3000);
             return inputs.take();
         });
 
-        Thread.sleep(10000);
+        Thread.sleep(6000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");
@@ -76,6 +80,7 @@ public class CrudOKTest extends BaseTest {
 
         verifyMessage("Command RESPONSE: CREATE OK - U");
         verifyMessage("Command RESPONSE: DELETE OK - U");
+
 
         for (Thread thread: servers) {
             thread.stop();
