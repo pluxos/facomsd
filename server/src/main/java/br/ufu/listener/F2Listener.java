@@ -78,10 +78,10 @@ public class F2Listener extends FxListener {
             File[] listLogs = logDirectory.listFiles();
             Arrays.sort(listLogs, Comparator.comparingLong(File::lastModified));
             if (listLogs.length > 3) {
-                if (listLogs[0].delete())
-                    System.out.println("  Deleted!");
-                else
-                    System.out.println("  Delete failed - reason unknown");
+                listLogs[0].delete();
+//                    System.out.println("  Deleted!");
+//                else
+//                    System.out.println("  Delete failed - reason unknown");
             }
         }
     }

@@ -86,7 +86,6 @@ public class SnapshotSchedule implements Runnable {
                     snapshotWriter.write(item.getKey(), item.getValue());
                 }
                 snapshotWriter.getWriter().close();
-                log.info("Snapshot " + snapshotNumber + " created!");
                 controlSnapNumber(getSnapshotPath());
             } catch (InterruptedException | IOException e) {
                 log.warn(e.getMessage(), e);

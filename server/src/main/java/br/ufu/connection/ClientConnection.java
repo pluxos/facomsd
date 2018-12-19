@@ -3,7 +3,6 @@ package br.ufu.connection;
 import br.ufu.communication.RequestKeyValue;
 import br.ufu.listener.F4Listener;
 import br.ufu.model.Command;
-import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import br.ufu.communication.GreeterGrpc;

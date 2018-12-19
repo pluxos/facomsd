@@ -15,10 +15,10 @@ import static br.ufu.TestUtil.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CrudOKTest extends BaseTest {
+public class NodesFailTest extends BaseTest {
 
     @Test
-    public void shouldTestCrudOK() throws Exception {
+    public void shouldTestNodesFail() throws Exception {
 
         deleteLogsAndSnapshots();
         deleteAtomixLogs();
@@ -31,7 +31,10 @@ public class CrudOKTest extends BaseTest {
             Thread.sleep(100);
         }
         Thread.sleep(1000);
-        
+
+        servers.get(0).interrupt();
+        servers.get(6).interrupt();
+
         String[] commands = getClientArgs(4449);
         Client clientSpy = Mockito.spy(new Client(commands));
 
@@ -45,8 +48,8 @@ public class CrudOKTest extends BaseTest {
         inputs.offer("CREATE 9 O");
         inputs.offer("DELETE 9");
 
-        inputs.offer("CREATE 4 J");
-        inputs.offer("UPDATE 4 P");
+        inputs.offer("CREATE 34 J");
+        inputs.offer("UPDATE 34 P");
 
         inputs.offer("CREATE 1 U");
         inputs.offer("DELETE 1");
@@ -65,6 +68,7 @@ public class CrudOKTest extends BaseTest {
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");
         tClient.start();
+
         tClient.join();
 
         verifyMessage("Command RESPONSE: CREATE OK - I");
@@ -78,7 +82,6 @@ public class CrudOKTest extends BaseTest {
 
         verifyMessage("Command RESPONSE: CREATE OK - U");
         verifyMessage("Command RESPONSE: DELETE OK - U");
-
 
         for (Thread thread: servers) {
             thread.stop();
