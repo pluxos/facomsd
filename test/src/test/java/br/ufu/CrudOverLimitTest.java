@@ -22,6 +22,7 @@ public class CrudOverLimitTest extends BaseTest {
     public void shouldTestCrudOverLimit() throws Exception {
 
         deleteLogsAndSnapshots();
+        deleteAtomixLogs();
 
         Integer m = 4;
 
@@ -30,8 +31,9 @@ public class CrudOverLimitTest extends BaseTest {
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(100);
+            Thread.sleep(100);
         }
+        Thread.sleep(1000);
 
         String[] commands = getClientArgs(4445);
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -49,11 +51,11 @@ public class CrudOverLimitTest extends BaseTest {
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenAnswer((Answer<Boolean>) invocation -> true);
         when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
+            Thread.sleep(3000);
             return inputs.take();
         });
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");

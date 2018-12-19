@@ -63,7 +63,6 @@ public class TestUtil {
     public static List<Thread> initServers(Integer m, Integer n, Integer initialPort, Integer snapTime,
                                            Integer numOfNodesPerCluster) {
         Integer port = initialPort;
-        Integer lastPort = (initialPort + n - 1) * numOfNodesPerCluster;
         BigInteger initialId = new BigInteger("2").pow(m).subtract(BigInteger.ONE);
         BigInteger id = initialId;
         BigInteger band = new BigInteger("2").pow(m).divide(new BigInteger(n.toString()));
@@ -73,7 +72,7 @@ public class TestUtil {
         String maxId = initialId.toString();
         List<Integer> nodes, ports, nodesIn;
         BigInteger smallerKey;
-        Integer numOfServers = n * numOfNodesPerCluster;
+
         Map<Integer, List<Integer>> nodesInCluster = new HashMap<>();
 
         for (int i=1; i<=n; i++) {
@@ -89,12 +88,17 @@ public class TestUtil {
 
                 serverConfig.setPort(port);
                 serverConfig.setId(id.toString());
-                serverConfig.setSmallerKey(smallerKey.toString());
                 serverConfig.setSnapTime(snapTime);
                 serverConfig.setMaxKey(maxId);
                 serverConfig.setClusterAddresses(nodesIn);
                 serverConfig.setClusterId(i);
                 serverConfig.setAtomixPort(port + 1000);
+
+                if (i == n) {
+                    serverConfig.setSmallerKey(BigInteger.ZERO.toString());
+                } else {
+                    serverConfig.setSmallerKey(smallerKey.toString());
+                }
 
                 serverConfigs.add(serverConfig);
 
@@ -115,17 +119,14 @@ public class TestUtil {
                 if (i == 1) {
                     serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i+1));
                     serverConfigs.get(interactor).setRightServers(nodesInCluster.get(n));
-                    interactor++;
                 } else if (i == n) {
                     serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(1));
                     serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i-1));
-                    serverConfigs.get(interactor).setSmallerKey(BigInteger.ZERO.toString());
-                    interactor++;
                 } else {
                     serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i+1));
                     serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i-1));
-                    interactor++;
                 }
+                interactor++;
             }
         }
 

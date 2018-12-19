@@ -21,13 +21,15 @@ public class CrudZeroTest extends BaseTest {
     public void shouldTestCrudZero() throws Exception {
 
         deleteLogsAndSnapshots();
+        deleteAtomixLogs();
 
         List<Thread> servers =  initServers(6, 11, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(100);
+            Thread.sleep(100);
         }
+        Thread.sleep(1000);
 
         String[] commands = getClientArgs(4448);
         Client clientSpy = Mockito.spy(new Client(commands));
@@ -45,11 +47,11 @@ public class CrudZeroTest extends BaseTest {
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenAnswer((Answer<Boolean>) invocation -> true);
         when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
+            Thread.sleep(3000);
             return inputs.take();
         });
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");

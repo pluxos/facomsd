@@ -21,12 +21,13 @@ public class CrudNegativeTest extends BaseTest {
     public void shouldTestCrudNegative() throws Exception {
 
         deleteLogsAndSnapshots();
+        deleteAtomixLogs();
 
         List<Thread> servers =  initServers(4, 4, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(100);
+            thread.sleep(3000);
         }
 
         String[] commands = getClientArgs(4445);
@@ -45,11 +46,11 @@ public class CrudNegativeTest extends BaseTest {
         when(clientSpy.getScanner()).thenReturn(mockScanner);
         when(mockScanner.hasNext()).thenAnswer((Answer<Boolean>) invocation -> true);
         when(mockScanner.nextLine()).thenAnswer((Answer<String>) invocation -> {
-            Thread.sleep(500);
+            Thread.sleep(3000);
             return inputs.take();
         });
 
-        Thread.sleep(2000);
+        Thread.sleep(6000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");
