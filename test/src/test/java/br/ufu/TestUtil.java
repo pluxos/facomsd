@@ -36,6 +36,7 @@ public class TestUtil {
                 "--cluster.id=" + server.getClusterId(),
                 "--server.atomix.port=" + server.getAtomixPort()
         };
+        System.out.println("--------------------------------------");
         for(String a : s) {
             System.out.println(a);
         }
@@ -70,17 +71,20 @@ public class TestUtil {
         List<ServerConfig> serverConfigs = new ArrayList<>();
         ServerConfig serverConfig;
         String maxId = initialId.toString();
-        List<Integer> nodes = new ArrayList<>();
+        List<Integer> nodes, ports, nodesIn;
         BigInteger smallerKey;
         Integer numOfServers = n * numOfNodesPerCluster;
         Map<Integer, List<Integer>> nodesInCluster = new HashMap<>();
 
         for (int i=1; i<=n; i++) {
             nodes = new ArrayList<>();
+            ports = new ArrayList<>();
 
             smallerKey =  id.subtract(band).add(BigInteger.ONE);
 
             for (int j=1; j<=numOfNodesPerCluster; j++) {
+                nodesIn = new ArrayList<>();
+                nodesIn.addAll(nodes);
                 serverConfig = new ServerConfig();
 
                 serverConfig.setPort(port);
@@ -88,16 +92,17 @@ public class TestUtil {
                 serverConfig.setSmallerKey(smallerKey.toString());
                 serverConfig.setSnapTime(snapTime);
                 serverConfig.setMaxKey(maxId);
-                serverConfig.setClusterAddresses(nodes);
+                serverConfig.setClusterAddresses(nodesIn);
                 serverConfig.setClusterId(i);
                 serverConfig.setAtomixPort(port + 1000);
 
                 serverConfigs.add(serverConfig);
 
                 nodes.add(port + 1000);
+                ports.add(port);
                 port++;
             }
-            nodesInCluster.put(i, nodes);
+            nodesInCluster.put(i, ports);
 
             id = id.subtract(band);
         }

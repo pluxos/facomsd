@@ -50,7 +50,8 @@ public class Server {
         List<Integer> leftServerList = getParameterList(userParameters.getList(PROPERTY_LEFT_SERVERS));
         List<Integer> rightServerList = getParameterList(userParameters.getList(PROPERTY_RIGHT_SERVERS));
         List<Integer> clusterAddresses = getParameterList(userParameters.getList(PROPERTY_CLUSTER_ADDRESSES));
-        printServerInfo(serverPort, serverId, smallerKey, leftServerList, rightServerList, clusterAddresses);
+
+        printServerInfo(serverPort, serverId, smallerKey, leftServerList, rightServerList, clusterId, clusterAddresses);
 
 
         atomixConnection = new AtomixConnection(serverAtomixPort, clusterAddresses);
@@ -150,12 +151,14 @@ public class Server {
     }
 
     private void printServerInfo(Integer port,  BigInteger biggerKey , BigInteger smallerKey,
-                                 List<Integer> leftServer, List<Integer> rightServer, List<Integer> cluster) {
+                                 List<Integer> leftServer, List<Integer> rightServer, BigInteger clusterId,
+                                 List<Integer> cluster) {
         System.out.println("----------------------");
         System.out.println("Server Port -> " + port );
         System.out.println("Server on Left -> " + leftServer);
         System.out.println("Server on Right -> " + rightServer);
         System.out.println("Key range -> [ "+ smallerKey +" , "+ biggerKey +" ]" );
+        System.out.println("Cluster Id -> " + clusterId );
         System.out.println("Servers already in cluster -> " + cluster);
         System.out.println("----------------------");
     }

@@ -27,7 +27,7 @@ public class CrudOKTest extends BaseTest {
 
         for (Thread thread: servers) {
             thread.start();
-            thread.sleep(100);
+            thread.sleep(3000);
         }
 
         String[] commands = getClientArgs(4449);
@@ -57,7 +57,8 @@ public class CrudOKTest extends BaseTest {
             Thread.sleep(500);
             return inputs.take();
         });
-        
+
+        Thread.sleep(10000);
 
         Thread tClient = getThread(clientSpy);
         System.out.println("Client started!");

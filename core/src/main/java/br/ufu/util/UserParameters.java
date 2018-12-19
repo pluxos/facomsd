@@ -43,7 +43,8 @@ public class UserParameters {
         String[] strings = StringUtils.replace(text, LINE_BREAK, SPACE).split(SPACE);
         Arrays.stream(strings).forEach(s -> {
             String[] commandSplited = s.split(ATRIBUTE_DELIMITER);
-            args.put(commandSplited[0].replace(START_PARAMETER_CHARS, ""), commandSplited[1]);
+            args.put(commandSplited[0].replace(START_PARAMETER_CHARS, ""),
+                    commandSplited.length > 1 ? commandSplited[1] : "");
         });
         return args;
     }
