@@ -22,7 +22,7 @@ public class CrudZeroTest extends BaseTest {
 
         deleteLogsAndSnapshots();
 
-        List<Thread> servers =  initServers(6, 11, 4444, 100000);
+        List<Thread> servers =  initServers(6, 11, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();

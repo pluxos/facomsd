@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestUtil {
 
@@ -18,22 +20,26 @@ public class TestUtil {
         return StringUtils.join(commands, LINE_BREAK) + LINE_BREAK;
     }
 
-    public static String[] getServerArgs(int port, String id, String smallerKey, int snapTime,
-         int[] rightServers, int[] leftServers, String maxKey, int[] clusterAddresses, int clusterId) {
-        return new String[]{
+    public static String[] getServerArgs(ServerConfig server) {
+        String[] s = new String[]{
                 "--log.path=/tmp/sd-snaps/",
                 "--server.host=127.0.0.1",
-                "--server.port=" + port,
-                "--server.id=" + id,
-                "--smaller.key=" + smallerKey,
+                "--server.port=" + server.getPort(),
+                "--server.id=" + server.getId(),
+                "--smaller.key=" + server.getSmallerKey(),
                 "--snap.path=/tmp/sd-snaps/",
-                "--snap.time=" + snapTime,
-                "--max.key=" + maxKey,
-                "--right.servers=" + getStringFromArray(rightServers),
-                "--left.servers=" + getStringFromArray(leftServers),
-                "--cluster.addresses=" + getStringFromArray(clusterAddresses),
-                "--cluster.id=" + clusterId
+                "--snap.time=" + server.getSnapTime(),
+                "--max.key=" + server.getMaxKey(),
+                "--right.servers=" + getStringFromArray(server.getRightServers()),
+                "--left.servers=" + getStringFromArray(server.getLeftServers()),
+                "--cluster.addresses=" + getStringFromArray(server.getClusterAddresses()),
+                "--cluster.id=" + server.getClusterId(),
+                "--server.atomix.port=" + server.getAtomixPort()
         };
+        for(String a : s) {
+            System.out.println(a);
+        }
+        return s;
     }
 
     public static String[] getClientArgs(int port) {
@@ -43,12 +49,13 @@ public class TestUtil {
         };
     }
 
-    private static String getStringFromArray(int[] array) {
-        if (array.length == 0) return "";
+    private static String getStringFromArray(List<Integer> array) {
+        if (array.size() == 0) return " ";
         StringBuilder stringFromArray = new StringBuilder();
         for (int item : array) {
             stringFromArray.append(item).append(",");
         }
+        stringFromArray.deleteCharAt(stringFromArray.length()-1);
         return stringFromArray.toString();
     }
 
@@ -60,36 +67,69 @@ public class TestUtil {
         BigInteger id = initialId;
         BigInteger band = new BigInteger("2").pow(m).divide(new BigInteger(n.toString()));
 
-        List<Thread> servers = new ArrayList<>();
-
-        Integer rightPort, leftPort, aux, clusterId = 0;
-        String serverId;
+        List<ServerConfig> serverConfigs = new ArrayList<>();
+        ServerConfig serverConfig;
         String maxId = initialId.toString();
+        List<Integer> nodes = new ArrayList<>();
         BigInteger smallerKey;
+        Integer numOfServers = n * numOfNodesPerCluster;
+        Map<Integer, List<Integer>> nodesInCluster = new HashMap<>();
 
-        while (port <= lastPort) {
-            aux = numOfNodesPerCluster;
-            clusterId++;
-            while(aux-- > 0) {
+        for (int i=1; i<=n; i++) {
+            nodes = new ArrayList<>();
 
-            }
-            port++;
-            id = id.subtract(band);
-            serverId = id.toString();
-            rightPort = port - 1;
-            leftPort = port + 1;
             smallerKey =  id.subtract(band).add(BigInteger.ONE);
 
-            if (port.equals(initialPort)) {
-                rightPort = lastPort;
-            }else if (port.equals(lastPort)) {
-                leftPort = initialPort;
-                smallerKey = BigInteger.ZERO;
-            }
+            for (int j=1; j<=numOfNodesPerCluster; j++) {
+                serverConfig = new ServerConfig();
 
-            servers.add(getThread(Mockito.spy(new Server(getServerArgs(
-                    port, serverId, smallerKey.toString(), snapTime,rightPort, leftPort, maxId)))));
+                serverConfig.setPort(port);
+                serverConfig.setId(id.toString());
+                serverConfig.setSmallerKey(smallerKey.toString());
+                serverConfig.setSnapTime(snapTime);
+                serverConfig.setMaxKey(maxId);
+                serverConfig.setClusterAddresses(nodes);
+                serverConfig.setClusterId(i);
+                serverConfig.setAtomixPort(port + 1000);
+
+                serverConfigs.add(serverConfig);
+
+                nodes.add(port + 1000);
+                port++;
+            }
+            nodesInCluster.put(i, nodes);
+
+            id = id.subtract(band);
         }
+
+        printClusters(nodesInCluster);
+
+        int interactor = 0;
+        for (int i=1; i<=n; i++) {
+            for (int j=1; j<=numOfNodesPerCluster; j++) {
+                if (i == 1) {
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(n));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i+1));
+                    interactor++;
+                } else if (i == n) {
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i-1));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(1));
+                    serverConfigs.get(interactor).setSmallerKey(BigInteger.ZERO.toString());
+                    interactor++;
+                } else {
+                    serverConfigs.get(interactor).setLeftServers(nodesInCluster.get(i-1));
+                    serverConfigs.get(interactor).setRightServers(nodesInCluster.get(i+1));
+                    interactor++;
+                }
+            }
+        }
+
+        List<Thread> servers = new ArrayList<>();
+
+        for (ServerConfig serverconf : serverConfigs) {
+            servers.add(getThread(Mockito.spy(new Server(getServerArgs(serverconf)))));
+        }
+
         return servers;
     }
 
@@ -128,5 +168,21 @@ public class TestUtil {
         });
     }
 
+    private static void printClusters(Map<Integer, List<Integer>>  clusters) {
+        for (Integer key : clusters.keySet()) {
+            System.out.println("----------------------------------");
+            System.out.println("Cluster: " + key);
+
+            StringBuilder nodes = new StringBuilder();
+            nodes.append("Nodes: ");
+            List<Integer> list = clusters.get(key);
+            for (Integer item: list) {
+                nodes.append(item).append("   ");
+            }
+
+            System.out.println(nodes.toString());
+        }
+
+    }
 
 }

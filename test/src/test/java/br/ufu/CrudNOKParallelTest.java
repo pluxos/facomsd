@@ -80,7 +80,7 @@ public class CrudNOKParallelTest extends BaseTest {
         int paralellThreads = 10;
         int port = 4445;
 
-        List<Thread> servers =  initServers(6, 6, 4444, 100000);
+        List<Thread> servers =  initServers(6, 6, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();

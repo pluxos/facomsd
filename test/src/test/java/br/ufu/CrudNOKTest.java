@@ -24,7 +24,7 @@ public class CrudNOKTest extends BaseTest {
 
         deleteLogsAndSnapshots();
 
-        List<Thread> servers =  initServers(4, 4, 4444, 100000);
+        List<Thread> servers =  initServers(4, 4, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();

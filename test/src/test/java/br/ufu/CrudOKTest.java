@@ -21,8 +21,9 @@ public class CrudOKTest extends BaseTest {
     public void shouldTestCrudOK() throws Exception {
 
         deleteLogsAndSnapshots();
+        deleteAtomixLogs();
 
-        List<Thread> servers =  initServers(6, 32, 4444, 100000);
+        List<Thread> servers =  initServers(6, 6, 4444, 100000, 3);
 
         for (Thread thread: servers) {
             thread.start();
