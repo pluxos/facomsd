@@ -1,5 +1,5 @@
 Host:localhost
 Porta Base:50050
-Tamanho do Chord:5
+Tamanho do Chord:2
 Chave máxima(bits):4
-Tempo de Snapshot(segundos):10
+Tempo de Snapshot(segundos):30

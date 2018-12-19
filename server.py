@@ -7,9 +7,14 @@ import grpcFiles.database_pb2_grpc as database_pb2_grpc
 import grpcFiles.database_pb2 as database_pb2
 import time
 import queue
+import collections
 import os
 import pickle
 import sys
+from pysyncobj import SyncObj, replicated, SyncObjConf
+import logging
+import traceback
+from pysyncobj.batteries import ReplDict, ReplLockManager
 
 
 class OperatorGrpc(database_pb2_grpc.DatabaseOperationServicer):
@@ -20,34 +25,34 @@ class OperatorGrpc(database_pb2_grpc.DatabaseOperationServicer):
     def Create(self, request, context):
         response_list = queue.Queue()
         server_request = '1' + '/' + request.chave + '/' + request.dados
-        self.server.line1.put([server_request,response_list])
+        self.server.line0.put([server_request,response_list])
         response = response_list.get()
         return database_pb2.Reply(resposta=response)
 
     def Read(self, request, context):
         response_list = queue.Queue()
         server_request = '2' + '/' + request.chave 
-        self.server.line1.put([server_request,response_list])
+        self.server.line0.put([server_request,response_list])
         response = response_list.get()
         return database_pb2.Reply(resposta=response)
 
     def Update(self, request, context):
         response_list = queue.Queue()
         server_request = '3' + '/' + request.chave + '/' + request.dados
-        self.server.line1.put([server_request,response_list])
+        self.server.line0.put([server_request,response_list])
         response = response_list.get()
         return database_pb2.Reply(resposta=response)
 
     def Delete(self, request, context):
         response_list = queue.Queue()
         server_request = '4' + '/' + request.chave 
-        self.server.line1.put([server_request,response_list])
+        self.server.line0.put([server_request,response_list])
         response = response_list.get()
         return database_pb2.Reply(resposta=response)
 
 
 
-class Servidor:
+class Servidor(SyncObj):
     '''Create start information for the server work
         mode default is 0, it means the server will work alone
         on single mode.
@@ -56,18 +61,27 @@ class Servidor:
         otherwise, the server_id will be assert by the order it
         joins the server. server_id default=0'''
 
-    def __init__(self,mode=0,server_id=0):
-        
+    def __init__(self,selfNodeAddr,selfPartnerAddr):
+        lockManager = ReplLockManager(autoUnlockTime=30)
+        self.distDatabase = ReplDict()
+        cfg = SyncObjConf(dynamicMembershipChange=True)
+        super(Servidor,self).__init__(selfNodeAddr,selfPartnerAddr, consumers=[lockManager,self.distDatabase],conf=cfg)
 
-        self.serverMode = int(mode)
-        self.id = int(server_id)
+                    
+    def start_server(self,clusterId,server_id):
+        
+        self.clusterId = int(clusterId)
+        self.id = int(server_id) + (10*clusterId)
         self.database = {}
+        self.line0 = queue.Queue()
         self.line1 = queue.Queue()
         self.line2 = queue.Queue()
         self.line3 = queue.Queue()
         self.line4 = queue.Queue()
+        self.auxLine = queue.Queue()
+        self.auxLine2 = queue.Queue()
         self.threadPool = futures.ThreadPoolExecutor(max_workers=15)
-        self.workPool = futures.ThreadPoolExecutor(max_workers=5)
+        self.workPool = futures.ThreadPoolExecutor(max_workers=6)
         self.dir_log = 'logs'
         self.dir_snap = 'snaps'
         self.onChord = False
@@ -76,9 +90,10 @@ class Servidor:
 
 
         if self.get_connection():
-            if self.serverMode == 1:
-                self.registerOnChord(self.id)
-
+            
+            self.registerOnChord()
+            
+            
             self.server = grpc.server(self.threadPool)
             self.server.add_insecure_port(self.host+':'+self.port)
             print(self.host+':'+self.port)
@@ -86,15 +101,15 @@ class Servidor:
             
         else:
             print("Fatal - cannot start the server")
-            
-    def start_server(self):
+            exit(-1)
+
         print("Running server") #implementar as threads de cada fila aqui
         self.server.start()
-        if self.onChord:
-            self.workPool.submit(self.lineOneChordMode)
-            self.workPool.submit(self.lineFour)
-        else:
-            self.workPool.submit(self.lineOne)
+        
+        self.workPool.submit(self.preProcessing)
+        self.workPool.submit(self.lineFour)
+    
+        self.workPool.submit(self.lineOne)
 
         self.workPool.submit(self.lineTwo)
         self.workPool.submit(self.lineThree)
@@ -151,32 +166,49 @@ Tempo de Snapshot(segundos):30'''
                 return False
 
 
+    def preProcessing(self):
 
-    def lineOne(self):
-        '''Duplicate requests to lines 2 and 3'''
-
-        while True:
-            request = self.line1.get()
-            self.line2.put(request[0]) #only pass the request, drop out the response_line
-            self.line3.put(request)
-
-    def lineOneChordMode(self):
-        '''Duplicate requests or repass to line 4'''
-        
         maximumKeyError = 'Cant store that key, maximum key is ' + str(self.maximumKey) 
         while True:
 
-            request = self.line1.get()
+            request = self.line0.get()
             key = int(request[0].split('/')[1])
 
             if key > self.maximumKey:
                 request[1].put(maximumKeyError)
 
             elif key <= self.chordId and key >= self.lowerKey:
-                self.line2.put(request[0]) 
-                self.line3.put(request)
+                self.auxLine.put(request[1])
+                self.difusao(request[0])
             else:
-                self.line4.put(request)
+                self.auxLine2.put(request[1])
+                self.difusao2(request[0])
+        
+        
+    
+    
+
+
+    def lineOne(self):
+        '''Duplicate requests to lines 2 and 3'''
+
+        while True:
+            request = self.line1.get()
+            
+            self.line2.put(request) #only pass the request, drop out the response_line
+            self.line3.put(request)
+
+            
+    @replicated
+    def difusao(self,request):
+        self.line1.put(request)
+
+    @replicated
+    def difusao2(self,request):
+        self.line4.put(request)
+
+
+       
 
 
     def lineTwo(self):
@@ -201,8 +233,12 @@ Tempo de Snapshot(segundos):30'''
         while True:
             
             request = self.line3.get()
-            response = self.applyDatabase(request[0])
-            request[1].put(response)
+            response = self.applyDatabase(request)
+            try:
+                rsp = self.auxLine.get_nowait()
+                rsp.put(response)
+            except:
+                pass
             request = ''
 
     def lineFour(self):
@@ -213,55 +249,59 @@ Tempo de Snapshot(segundos):30'''
             stub = None
             channel = None
             request = self.line4.get()
-            key = int(request[0].split('/')[1])
+            key = int(request.split('/')[1])
 
             if key <= lowerKey and key >= halfChord:
-                print('go prev')
                 try:
                     self.handleRequest(self.routingTable['prev'],request)
                 except:
                     print('Error - on this request')
                 
             else:
-                print('go next')
                 try:
                     self.handleRequest(self.routingTable['next'],request)
-                except Error:
+                except:
                     print('Error - on this request')
             
 
     def handleRequest(self, stub, request):
         
-        data = request[0].split('/')
+        data = request.split('/')
         op = data.pop(0)
         key = data.pop(0)
         values = '/'.join(data)
         
         if   op == '1':
             try:
+
                 response = stub.Create(database_pb2.CrUpRequest(chave=key,dados=values))
-                request[1].put(response.resposta)
-            except error:
-                print('Stub creation error, please try again', error)
+                rsp = self.auxLine2.get_nowait()
+                rsp.put(response.resposta)
+            except :
+                pass
 
         elif op == '2':
             try:
                 response = stub.Read(database_pb2.RdDelRequest(chave=key))
-                request[1].put(response.resposta)
-            except error:
-                print('Stub creation error, please try again', error)
+                rsp = self.auxLine2.get_nowait()
+                rsp.put(response.resposta)
+            except :
+                pass
         elif op == '3':
             try:
                 response = stub.Update(database_pb2.CrUpRequest(chave=key,dados=values))
-                request[1].put(response.resposta)
-            except error:
-                print('Stub creation error, please try again', error)
+                rsp = self.auxLine2.get_nowait()
+                rsp.put(response.resposta)
+            except :
+                pass
         elif op == '4':
             try:
                 response = stub.Delete(database_pb2.RdDelRequest(chave=key))
-                request[1].put(response.resposta)
-            except error:
-                print('Stub creation error, please try again', error)
+                rsp = self.auxLine2.get_nowait()
+                rsp.put(response.resposta)
+            except:
+                pass
+                
     
 
 
@@ -392,24 +432,25 @@ Tempo de Snapshot(segundos):30'''
             logR = self.dir_log + '/' + str(self.id) + '.log.' + str(self.numSnap - 3)
             os.remove(logR)
 
-    def registerOnChord(self,registerId):
+    def registerOnChord(self):
 
         self.maximumKey = (2 ** self.num_bits) - 1
         self.espectrum = (self.maximumKey // self.num_servers)
-        self.chordId = self.maximumKey - (self.espectrum * self.id)
+        self.chordId = self.maximumKey - (self.espectrum * self.clusterId)
 
-        if self.id == self.num_servers - 1:
+        if self.clusterId == self.num_servers - 1:
             self.lowerKey = 0
         else :
             self.lowerKey = self.chordId - self.espectrum + 1
         
-        self.port = str( int(self.port) + self.id)
+        self.port = str( int(self.port)  + self.id)
         #because register is made with 0 the higher key, the lower id, bigger the key
-        idPrev = (self.id + 1) % self.num_servers
-        idNext = (self.id - 1) % self.num_servers
+        idPrev = (self.id + 10) % (self.num_servers*10)
+        idNext = (self.id - 10) % (self.num_servers*10)
 
         self.routingTable = {}
         
+
         channel1 = grpc.insecure_channel((self.host + ':' + str(50050 + idPrev)))
         stub1 = database_pb2_grpc.DatabaseOperationStub(channel1)
         channel2 = grpc.insecure_channel((self.host + ':' + str(50050 + idNext)))
@@ -417,24 +458,22 @@ Tempo de Snapshot(segundos):30'''
 
         self.routingTable['prev'] = stub1 
         self.routingTable['next'] = stub2
-        self.onChord = True
+        
 
         print('On chord, keys:' ,self.chordId,',', self.lowerKey)
 
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
-        modo = int(sys.argv[1])
-        server = int(sys.argv[2])
-        meu_server = Servidor(mode=modo,server_id=server)
 
-    elif len(sys.argv) > 1:
-        server = int(sys.argv[1])
-        meu_server = Servidor(mode=0,server_id=server)
-    else:
-        modo = int(input('Server mode:'))
-        server = int(input('Server id:'))
-        meu_server = Servidor(mode=modo,server_id=server)
+        num_cluster = int(input("Cluster:"))
+        serv_id = int(input("Server ID:"))
+        cluster = [12000,12001,12002]
+        for p in range(len(cluster)):
+            cluster[p] += (num_cluster*10)
+        
+        port = cluster.pop(serv_id)
+        partners = ['localhost:%d' % int(p) for p in cluster]
 
-    meu_server.start_server()
+        my_server = Servidor('localhost:%d' % port,partners)
+        my_server.start_server(num_cluster,serv_id)

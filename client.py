@@ -4,15 +4,16 @@ import grpcFiles.database_pb2_grpc as database_pb2_grpc
 import os
 from threading import Thread
 import time
+import sys
 
 
 class Client:
 
-    def __init__(self):
+    def __init__(self,port):
         
         self.instantiate_dirs()
         self.get_connection()
-        
+        self.port = port
         channel = grpc.insecure_channel(self.host+':'+self.port) 
         self.stub = database_pb2_grpc.DatabaseOperationStub(channel)
 
@@ -80,7 +81,7 @@ Porta:50050'''
             elif resposta == 'create' or resposta == '1':
                 key = input("Digite a chave:")
                 if not key.isdecimal() :
-                    print("A chave deve ser um número inteiro!")
+                    print("A chave deve ser um numero inteiro!")
                 
                 else:
                     value = input("Digite os dados:")
@@ -139,5 +140,6 @@ Porta:50050'''
         
 
 if __name__ == '__main__':
-    meu_cliente = Client()
+    porta = sys.argv[1]
+    meu_cliente = Client(porta)
     meu_cliente.run()
