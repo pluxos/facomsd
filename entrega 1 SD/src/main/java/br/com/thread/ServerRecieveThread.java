@@ -1,5 +1,7 @@
 package br.com.thread;
 
+import br.com.atomix.Atomix;
+
 import java.net.ServerSocket;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
@@ -9,15 +11,15 @@ public class ServerRecieveThread implements Runnable {
 
 	private ServerSocket serverSocket;
 	
-	private Queue< String > Queue;
+	private Queue< String > queue;
 
 	
 	private ExecutorService executor = Executors.newCachedThreadPool();
 
 
-	public ServerRecieveThread( ServerSocket serverSocket, Queue< String > Queue ) {
+	public ServerRecieveThread( ServerSocket serverSocket, Queue< String > queue ) {
 		this.serverSocket = serverSocket;
-		this.Queue = Queue;
+		this.queue = queue;
 	}
 
 	@Override
@@ -26,9 +28,11 @@ public class ServerRecieveThread implements Runnable {
 			while (true) {
 				try {
 
-					String instruction = Queue.poll();
+					String instruction = queue.poll();
 
 					if (instruction != null) {
+						Atomix atomix = new Atomix();
+						atomix.getReplica();
 
 						synchronized (GrpcThread.f1) {
 							GrpcThread.f1.add(instruction);

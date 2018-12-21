@@ -17,7 +17,7 @@ public class ClientGrpc {
 		
 		try {
 			
-			grpccServerSettings = Configuration.grpcServerSettings();
+			grpccServerSettings = Configuration.grpcServerSettings(args[0]);
 			
 			executor = Executors.newFixedThreadPool(50);
 			ClientSenderGrpcThread grpcClientThread = new ClientSenderGrpcThread( grpccServerSettings );

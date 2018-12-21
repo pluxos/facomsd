@@ -14,42 +14,44 @@ import br.com.configuration.SocketSetting;
 
 public class FileReader {
 
-	/**
-	 * Le o arquivo de configuracao XML
-	 * @param file
-	 * @return SocketSetting
-	 */
-	public static SocketSetting readXMLConfiguration( File file ) {
+    /**
+     * Le o arquivo de configuracao XML
+     *
+     * @param file
+     * @return SocketSetting
+     */
+    public static SocketSetting readXMLConfiguration(File file) {
 
-		try {
-			
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse( file );
+        try {
 
-			doc.getDocumentElement().normalize();
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(file);
 
-			NodeList nList = doc.getElementsByTagName( "server" );
+            doc.getDocumentElement().normalize();
 
-			Node nNode = nList.item( 0 );
+            NodeList nList = doc.getElementsByTagName("server");
 
-			if ( nNode.getNodeType() == Node.ELEMENT_NODE ) {
+            Node nNode = nList.item(0);
 
-				Element eElement = (Element) nNode;
-				
-				String host = eElement.getElementsByTagName( "host" ).item( 0 ).getTextContent();
-				String port = eElement.getElementsByTagName( "port" ).item( 0 ).getTextContent();
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
-				return new SocketSetting( host, Integer.parseInt( port ) );
-				
-			}
-			
-			return null;
-			
-		} catch ( Exception e ) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+                Element eElement = (Element) nNode;
+
+                String host = eElement.getElementsByTagName("host").item(0).getTextContent();
+                String port = eElement.getElementsByTagName("port").item(0).getTextContent();
+                String id = eElement.getElementsByTagName("id").item(0).getTextContent();
+
+                return new SocketSetting(host, Integer.parseInt(port), Integer.parseInt(id));
+
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

@@ -16,8 +16,8 @@ public class Configuration {
 		return FileReader.readXMLConfiguration( file );
 	}
 	
-	public static SocketSetting grpcServerSettings() {
-		File file = new File( GRPC_SERVER_SETTINGS );
+	public static SocketSetting grpcServerSettings(String id) {
+		File file = new File( GRPC_SERVER_SETTINGS+"."+id );
 		return FileReader.readXMLConfiguration( file );
 	}
 
@@ -25,8 +25,8 @@ public class Configuration {
 	 * Leitura do XML do servidor
 	 * @return SocketSettings
 	 */
-	public static SocketSetting serverSettings() {
-		File file = new File( SERVER_SETTINGS );
+	public static SocketSetting serverSettings(String id) {
+		File file = new File( SERVER_SETTINGS+"."+id );
 		return FileReader.readXMLConfiguration( file );
 	}
 

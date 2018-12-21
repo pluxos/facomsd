@@ -1,11 +1,5 @@
 package br.com.thread;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import br.com.configuration.SocketSetting;
 import br.com.context.Context;
 import br.com.proto.ContextProto.SubscribeResponse;
@@ -14,22 +8,26 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class GrpcThread implements Runnable {
 
 	private Queue< String > logQueue;
 
 	private Queue< String > Queue;
 	static LinkedList<String> f1 = new LinkedList<>();
-	static LinkedList<String> f2 = new LinkedList<>();
-	static LinkedList<String> f3 = new LinkedList<>();
+
 
 	private Context context;
 	
 	private ExecutorService executor = Executors.newCachedThreadPool();
 	
 	private SocketSetting settings;
-	
-	private List< String > subscribeAlert = new ArrayList< String >();
+
 	
 	private Map< String, List< StreamObserver< SubscribeResponse > > > observers;
 

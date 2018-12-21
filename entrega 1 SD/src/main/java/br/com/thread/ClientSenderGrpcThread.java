@@ -3,11 +3,9 @@ package br.com.thread;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import br.com.configuration.SocketSetting;
 import br.com.enums.Operation;
@@ -16,6 +14,10 @@ import br.com.proto.ContextProto.ContextResponse;
 import br.com.proto.ContextProto.SubscribeRequest;
 import br.com.proto.ContextProto.SubscribeResponse;
 import br.com.proto.ContextServiceGrpc;
+import io.atomix.AtomixClient;
+import io.atomix.catalyst.transport.Address;
+import io.atomix.catalyst.transport.netty.NettyTransport;
+import io.atomix.copycat.client.CopycatClient;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -34,6 +36,7 @@ public class ClientSenderGrpcThread implements Runnable {
     public void run() {
 
         String server = settings.getHost() + ":" + settings.getPort();
+
 
         final ManagedChannel channel = ManagedChannelBuilder.forTarget(server).usePlaintext(true).build();
         final ManagedChannel aSyncChannel = ManagedChannelBuilder.forTarget(server).usePlaintext(true).build();
@@ -86,20 +89,34 @@ public class ClientSenderGrpcThread implements Runnable {
 
                     ContextResponse contextResponse = null;
 
+                    CompletableFuture[] futures = null;
+
                     if (Operation.INSERT.name().equals(operation)) {
+                        futures = new CompletableFuture[]{
+
+                        };
                         contextResponse = stub.insert(contextRequest);
                         System.out.println(contextResponse.getMessage());
                     } else if (Operation.UPDATE.name().equals(operation)) {
+                        futures = new CompletableFuture[]{
+
+                        };
                         contextResponse = stub.update(contextRequest);
                         System.out.println(contextResponse.getMessage());
                     } else if (Operation.DELETE.name().equals(operation)) {
+                        futures = new CompletableFuture[]{
+
+                        };
                         contextResponse = stub.delete(contextRequest);
                         System.out.println(contextResponse.getMessage());
                     } else if (Operation.RETURN.name().equals(operation)) {
+                        futures = new CompletableFuture[]{
+
+                        };
                         contextResponse = stub.find(contextRequest);
                         System.out.println(contextResponse.getMessage());
                     }
-
+                    CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
                 }
 
                 Thread.sleep(1);

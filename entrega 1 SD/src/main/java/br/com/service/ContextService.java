@@ -61,12 +61,10 @@ public class ContextService extends ContextServiceGrpc.ContextServiceImplBase {
 
 	@Override
 	public void find( ContextRequest request, StreamObserver< ContextResponse > responseObserver ) {
-		String instruction = request.getInstruction();
-		List< String > params = Arrays.asList( instruction.split( " " ) );
-		String stringify = context.get( new BigInteger( params.get( 1 ) ));
-		ContextResponse response = ContextResponse.newBuilder().setMessage( stringify ).build();
-		responseObserver.onNext( response );
-		responseObserver.onCompleted();
+        messageToQueue( request.getInstruction() );
+        ContextResponse response = ContextResponse.newBuilder().setMessage( "Instrucao enviada para execucao " + request.getInstruction() ).build();
+        responseObserver.onNext( response );
+        responseObserver.onCompleted();
 	}
 
 	@Override

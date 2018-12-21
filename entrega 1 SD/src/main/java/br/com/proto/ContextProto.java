@@ -21,7 +21,7 @@ public final class ContextProto {
     /**
      * <code>string instruction = 1;</code>
      */
-    java.lang.String getInstruction();
+    String getInstruction();
     /**
      * <code>string instruction = 1;</code>
      */
@@ -44,7 +44,7 @@ public final class ContextProto {
       instruction_ = "";
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -73,7 +73,7 @@ public final class ContextProto {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instruction_ = s;
               break;
@@ -92,29 +92,29 @@ public final class ContextProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
+      return ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_ContextRequest_fieldAccessorTable
+      return ContextProto.internal_static_br_com_proto_ContextRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              br.com.proto.ContextProto.ContextRequest.class, br.com.proto.ContextProto.ContextRequest.Builder.class);
+              ContextRequest.class, Builder.class);
     }
 
     public static final int INSTRUCTION_FIELD_NUMBER = 1;
-    private volatile java.lang.Object instruction_;
+    private volatile Object instruction_;
     /**
      * <code>string instruction = 1;</code>
      */
-    public java.lang.String getInstruction() {
-      java.lang.Object ref = instruction_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    public String getInstruction() {
+      Object ref = instruction_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instruction_ = s;
         return s;
       }
@@ -124,11 +124,11 @@ public final class ContextProto {
      */
     public com.google.protobuf.ByteString
         getInstructionBytes() {
-      java.lang.Object ref = instruction_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instruction_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instruction_ = b;
         return b;
       } else {
@@ -167,15 +167,15 @@ public final class ContextProto {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof br.com.proto.ContextProto.ContextRequest)) {
+      if (!(obj instanceof ContextRequest)) {
         return super.equals(obj);
       }
-      br.com.proto.ContextProto.ContextRequest other = (br.com.proto.ContextProto.ContextRequest) obj;
+      ContextRequest other = (ContextRequest) obj;
 
       boolean result = true;
       result = result && getInstruction()
@@ -184,7 +184,7 @@ public final class ContextProto {
       return result;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -198,69 +198,69 @@ public final class ContextProto {
       return hash;
     }
 
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(byte[] data)
+    public static ContextRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(java.io.InputStream input)
+    public static ContextRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseDelimitedFrom(java.io.InputStream input)
+    public static ContextRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseDelimitedFrom(
+    public static ContextRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextRequest parseFrom(
+    public static ContextRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -272,7 +272,7 @@ public final class ContextProto {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(br.com.proto.ContextProto.ContextRequest prototype) {
+    public static Builder newBuilder(ContextRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -280,9 +280,9 @@ public final class ContextProto {
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -292,17 +292,17 @@ public final class ContextProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:br.com.proto.ContextRequest)
-        br.com.proto.ContextProto.ContextRequestOrBuilder {
+        ContextRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
+        return ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextRequest_fieldAccessorTable
+        return ContextProto.internal_static_br_com_proto_ContextRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                br.com.proto.ContextProto.ContextRequest.class, br.com.proto.ContextProto.ContextRequest.Builder.class);
+                ContextRequest.class, Builder.class);
       }
 
       // Construct using br.com.proto.ContextProto.ContextRequest.newBuilder()
@@ -311,7 +311,7 @@ public final class ContextProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -329,23 +329,23 @@ public final class ContextProto {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
+        return ContextProto.internal_static_br_com_proto_ContextRequest_descriptor;
       }
 
-      public br.com.proto.ContextProto.ContextRequest getDefaultInstanceForType() {
-        return br.com.proto.ContextProto.ContextRequest.getDefaultInstance();
+      public ContextRequest getDefaultInstanceForType() {
+        return ContextRequest.getDefaultInstance();
       }
 
-      public br.com.proto.ContextProto.ContextRequest build() {
-        br.com.proto.ContextProto.ContextRequest result = buildPartial();
+      public ContextRequest build() {
+        ContextRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public br.com.proto.ContextProto.ContextRequest buildPartial() {
-        br.com.proto.ContextProto.ContextRequest result = new br.com.proto.ContextProto.ContextRequest(this);
+      public ContextRequest buildPartial() {
+        ContextRequest result = new ContextRequest(this);
         result.instruction_ = instruction_;
         onBuilt();
         return result;
@@ -356,7 +356,7 @@ public final class ContextProto {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -369,25 +369,25 @@ public final class ContextProto {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof br.com.proto.ContextProto.ContextRequest) {
-          return mergeFrom((br.com.proto.ContextProto.ContextRequest)other);
+        if (other instanceof ContextRequest) {
+          return mergeFrom((ContextRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(br.com.proto.ContextProto.ContextRequest other) {
-        if (other == br.com.proto.ContextProto.ContextRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(ContextRequest other) {
+        if (other == ContextRequest.getDefaultInstance()) return this;
         if (!other.getInstruction().isEmpty()) {
           instruction_ = other.instruction_;
           onChanged();
@@ -405,11 +405,11 @@ public final class ContextProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        br.com.proto.ContextProto.ContextRequest parsedMessage = null;
+        ContextRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (br.com.proto.ContextProto.ContextRequest) e.getUnfinishedMessage();
+          parsedMessage = (ContextRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -419,20 +419,20 @@ public final class ContextProto {
         return this;
       }
 
-      private java.lang.Object instruction_ = "";
+      private Object instruction_ = "";
       /**
        * <code>string instruction = 1;</code>
        */
-      public java.lang.String getInstruction() {
-        java.lang.Object ref = instruction_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstruction() {
+        Object ref = instruction_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instruction_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -440,11 +440,11 @@ public final class ContextProto {
        */
       public com.google.protobuf.ByteString
           getInstructionBytes() {
-        java.lang.Object ref = instruction_;
+        Object ref = instruction_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instruction_ = b;
           return b;
         } else {
@@ -455,7 +455,7 @@ public final class ContextProto {
        * <code>string instruction = 1;</code>
        */
       public Builder setInstruction(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -502,12 +502,12 @@ public final class ContextProto {
     }
 
     // @@protoc_insertion_point(class_scope:br.com.proto.ContextRequest)
-    private static final br.com.proto.ContextProto.ContextRequest DEFAULT_INSTANCE;
+    private static final ContextRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new br.com.proto.ContextProto.ContextRequest();
+      DEFAULT_INSTANCE = new ContextRequest();
     }
 
-    public static br.com.proto.ContextProto.ContextRequest getDefaultInstance() {
+    public static ContextRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -525,12 +525,12 @@ public final class ContextProto {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<ContextRequest> getParserForType() {
       return PARSER;
     }
 
-    public br.com.proto.ContextProto.ContextRequest getDefaultInstanceForType() {
+    public ContextRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -543,7 +543,7 @@ public final class ContextProto {
     /**
      * <code>string message = 1;</code>
      */
-    java.lang.String getMessage();
+    String getMessage();
     /**
      * <code>string message = 1;</code>
      */
@@ -566,7 +566,7 @@ public final class ContextProto {
       message_ = "";
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -595,7 +595,7 @@ public final class ContextProto {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               message_ = s;
               break;
@@ -614,29 +614,29 @@ public final class ContextProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
+      return ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_ContextResponse_fieldAccessorTable
+      return ContextProto.internal_static_br_com_proto_ContextResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              br.com.proto.ContextProto.ContextResponse.class, br.com.proto.ContextProto.ContextResponse.Builder.class);
+              ContextResponse.class, Builder.class);
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 1;
-    private volatile java.lang.Object message_;
+    private volatile Object message_;
     /**
      * <code>string message = 1;</code>
      */
-    public java.lang.String getMessage() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    public String getMessage() {
+      Object ref = message_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         message_ = s;
         return s;
       }
@@ -646,11 +646,11 @@ public final class ContextProto {
      */
     public com.google.protobuf.ByteString
         getMessageBytes() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
+      Object ref = message_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         message_ = b;
         return b;
       } else {
@@ -689,15 +689,15 @@ public final class ContextProto {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof br.com.proto.ContextProto.ContextResponse)) {
+      if (!(obj instanceof ContextResponse)) {
         return super.equals(obj);
       }
-      br.com.proto.ContextProto.ContextResponse other = (br.com.proto.ContextProto.ContextResponse) obj;
+      ContextResponse other = (ContextResponse) obj;
 
       boolean result = true;
       result = result && getMessage()
@@ -706,7 +706,7 @@ public final class ContextProto {
       return result;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -720,69 +720,69 @@ public final class ContextProto {
       return hash;
     }
 
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(byte[] data)
+    public static ContextResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(java.io.InputStream input)
+    public static ContextResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseDelimitedFrom(java.io.InputStream input)
+    public static ContextResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseDelimitedFrom(
+    public static ContextResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.ContextResponse parseFrom(
+    public static ContextResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -794,7 +794,7 @@ public final class ContextProto {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(br.com.proto.ContextProto.ContextResponse prototype) {
+    public static Builder newBuilder(ContextResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -802,9 +802,9 @@ public final class ContextProto {
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -814,17 +814,17 @@ public final class ContextProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:br.com.proto.ContextResponse)
-        br.com.proto.ContextProto.ContextResponseOrBuilder {
+        ContextResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
+        return ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextResponse_fieldAccessorTable
+        return ContextProto.internal_static_br_com_proto_ContextResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                br.com.proto.ContextProto.ContextResponse.class, br.com.proto.ContextProto.ContextResponse.Builder.class);
+                ContextResponse.class, Builder.class);
       }
 
       // Construct using br.com.proto.ContextProto.ContextResponse.newBuilder()
@@ -833,7 +833,7 @@ public final class ContextProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -851,23 +851,23 @@ public final class ContextProto {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
+        return ContextProto.internal_static_br_com_proto_ContextResponse_descriptor;
       }
 
-      public br.com.proto.ContextProto.ContextResponse getDefaultInstanceForType() {
-        return br.com.proto.ContextProto.ContextResponse.getDefaultInstance();
+      public ContextResponse getDefaultInstanceForType() {
+        return ContextResponse.getDefaultInstance();
       }
 
-      public br.com.proto.ContextProto.ContextResponse build() {
-        br.com.proto.ContextProto.ContextResponse result = buildPartial();
+      public ContextResponse build() {
+        ContextResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public br.com.proto.ContextProto.ContextResponse buildPartial() {
-        br.com.proto.ContextProto.ContextResponse result = new br.com.proto.ContextProto.ContextResponse(this);
+      public ContextResponse buildPartial() {
+        ContextResponse result = new ContextResponse(this);
         result.message_ = message_;
         onBuilt();
         return result;
@@ -878,7 +878,7 @@ public final class ContextProto {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -891,25 +891,25 @@ public final class ContextProto {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof br.com.proto.ContextProto.ContextResponse) {
-          return mergeFrom((br.com.proto.ContextProto.ContextResponse)other);
+        if (other instanceof ContextResponse) {
+          return mergeFrom((ContextResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(br.com.proto.ContextProto.ContextResponse other) {
-        if (other == br.com.proto.ContextProto.ContextResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(ContextResponse other) {
+        if (other == ContextResponse.getDefaultInstance()) return this;
         if (!other.getMessage().isEmpty()) {
           message_ = other.message_;
           onChanged();
@@ -927,11 +927,11 @@ public final class ContextProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        br.com.proto.ContextProto.ContextResponse parsedMessage = null;
+        ContextResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (br.com.proto.ContextProto.ContextResponse) e.getUnfinishedMessage();
+          parsedMessage = (ContextResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -941,20 +941,20 @@ public final class ContextProto {
         return this;
       }
 
-      private java.lang.Object message_ = "";
+      private Object message_ = "";
       /**
        * <code>string message = 1;</code>
        */
-      public java.lang.String getMessage() {
-        java.lang.Object ref = message_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getMessage() {
+        Object ref = message_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           message_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -962,11 +962,11 @@ public final class ContextProto {
        */
       public com.google.protobuf.ByteString
           getMessageBytes() {
-        java.lang.Object ref = message_;
+        Object ref = message_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           message_ = b;
           return b;
         } else {
@@ -977,7 +977,7 @@ public final class ContextProto {
        * <code>string message = 1;</code>
        */
       public Builder setMessage(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1024,12 +1024,12 @@ public final class ContextProto {
     }
 
     // @@protoc_insertion_point(class_scope:br.com.proto.ContextResponse)
-    private static final br.com.proto.ContextProto.ContextResponse DEFAULT_INSTANCE;
+    private static final ContextResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new br.com.proto.ContextProto.ContextResponse();
+      DEFAULT_INSTANCE = new ContextResponse();
     }
 
-    public static br.com.proto.ContextProto.ContextResponse getDefaultInstance() {
+    public static ContextResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1047,12 +1047,12 @@ public final class ContextProto {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<ContextResponse> getParserForType() {
       return PARSER;
     }
 
-    public br.com.proto.ContextProto.ContextResponse getDefaultInstanceForType() {
+    public ContextResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1065,7 +1065,7 @@ public final class ContextProto {
     /**
      * <code>string key = 1;</code>
      */
-    java.lang.String getKey();
+    String getKey();
     /**
      * <code>string key = 1;</code>
      */
@@ -1088,7 +1088,7 @@ public final class ContextProto {
       key_ = "";
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -1117,7 +1117,7 @@ public final class ContextProto {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               key_ = s;
               break;
@@ -1136,29 +1136,29 @@ public final class ContextProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
+      return ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeRequest_fieldAccessorTable
+      return ContextProto.internal_static_br_com_proto_SubscribeRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              br.com.proto.ContextProto.SubscribeRequest.class, br.com.proto.ContextProto.SubscribeRequest.Builder.class);
+              SubscribeRequest.class, Builder.class);
     }
 
     public static final int KEY_FIELD_NUMBER = 1;
-    private volatile java.lang.Object key_;
+    private volatile Object key_;
     /**
      * <code>string key = 1;</code>
      */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    public String getKey() {
+      Object ref = key_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         key_ = s;
         return s;
       }
@@ -1168,11 +1168,11 @@ public final class ContextProto {
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
+      Object ref = key_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         key_ = b;
         return b;
       } else {
@@ -1211,15 +1211,15 @@ public final class ContextProto {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof br.com.proto.ContextProto.SubscribeRequest)) {
+      if (!(obj instanceof SubscribeRequest)) {
         return super.equals(obj);
       }
-      br.com.proto.ContextProto.SubscribeRequest other = (br.com.proto.ContextProto.SubscribeRequest) obj;
+      SubscribeRequest other = (SubscribeRequest) obj;
 
       boolean result = true;
       result = result && getKey()
@@ -1228,7 +1228,7 @@ public final class ContextProto {
       return result;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -1242,69 +1242,69 @@ public final class ContextProto {
       return hash;
     }
 
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(byte[] data)
+    public static SubscribeRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(java.io.InputStream input)
+    public static SubscribeRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseDelimitedFrom(java.io.InputStream input)
+    public static SubscribeRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseDelimitedFrom(
+    public static SubscribeRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeRequest parseFrom(
+    public static SubscribeRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1316,7 +1316,7 @@ public final class ContextProto {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(br.com.proto.ContextProto.SubscribeRequest prototype) {
+    public static Builder newBuilder(SubscribeRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1324,9 +1324,9 @@ public final class ContextProto {
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1336,17 +1336,17 @@ public final class ContextProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:br.com.proto.SubscribeRequest)
-        br.com.proto.ContextProto.SubscribeRequestOrBuilder {
+        SubscribeRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
+        return ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeRequest_fieldAccessorTable
+        return ContextProto.internal_static_br_com_proto_SubscribeRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                br.com.proto.ContextProto.SubscribeRequest.class, br.com.proto.ContextProto.SubscribeRequest.Builder.class);
+                SubscribeRequest.class, Builder.class);
       }
 
       // Construct using br.com.proto.ContextProto.SubscribeRequest.newBuilder()
@@ -1355,7 +1355,7 @@ public final class ContextProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1373,23 +1373,23 @@ public final class ContextProto {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
+        return ContextProto.internal_static_br_com_proto_SubscribeRequest_descriptor;
       }
 
-      public br.com.proto.ContextProto.SubscribeRequest getDefaultInstanceForType() {
-        return br.com.proto.ContextProto.SubscribeRequest.getDefaultInstance();
+      public SubscribeRequest getDefaultInstanceForType() {
+        return SubscribeRequest.getDefaultInstance();
       }
 
-      public br.com.proto.ContextProto.SubscribeRequest build() {
-        br.com.proto.ContextProto.SubscribeRequest result = buildPartial();
+      public SubscribeRequest build() {
+        SubscribeRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public br.com.proto.ContextProto.SubscribeRequest buildPartial() {
-        br.com.proto.ContextProto.SubscribeRequest result = new br.com.proto.ContextProto.SubscribeRequest(this);
+      public SubscribeRequest buildPartial() {
+        SubscribeRequest result = new SubscribeRequest(this);
         result.key_ = key_;
         onBuilt();
         return result;
@@ -1400,7 +1400,7 @@ public final class ContextProto {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -1413,25 +1413,25 @@ public final class ContextProto {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof br.com.proto.ContextProto.SubscribeRequest) {
-          return mergeFrom((br.com.proto.ContextProto.SubscribeRequest)other);
+        if (other instanceof SubscribeRequest) {
+          return mergeFrom((SubscribeRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(br.com.proto.ContextProto.SubscribeRequest other) {
-        if (other == br.com.proto.ContextProto.SubscribeRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(SubscribeRequest other) {
+        if (other == SubscribeRequest.getDefaultInstance()) return this;
         if (!other.getKey().isEmpty()) {
           key_ = other.key_;
           onChanged();
@@ -1449,11 +1449,11 @@ public final class ContextProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        br.com.proto.ContextProto.SubscribeRequest parsedMessage = null;
+        SubscribeRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (br.com.proto.ContextProto.SubscribeRequest) e.getUnfinishedMessage();
+          parsedMessage = (SubscribeRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1463,20 +1463,20 @@ public final class ContextProto {
         return this;
       }
 
-      private java.lang.Object key_ = "";
+      private Object key_ = "";
       /**
        * <code>string key = 1;</code>
        */
-      public java.lang.String getKey() {
-        java.lang.Object ref = key_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getKey() {
+        Object ref = key_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           key_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -1484,11 +1484,11 @@ public final class ContextProto {
        */
       public com.google.protobuf.ByteString
           getKeyBytes() {
-        java.lang.Object ref = key_;
+        Object ref = key_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           key_ = b;
           return b;
         } else {
@@ -1499,7 +1499,7 @@ public final class ContextProto {
        * <code>string key = 1;</code>
        */
       public Builder setKey(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1546,12 +1546,12 @@ public final class ContextProto {
     }
 
     // @@protoc_insertion_point(class_scope:br.com.proto.SubscribeRequest)
-    private static final br.com.proto.ContextProto.SubscribeRequest DEFAULT_INSTANCE;
+    private static final SubscribeRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new br.com.proto.ContextProto.SubscribeRequest();
+      DEFAULT_INSTANCE = new SubscribeRequest();
     }
 
-    public static br.com.proto.ContextProto.SubscribeRequest getDefaultInstance() {
+    public static SubscribeRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1569,12 +1569,12 @@ public final class ContextProto {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<SubscribeRequest> getParserForType() {
       return PARSER;
     }
 
-    public br.com.proto.ContextProto.SubscribeRequest getDefaultInstanceForType() {
+    public SubscribeRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1587,7 +1587,7 @@ public final class ContextProto {
     /**
      * <code>string message = 1;</code>
      */
-    java.lang.String getMessage();
+    String getMessage();
     /**
      * <code>string message = 1;</code>
      */
@@ -1610,7 +1610,7 @@ public final class ContextProto {
       message_ = "";
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -1639,7 +1639,7 @@ public final class ContextProto {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               message_ = s;
               break;
@@ -1658,29 +1658,29 @@ public final class ContextProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
+      return ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeResponse_fieldAccessorTable
+      return ContextProto.internal_static_br_com_proto_SubscribeResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              br.com.proto.ContextProto.SubscribeResponse.class, br.com.proto.ContextProto.SubscribeResponse.Builder.class);
+              SubscribeResponse.class, Builder.class);
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 1;
-    private volatile java.lang.Object message_;
+    private volatile Object message_;
     /**
      * <code>string message = 1;</code>
      */
-    public java.lang.String getMessage() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    public String getMessage() {
+      Object ref = message_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         message_ = s;
         return s;
       }
@@ -1690,11 +1690,11 @@ public final class ContextProto {
      */
     public com.google.protobuf.ByteString
         getMessageBytes() {
-      java.lang.Object ref = message_;
-      if (ref instanceof java.lang.String) {
+      Object ref = message_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         message_ = b;
         return b;
       } else {
@@ -1733,15 +1733,15 @@ public final class ContextProto {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof br.com.proto.ContextProto.SubscribeResponse)) {
+      if (!(obj instanceof SubscribeResponse)) {
         return super.equals(obj);
       }
-      br.com.proto.ContextProto.SubscribeResponse other = (br.com.proto.ContextProto.SubscribeResponse) obj;
+      SubscribeResponse other = (SubscribeResponse) obj;
 
       boolean result = true;
       result = result && getMessage()
@@ -1750,7 +1750,7 @@ public final class ContextProto {
       return result;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -1764,69 +1764,69 @@ public final class ContextProto {
       return hash;
     }
 
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(byte[] data)
+    public static SubscribeResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(java.io.InputStream input)
+    public static SubscribeResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseDelimitedFrom(java.io.InputStream input)
+    public static SubscribeResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseDelimitedFrom(
+    public static SubscribeResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static br.com.proto.ContextProto.SubscribeResponse parseFrom(
+    public static SubscribeResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1838,7 +1838,7 @@ public final class ContextProto {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(br.com.proto.ContextProto.SubscribeResponse prototype) {
+    public static Builder newBuilder(SubscribeResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1846,9 +1846,9 @@ public final class ContextProto {
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1858,17 +1858,17 @@ public final class ContextProto {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:br.com.proto.SubscribeResponse)
-        br.com.proto.ContextProto.SubscribeResponseOrBuilder {
+        SubscribeResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
+        return ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeResponse_fieldAccessorTable
+        return ContextProto.internal_static_br_com_proto_SubscribeResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                br.com.proto.ContextProto.SubscribeResponse.class, br.com.proto.ContextProto.SubscribeResponse.Builder.class);
+                SubscribeResponse.class, Builder.class);
       }
 
       // Construct using br.com.proto.ContextProto.SubscribeResponse.newBuilder()
@@ -1877,7 +1877,7 @@ public final class ContextProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1895,23 +1895,23 @@ public final class ContextProto {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return br.com.proto.ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
+        return ContextProto.internal_static_br_com_proto_SubscribeResponse_descriptor;
       }
 
-      public br.com.proto.ContextProto.SubscribeResponse getDefaultInstanceForType() {
-        return br.com.proto.ContextProto.SubscribeResponse.getDefaultInstance();
+      public SubscribeResponse getDefaultInstanceForType() {
+        return SubscribeResponse.getDefaultInstance();
       }
 
-      public br.com.proto.ContextProto.SubscribeResponse build() {
-        br.com.proto.ContextProto.SubscribeResponse result = buildPartial();
+      public SubscribeResponse build() {
+        SubscribeResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public br.com.proto.ContextProto.SubscribeResponse buildPartial() {
-        br.com.proto.ContextProto.SubscribeResponse result = new br.com.proto.ContextProto.SubscribeResponse(this);
+      public SubscribeResponse buildPartial() {
+        SubscribeResponse result = new SubscribeResponse(this);
         result.message_ = message_;
         onBuilt();
         return result;
@@ -1922,7 +1922,7 @@ public final class ContextProto {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -1935,25 +1935,25 @@ public final class ContextProto {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof br.com.proto.ContextProto.SubscribeResponse) {
-          return mergeFrom((br.com.proto.ContextProto.SubscribeResponse)other);
+        if (other instanceof SubscribeResponse) {
+          return mergeFrom((SubscribeResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(br.com.proto.ContextProto.SubscribeResponse other) {
-        if (other == br.com.proto.ContextProto.SubscribeResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(SubscribeResponse other) {
+        if (other == SubscribeResponse.getDefaultInstance()) return this;
         if (!other.getMessage().isEmpty()) {
           message_ = other.message_;
           onChanged();
@@ -1971,11 +1971,11 @@ public final class ContextProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        br.com.proto.ContextProto.SubscribeResponse parsedMessage = null;
+        SubscribeResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (br.com.proto.ContextProto.SubscribeResponse) e.getUnfinishedMessage();
+          parsedMessage = (SubscribeResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1985,20 +1985,20 @@ public final class ContextProto {
         return this;
       }
 
-      private java.lang.Object message_ = "";
+      private Object message_ = "";
       /**
        * <code>string message = 1;</code>
        */
-      public java.lang.String getMessage() {
-        java.lang.Object ref = message_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getMessage() {
+        Object ref = message_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           message_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2006,11 +2006,11 @@ public final class ContextProto {
        */
       public com.google.protobuf.ByteString
           getMessageBytes() {
-        java.lang.Object ref = message_;
+        Object ref = message_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           message_ = b;
           return b;
         } else {
@@ -2021,7 +2021,7 @@ public final class ContextProto {
        * <code>string message = 1;</code>
        */
       public Builder setMessage(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2068,12 +2068,12 @@ public final class ContextProto {
     }
 
     // @@protoc_insertion_point(class_scope:br.com.proto.SubscribeResponse)
-    private static final br.com.proto.ContextProto.SubscribeResponse DEFAULT_INSTANCE;
+    private static final SubscribeResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new br.com.proto.ContextProto.SubscribeResponse();
+      DEFAULT_INSTANCE = new SubscribeResponse();
     }
 
-    public static br.com.proto.ContextProto.SubscribeResponse getDefaultInstance() {
+    public static SubscribeResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2091,12 +2091,12 @@ public final class ContextProto {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<SubscribeResponse> getParserForType() {
       return PARSER;
     }
 
-    public br.com.proto.ContextProto.SubscribeResponse getDefaultInstanceForType() {
+    public SubscribeResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2130,7 +2130,7 @@ public final class ContextProto {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\022ContextProto.proto\022\014br.com.proto\"%\n\016Co" +
       "ntextRequest\022\023\n\013instruction\030\001 \001(\t\"\"\n\017Con" +
       "textResponse\022\017\n\007message\030\001 \001(\t\"\037\n\020Subscri" +
@@ -2164,25 +2164,25 @@ public final class ContextProto {
     internal_static_br_com_proto_ContextRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_br_com_proto_ContextRequest_descriptor,
-        new java.lang.String[] { "Instruction", });
+        new String[] { "Instruction", });
     internal_static_br_com_proto_ContextResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_br_com_proto_ContextResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_br_com_proto_ContextResponse_descriptor,
-        new java.lang.String[] { "Message", });
+        new String[] { "Message", });
     internal_static_br_com_proto_SubscribeRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_br_com_proto_SubscribeRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_br_com_proto_SubscribeRequest_descriptor,
-        new java.lang.String[] { "Key", });
+        new String[] { "Key", });
     internal_static_br_com_proto_SubscribeResponse_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_br_com_proto_SubscribeResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_br_com_proto_SubscribeResponse_descriptor,
-        new java.lang.String[] { "Message", });
+        new String[] { "Message", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

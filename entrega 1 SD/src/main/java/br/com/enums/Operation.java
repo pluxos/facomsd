@@ -6,8 +6,7 @@ public enum Operation {
 	DELETE( "DELETE" ),
 	UPDATE( "UPDATE" ),
 	RETURN( "RETURN" ),
-	SUBSCRIBE( "SUBSCRIBE" ),
-	UNSUBSCRIBE( "UNSUBSCRIBE" );
+	SUBSCRIBE( "SUBSCRIBE" ),;
 	
 	private String value;
 	

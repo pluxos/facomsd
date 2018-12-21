@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import br.com.atomix.Atomix;
 import br.com.context.Context;
 import br.com.enums.Operation;
+import br.com.operations.Creat;
+import br.com.operations.Delete;
+import br.com.operations.Read;
 import br.com.proto.ContextProto.SubscribeResponse;
+import io.atomix.catalyst.transport.netty.NettyTransport;
+import io.atomix.copycat.client.CopycatClient;
 import io.grpc.stub.StreamObserver;
 
 public class ExecutorThread implements Runnable {
@@ -25,18 +31,23 @@ public class ExecutorThread implements Runnable {
 
     private Boolean semaphore;
 
+    private CopycatClient copycatClient;
+
+
+
     public ExecutorThread(
             ServerSocket serverSocket,
             Queue<String> logQueue,
             Context context,
             Map<String, List<StreamObserver<SubscribeResponse>>> observers,
-            Boolean semaphore) {
+            Boolean semaphore, CopycatClient copycatClient) {
         this.logQueue = logQueue;
 
         this.context = context;
         this.serverSocket = serverSocket;
         this.observers = observers;
         this.semaphore = semaphore;
+        this.copycatClient = copycatClient;
     }
 
     @Override
@@ -46,12 +57,13 @@ public class ExecutorThread implements Runnable {
             try {
 
                 String instruction;
-                synchronized (GrpcThread.f3) {
-                    instruction = GrpcThread.f3.poll();
+                synchronized (GrpcThread.f1) {
+                    instruction = GrpcThread.f1.poll();
                 }
                 if (instruction != null && !semaphore) {
                     System.out.println("Executando instrucao: " + instruction);
                     execute(instruction);
+
                 }
                 Thread.sleep(1);
             } catch (Exception ex) {
@@ -67,24 +79,23 @@ public class ExecutorThread implements Runnable {
      * @param instruction
      */
     private void execute(String instruction) {
+
         List<String> params = Arrays.asList(instruction.split(";"));
+
         if (Operation.INSERT.name().equals(params.get(0))) {
-            context.put(new BigInteger(params.get(1)), params.get(2));
-
+            copycatClient.submit(new Creat(new BigInteger(params.get(1)), params.get(2))).join();
         } else if (Operation.UPDATE.name().equals(params.get(0))) {
-            if (!"Chave nao encontrada no contexto.".equals(context.get(new BigInteger(params.get(1))))) {
-                context.put(new BigInteger(params.get(1)), params.get(2));
+            copycatClient.submit(new Read(new BigInteger(params.get(1)), params.get(2))).join();
 
-            }
+        } else if (Operation.RETURN.name().equals(params.get(0))) {
+            copycatClient.submit(new Read(new BigInteger(params.get(1)), params.get(2))).join();
         } else {
-            context.remove(new BigInteger(params.get(1)));
-
+            copycatClient.submit(new Delete(new BigInteger(params.get(1)), params.get(2))).join();
         }
 
         logQueue.add(instruction);
 
     }
-
 
 
 }

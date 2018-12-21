@@ -26,68 +26,68 @@ public final class ContextServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<br.com.proto.ContextProto.ContextRequest,
-      br.com.proto.ContextProto.ContextResponse> METHOD_INSERT =
-      io.grpc.MethodDescriptor.<br.com.proto.ContextProto.ContextRequest, br.com.proto.ContextProto.ContextResponse>newBuilder()
+  public static final io.grpc.MethodDescriptor<ContextProto.ContextRequest,
+      ContextProto.ContextResponse> METHOD_INSERT =
+      io.grpc.MethodDescriptor.<ContextProto.ContextRequest, ContextProto.ContextResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "br.com.proto.ContextService", "insert"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextRequest.getDefaultInstance()))
+              ContextProto.ContextRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextResponse.getDefaultInstance()))
+              ContextProto.ContextResponse.getDefaultInstance()))
           .setSchemaDescriptor(new ContextServiceMethodDescriptorSupplier("insert"))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<br.com.proto.ContextProto.ContextRequest,
-      br.com.proto.ContextProto.ContextResponse> METHOD_UPDATE =
-      io.grpc.MethodDescriptor.<br.com.proto.ContextProto.ContextRequest, br.com.proto.ContextProto.ContextResponse>newBuilder()
+  public static final io.grpc.MethodDescriptor<ContextProto.ContextRequest,
+      ContextProto.ContextResponse> METHOD_UPDATE =
+      io.grpc.MethodDescriptor.<ContextProto.ContextRequest, ContextProto.ContextResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "br.com.proto.ContextService", "update"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextRequest.getDefaultInstance()))
+              ContextProto.ContextRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextResponse.getDefaultInstance()))
+              ContextProto.ContextResponse.getDefaultInstance()))
           .setSchemaDescriptor(new ContextServiceMethodDescriptorSupplier("update"))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<br.com.proto.ContextProto.ContextRequest,
-      br.com.proto.ContextProto.ContextResponse> METHOD_DELETE =
-      io.grpc.MethodDescriptor.<br.com.proto.ContextProto.ContextRequest, br.com.proto.ContextProto.ContextResponse>newBuilder()
+  public static final io.grpc.MethodDescriptor<ContextProto.ContextRequest,
+      ContextProto.ContextResponse> METHOD_DELETE =
+      io.grpc.MethodDescriptor.<ContextProto.ContextRequest, ContextProto.ContextResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "br.com.proto.ContextService", "delete"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextRequest.getDefaultInstance()))
+              ContextProto.ContextRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextResponse.getDefaultInstance()))
+              ContextProto.ContextResponse.getDefaultInstance()))
           .setSchemaDescriptor(new ContextServiceMethodDescriptorSupplier("delete"))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<br.com.proto.ContextProto.ContextRequest,
-      br.com.proto.ContextProto.ContextResponse> METHOD_FIND =
-      io.grpc.MethodDescriptor.<br.com.proto.ContextProto.ContextRequest, br.com.proto.ContextProto.ContextResponse>newBuilder()
+  public static final io.grpc.MethodDescriptor<ContextProto.ContextRequest,
+      ContextProto.ContextResponse> METHOD_FIND =
+      io.grpc.MethodDescriptor.<ContextProto.ContextRequest, ContextProto.ContextResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
               "br.com.proto.ContextService", "find"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextRequest.getDefaultInstance()))
+              ContextProto.ContextRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.ContextResponse.getDefaultInstance()))
+              ContextProto.ContextResponse.getDefaultInstance()))
           .setSchemaDescriptor(new ContextServiceMethodDescriptorSupplier("find"))
           .build();
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<br.com.proto.ContextProto.SubscribeRequest,
-      br.com.proto.ContextProto.SubscribeResponse> METHOD_SUBSCRIBE =
-      io.grpc.MethodDescriptor.<br.com.proto.ContextProto.SubscribeRequest, br.com.proto.ContextProto.SubscribeResponse>newBuilder()
+  public static final io.grpc.MethodDescriptor<ContextProto.SubscribeRequest,
+      ContextProto.SubscribeResponse> METHOD_SUBSCRIBE =
+      io.grpc.MethodDescriptor.<ContextProto.SubscribeRequest, ContextProto.SubscribeResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
           .setFullMethodName(generateFullMethodName(
               "br.com.proto.ContextService", "subscribe"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.SubscribeRequest.getDefaultInstance()))
+              ContextProto.SubscribeRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-              br.com.proto.ContextProto.SubscribeResponse.getDefaultInstance()))
+              ContextProto.SubscribeResponse.getDefaultInstance()))
           .setSchemaDescriptor(new ContextServiceMethodDescriptorSupplier("subscribe"))
           .build();
 
@@ -120,75 +120,75 @@ public final class ContextServiceGrpc {
 
     /**
      */
-    public void insert(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void insert(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_INSERT, responseObserver);
     }
 
     /**
      */
-    public void update(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void update(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_UPDATE, responseObserver);
     }
 
     /**
      */
-    public void delete(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void delete(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_DELETE, responseObserver);
     }
 
     /**
      */
-    public void find(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void find(ContextProto.ContextRequest request,
+                     io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_FIND, responseObserver);
     }
 
     /**
      */
-    public void subscribe(br.com.proto.ContextProto.SubscribeRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.SubscribeResponse> responseObserver) {
+    public void subscribe(ContextProto.SubscribeRequest request,
+                          io.grpc.stub.StreamObserver<ContextProto.SubscribeResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_SUBSCRIBE, responseObserver);
     }
 
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+    @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             METHOD_INSERT,
             asyncUnaryCall(
               new MethodHandlers<
-                br.com.proto.ContextProto.ContextRequest,
-                br.com.proto.ContextProto.ContextResponse>(
+                ContextProto.ContextRequest,
+                ContextProto.ContextResponse>(
                   this, METHODID_INSERT)))
           .addMethod(
             METHOD_UPDATE,
             asyncUnaryCall(
               new MethodHandlers<
-                br.com.proto.ContextProto.ContextRequest,
-                br.com.proto.ContextProto.ContextResponse>(
+                ContextProto.ContextRequest,
+                ContextProto.ContextResponse>(
                   this, METHODID_UPDATE)))
           .addMethod(
             METHOD_DELETE,
             asyncUnaryCall(
               new MethodHandlers<
-                br.com.proto.ContextProto.ContextRequest,
-                br.com.proto.ContextProto.ContextResponse>(
+                ContextProto.ContextRequest,
+                ContextProto.ContextResponse>(
                   this, METHODID_DELETE)))
           .addMethod(
             METHOD_FIND,
             asyncUnaryCall(
               new MethodHandlers<
-                br.com.proto.ContextProto.ContextRequest,
-                br.com.proto.ContextProto.ContextResponse>(
+                ContextProto.ContextRequest,
+                ContextProto.ContextResponse>(
                   this, METHODID_FIND)))
           .addMethod(
             METHOD_SUBSCRIBE,
             asyncServerStreamingCall(
               new MethodHandlers<
-                br.com.proto.ContextProto.SubscribeRequest,
-                br.com.proto.ContextProto.SubscribeResponse>(
+                ContextProto.SubscribeRequest,
+                ContextProto.SubscribeResponse>(
                   this, METHODID_SUBSCRIBE)))
           .build();
     }
@@ -206,7 +206,7 @@ public final class ContextServiceGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ContextServiceStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new ContextServiceStub(channel, callOptions);
@@ -214,40 +214,40 @@ public final class ContextServiceGrpc {
 
     /**
      */
-    public void insert(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void insert(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_INSERT, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void update(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void update(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_UPDATE, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void delete(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void delete(ContextProto.ContextRequest request,
+                       io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_DELETE, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void find(br.com.proto.ContextProto.ContextRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse> responseObserver) {
+    public void find(ContextProto.ContextRequest request,
+                     io.grpc.stub.StreamObserver<ContextProto.ContextResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_FIND, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void subscribe(br.com.proto.ContextProto.SubscribeRequest request,
-        io.grpc.stub.StreamObserver<br.com.proto.ContextProto.SubscribeResponse> responseObserver) {
+    public void subscribe(ContextProto.SubscribeRequest request,
+                          io.grpc.stub.StreamObserver<ContextProto.SubscribeResponse> responseObserver) {
       asyncServerStreamingCall(
           getChannel().newCall(METHOD_SUBSCRIBE, getCallOptions()), request, responseObserver);
     }
@@ -265,7 +265,7 @@ public final class ContextServiceGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ContextServiceBlockingStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new ContextServiceBlockingStub(channel, callOptions);
@@ -273,36 +273,36 @@ public final class ContextServiceGrpc {
 
     /**
      */
-    public br.com.proto.ContextProto.ContextResponse insert(br.com.proto.ContextProto.ContextRequest request) {
+    public ContextProto.ContextResponse insert(ContextProto.ContextRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_INSERT, getCallOptions(), request);
     }
 
     /**
      */
-    public br.com.proto.ContextProto.ContextResponse update(br.com.proto.ContextProto.ContextRequest request) {
+    public ContextProto.ContextResponse update(ContextProto.ContextRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_UPDATE, getCallOptions(), request);
     }
 
     /**
      */
-    public br.com.proto.ContextProto.ContextResponse delete(br.com.proto.ContextProto.ContextRequest request) {
+    public ContextProto.ContextResponse delete(ContextProto.ContextRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_DELETE, getCallOptions(), request);
     }
 
     /**
      */
-    public br.com.proto.ContextProto.ContextResponse find(br.com.proto.ContextProto.ContextRequest request) {
+    public ContextProto.ContextResponse find(ContextProto.ContextRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_FIND, getCallOptions(), request);
     }
 
     /**
      */
-    public java.util.Iterator<br.com.proto.ContextProto.SubscribeResponse> subscribe(
-        br.com.proto.ContextProto.SubscribeRequest request) {
+    public java.util.Iterator<ContextProto.SubscribeResponse> subscribe(
+        ContextProto.SubscribeRequest request) {
       return blockingServerStreamingCall(
           getChannel(), METHOD_SUBSCRIBE, getCallOptions(), request);
     }
@@ -320,7 +320,7 @@ public final class ContextServiceGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ContextServiceFutureStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new ContextServiceFutureStub(channel, callOptions);
@@ -328,32 +328,32 @@ public final class ContextServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<br.com.proto.ContextProto.ContextResponse> insert(
-        br.com.proto.ContextProto.ContextRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<ContextProto.ContextResponse> insert(
+        ContextProto.ContextRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_INSERT, getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<br.com.proto.ContextProto.ContextResponse> update(
-        br.com.proto.ContextProto.ContextRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<ContextProto.ContextResponse> update(
+        ContextProto.ContextRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_UPDATE, getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<br.com.proto.ContextProto.ContextResponse> delete(
-        br.com.proto.ContextProto.ContextRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<ContextProto.ContextResponse> delete(
+        ContextProto.ContextRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_DELETE, getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<br.com.proto.ContextProto.ContextResponse> find(
-        br.com.proto.ContextProto.ContextRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<ContextProto.ContextResponse> find(
+        ContextProto.ContextRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_FIND, getCallOptions()), request);
     }
@@ -378,37 +378,37 @@ public final class ContextServiceGrpc {
       this.methodId = methodId;
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_INSERT:
-          serviceImpl.insert((br.com.proto.ContextProto.ContextRequest) request,
-              (io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse>) responseObserver);
+          serviceImpl.insert((ContextProto.ContextRequest) request,
+              (io.grpc.stub.StreamObserver<ContextProto.ContextResponse>) responseObserver);
           break;
         case METHODID_UPDATE:
-          serviceImpl.update((br.com.proto.ContextProto.ContextRequest) request,
-              (io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse>) responseObserver);
+          serviceImpl.update((ContextProto.ContextRequest) request,
+              (io.grpc.stub.StreamObserver<ContextProto.ContextResponse>) responseObserver);
           break;
         case METHODID_DELETE:
-          serviceImpl.delete((br.com.proto.ContextProto.ContextRequest) request,
-              (io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse>) responseObserver);
+          serviceImpl.delete((ContextProto.ContextRequest) request,
+              (io.grpc.stub.StreamObserver<ContextProto.ContextResponse>) responseObserver);
           break;
         case METHODID_FIND:
-          serviceImpl.find((br.com.proto.ContextProto.ContextRequest) request,
-              (io.grpc.stub.StreamObserver<br.com.proto.ContextProto.ContextResponse>) responseObserver);
+          serviceImpl.find((ContextProto.ContextRequest) request,
+              (io.grpc.stub.StreamObserver<ContextProto.ContextResponse>) responseObserver);
           break;
         case METHODID_SUBSCRIBE:
-          serviceImpl.subscribe((br.com.proto.ContextProto.SubscribeRequest) request,
-              (io.grpc.stub.StreamObserver<br.com.proto.ContextProto.SubscribeResponse>) responseObserver);
+          serviceImpl.subscribe((ContextProto.SubscribeRequest) request,
+              (io.grpc.stub.StreamObserver<ContextProto.SubscribeResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
       }
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
@@ -422,12 +422,12 @@ public final class ContextServiceGrpc {
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     ContextServiceBaseDescriptorSupplier() {}
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return br.com.proto.ContextProto.getDescriptor();
+      return ContextProto.getDescriptor();
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
       return getFileDescriptor().findServiceByName("ContextService");
     }
@@ -447,7 +447,7 @@ public final class ContextServiceGrpc {
       this.methodName = methodName;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
       return getServiceDescriptor().findMethodByName(methodName);
     }
