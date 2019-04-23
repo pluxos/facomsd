@@ -1,9 +1,9 @@
 package client;
 
-import client.commons.validation.CommandsValidator;
-
 import java.io.PrintStream;
 import java.util.Scanner;
+
+import client.commons.utils.CommandsModelator;
 
 public class ClientCommands implements Runnable {
 
@@ -19,10 +19,20 @@ public class ClientCommands implements Runnable {
 	public void run() {
 		System.out.println("Thread de comando Iniciado!");
 
-		while(scanner.hasNextLine()){
-			String command = scanner.nextLine();
+		for(;;){
+			this.printCommands();
 
-			CommandsValidator.validateCommand(command);
+			String command = CommandsModelator.getStringLowerCase(scanner.nextLine());
+
+			if(command.equals("sair")){
+				break;
+			}
 		}
+
+		System.out.println("Finalizando thread de Comandos...");
+	}
+
+	public void printCommands(){
+		System.out.println("Comandos são assim");
 	}
 }
