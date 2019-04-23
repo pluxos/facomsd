@@ -1,7 +1,9 @@
 package client;
 
+import client.client.ClientCommands;
+import client.receptor.ServerResponse;
+
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -14,15 +16,17 @@ public class ClientApplication {
 
 		ClientCommands clientCommands = new ClientCommands(output);
 		Thread threadCommands = new Thread(clientCommands);
-		threadCommands.start();
 
 		ServerResponse serverResponse = new ServerResponse(input);
 		Thread threadResponse = new Thread(serverResponse);
+
+		threadCommands.start();
 		threadResponse.start();
 
 		try {
 			threadCommands.join();
 			Thread.sleep(5000);
+
 			System.out.println("Finalizando Cliente!");
 		} catch (InterruptedException e) {
 			e.printStackTrace();

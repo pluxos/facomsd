@@ -1,4 +1,4 @@
-package client;
+package client.client;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -17,8 +17,6 @@ public class ClientCommands implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("Thread de comando Iniciado!");
-
 		for(;;){
 			this.printCommands();
 
@@ -32,7 +30,9 @@ public class ClientCommands implements Runnable {
 		System.out.println("Finalizando thread de Comandos...");
 	}
 
-	public void printCommands(){
-		System.out.println("Comandos são assim");
+	private void printCommands(){
+		System.out.println("Comandos: ");
+		System.out.println("create, read, update e delete");
+		System.out.println("Caso queira sair, digite 'sair'");
 	}
 }
