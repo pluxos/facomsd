@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import client.commons.utils.CommandsModelator;
+import client.service.connector.ProcessUser;
 import client.service.validation.CommandRequestValidator;
 
 public class ClientCommands implements Runnable {
@@ -28,17 +29,20 @@ public class ClientCommands implements Runnable {
 			/* Validar comando */
 			try {
 				CommandRequestValidator.validateCommand(command);
+				
+				if(command.equals("sair")){
+					break;
+				}
+				
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				continue;
 			}
-
+			
+			ProcessUser.sendCommand(command, this.output);
+			
 			/* Mandar comando */
 
-
-			if(command.equals("sair")){
-				break;
-			}
 		}
 
 		System.out.println("Finalizando thread de Comandos...");

@@ -13,7 +13,7 @@ public class ClientApplication {
 
 		PrintStream output = new PrintStream(client.getOutputStream());
 		Scanner input = new Scanner(client.getInputStream());
-
+		
 		ClientCommands clientCommands = new ClientCommands(output);
 		Thread threadCommands = new Thread(clientCommands);
 
