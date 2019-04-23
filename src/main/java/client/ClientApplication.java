@@ -1,36 +1,31 @@
 package client;
 
 import java.io.*;
-import java.net.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientApplication {
-	public static void main(String[] args) throws UnknownHostException,IOException {
-		
-		ExecutorService executor = Executors.newFixedThreadPool(2);
-		
-		// Start Socket
-		
-		//
-		ClientCommands clientCommands = new ClientCommands("Matheus");
-		executor.execute(clientCommands);
+	public static void main(String[] args) throws IOException {
+		Socket client = new Socket("127.0.0.1", 12345);
 
-		ServerResponse serverResponse = new ServerResponse();
-		executor.execute(serverResponse);
-		
-		/*Socket client = new Socket("127.0.0.1", 12345);
-		System.out.println("Cliente conectado ao servidor");
-		PrintStream saida = new PrintStream(client.getOutputStream());
-		
-		Scanner scan = new Scanner(System.in);
-		
-		while(scan.hasNextLine()) {
-			saida.println(scan.nextLine());
+		PrintStream output = new PrintStream(client.getOutputStream());
+		Scanner input = new Scanner(client.getInputStream());
+
+		ClientCommands clientCommands = new ClientCommands(output);
+		Thread threadCommands = new Thread(clientCommands);
+		threadCommands.start();
+
+		ServerResponse serverResponse = new ServerResponse(input);
+		Thread threadResponse = new Thread(serverResponse);
+		threadResponse.start();
+
+		try {
+			threadCommands.join();
+			Thread.sleep(5000);
+			System.out.println("Finalizando Cliente!");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		
-		saida.close();
-		scan.close();
-		client.close();*/
 	}
 }

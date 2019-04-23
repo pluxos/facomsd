@@ -1,16 +1,18 @@
 package client;
 
+import java.io.PrintStream;
+
 public class ClientCommands implements Runnable {
 
-	private String test;
+	private PrintStream output;
 	
-	public ClientCommands(String test){
-		this.test = test;
+	public ClientCommands(PrintStream output){
+		this.output = output;
 	}
 	
 	@Override
 	public void run() {
-		System.out.println("Thread de comando Iniciado! " + this.test);
+		System.out.println("Thread de comando Iniciado!");
 	}
 
 }
