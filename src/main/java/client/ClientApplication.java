@@ -1,7 +1,7 @@
 package client;
 
-import client.client.ClientCommands;
-import client.receptor.ServerResponse;
+import client.service.ClientCommands;
+import client.service.ServerResponse;
 
 import java.io.*;
 import java.net.Socket;

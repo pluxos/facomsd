@@ -1,4 +1,4 @@
-package client.receptor;
+package client.service;
 
 import java.util.Scanner;
 

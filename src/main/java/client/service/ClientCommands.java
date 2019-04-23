@@ -1,9 +1,10 @@
-package client.client;
+package client.service;
 
 import java.io.PrintStream;
 import java.util.Scanner;
 
 import client.commons.utils.CommandsModelator;
+import client.service.validation.CommandRequestValidator;
 
 public class ClientCommands implements Runnable {
 
@@ -18,9 +19,22 @@ public class ClientCommands implements Runnable {
 	@Override
 	public void run() {
 		for(;;){
+
 			this.printCommands();
 
-			String command = CommandsModelator.getStringLowerCase(scanner.nextLine());
+			/* Ler commando */
+			String command = CommandsModelator.getCommandModel(scanner.nextLine());
+
+			/* Validar comando */
+			try {
+				CommandRequestValidator.validateCommand(command);
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				continue;
+			}
+
+			/* Mandar comando */
+
 
 			if(command.equals("sair")){
 				break;
