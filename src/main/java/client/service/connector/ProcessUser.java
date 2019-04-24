@@ -31,16 +31,6 @@ public class ProcessUser {
 				break;
 		}
 	}
-	
-	private static void deleteUser(String[] commandsArray, PrintStream output) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void updateUser(String[] commandsArray, PrintStream output) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private static void createUser(String[] commandsArray, PrintStream output) {
 		/* Cria o objeto UserDTO */
@@ -49,10 +39,27 @@ public class ProcessUser {
 		byte[] userByte = BatmanCode.encode(user);
 		BigInteger userCode = BatmanCode.stringToBigInteger(commandsArray[1]);
 		/* SendCommands -> Enviar */
-		SendCommands.sendCreateCommand(commandsArray[0], userCode, userByte);
+		SendCommands.sendCreateCommand(commandsArray[0], userCode, userByte, output);
 	}
 	
 	private static void getUser(String[] commandsArray, PrintStream output) {
+		BigInteger userCode = BatmanCode.stringToBigInteger(commandsArray[1]);
 		
+		SendCommands.sendGetCommand(commandsArray[0], userCode, output);
+	}
+	
+	private static void deleteUser(String[] commandsArray, PrintStream output) {
+		BigInteger userCode = BatmanCode.stringToBigInteger(commandsArray[1]);
+		
+		SendCommands.sendDeleteCommand(commandsArray[0], userCode, output);
+	}
+
+	private static void updateUser(String[] commandsArray, PrintStream output) {
+		UserDTO user = new UserDTO(commandsArray[2], commandsArray[3], commandsArray[4]);
+		
+		byte[] userByte = BatmanCode.encode(user);
+		BigInteger userCode = BatmanCode.stringToBigInteger(commandsArray[1]);
+		
+		SendCommands.sendUpdateCommand(commandsArray[0], userCode, userByte, output);
 	}
 }
