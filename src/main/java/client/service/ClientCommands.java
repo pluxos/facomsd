@@ -38,11 +38,9 @@ public class ClientCommands implements Runnable {
 				System.err.println(e.getMessage());
 				continue;
 			}
-			
-			ProcessUser.sendCommand(command, this.output);
-			
-			/* Mandar comando */
 
+			/* Mandar comando */
+			ProcessUser.sendCommand(command, this.output);
 		}
 
 		System.out.println("Finalizando thread de Comandos...");
