@@ -1,6 +1,8 @@
 package client.commons.dto;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
     private String email;
     private String name;
     private String password;

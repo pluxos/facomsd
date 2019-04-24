@@ -1,7 +1,7 @@
 package client;
 
-import client.client.ClientCommands;
-import client.receptor.ServerResponse;
+import client.service.ClientCommands;
+import client.service.ServerResponse;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,7 +13,7 @@ public class ClientApplication {
 
 		PrintStream output = new PrintStream(client.getOutputStream());
 		Scanner input = new Scanner(client.getInputStream());
-
+		
 		ClientCommands clientCommands = new ClientCommands(output);
 		Thread threadCommands = new Thread(clientCommands);
 
