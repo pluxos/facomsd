@@ -1,6 +1,6 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome 2018_2_X, onde X é um identificador atribuído pelo professor para o seu grupo de trabalho. 
+Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
 
 Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
 
