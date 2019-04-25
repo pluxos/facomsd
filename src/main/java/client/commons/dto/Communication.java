@@ -1,7 +1,10 @@
 package client.commons.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.math.BigInteger;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Communication {
     public String command;
     public BigInteger code;
