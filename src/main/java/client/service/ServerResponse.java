@@ -12,7 +12,18 @@ public class ServerResponse implements Runnable {
 
 	@Override
 	public void run() {
-		//System.out.println("Respostas do servidor startado!");
+		System.out.println("Respostas do servidor startado!");
+
+		while(true){
+			try {
+				String res = this.input.nextLine();
+
+				System.out.println(res);
+			}catch (Exception e){
+				System.out.println("TRETA");
+				break;
+			}
+		}
 	}
 
 }
