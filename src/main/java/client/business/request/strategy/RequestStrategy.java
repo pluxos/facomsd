@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import client.commons.exceptions.InvalidCommandException;
 import client.commons.utils.JsonUtils;
+import client.connector.CommandSender;
 import client.connector.GenericRequest;
 
 public interface RequestStrategy {
@@ -13,6 +14,6 @@ public interface RequestStrategy {
 	
 	default void makeRequest(GenericRequest request, PrintStream output) {
 		String json = JsonUtils.serialize(request);
-		//makeRequest(request);
+		CommandSender.send(json, output);
 	}
 }
