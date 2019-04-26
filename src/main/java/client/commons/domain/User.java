@@ -1,15 +1,18 @@
-package client.commons.dto;
+package client.commons.domain;
 
 import java.io.Serializable;
 
-public class UserDTO implements Serializable {
-    private String email;
+public class User implements Serializable {
+  
+	private static final long serialVersionUID = 1L;
+	
+	private String email;
     private String name;
     private String password;
 
-    public UserDTO(){}
+    public User(){}
 
-    public UserDTO(String name, String email, String password) {
+    public User(String name, String email, String password) {
         this.email = email;
         this.name = name;
         this.password = password;

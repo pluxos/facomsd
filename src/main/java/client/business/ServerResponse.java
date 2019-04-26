@@ -1,4 +1,4 @@
-package client.service;
+package client.business;
 
 import java.util.Scanner;
 

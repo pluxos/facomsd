@@ -1,13 +1,14 @@
 package client;
 
-import client.service.ClientCommands;
-import client.service.ServerResponse;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+import client.business.ClientCommands;
+import client.business.ServerResponse;
+
 public class ClientApplication {
+	
 	public static void main(String[] args) throws IOException {
 		Socket client = new Socket("127.0.0.1", 12345);
 

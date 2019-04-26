@@ -1,15 +1,17 @@
 package client.commons.validation;
 
-import client.service.validation.ValidCommands;
+import org.apache.commons.lang3.StringUtils;
+
+import client.commons.domain.Method;
+import client.commons.exceptions.InvalidCommandException;
 
 public class CommandsValidator {
-    public static boolean commandIsEmpty(String str) {
-        return str.isEmpty();
-    }
-
-    public static boolean commandIsValid(String str) {
-        String command = str.split("; ")[0];
-
-        return ValidCommands.isValid(command);
+   
+    public static boolean commandIsValid(String input) throws InvalidCommandException {
+    	if (!StringUtils.isEmpty(input)) {
+    		String command = input.split("; ")[0];
+            return Method.getMethod(command) != null;
+    	}
+    	return false;
     }
 }
