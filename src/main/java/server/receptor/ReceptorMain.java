@@ -1,28 +1,16 @@
 package server.receptor;
 
-import java.io.IOException;
-import java.net.*;
-import java.util.Scanner;
+import java.net.Socket;
 
-public class ReceptorMain {
-	private ServerSocket server;
+public class ReceptorMain implements Runnable {
+	private final Socket socket;
 
-	public void run() throws IOException {
-		this.server = new ServerSocket(12345);
-		System.out.println("Server TCP startado na porta 12345");
-		
-		Socket cliente = this.server.accept();
-		System.out.println("Nova conexão com o cliente " + 
-		    cliente.getInetAddress().getHostAddress()
-		);
-		
-		Scanner s = new Scanner(cliente.getInputStream());
-        while (s.hasNextLine()) {
-            System.out.println(s.nextLine());
-        }
+	public ReceptorMain(Socket socket) {
+		this.socket = socket;
+	}
 
-        s.close();
-        this.server.close();
-        cliente.close();
+	public void run() {
+		System.out.println("Novo cliente conectado na porta: " + this.socket.getPort());
+		System.out.println(Thread.currentThread().getId());
 	}
 }
