@@ -41,7 +41,6 @@ public class ClienteMenu implements Runnable{
 								}
 								else
 									System.out.println("Invalidado");
-									}
 								break;
 					case "R":	
 								System.out.println("Read");
