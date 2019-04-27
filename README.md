@@ -6,11 +6,11 @@ Quando estiver pronto para submeter a versao final, faca um pull request para es
 
 Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
 
-#Organização do Git
+# Organização do Git
 
 Cada um desenvolve somente na branch SUBMISSAO_1, se vocês quiserem, a gnt pode usar várias branches, mas pra fork, eu não sei se compensa. Nunca dêem push para a master. Seria bom dividir as partes pra não dar merda no merge. Pode usar qualquer IDE, já configurei o .gitignore.
 
-###Branches Atuais
+### Branches Atuais
 ```
 master
 SUBMISSAO_1
