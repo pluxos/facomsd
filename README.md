@@ -8,12 +8,10 @@ Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter
 
 #Organização do Git
 
-Cada um desenvolve somente na sua branch, e preferencialmente em uma específica do projeto.
-
-A branch principal é a SUBMISSAO_1. Sempre que for desenvolvida uma nova funcionalidade, deve-se fazer o push para sua branch e para a branch SUBMISSAO_1.
+Cada um desenvolve somente na branch SUBMISSAO_1, se vocês quiserem, a gnt pode usar várias branches, mas pra fork, eu não sei se compensa. Nunca dêem push para a master. Seria bom dividir as partes pra não dar merda no merge. Pode usar qualquer IDE, já configurei o .gitignore.
 
 ###Branches Atuais
 ```
+master
 SUBMISSAO_1
-JP
 ```
