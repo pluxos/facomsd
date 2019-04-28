@@ -1,6 +1,8 @@
 package com.SDgroup;
 
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Properties;
 
 class Server{
@@ -8,12 +10,19 @@ class Server{
     Properties properties = new Properties();
     FileInputStream propsFS = new FileInputStream("src/main/resources/Constants.prop");
     properties.load(propsFS);
-    Thread[] entrypoints = new Thread[Integer.parseInt( properties.getProperty("threads"))];
+    
     Integer port = Integer.parseInt(properties.getProperty("port"));
-    for (Thread entrypoint : entrypoints) {
-      entrypoint = new Thread(new EntryPoint(port));
-      entrypoint.start();
-    }
+    
+    
+    ServerSocket ssock = new ServerSocket(port);
+    System.out.println("Listening");
+      while (true) {
+        // o método accept() bloqueia a execução até que
+        // o servidor receba um pedido de conexão    
+         Socket sock = ssock.accept();
+         System.out.println("Connected");
+         new Thread(new EntryPoint(sock)).start();
+      }
   }
 
   

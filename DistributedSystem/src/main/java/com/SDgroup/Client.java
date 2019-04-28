@@ -2,8 +2,6 @@ package com.SDgroup;
 
 import java.io.*;
 import java.net.*;
-import javax.swing.JOptionPane;
-import java.util.*;
 
 class Client {
   public static void main(String argv[]) throws Exception {
@@ -14,7 +12,9 @@ class Client {
       System.out.println(entrada.readObject());
       System.out.println(entrada.readObject());
       System.out.println(entrada.readObject());
+          
       entrada.close();
+      cliente.close();
       System.out.println("Conexão encerrada");
     }
     catch(Exception e) {
