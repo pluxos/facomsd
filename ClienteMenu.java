@@ -14,10 +14,9 @@ public class ClienteMenu implements Runnable {
 			Scanner scanIn = new Scanner(System.in);
 
 			InetAddress ip = InetAddress.getByName("localhost");
-			Socket cliente = new Socket(ip, 1234);
+			Socket menu = new Socket(ip, 1234);
 
-      DataInputStream dis = new DataInputStream(cliente.getInputStream()); 
-      DataOutputStream dos = new DataOutputStream(cliente.getOutputStream());
+      		DataOutputStream dos = new DataOutputStream(menu.getOutputStream());
 			
 			while (true){
 			
@@ -53,9 +52,6 @@ public class ClienteMenu implements Runnable {
 									dos.writeInt(1); // 1 = "create"
 									dos.write(chaveCreate);
 									dos.write(createByte);
-
-									String resCreate = dis.readUTF(); // resultado da operação
-									Sysem.out.println(resCreate); 
 									break;
 						case "R":	
 									System.out.println("Read");
@@ -66,9 +62,6 @@ public class ClienteMenu implements Runnable {
 
 									dos.writeInt(2); // 2 = "read"
 									dos.write(chaveRead);
-
-									String resRead = dis.readUTF(); // resultado da operação
-									Sysem.out.println(resRead);
 									break;
 						case "U":
 									System.out.println("Update");
@@ -89,9 +82,6 @@ public class ClienteMenu implements Runnable {
 									dos.writeInt(3); // 3 = "update"
 									dos.write(chaveUpdate);
 									dos.write(updateByte);
-
-									String resUpdate = dis.readUTF(); // resultado da operação
-									System.out.println(resUpdate);
 									break;
 						case "D":
 									System.out.println("Delete");
@@ -102,28 +92,29 @@ public class ClienteMenu implements Runnable {
 
 									dos.writeInt(4); // 4 = "delete"
 									dos.write(chaveDeleite);
-
-									String resDelete = dis.readUTF(); // resultado da operação
-									System.out.println(resDelete);
 									break;
-						case "X": scanIn.close(); return;
-						default: System.out.println("opcao inválida"); break;
+						case "X": 
+									scanIn.close(); 
+									menu.close(); 
+									return;
+						default: 
+									System.out.println("opcao inválida"); break;
 						
 					}
 				}catch (InputMismatchException e){
 					System.out.println("Formato de chave inválido");
 					System.out.println("Operação não realizada");
-				}catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
-		}catch (UnknownHostException e) {
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
   }
 	
 	public static void main (String args[]) {
-			Thread t1 = new Thread(new ClienteMenu(), "thread1");
+			Thread t1 = new Thread(new ClienteMenu(), "threadMenu");
 			t1.start(); //inicia thread do menu
+			Thread t2 = new Thread(new ClienteListener(t1), "threadListener");
+			t2.start();
 	}
 }
