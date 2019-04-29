@@ -15,16 +15,18 @@ class Server{
     
     
     ServerSocket ssock = new ServerSocket(port);
-    System.out.println("Listening");
-      while (true) {
-        // o método accept() bloqueia a execução até que
-        // o servidor receba um pedido de conexão    
-         Socket sock = ssock.accept();
-         System.out.println("Connected");
-         new Thread(new EntryPoint(sock)).start();
-      }
+    System.out.println("Listening on port " + port);
+    while (true) {
+      // o método accept() bloqueia a execução até que
+      // o servidor receba um pedido de conexão    
+      Socket sock = ssock.accept();
+      System.out.println("Connected");
+      new Thread(new EntryPoint(sock)).start();
+    }
+    
+    
   }
-
+  
   
   
 }
