@@ -1,28 +1,31 @@
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.net.*;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 
 public class Servidor implements Runnable{
+
+    BlockingQueue<Comando> f1;
+    Comando c;
+
+    Servidor(BlockingQueue<Comando> f1){
+        this.f1 = f1;
+    }
 	
 	public void run() {
         try {
             ServerSocket servidor = new ServerSocket(1234);
-            ServerSocket servidor1 = new ServerSocket(5678);
-            Socket menu, listener;
+            Socket menu;
             
             int cmd, chave;
-            String msg;
+            String valor;
     
             menu = servidor.accept();
-            listener = servidor1.accept();
             System.out.println("conexão feita com: " + menu);
-            System.out.println("conexão feita com: " + listener);
 
-            DataInputStream dis = new DataInputStream(menu.getInputStream()); 
-            DataOutputStream dos = new DataOutputStream(listener.getOutputStream());
+            DataInputStream dis = new DataInputStream(menu.getInputStream());
 
             while(true){
     
@@ -30,34 +33,33 @@ public class Servidor implements Runnable{
 
                 switch (cmd) {
                     case 1: //create
-                        System.out.println("Create");
                         chave = dis.readInt();
-                        msg = dis.readUTF();
-                        dos.writeUTF("Created - chave: " + chave + "  valor: " + msg);
+                        valor = dis.readUTF();
+                        c = new Comando(cmd, chave, valor);
+                        f1.add(c); // adiciona comando à f1
                         break;
 
                     case 2: //read
-                        System.out.println("Read");
                         chave = dis.readInt();
-                        dos.writeUTF("Readed - chave: " + chave);
+                        c = new Comando(cmd, chave, "");
+                        f1.add(c); // adiciona comando à f1
                         break;
 
                     case 3: //update
-                        System.out.println("Update");
                         chave = dis.readInt();
-                        msg = dis.readUTF();
-                        dos.writeUTF("Updated - chave: " + chave + "  valor: " + msg);
+                        valor = dis.readUTF();
+                        c = new Comando(cmd, chave, valor);
+                        f1.add(c); // adiciona comando à f1
                         break;
 
                     case 4: //delete
-                        System.out.println("Delete");
                         chave = dis.readInt();
-                        dos.writeUTF("Deleted - chave: " + chave);
+                        c = new Comando(cmd, chave, "");
+                        f1.add(c); // adiciona comando à f1
                         break;
                     } 
                     
                     servidor.close();
-                    servidor1.close();
                 }    
             
         } catch (IOException e) {
@@ -68,19 +70,19 @@ public class Servidor implements Runnable{
 	
 	
 	public static void main (String args[]) {
-        Thread t = new Thread(new Servidor(), "servidor");
-        t.start();
-        // Thread t2 = new Thread(new Servidor2(), "thread2");
-        // t2.start();
-        // Thread t3 = new Thread(new Servidor3(), "thread3");
-        // t3.start();
-        // Thread t4 = new Thread(new Servidor4(), "thread4");
-		// t4.start();
+
+        BlockingQueue<Comando> f1 = new LinkedBlockingDeque<>();
+        BlockingQueue<Comando> f2 = new LinkedBlockingDeque<>();
+        BlockingQueue<Comando> f3 = new LinkedBlockingDeque<>();
+
+        Thread t1 = new Thread(new Servidor(f1), "commandListener");
+        t1.start();
+        Thread t2 = new Thread(new Servidor2(f1, f2, f3), "commandCopier");
+        t2.start();
+        Thread t3 = new Thread(new Servidor3(f2), "commandLogger");
+        t3.start();
+        Thread t4 = new Thread(new Servidor4(f3), "commandExecutor");
+		t4.start();
 
 	}
-	
-	
-	
-	
-	
 }
