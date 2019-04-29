@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import server.receptor.*;
 
 public class ServerApplication {
+
 	private static ServerSocket serverSocket;
 	private static ExecutorService pool;
 
