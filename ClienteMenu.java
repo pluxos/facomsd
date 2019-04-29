@@ -1,7 +1,6 @@
 import java.util.*;
 import java.net.*;
 import java.io.DataOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -34,12 +33,12 @@ public class ClienteMenu implements Runnable {
 					switch (input.toUpperCase()){
 						case "C":
 
-									System.out.println("Create");
+									System.out.println("Create\n");
 									Scanner create = new Scanner(System.in);
 
-									System.out.println("Chave: ");
-									byte[] chaveCreate = create.nextBigInteger().toByteArray();
-									System.out.println("Valor: ");
+									System.out.print("Chave: ");
+									int chaveCreate = create.nextInt();
+									System.out.print("Valor: ");
 									String valorCreate = create.next();
 
 									if(valorCreate.length() > 100){
@@ -47,51 +46,50 @@ public class ClienteMenu implements Runnable {
 										System.out.println("Operação não realizada");
 										break;
 									}
-									byte[] createByte = valorCreate.getBytes();
 
 									dos.writeInt(1); // 1 = "create"
-									dos.write(chaveCreate);
-									dos.write(createByte);
+									dos.writeInt(chaveCreate);
+									dos.writeUTF(valorCreate);
 									break;
 						case "R":	
-									System.out.println("Read");
+									System.out.println("Read\n");
 									Scanner read = new Scanner(System.in);
 
-									System.out.println("Chave: ");
-									byte[] chaveRead = read.nextBigInteger().toByteArray();
+									System.out.print("Chave: ");
+									int chaveRead = read.nextInt();
 
 									dos.writeInt(2); // 2 = "read"
-									dos.write(chaveRead);
+									dos.writeInt(chaveRead);
 									break;
 						case "U":
-									System.out.println("Update");
+									System.out.println("Update\n");
 									Scanner update = new Scanner(System.in);
 
-									System.out.println("Chave: ");
-									byte[] chaveUpdate= update.nextBigInteger().toByteArray();
+									System.out.print("Chave: ");
+									int chaveUpdate= update.nextInt();
 									
-									System.out.println("Novo valor: ");
+									System.out.print("Novo valor: ");
 									String valorUpdate = update.next();
+
 									if(valorUpdate.length() > 100){
 										System.out.println("Valor ultrapaça tamanho máximo permitido");
 										System.out.println("Operação não realizada");
 										break;
 									}
-									
-									byte[] updateByte = valorUpdate.getBytes();
+
 									dos.writeInt(3); // 3 = "update"
-									dos.write(chaveUpdate);
-									dos.write(updateByte);
+									dos.writeInt(chaveUpdate);
+									dos.writeUTF(valorUpdate);
 									break;
 						case "D":
-									System.out.println("Delete");
+									System.out.println("Delete\n");
 									Scanner delete = new Scanner(System.in);
 
-									System.out.println("Chave: ");
-									byte[] chaveDeleite = delete.nextBigInteger().toByteArray();
+									System.out.print("Chave: ");
+									int chaveDeleite = delete.nextInt();
 
 									dos.writeInt(4); // 4 = "delete"
-									dos.write(chaveDeleite);
+									dos.writeInt(chaveDeleite);
 									break;
 						case "X": 
 									scanIn.close(); 
@@ -104,7 +102,8 @@ public class ClienteMenu implements Runnable {
 				}catch (InputMismatchException e){
 					System.out.println("Formato de chave inválido");
 					System.out.println("Operação não realizada");
-				}
+				} // tratamento de chave inválida
+				  // continua dentro do loop
 			}
 		}catch (IOException e) {
 			e.printStackTrace();
@@ -113,8 +112,8 @@ public class ClienteMenu implements Runnable {
 	
 	public static void main (String args[]) {
 			Thread t1 = new Thread(new ClienteMenu(), "threadMenu");
-			t1.start(); //inicia thread do menu
+			t1.start(); // inicia thread do menu
 			Thread t2 = new Thread(new ClienteListener(t1), "threadListener");
-			t2.start();
+			t2.start(); // inicia thread do listener
 	}
 }
