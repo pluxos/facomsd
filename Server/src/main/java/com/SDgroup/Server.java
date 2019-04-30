@@ -8,7 +8,7 @@ import java.util.Properties;
 class Server{
   public static void main(String argv[]) throws Exception {
     Properties properties = new Properties();
-    FileInputStream propsFS = new FileInputStream("src/main/resources/Constants.prop");
+    FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
     properties.load(propsFS);
     
     Integer port = Integer.parseInt(properties.getProperty("port"));
@@ -16,18 +16,18 @@ class Server{
     
     // ServerSocket ssock = new ServerSocket(port);
     System.out.println("Listening on port " + port);
-   
-    while (true) {
+    new Thread(new Consumidor()).start(); 
+    //while (true) {
       // o método accept() bloqueia a execução até que
       // o servidor receba um pedido de conexão    
       //   Socket sock = ssock.accept();
-      Thread.currentThread().sleep(1000*20);
+      Thread.currentThread().sleep(1000*5);
       System.out.println("enviando um nova thread");
-      new Thread(new EntryPoint(null)).start(); 
+      new Thread(new EntryPoint()).start(); 
      
       
       
-    }
+   // }
     
     
   }

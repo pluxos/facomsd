@@ -12,18 +12,22 @@ public class Consumidor implements Runnable {
     public void run() {
         ItemFila item = null;;
         while(true){
-            try {
-                item = f1.unqueue();
-            } catch (Exception e) {
+            synchronized(f1){
+                System.out.println("Consumidor no syncronized");
                 try {
-                    f1.wait();
-                    continue;
-                } catch (InterruptedException e1) {
-                    
-                    e1.printStackTrace();
+                    item = f1.unqueue();
+                } catch (Exception e) {
+                    try {
+                        f1.wait();
+                        continue;
+                    } catch (InterruptedException e1) {
+                        
+                        e1.printStackTrace();
+                    }
                 }
+                System.out.println("O chave do item obtido foi: " + item.k);
             }
-            System.out.println("O chave do item obtido foi: " + item.k);
+            
         }
     }
     

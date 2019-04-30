@@ -7,8 +7,8 @@ import java.net.Socket;
 public class EntryPoint implements Runnable{
     private Socket cliente;
     
-    EntryPoint(Socket cliente){
-        this.cliente = cliente;
+    EntryPoint(){
+        this.cliente = new Socket();
     }
     
     public void run() {
@@ -25,13 +25,21 @@ public class EntryPoint implements Runnable{
             cliente.close();
             */
             ItemFila c = new ItemFila();
-            c.k ++;
-           F1 f1 =  F1.getInstance();
-           f1.queue(c);
-            f1.notify();
+            
+            F1 f1 =  F1.getInstance();
+            synchronized(f1){
+                System.out.println("Entrypoint no syncronized");
+                while(true){
+                    f1.queue(c);
+                    System.out.println("emfileirado");
+                    c.k ++;
+                    f1.notify();
+                    System.out.println("notificado");
+                }
+            }
         }   
         catch(Exception e) {
-            System.out.println("Erro: " + e.getMessage());
+            e.printStackTrace();
         }
         // finally {...}
     }

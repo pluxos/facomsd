@@ -33,7 +33,8 @@ public class F1 {
         throw new NoSuchElementException();
         } 
         ItemFila itemFila = row.remove(tail);
-        tail--;
+        tail-=2;
+        head--;
         return itemFila;
     }
 }
