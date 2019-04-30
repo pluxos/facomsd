@@ -4,7 +4,7 @@ Este projeto está sendo desenvolvido para matéria Sistemas Distribuidos
 Faculdade de Computação - Universidade Federal de Uberlândia
 Professor Lázaro Camargo (http://www.facom.ufu.br/~lasaro/)
 
-Integrantes:  Deise Raiane Ribeiro dos Santos - 11911BSI276
+Integrantes:  Deise Raiane Ribeiro dos Santos - 11911BSI276 \n
               Wallyson Pedrosa Ferreira - 11711BSI267
               Rafael Denipote Ricci - 11511BSI255
 
