@@ -3,15 +3,19 @@
 import java.io.*;
 import java.nio.file.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.List;
 
 public class Logger  implements Runnable
 {
 
     protected BlockingQueue<ItemFila> f2;
+    protected BlockingQueue<ItemFila> f3;
     Path  path = Paths.get("./log");
 
     Logger(){
         this.f2 = F2.getInstance();
+        this.f3 = F3.getInstance();
+
     }
 
     @Override
@@ -47,24 +51,27 @@ public class Logger  implements Runnable
 
 
     /*Essa é a parte de recuperação apartir do arquivo log*/
-//    public List<String> getListOfCommands(){
-//        List<String> contents;
-//        try{
-////            Path  path = Paths.get("./log");
-//            contents = Files.readAllLines(path);
-//            return contents;
-//        }catch(IOException ex){
-//            ex.printStackTrace();//handle exception here
-//        }
-//        return null;
-//    }
+    public void getListOfCommands(){
+        List<String> contents;
+        ItemFila item;
+        try{
+//            Path  path = Paths.get("./log");
+            contents = Files.readAllLines(path);
+            for(String content:contents){
+                String[] commandSplited = content.split("\\s+");
+                if ( commandSplited.length == 3 ){
+                    item = new ItemFila( null, commandSplited[0].getBytes(),commandSplited[1].getBytes(),commandSplited[2].getBytes());
+                    f3.add(item);
+                }
+                else if ( commandSplited.length == 2 ){
+                    item = new ItemFila( null, commandSplited[0].getBytes(),commandSplited[1].getBytes());
+                    f3.add(item);
+                }
+            }
+        }catch(IOException ex){
+            ex.printStackTrace();//handle exception here
+        }
+    }
 
-//    public static void main(String[] args) throws Exception {
-//        writeCommand("comando maluco5");
-//        writeCommand("READ alkfdjalskdfjç");
-//        List<String> s = getListOfCommands();
-//        for(String content:s){//for each line of content in contents
-//            System.out.println(content);// print the line
-//        }
-//    }
 }
+
