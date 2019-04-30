@@ -9,7 +9,7 @@
               Rafael Denipote Ricci - 11511BSI255.
 
 # Instruções do projeto
-- As classes .java esta em pacotes que ficam no diretório sd-trabalho/src/main/java.
+- As classes .java estão em pacotes que ficam no diretório sd-trabalho/src/main/java.
 - As classes do pacote util são classes para auxiliar e padronizar a troca de mensagens entre cliente e servidor.
 - Executar primeiro a classe Servidor.
 - Executar depois classe MenuCliente, essa classe pode ser executada quantas vezes quiser, já o servidor vai criar uma thread para atender cada cliente.
