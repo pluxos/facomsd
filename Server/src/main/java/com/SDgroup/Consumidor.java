@@ -1,43 +1,30 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.util.concurrent.BlockingQueue;
 
 class Consumidor implements Runnable
 {
-    protected BlockingQueue<ItemFila> f1;
-    protected BlockingQueue<ItemFila> f2;
-    protected BlockingQueue<ItemFila> f3;
- 
-    Consumidor() {
-        this.f1 = F1.getInstance();
-        this.f2 = F2.getInstance();
-        this.f3 = F3.getInstance();
+  protected BlockingQueue<ItemFila> f1;
+  protected BlockingQueue<ItemFila> f2;
+  protected BlockingQueue<ItemFila> f3;
+  
+  Consumidor() {
+    this.f1 = F1.getInstance();
+    this.f2 = F2.getInstance();
+    this.f3 = F3.getInstance();
+  }
+  
+  public void run() {
+    try{
+      while (true){
+        ItemFila obj = f1.take();
+        obj.print();
+        f2.put(obj);
+        f3.put(obj);
+      }
     }
- 
-    public void run() {
-        try{
-            while (true){
-                ItemFila obj = f1.take();
-                f2.put(obj);
-                f3.put(obj);
-            }
-        }
-        catch (InterruptedException ex){
-            ex.printStackTrace();
-        }
+    catch (InterruptedException ex){
+      ex.printStackTrace();
     }
- 
-    void take(ItemFila obj)
-    {
-        try{
-            Thread.sleep(2);
-            f2.put(obj);
-            f3.put(obj);
-          //envia pra f2 e f3
-        }
-        catch (InterruptedException ex){
-            ex.printStackTrace();
-        }
-        System.out.println("Consuming object " + obj.k);
-    }
+  }
 }

@@ -1,4 +1,4 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -8,46 +8,25 @@ import java.util.Properties;
 class Server {
 
   public static void main(String[] args) {
-    Properties properties = new Properties();
-    FileInputStream propsFS;
     try {
-      propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
-      properties.load(propsFS);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+      // Properties properties = new Properties();
+      // FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
+      // properties.load(propsFS);
 
-    Integer port = Integer.parseInt(properties.getProperty("port"));
+      Integer port =  12345; // Integer.parseInt(properties.getProperty("port"));
+      
+      ServerSocket server = new ServerSocket(port);
+      System.out.println("Listening on port " + port);
 
-    ServerSocket ssock = null;
+      new Thread(new Consumidor()).start();
 
-    new Thread(new Consumidor()).start(); 
-
-    try {
-      ssock = new ServerSocket(port);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    System.out.println("Listening on port " + port);
-
-    while (true) {
-      // o método accept() bloqueia a execução até que
-      // o servidor receba um pedido de conexão
-      Socket sock = null;
-      try {
-        sock = ssock.accept();
-      } catch (IOException e) {
-        e.printStackTrace();
+      while( true ) {
+        Socket client = server.accept();
+        new Thread( new EntryPoint( client ) ).start();         
       }
-      new Thread(new EntryPoint(sock)).start(); 
     }
-    
-    
+    catch(Exception e) {
+      System.out.println("Erro: " + e.getMessage());
+    }
   }
-  
-  
-  
-  
 }
