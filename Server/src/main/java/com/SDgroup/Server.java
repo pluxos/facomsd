@@ -1,4 +1,4 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.io.FileInputStream;
 import java.net.ServerSocket;
@@ -9,12 +9,11 @@ class Server {
   
   public static void main(String[] args) {
     try {
-      Properties properties = new Properties();
-//      FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
-      FileInputStream propsFS = new FileInputStream("/home/jpveira/Documents/UFU/facomsd/Server/src/main/resources/Constants.prop");
-      properties.load(propsFS);
+      // Properties properties = new Properties();
+      // FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
+      // properties.load(propsFS);
 
-      Integer port = Integer.parseInt(properties.getProperty("port"));
+      Integer port = 12345;// Integer.parseInt(properties.getProperty("port"));
 
       ServerSocket server = new ServerSocket(port);
       System.out.println("Listening on port " + port);

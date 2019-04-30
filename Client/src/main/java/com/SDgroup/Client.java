@@ -1,5 +1,4 @@
-package com.SDgroup;
-
+// package com.SDgroup;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -26,10 +25,16 @@ public class Client {
 
   BigInteger keyBigInteger;
 
+  Socket connection;
+
   public Client() {
     try {
-      Socket connection = new Socket( "localhost", 12345 );
+      connection = new Socket( "localhost", 12345 );
       System.out.println( done );
+
+      Runnable runnable = new ClientResponse(connection);
+      Thread thread = new Thread(runnable);
+      thread.start();
 
       Scanner scanner = new Scanner( System.in );
       DataOutputStream output = new DataOutputStream( connection.getOutputStream() );
@@ -111,9 +116,6 @@ public class Client {
   }
   public static void main(String argv[]) throws Exception {
 
-    // Runnable runnable = new ClientQuery();
-    // Thread thread = new Thread(runnable);
-    // thread.start();
     new Client();
   }
 }

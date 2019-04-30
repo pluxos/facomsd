@@ -1,4 +1,4 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.net.Socket;
 import java.math.*;
@@ -33,24 +33,17 @@ public class ItemFila{
       System.out.println( x + " " + y);
     }
   }
-  /*
-  * João Paulo
-  *
-  * Devo verificar como funciona as funções do Client:
-  *     Se o read for a única de 2 valores, toString return null
-  * */
+  
   @Override
   public String toString() {
     String x = new String(controll);
     BigInteger y = new BigInteger(key);
     if( value != null ) {
       String z = new String(value);
-//      System.out.println( "Inserindo no LOG: "+x + " " + y + " " + z);
       return ( x + " " + y + " " + z);
     }
     else {
-//      System.out.println( x + " " + y);
-      return null;
+      return ( x + " " + y);
     }
 
   }

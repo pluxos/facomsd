@@ -1,6 +1,9 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.util.concurrent.BlockingQueue;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 class Consumidor implements Runnable
 {
@@ -19,12 +22,18 @@ class Consumidor implements Runnable
             while (true){
                 ItemFila obj = f1.take();
                 obj.print();
+
+                DataOutputStream output = new DataOutputStream( obj.socket.getOutputStream() );
+                byte[] messageBytesCommand = "Deu certo".getBytes();
+                output.writeInt( messageBytesCommand.length );
+                output.write( messageBytesCommand );
+                
                 f2.put(obj);
                 f3.put(obj);
             }
         }
-        catch (InterruptedException ex){
-            ex.printStackTrace();
+        catch (Exception e){
+            System.out.println( "Erro: " + e.getMessage() );
         }
     }
 }

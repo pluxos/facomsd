@@ -1,4 +1,4 @@
-package com.SDgroup;
+// package com.SDgroup;
 
 import java.io.*;
 import java.nio.file.*;
@@ -28,7 +28,8 @@ public class Logger  implements Runnable
     }
 
     private void writeCommand(String comando){
-        if (comando.contains("READ"))
+        // if(comando == null) System.out.println("MEGA BATATA");
+        if ( comando.substring( 0, 4 ).equals("READ") )
             return;
         try {
             if(!Files.exists(path)) {
