@@ -1,20 +1,36 @@
 package com.SDgroup;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.List;
+import java.nio.file.*;
+import java.util.concurrent.BlockingQueue;
 
-public class Logger {
+public class Logger  implements Runnable
+{
 
+    protected BlockingQueue<ItemFila> f2;
     Path  path = Paths.get("./log");
 
-    public void writeCommand(String comando){
+    Logger(){
+        this.f2 = F2.getInstance();
+    }
+
+    @Override
+    public void run() {
+        try{
+            while (true){
+                ItemFila obj = f2.take();
+                writeCommand(obj.toString());
+            }
+        }
+        catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void writeCommand(String comando){
         if (comando.contains("READ"))
             return;
         try {
-//            Path  path = Paths.get("./log");
             if(!Files.exists(path)) {
                 System.out.println("Arquivo Inexistente, Criando...");
                 Files.createFile(path);
@@ -27,17 +43,20 @@ public class Logger {
         }
     }
 
-    public List<String> getListOfCommands(){
-        List<String> contents;
-        try{
-//            Path  path = Paths.get("./log");
-            contents = Files.readAllLines(path);
-            return contents;
-        }catch(IOException ex){
-            ex.printStackTrace();//handle exception here
-        }
-        return null;
-    }
+
+
+    /*Essa é a parte de recuperação apartir do arquivo log*/
+//    public List<String> getListOfCommands(){
+//        List<String> contents;
+//        try{
+////            Path  path = Paths.get("./log");
+//            contents = Files.readAllLines(path);
+//            return contents;
+//        }catch(IOException ex){
+//            ex.printStackTrace();//handle exception here
+//        }
+//        return null;
+//    }
 
 //    public static void main(String[] args) throws Exception {
 //        writeCommand("comando maluco5");

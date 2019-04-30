@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.SDgroup.ServerTest" time="0.07" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.SDgroup.ServerTest" time="0.063" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="gnome"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
-    <property name="java.specification.version" value="11"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="java.specification.version" value="1.8"/>
     <property name="sun.cpu.isalist" value=""/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="java.class.path" value="/home/jpveira/Documentos/SD/SD/Server/target/test-classes:/home/jpveira/Documentos/SD/SD/Server/target/classes:/home/jpveira/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/jpveira/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="java.class.path" value="/home/jpveira/Documents/UFU/facomsd/Server/target/test-classes:/home/jpveira/Documents/UFU/facomsd/Server/target/classes:/home/jpveira/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/jpveira/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="http://java.oracle.com/"/>
     <property name="user.timezone" value=""/>
-    <property name="java.vm.specification.version" value="11"/>
+    <property name="java.vm.specification.version" value="1.8"/>
     <property name="os.name" value="Linux"/>
+    <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-    <property name="user.country" value="BR"/>
-    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/jpveira/Documentos/SD/SD/Server/target/surefire/surefirebooter10980511101089614934.jar /home/jpveira/Documentos/SD/SD/Server/target/surefire 2019-04-29T16-36-36_980-jvmRun1 surefire10804426105258520854tmp surefire_08445235625591189413tmp"/>
-    <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="/home/jpveira/Documentos/SD/SD/Server/target/test-classes:/home/jpveira/Documentos/SD/SD/Server/target/classes:/home/jpveira/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/jpveira/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-oracle/jre/lib/amd64"/>
+    <property name="sun.java.command" value="/home/jpveira/Documents/UFU/facomsd/Server/target/surefire/surefirebooter4940475964079977390.jar /home/jpveira/Documents/UFU/facomsd/Server/target/surefire 2019-04-30T10-08-04_941-jvmRun1 surefire4917020191982632466tmp surefire_03028960924814551197tmp"/>
+    <property name="surefire.test.class.path" value="/home/jpveira/Documents/UFU/facomsd/Server/target/test-classes:/home/jpveira/Documents/UFU/facomsd/Server/target/classes:/home/jpveira/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/jpveira/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="/home/jpveira"/>
-    <property name="user.language" value="pt"/>
+    <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
-    <property name="java.version.date" value="2019-01-15"/>
-    <property name="java.home" value="/usr/lib/jvm/java-11-openjdk-amd64"/>
+    <property name="java.home" value="/usr/lib/jvm/java-8-oracle/jre"/>
+    <property name="basedir" value="/home/jpveira/Documents/UFU/facomsd/Server"/>
     <property name="file.separator" value="/"/>
-    <property name="basedir" value="/home/jpveira/Documentos/SD/SD/Server"/>
-    <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="line.separator" value="&#10;"/>
-    <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/home/jpveira/Documentos/SD/SD/Server/target/surefire/surefirebooter10980511101089614934.jar"/>
+    <property name="surefire.real.class.path" value="/home/jpveira/Documents/UFU/facomsd/Server/target/surefire/surefirebooter4940475964079977390.jar"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-8-oracle/jre/lib/resources.jar:/usr/lib/jvm/java-8-oracle/jre/lib/rt.jar:/usr/lib/jvm/java-8-oracle/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jce.jar:/usr/lib/jvm/java-8-oracle/jre/lib/charsets.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jfr.jar:/usr/lib/jvm/java-8-oracle/jre/classes"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="java.runtime.version" value="11.0.2+9-Ubuntu-3ubuntu118.04.3"/>
+    <property name="java.runtime.version" value="1.8.0_201-b09"/>
     <property name="user.name" value="jpveira"/>
     <property name="path.separator" value=":"/>
-    <property name="os.version" value="4.15.0-47-generic"/>
-    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="os.version" value="4.9.0-8-amd64"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-8-oracle/jre/lib/endorsed"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
-    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="localRepository" value="/home/jpveira/.m2/repository"/>
-    <property name="java.vendor.url.bug" value="http://bugreport.java.com/bugreport/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
     <property name="java.io.tmpdir" value="/tmp"/>
-    <property name="java.version" value="11.0.2"/>
-    <property name="user.dir" value="/home/jpveira/Documentos/SD/SD/Server"/>
+    <property name="java.version" value="1.8.0_201"/>
+    <property name="user.dir" value="/home/jpveira/Documents/UFU/facomsd/Server"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
     <property name="sun.os.patch.level" value="unknown"/>
-    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode"/>
     <property name="java.vendor" value="Oracle Corporation"/>
-    <property name="java.vm.info" value="mixed mode, sharing"/>
-    <property name="java.vm.version" value="11.0.2+9-Ubuntu-3ubuntu118.04.3"/>
+    <property name="java.vm.version" value="25.201-b09"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-8-oracle/jre/lib/ext:/usr/java/packages/lib/ext"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
-    <property name="java.class.version" value="55.0"/>
+    <property name="java.class.version" value="52.0"/>
   </properties>
   <testcase name="shouldAnswerWithTrue" classname="com.SDgroup.ServerTest" time="0.002"/>
 </testsuite>
