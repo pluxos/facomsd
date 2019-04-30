@@ -12,7 +12,7 @@ import client.connector.GenericRequest;
 
 public class UpdateUser implements RequestStrategy {
 	@Override
-	public GenericRequest buildRequest(String[] inputParams) throws InvalidCommandException, IOException {
+	public GenericRequest buildRequest(String[] inputParams) throws IOException {
 		User user = null;
 		GenericRequest request = new GenericRequest();
 		try {

@@ -1,10 +1,10 @@
-package client.business.validation;
+package client.commons.validation.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
 import client.commons.exceptions.ErrorMap;
 import client.commons.exceptions.InvalidCommandException;
-import client.commons.validation.CommandsValidator;
+import client.commons.utils.CommandUtils;
 
 public class InputRequestValidator {
 
@@ -12,9 +12,6 @@ public class InputRequestValidator {
         if (StringUtils.isEmpty(input)) {
             throw new InvalidCommandException(ErrorMap.EMPTY_INPUT);
         }
-
-        if (!CommandsValidator.commandIsValid(input)) {
-        	throw new InvalidCommandException(ErrorMap.INVALID_COMMAND);
-        }
+        ValidatorUtils.getStrategyByMethod(CommandUtils.getMethodByUserInput(input)).validate(input);
     }
 }
