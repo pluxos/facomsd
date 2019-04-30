@@ -1,4 +1,4 @@
-//package com.SDgroup;
+package com.SDgroup;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +14,7 @@ public class Logger {
         if (comando.contains("READ"))
             return;
         try {
-            Path  path = Paths.get("./log");
+//            Path  path = Paths.get("./log");
             if(!Files.exists(path)) {
                 System.out.println("Arquivo Inexistente, Criando...");
                 Files.createFile(path);
@@ -30,7 +30,7 @@ public class Logger {
     public List<String> getListOfCommands(){
         List<String> contents;
         try{
-            Path  path = Paths.get("./log");
+//            Path  path = Paths.get("./log");
             contents = Files.readAllLines(path);
             return contents;
         }catch(IOException ex){
