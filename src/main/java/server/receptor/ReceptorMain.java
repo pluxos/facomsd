@@ -1,9 +1,8 @@
 package server.receptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import server.commons.RowF1;
+import server.commons.Rows.RowF1;
 import server.commons.domain.GenericCommand;
-import server.commons.exceptions.ErrorMap;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.commons.utils.ResponseError;

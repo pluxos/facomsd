@@ -1,4 +1,4 @@
-package server.commons;
+package server.commons.Rows;
 
 import server.commons.domain.GenericCommand;
 
