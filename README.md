@@ -16,14 +16,14 @@ As classes .java esta em pacotes que ficam no diretório sd-trabalho/src/main/ja
 As classes do pacote util são classes para auxiliar e padronizar a troca de mensagens entre cliente e servidor.
 
 
-Para executar o projeto é necessário 
+# Para executar o projeto é necessário 
 
 
 Executar primeiro a classe Servidor.
 
 Executar depois classe MenuCliente, essa classe pode ser executada quantas vezes quiser, já o servidor vai criar uma thread para atender cada cliente.
 
-Instruções do cliente
+# Instruções do cliente
 
 
 As operações para o Cliente(MenuCliente) são: READ, CREATE, UPDATE, DELETE, SAIR e AJUDA.
