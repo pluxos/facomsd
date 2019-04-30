@@ -8,10 +8,6 @@ Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter
 
 # Organização do Git
 
-Cada um desenvolve somente na branch SUBMISSAO_1, se vocês quiserem, a gnt pode usar várias branches, mas pra fork, eu não sei se compensa. Nunca dêem push para a master. Seria bom dividir as partes pra não dar merda no merge. Pode usar qualquer IDE, já configurei o .gitignore.
+Cada um desenvolve somente na sua branch. Há 2 projetos (Client e Server) para melhor organizar o conteúdo. Quando desenvolvida uma funcionalidade, deve-se criar um pull request no github para a master. 
 
-### Branches Atuais
-```
-master
-SUBMISSAO_1
-```
+No envio, faremos uma nova branch com o nome SUBMISSAO_1.
