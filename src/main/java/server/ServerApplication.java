@@ -9,14 +9,11 @@ import server.receptor.*;
 
 public class ServerApplication {
 
-	private static ServerSocket serverSocket;
-	private static ExecutorService pool;
-
 	public static void main(String[] args) throws IOException {
-		serverSocket = new ServerSocket(12345);
+		ServerSocket serverSocket = new ServerSocket(12345);
 		System.out.println("Server TCP startado na porta 12345");
 
-		pool = Executors.newFixedThreadPool(10);
+		ExecutorService pool = Executors.newFixedThreadPool(10);
 
 		for(;;){
 			try {
