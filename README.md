@@ -1,10 +1,8 @@
 # Trabalho de Sistemas distribuidos
 
-Este projeto está sendo desenvolvido para matéria Sistemas Distribuidos
-
-Faculdade de Computação - Universidade Federal de Uberlândia
-
-Professor Lázaro Camargo (http://www.facom.ufu.br/~lasaro/)
+- Este projeto está sendo desenvolvido para matéria Sistemas Distribuidos;
+Faculdade de Computação - Universidade Federal de Uberlândia;
+- Professor Lázaro Camargo (http://www.facom.ufu.br/~lasaro/)
 
 Integrantes:  Deise Raiane Ribeiro dos Santos - 11911BSI276,
               Wallyson Pedrosa Ferreira - 11711BSI267,
