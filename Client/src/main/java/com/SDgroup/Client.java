@@ -11,7 +11,7 @@ public class Client {
   String invalid = "Opção inválida!!!";
   String done = "Conexão concluída!!!\n";
   String quit = "Conexão encerrada!!!";
-  String close = "Saindo...";
+  String close = "Saindo....";
   String option;
   String command;
   String key;
@@ -42,6 +42,7 @@ public class Client {
       System.out.println( welcome );
       System.out.println( options );
       while( true ) {
+        Thread.sleep(1000);
         System.out.print( read );
         option = scanner.nextLine();
 
