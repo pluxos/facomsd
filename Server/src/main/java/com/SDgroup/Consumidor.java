@@ -21,13 +21,7 @@ class Consumidor implements Runnable
         try{
             while (true){
                 ItemFila obj = f1.take();
-                obj.print();
 
-                DataOutputStream output = new DataOutputStream( obj.socket.getOutputStream() );
-                byte[] messageBytesCommand = "Deu certo".getBytes();
-                output.writeInt( messageBytesCommand.length );
-                output.write( messageBytesCommand );
-                
                 f2.put(obj);
                 f3.put(obj);
             }

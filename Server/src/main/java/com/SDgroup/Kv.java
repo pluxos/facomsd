@@ -24,7 +24,10 @@ public class Kv {
   }
   
   public byte[] Read (BigInteger key) {
-    return this.Database.get(key);
+    if( this.Database.containsKey(key) ) {
+      return this.Database.get(key);
+    }
+    else return null;
   }
   
   public Boolean Update (BigInteger key, byte[] value) {

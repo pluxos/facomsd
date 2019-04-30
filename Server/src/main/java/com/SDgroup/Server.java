@@ -20,6 +20,7 @@ class Server {
 
       new Thread(new Consumidor()).start();
       new Thread(new Logger()).start();
+      new Thread(new Persistence()).start();
 
       while( true ) {
         Socket client = server.accept();

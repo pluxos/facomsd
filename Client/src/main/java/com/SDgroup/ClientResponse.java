@@ -16,18 +16,28 @@ public class ClientResponse implements Runnable {
     try {
       DataInputStream input = new DataInputStream(connection.getInputStream());
       byte[] message = null;
-      int length;
-      String x;
+      int lengthWrong;
+      int lengthRight;
+      int type;
+      String x = null;
       
       while(true) {
         try {
-          length = input.readInt();
+          lengthWrong = input.readInt();
+          lengthRight = (int) lengthWrong/10;
+          type = lengthWrong - (lengthRight*10);
           
-          if( length > 0 ) {
-            message = new byte[length];
-            input.readFully(message, 0, length);
+          if( lengthRight > 0 ) {
+              message = new byte[lengthRight];
+              input.readFully(message, 0, lengthRight);
           }
-          x = new String(message);
+          
+          if( type == 1 ) {
+            x = new String(message);
+          }
+          else if ( type == 2 ) {
+            x = new String(message);
+          }
           System.out.println(x);
         }
         catch(Exception e) {

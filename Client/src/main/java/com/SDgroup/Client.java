@@ -42,6 +42,7 @@ public class Client {
       System.out.println( welcome );
       System.out.println( options );
       while( true ) {
+        Thread.sleep(1000);
         System.out.print( read );
         option = scanner.nextLine();
 
