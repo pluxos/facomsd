@@ -1,21 +1,30 @@
 package com.SDgroup;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
-public class Consumidor implements Runnable{
-    private Collection<Comando> F1;
-    private Collection<Comando> F2;
-    private Collection<Comando> F3;
-    Consumidor(){
-        F1 = Collections.synchronizedCollection(new ArrayList<Comando>());
-        F2 = Collections.synchronizedCollection(new ArrayList<Comando>());
-        F3 = Collections.synchronizedCollection(new ArrayList<Comando>());
+public class Consumidor implements Runnable {
+    private F1 f1;
+    
+    Consumidor() {
+        f1 = F1.getInstance();
+        
     }
+    
     @Override
     public void run() {
-        F1.
+        ItemFila item = null;;
+        while(true){
+            try {
+                item = f1.unqueue();
+            } catch (Exception e) {
+                try {
+                    f1.wait();
+                    continue;
+                } catch (InterruptedException e1) {
+                    
+                    e1.printStackTrace();
+                }
+            }
+            System.out.println("O chave do item obtido foi: " + item.k);
+        }
     }
     
 }

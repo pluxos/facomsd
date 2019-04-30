@@ -3,6 +3,8 @@ package com.SDgroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 class Escrita implements Runnable {
     private int i;
@@ -16,16 +18,16 @@ class Escrita implements Runnable {
     
    public class Teste {
     public static void main(String[] args) {
-         Collection<Comando>  F1 = Collections.synchronizedCollection(new ArrayList<Comando>());
+        List<ItemFila> row = (new LinkedList<ItemFila>());
 
-        if(F1 instanceof ArrayList){
-            System.out.println("!é um arraylist");
+        if(row instanceof LinkedList){
+            System.out.println("é um Linkedlist!!!");
         }
         else System.out.println("naõ é");
-        System.out.println(F1.getClass());
-        Escrita e = new Escrita(); //Cria o contexto de execução
+        System.out.println(row.getClass());
+  /*       Escrita e = new Escrita(); //Cria o contexto de execução
     Thread t = new Thread(e); //Cria a linha de execução
     t.start(); //Ativa a thread
     new Thread(e).start();
-    }
+ */    }
    }

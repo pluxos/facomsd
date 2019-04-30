@@ -14,14 +14,19 @@ class Server{
     Integer port = Integer.parseInt(properties.getProperty("port"));
     
     
-    ServerSocket ssock = new ServerSocket(port);
+    // ServerSocket ssock = new ServerSocket(port);
     System.out.println("Listening on port " + port);
+   
     while (true) {
       // o método accept() bloqueia a execução até que
       // o servidor receba um pedido de conexão    
-      Socket sock = ssock.accept();
-      System.out.println("Connected");
-      new Thread(new EntryPoint(sock)).start();
+      //   Socket sock = ssock.accept();
+      Thread.currentThread().sleep(1000*20);
+      System.out.println("enviando um nova thread");
+      new Thread(new EntryPoint(null)).start(); 
+     
+      
+      
     }
     
     
