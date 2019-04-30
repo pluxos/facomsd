@@ -1,6 +1,6 @@
 import java.util.*;
 import java.net.*;
-import java.io.DataInputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 
 public class ClienteListener implements Runnable {
@@ -17,21 +17,21 @@ public class ClienteListener implements Runnable {
 			InetAddress ip = InetAddress.getByName("localhost");
 			Socket listener = new Socket(ip, 5678);
 
-            DataInputStream dis = new DataInputStream(listener.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(listener.getInputStream());
 			
 			while (true){
 
                 if(!t.isAlive()){
                     while(true){
                         Thread.sleep(5000);
-                        if((res = dis.readUTF()) == ""){
+                        if((res = ois.readUTF()) == ""){
                             listener.close();
                             return;
                         }
                         System.out.println(res);
                     }
                 }else{
-                    res = dis.readUTF(); // resultado da operação
+                    res = ois.readUTF(); // resultado da operação
                     System.out.println(res);
                 }
 			}

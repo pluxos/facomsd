@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.net.*;
-import java.io.DataInputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 
 public class Servidor implements Runnable{
@@ -18,43 +18,31 @@ public class Servidor implements Runnable{
         try {
             ServerSocket servidor = new ServerSocket(1234);
             Socket menu;
-            
-            int cmd, chave;
-            String valor;
     
             menu = servidor.accept();
             System.out.println("conexão feita com: " + menu);
 
-            DataInputStream dis = new DataInputStream(menu.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(menu.getInputStream());
 
             while(true){
     
-                cmd = dis.readInt();
+                c = (Comando) ois.readObject();
+                System.out.println(c.cmd + " " + c.chave + " " + c.valor);
 
-                switch (cmd) {
+                switch (c.cmd) {
                     case 1: //create
-                        chave = dis.readInt();
-                        valor = dis.readUTF();
-                        c = new Comando(cmd, chave, valor);
                         f1.add(c); // adiciona comando à f1
                         break;
 
                     case 2: //read
-                        chave = dis.readInt();
-                        c = new Comando(cmd, chave, "");
                         f1.add(c); // adiciona comando à f1
                         break;
 
                     case 3: //update
-                        chave = dis.readInt();
-                        valor = dis.readUTF();
-                        c = new Comando(cmd, chave, valor);
                         f1.add(c); // adiciona comando à f1
                         break;
 
                     case 4: //delete
-                        chave = dis.readInt();
-                        c = new Comando(cmd, chave, "");
                         f1.add(c); // adiciona comando à f1
                         break;
                     } 
@@ -63,6 +51,8 @@ public class Servidor implements Runnable{
                 }    
             
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

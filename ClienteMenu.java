@@ -1,6 +1,6 @@
 import java.util.*;
 import java.net.*;
-import java.io.DataOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -10,12 +10,15 @@ public class ClienteMenu implements Runnable {
       
 		try{
 			String input="";
+			BigInteger chave;
+			String valor;
 			Scanner scanIn = new Scanner(System.in);
+			Comando c;
 
 			InetAddress ip = InetAddress.getByName("localhost");
 			Socket menu = new Socket(ip, 1234);
 
-      		DataOutputStream dos = new DataOutputStream(menu.getOutputStream());
+   ObjectOutputStream oos = new ObjectOutputStream(menu.getOutputStream());
 			
 			while (true){
 			
@@ -37,59 +40,57 @@ public class ClienteMenu implements Runnable {
 									Scanner create = new Scanner(System.in);
 
 									System.out.print("Chave: ");
-									int chaveCreate = create.nextInt();
+									chave = create.nextBigInteger();
 									System.out.print("Valor: ");
-									String valorCreate = create.next();
+									valor = create.next();
 
-									if(valorCreate.length() > 100){
+									if(valor.length() > 100){
 										System.out.println("Valor ultrapaça tamanho máximo permitido");
 										System.out.println("Operação não realizada");
 										break;
 									}
-
-									dos.writeInt(1); // 1 = "create"
-									dos.writeInt(chaveCreate);
-									dos.writeUTF(valorCreate);
+									
+									c = new Comando(1, chave, valor);
+									oos.writeObject(c);
 									break;
 						case "R":	
 									System.out.println("Read\n");
 									Scanner read = new Scanner(System.in);
 
 									System.out.print("Chave: ");
-									int chaveRead = read.nextInt();
+									chave = read.nextBigInteger();
 
-									dos.writeInt(2); // 2 = "read"
-									dos.writeInt(chaveRead);
+									c = new Comando(2, chave, "");
+									oos.writeObject(c);
 									break;
 						case "U":
 									System.out.println("Update\n");
 									Scanner update = new Scanner(System.in);
 
 									System.out.print("Chave: ");
-									int chaveUpdate= update.nextInt();
+									chave = update.nextBigInteger();
 									
 									System.out.print("Novo valor: ");
-									String valorUpdate = update.next();
+									valor = update.next();
 
-									if(valorUpdate.length() > 100){
+									if(valor.length() > 100){
 										System.out.println("Valor ultrapaça tamanho máximo permitido");
 										System.out.println("Operação não realizada");
 										break;
 									}
 
-									dos.writeInt(3); // 3 = "update"
-									dos.writeInt(chaveUpdate);
-									dos.writeUTF(valorUpdate);
+									c = new Comando(3, chave, valor);
+									oos.writeObject(c);
 									break;
 						case "D":
 									System.out.println("Delete\n");
 									Scanner delete = new Scanner(System.in);
 
 									System.out.print("Chave: ");
-									int chaveDeleite = delete.nextInt();
+									chave = delete.nextBigInteger();
 
-									dos.writeInt(4); // 4 = "delete"
-									dos.writeInt(chaveDeleite);
+									c = new Comando(4, chave, "");
+									oos.writeObject(c);
 									break;
 						case "X": 
 									scanIn.close(); 
