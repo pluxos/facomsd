@@ -3,15 +3,15 @@ package com.SDgroup;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class F1 {
+public class F3 {
  
-	private static final  BlockingQueue<ItemFila> f1 = new LinkedBlockingQueue<>();
+	private static final  BlockingQueue<ItemFila> f3 = new LinkedBlockingQueue<>();
  
-	protected F1() {
+	protected F3() {
 	}
  
 
 	public static BlockingQueue<ItemFila> getInstance() {
-		return f1;
+		return f3;
 	}
 }

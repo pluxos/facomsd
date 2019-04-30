@@ -1,46 +1,45 @@
 package com.SDgroup;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
 
-public class EntryPoint implements Runnable{
-    private Socket cliente;
-    
-    EntryPoint(){
-        this.cliente = new Socket();
+class EntryPoint implements Runnable
+{
+    protected BlockingQueue<ItemFila> queue;
+    private int id = 0;
+    private Socket sock;
+
+    EntryPoint(Socket sock) {
+        this.sock = sock;
+        this.queue = F1.getInstance();
     }
     
-    public void run() {
-        try {
-            /*
-            System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-            ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
-            saida.flush();
-            saida.writeObject("teste1");
-            saida.writeObject("teste2");
-            saida.writeObject("teste3");
-            
-            saida.close();
-            cliente.close();
-            */
-            ItemFila c = new ItemFila();
-            
-            F1 f1 =  F1.getInstance();
-            synchronized(f1){
-                System.out.println("Entrypoint no syncronized");
-                while(true){
-                    f1.queue(c);
-                    System.out.println("emfileirado");
-                    c.k ++;
-                    f1.notify();
-                    System.out.println("notificado");
-                }
+    public void run()
+    {
+        try
+        {
+            while(true){
+                ItemFila justProduced = getItemFila();
+                queue.put(justProduced);
             }
-        }   
-        catch(Exception e) {
-            e.printStackTrace();
         }
-        // finally {...}
+        catch (InterruptedException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+    
+    ItemFila getItemFila(){
+        try{
+            Thread.sleep(100); // simulate time passing during read
+        }
+        catch (InterruptedException ex){
+           ex.printStackTrace();
+        }
+        ItemFila item = new ItemFila();
+        item.k = this.id ++;
+        item.v = this.id;
+        item.socket = this.sock;
+        return item;
     }
 }

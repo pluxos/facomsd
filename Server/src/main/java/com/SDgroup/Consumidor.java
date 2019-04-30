@@ -1,34 +1,43 @@
 package com.SDgroup;
 
-public class Consumidor implements Runnable {
-    private F1 f1;
-    
+import java.util.concurrent.BlockingQueue;
+
+class Consumidor implements Runnable
+{
+    protected BlockingQueue<ItemFila> f1;
+    protected BlockingQueue<ItemFila> f2;
+    protected BlockingQueue<ItemFila> f3;
+ 
     Consumidor() {
-        f1 = F1.getInstance();
-        
+        this.f1 = F1.getInstance();
+        this.f2 = F2.getInstance();
+        this.f3 = F3.getInstance();
     }
-    
-    @Override
+ 
     public void run() {
-        ItemFila item = null;;
-        while(true){
-            synchronized(f1){
-                System.out.println("Consumidor no syncronized");
-                try {
-                    item = f1.unqueue();
-                } catch (Exception e) {
-                    try {
-                        f1.wait();
-                        continue;
-                    } catch (InterruptedException e1) {
-                        
-                        e1.printStackTrace();
-                    }
-                }
-                System.out.println("O chave do item obtido foi: " + item.k);
+        try{
+            while (true){
+                ItemFila obj = f1.take();
+                f2.put(obj);
+                f3.put(obj);
             }
-            
+        }
+        catch (InterruptedException ex){
+            ex.printStackTrace();
         }
     }
-    
+ 
+    void take(ItemFila obj)
+    {
+        try{
+            Thread.sleep(2);
+            f2.put(obj);
+            f3.put(obj);
+          //envia pra f2 e f3
+        }
+        catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+        System.out.println("Consuming object " + obj.k);
+    }
 }

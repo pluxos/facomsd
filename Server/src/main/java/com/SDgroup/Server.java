@@ -5,32 +5,48 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
 
-class Server{
-  public static void main(String argv[]) throws Exception {
+class Server {
+
+  public static void main(String[] args) {
     Properties properties = new Properties();
-    FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
-    properties.load(propsFS);
-    
+    FileInputStream propsFS;
+    try {
+      propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
+      properties.load(propsFS);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     Integer port = Integer.parseInt(properties.getProperty("port"));
-    
-    
-    // ServerSocket ssock = new ServerSocket(port);
-    System.out.println("Listening on port " + port);
+
+    ServerSocket ssock = null;
+
     new Thread(new Consumidor()).start(); 
-    //while (true) {
+
+    try {
+      ssock = new ServerSocket(port);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    System.out.println("Listening on port " + port);
+
+    while (true) {
       // o método accept() bloqueia a execução até que
-      // o servidor receba um pedido de conexão    
-      //   Socket sock = ssock.accept();
-      Thread.currentThread().sleep(1000*5);
-      System.out.println("enviando um nova thread");
-      new Thread(new EntryPoint()).start(); 
-     
-      
-      
-   // }
+      // o servidor receba um pedido de conexão
+      Socket sock = null;
+      try {
+        sock = ssock.accept();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      new Thread(new EntryPoint(sock)).start(); 
+    }
     
     
   }
+  
   
   
   
