@@ -5,7 +5,7 @@ import server.commons.domain.GenericCommand;
 import java.util.ArrayList;
 
 public class RowF1 {
-    public static volatile ArrayList<GenericCommand> f1 = new ArrayList<>();
+    private static volatile ArrayList<GenericCommand> f1 = new ArrayList<>();
 
     public synchronized static void addItem(GenericCommand item) {
         f1.add(item);

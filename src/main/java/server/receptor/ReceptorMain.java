@@ -1,6 +1,5 @@
 package server.receptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import server.commons.Rows.RowF1;
 import server.commons.domain.GenericCommand;
 import server.commons.exceptions.ServerException;
@@ -16,13 +15,11 @@ public class ReceptorMain implements Runnable {
 	private Socket socket;
 	private Scanner input;
 	private PrintStream output;
-	private ObjectMapper objectMapper;
 
 	public ReceptorMain(Socket socket) throws IOException {
 		this.socket = socket;
 		this.input = new Scanner(socket.getInputStream());
 		this.output = new PrintStream(this.socket.getOutputStream());
-		this.objectMapper = new ObjectMapper();
 	}
 
 	public void run() {
