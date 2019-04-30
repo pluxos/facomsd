@@ -16,11 +16,11 @@ public class ClienteMenu implements Runnable {
 			Comando c;
 
 			InetAddress ip = InetAddress.getByName("localhost");
-			Socket menu = new Socket(ip, 1234);
-
-   ObjectOutputStream oos = new ObjectOutputStream(menu.getOutputStream());
+			
 			
 			while (true){
+				Socket menu = new Socket(ip, 1234);
+				ObjectOutputStream oos = new ObjectOutputStream(menu.getOutputStream());
 			
 				System.out.println("C - Create");
 				System.out.println("R - Read");
@@ -30,7 +30,8 @@ public class ClienteMenu implements Runnable {
 				System.out.println();
 				
 				
-				input = scanIn.nextLine();  
+				input = scanIn.nextLine();
+				
 			
 				try{
 					switch (input.toUpperCase()){
@@ -107,7 +108,6 @@ public class ClienteMenu implements Runnable {
 				  // continua dentro do loop
 			}
 		}catch (IOException e) {
-			e.printStackTrace();
 		}
   }
 	

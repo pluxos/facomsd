@@ -19,13 +19,14 @@ public class Servidor implements Runnable{
             ServerSocket servidor = new ServerSocket(1234);
             Socket menu;
     
-            menu = servidor.accept();
-            System.out.println("conexão feita com: " + menu);
-
-            ObjectInputStream ois = new ObjectInputStream(menu.getInputStream());
-
+            
+            
             while(true){
-    
+                
+                menu = servidor.accept();
+                System.out.println("conexão feita com: " + menu);
+                ObjectInputStream ois = new ObjectInputStream(menu.getInputStream());
+
                 c = (Comando) ois.readObject();
                 System.out.println(c.cmd + " " + c.chave + " " + c.valor);
 
@@ -47,7 +48,7 @@ public class Servidor implements Runnable{
                         break;
                     } 
                     
-                    servidor.close();
+                    // servidor.close();
                 }    
             
         } catch (IOException e) {
