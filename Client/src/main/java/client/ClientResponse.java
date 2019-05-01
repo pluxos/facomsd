@@ -1,3 +1,4 @@
+package client;
 import java.io.*;
 import java.net.*;
 import javax.swing.JOptionPane;
@@ -6,32 +7,42 @@ import java.lang.*;
 
 public class ClientResponse implements Runnable {
   Socket connection;
-  
+
   public ClientResponse( Socket connection ) {
     this.connection = connection;
   }
-  
-  @Override
+
+
   public void run() {
     try {
       DataInputStream input = new DataInputStream(connection.getInputStream());
       byte[] message = null;
-      int length;
-      String x;
-      
+      int lengthWrong;
+      int lengthRight;
+      int type;
+      String x = null;
+
       while(true) {
         try {
-          length = input.readInt();
-          
-          if( length > 0 ) {
-            message = new byte[length];
-            input.readFully(message, 0, length);
+          lengthWrong = input.readInt();
+          lengthRight = (int) lengthWrong/10;
+          type = lengthWrong - (lengthRight*10);
+
+          if( lengthRight > 0 ) {
+            message = new byte[lengthRight];
+            input.readFully(message, 0, lengthRight);
           }
-          x = new String(message);
+
+          if( type == 1 ) {
+            x = new String(message);
+          }
+          else if ( type == 2 ) {
+            x = new String(message);
+          }
           System.out.println(x);
         }
         catch(Exception e) {
-          System.out.println("Erro: " + e.getMessage());
+          System.out.println("Saindo em 5 segundos...");
           break;
         }
       }
@@ -41,6 +52,6 @@ public class ClientResponse implements Runnable {
     }
     // input.close();
     System.out.println("Conexão encerrada");
-    
+
   }
 }

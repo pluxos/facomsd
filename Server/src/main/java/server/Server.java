@@ -1,12 +1,13 @@
 package server;
 
+
 import java.io.FileInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
 
 class Server {
-  
+
   public static void main(String[] args) {
     try {
       // Properties properties = new Properties();
@@ -18,8 +19,9 @@ class Server {
       ServerSocket server = new ServerSocket(port);
       System.out.println("Listening on port " + port);
 
-      new Thread(new Consumidor()).start();
+      new Thread(new Persistence()).start();
       new Thread(new Logger()).start();
+      new Thread(new Consumidor()).start();
 
       while( true ) {
         Socket client = server.accept();
