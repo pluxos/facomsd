@@ -21,4 +21,8 @@ public class Manipulator {
     public static void updateValue(BigInteger code, byte[] data) {
         db.replace(code, data);
     }
+
+    public static boolean containKey(BigInteger code) {
+        return db.containsKey(code);
+    }
 }

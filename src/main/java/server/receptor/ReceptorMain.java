@@ -26,7 +26,6 @@ public class ReceptorMain implements Runnable {
 	public void run() {
 		while (this.input.hasNextLine()) {
 			String req = this.input.nextLine();
-			System.out.println(req);
 			try {
 				GenericCommand gc = JsonUtils.deserialize(req, GenericCommand.class);
 				gc.setOutput(this.output);
