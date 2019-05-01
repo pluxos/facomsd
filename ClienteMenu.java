@@ -1,12 +1,31 @@
 import java.util.*;
-public class ClienteMenu implements Runnable{
-	
+import java.net.*;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.io.File;
+
+public class ClienteMenu implements Runnable {
+	public int port;
 	public void run() {
-      
+
+		try{
+			Scanner scanner = new Scanner(new File("port.txt"));
+			while (scanner.hasNextInt()) {
+				port = scanner.nextInt();
+			}
 			String input="";
+			BigInteger chave;
+			String valor;
 			Scanner scanIn = new Scanner(System.in);
+			Comando c;
+
+			InetAddress ip = InetAddress.getByName("localhost");
+			
 			
 			while (true){
+				Socket menu = new Socket(ip, port);
+				ObjectOutputStream oos = new ObjectOutputStream(menu.getOutputStream());
 			
 				System.out.println("C - Create");
 				System.out.println("R - Read");
@@ -16,58 +35,91 @@ public class ClienteMenu implements Runnable{
 				System.out.println();
 				
 				
-				input = scanIn.nextLine();  
+				input = scanIn.nextLine();
+				
 			
-			
-				switch (input.toUpperCase()){
-					case "C":
-								input = "";
-								System.out.println("Digite a string ser criada:");
-								input = scanIn.nextLine();
-								System.out.println(input);
-								if(input != "") {
-									System.out.println("Validado");
-									try {
-										socket = new Socket("ip address", 4014);
-										osw =new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
-										osw.write(input, 0, input.length());
-									} catch (IOException e) {
-										System.err.print(e);
-									} catch (UnknownHostException e) {
-										System.err.print(e);
-									} finally {
-										socket.close();
+				try{
+					switch (input.toUpperCase()){
+						case "C":
+
+									System.out.println("Create\n");
+									Scanner create = new Scanner(System.in);
+
+									System.out.print("Chave: ");
+									chave = create.nextBigInteger();
+									System.out.print("Valor: ");
+									valor = create.next();
+
+									if(valor.length() > 100){
+										System.out.println("Valor ultrapaça tamanho máximo permitido");
+										System.out.println("Operação não realizada");
+										break;
 									}
-								}
-								else
-									System.out.println("Invalidado");
+									
+									c = new Comando(1, chave, valor);
+									oos.writeObject(c);
+									break;
+						case "R":	
+									System.out.println("Read\n");
+									Scanner read = new Scanner(System.in);
+
+									System.out.print("Chave: ");
+									chave = read.nextBigInteger();
+
+									c = new Comando(2, chave, "");
+									oos.writeObject(c);
+									break;
+						case "U":
+									System.out.println("Update\n");
+									Scanner update = new Scanner(System.in);
+
+									System.out.print("Chave: ");
+									chave = update.nextBigInteger();
+									
+									System.out.print("Novo valor: ");
+									valor = update.next();
+
+									if(valor.length() > 100){
+										System.out.println("Valor ultrapaça tamanho máximo permitido");
+										System.out.println("Operação não realizada");
+										break;
 									}
-								break;
-					case "R":	
-								System.out.println("Read");
-								break;
-					case "U":
-								System.out.println("Update");
-								break;
-					case "D":
-								System.out.println("Delete");
-								break;
-					case "X": return;
-					default: System.out.println("opcao invalida"); break;
-					
-				}
+
+									c = new Comando(3, chave, valor);
+									oos.writeObject(c);
+									break;
+						case "D":
+									System.out.println("Delete\n");
+									Scanner delete = new Scanner(System.in);
+
+									System.out.print("Chave: ");
+									chave = delete.nextBigInteger();
+
+									c = new Comando(4, chave, "");
+									oos.writeObject(c);
+									break;
+						case "X": 
+									scanIn.close(); 
+									menu.close(); 
+									return;
+						default: 
+									System.out.println("opcao inválida"); break;
+						
+					}
+				}catch (InputMismatchException e){
+					System.out.println("Formato de chave inválido");
+					System.out.println("Operação não realizada");
+				} // tratamento de chave inválida
+				  // continua dentro do loop
 			}
-    }
-		
-	
+		}catch (IOException e) {
+		}
+  }
 	
 	public static void main (String args[]) {
-			Thread t1 = new Thread(new ClienteMenu(), "thread1");
-			t1.start();
+			Thread t1 = new Thread(new ClienteMenu(), "threadMenu");
+			t1.start(); // inicia thread do menu
+			Thread t2 = new Thread(new ClienteListener(t1), "threadListener");
+			t2.start(); // inicia thread do listener
 	}
-	
-	
-	
-	
-	
 }
