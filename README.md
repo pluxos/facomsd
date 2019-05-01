@@ -12,7 +12,7 @@ arquivo "ClienteMenu.java"
 
 em "ClienteMenu" é onde será mostrado o menu com as opções de operações:
 
-C - Create
+C - Create \n
 R - Read
 U - Update
 D - Delete
