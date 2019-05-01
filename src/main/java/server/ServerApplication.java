@@ -12,6 +12,9 @@ public class ServerApplication {
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = new ServerSocket(12345);
 		System.out.println("Server TCP startado na porta 12345");
+		
+		Thread t = new Thread(new ConsumerF1());
+		t.start();
 
 		ExecutorService pool = Executors.newFixedThreadPool(10);
 
