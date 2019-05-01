@@ -9,7 +9,7 @@ import client.connector.GenericRequest;
 public class GetUser implements RequestStrategy {
 
 	@Override
-	public GenericRequest buildRequest(String[] inputParams) throws InvalidCommandException {
+	public GenericRequest buildRequest(String[] inputParams) {
 		GenericRequest request = new GenericRequest();
 		try {
 			request.setCode(DataCodificator.stringToBigInteger(inputParams[1]));
