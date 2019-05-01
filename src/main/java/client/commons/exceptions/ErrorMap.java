@@ -10,7 +10,8 @@ public enum ErrorMap {
 	INVALID_EMAIL("Email inválido!"),
 	INVALID_NAME("Nome não pode conter caracters numéricos"),
 	INVALID_PARAMS_LENGTH("Quantidade de parâmetros errada!"),
-	UNDEFINED_METHOD("Método digitado não reconhecido! Deve ser get, create, update ou delete");
+	UNDEFINED_METHOD("Método digitado não reconhecido! Deve ser get, create, update ou delete"),
+	CONNECTION_ERROR("Não foi possível estabelecer uma conexão com o servidor!");
 	
 	private String message;
 	

@@ -1,7 +1,8 @@
 package server.commons.exceptions;
 
 public enum ErrorMap {
-    BAD_REQUEST("400 - Bad Request"), INTERNAL_SERVER_ERROR("500 - Internal Server Error");
+    BAD_REQUEST("Requisição inválida! Verifique se todos os dados foram passados corretamente"),
+    INTERNAL_SERVER_ERROR("Erro inesperado! Tente novamente");
 
     private String message;
 

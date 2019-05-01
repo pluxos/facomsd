@@ -33,7 +33,7 @@ public class ClientCommands implements Runnable {
 			} catch (DomainException e) {
 				System.err.println(e.getErrorMessage());
 			} catch (Exception e) {
-				System.err.println(ErrorMap.UNEXPECTED_ERROR);
+				System.err.println(ErrorMap.UNEXPECTED_ERROR.getMessage());
 			}
 		}
 		System.out.println("Finalizando thread de Comandos...");

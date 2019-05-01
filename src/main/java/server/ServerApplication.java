@@ -10,12 +10,10 @@ import server.receptor.*;
 public class ServerApplication {
 
 	public static void main(String[] args) throws IOException {
-		ServerSocket serverSocket = new ServerSocket(12345);
+		ServerSocket serverSocket = SocketConnection.getServerSocket();
 		System.out.println("Server TCP startado na porta 12345");
-
 		ExecutorService pool = Executors.newFixedThreadPool(10);
-
-		for(;;){
+		for (;;) {
 			try {
 				pool.execute(new ReceptorMain(serverSocket.accept()));
 			} catch (IOException e) {
@@ -23,7 +21,6 @@ public class ServerApplication {
 				break;
 			}
 		}
-
 		serverSocket.close();
 	}
 }
