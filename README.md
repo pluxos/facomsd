@@ -35,7 +35,10 @@ $ expect RunExpect.sh
 
 Com isso é possível executar uma sequência de comandos através de um cliente. Abrindo vários terminais é possível executar vários clientes automaticamente com o expect.
 
-O servidor suporta vários clientes simultâneos e faz uso de Non-Blocking I/O.
+## Features
+
+* Multiplos clientes através de Non-Blocking I/O
+* Utilização de ProtoBuf para troca de informações entre clientes e servidor
 
 # Grupo: 
 
