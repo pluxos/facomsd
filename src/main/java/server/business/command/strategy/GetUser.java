@@ -1,10 +1,26 @@
 package server.business.command.strategy;
 
-public class GetUser implements RequestStrategy {
+import server.commons.domain.GenericCommand;
+import server.commons.domain.GenericResponse;
+import server.model.HashMap.Manipulator;
+
+import java.math.BigInteger;
+
+public class GetUser implements CommandStrategy {
 
 	@Override
-	public boolean executeCommand(String[] inputParams) {
-		System.out.println("GET USER");
-		return true;
+	public GenericResponse executeCommand(GenericCommand inputParams) {
+		BigInteger code = inputParams.getCode();
+		GenericResponse genericResponse = new GenericResponse();
+
+		byte[] res = Manipulator.getValue(code);
+
+		if(res != null){
+			genericResponse.setData(res);
+		} else {
+			genericResponse.setMsg("Erro ao realizar GET");
+		}
+
+		return genericResponse;
 	}
 }
