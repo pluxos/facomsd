@@ -13,6 +13,7 @@ public class Servidor4 implements Runnable{
     }
 	
 	public void run() {
+            
 
         String valor;
         byte[] valorByte;

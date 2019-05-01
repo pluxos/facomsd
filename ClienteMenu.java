@@ -3,12 +3,17 @@ import java.net.*;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.io.File;
 
 public class ClienteMenu implements Runnable {
-	
+	public int port;
 	public void run() {
-      
+
 		try{
+			Scanner scanner = new Scanner(new File("port.txt"));
+			while (scanner.hasNextInt()) {
+				port = scanner.nextInt();
+			}
 			String input="";
 			BigInteger chave;
 			String valor;
@@ -19,7 +24,7 @@ public class ClienteMenu implements Runnable {
 			
 			
 			while (true){
-				Socket menu = new Socket(ip, 1234);
+				Socket menu = new Socket(ip, port);
 				ObjectOutputStream oos = new ObjectOutputStream(menu.getOutputStream());
 			
 				System.out.println("C - Create");

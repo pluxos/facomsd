@@ -4,9 +4,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.net.*;
 import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.File;
 
 public class Servidor implements Runnable{
-
+	public int port;
     BlockingQueue<Comando> f1;
     Comando c;
 
@@ -16,7 +17,11 @@ public class Servidor implements Runnable{
 	
 	public void run() {
         try {
-            ServerSocket servidor = new ServerSocket(1234);
+			Scanner scanner = new Scanner(new File("port.txt"));
+			while (scanner.hasNextInt()) {
+				port = scanner.nextInt();
+			}
+            ServerSocket servidor = new ServerSocket(port);
             Socket menu;
     
             
