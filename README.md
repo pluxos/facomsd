@@ -12,11 +12,11 @@ arquivo "ClienteMenu.java"
 
 em "ClienteMenu" é onde será mostrado o menu com as opções de operações:
 
-C - Create \n
-R - Read
-U - Update
-D - Delete
-X - Sair
+C - Create |
+R - Read |
+U - Update |
+D - Delete |
+X - Sair |
 
 "Servidor" é a classe que irá iniciar as Threads do Servidor que sao:
 
