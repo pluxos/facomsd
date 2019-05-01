@@ -7,7 +7,7 @@ Quando estiver pronto para submeter a versao final, faca um pull request para es
 Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes
 
 # Como executar?
-Instruções para executar cada projeto estão disponíveis em:</br>
+#### Instruções para executar cada projeto estão disponíveis em:</br>
 
 [DS-Server (Entrega 1)](https://github.com/MarcusAdriano/DS-Server/tree/Submit/ONE)</br>
 [DS-Client (Entrega 1)](https://github.com/MarcusAdriano/DS-Server/tree/Submit/ONE)
