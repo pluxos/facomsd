@@ -1,10 +1,19 @@
 package server.business.command.strategy;
 
-public class CreateUser implements RequestStrategy {
+import server.commons.domain.GenericCommand;
+import server.model.HashMap.Manipulator;
+
+import java.math.BigInteger;
+
+public class CreateUser implements CommandStrategy {
 
 	@Override
-	public boolean executeCommand(String[] inputParams) {
-		System.out.println("Create USER");
+	public boolean executeCommand(GenericCommand inputParams) {
+		BigInteger code = inputParams.getCode();
+		byte[] data = inputParams.getData();
+
+		Manipulator.addValue(code, data);
+
 		return true;
 	}
 }

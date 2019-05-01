@@ -1,10 +1,12 @@
 package server.business.command.strategy;
 
-public class GetUser implements RequestStrategy {
+import server.commons.domain.GenericCommand;
+
+public class GetUser implements CommandStrategy {
 
 	@Override
-	public boolean executeCommand(String[] inputParams) {
-		System.out.println("GET USER");
+	public boolean executeCommand(GenericCommand inputParams) {
+		System.out.println("GET USER" + inputParams.getCode());
 		return true;
 	}
 }

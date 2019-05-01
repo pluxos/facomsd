@@ -1,10 +1,12 @@
 package server.business.command.strategy;
 
-public class UpdateUser implements RequestStrategy {
-	
+import server.commons.domain.GenericCommand;
+
+public class UpdateUser implements CommandStrategy {
+
 	@Override
-	public boolean executeCommand(String[] inputParams) {
-		System.out.println("UPDATE USER");
+	public boolean executeCommand(GenericCommand inputParams) {
+		System.out.println("UPDATE USER" + inputParams.getCode());
 		return true;
 	}
 }

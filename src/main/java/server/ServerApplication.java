@@ -13,8 +13,12 @@ public class ServerApplication {
 		ServerSocket serverSocket = new ServerSocket(12345);
 		System.out.println("Server TCP startado na porta 12345");
 		
-		Thread t = new Thread(new ConsumerF1());
-		t.start();
+		Thread tConsumer = new Thread(new ConsumerF1());
+		Thread tCommand = new Thread(new ThreadCommand());
+		Thread tLog = new Thread(new ThreadLog());
+		tConsumer.start();
+		tCommand.start();
+		tLog.start();
 
 		ExecutorService pool = Executors.newFixedThreadPool(10);
 

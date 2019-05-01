@@ -2,15 +2,15 @@ package server.business.command.strategy;
 
 import client.commons.utils.JsonUtils;
 import client.connector.CommandSender;
-import client.connector.GenericRequest;
+import server.commons.domain.GenericCommand;
 
 import java.io.PrintStream;
 
-public interface RequestStrategy {
+public interface CommandStrategy {
 
-	boolean executeCommand(String[] inputParams);
+	boolean executeCommand(GenericCommand inputParams);
 	
-	default void makeRequest(GenericRequest request, PrintStream output) {
+	default void makeRequest(GenericCommand request, PrintStream output) {
 		String json = JsonUtils.serialize(request);
 		CommandSender.send(json, output);
 	}
