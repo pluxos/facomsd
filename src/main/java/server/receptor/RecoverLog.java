@@ -1,37 +1,35 @@
 package server.receptor;
-import server.business.command.strategy.CreateUser;
-import server.business.command.strategy.DeleteUser;
-import server.business.command.strategy.UpdateUser;
-import server.business.command.strategy.RequestStrategy;
+import server.business.command.RequestUtils;
+import server.business.command.strategy.CommandStrategy;
+import server.commons.domain.GenericCommand;
+import server.commons.domain.Method;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.JsonUtils;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 
-public class RecoverLog {
+public class RecoverLog implements Runnable {
 
-    public static void recover (String readFile){
+    @Override
+    public void run (){
         try{
-            BufferedReader file = new BufferedReader(new FileReader(readFile));
-            RequestStrategy method;
+            BufferedReader file = new BufferedReader(new FileReader("comand.log"));
 
             while(file.ready()){
                 String line = file.readLine();
-                String list[] = line.split(";");
+                try {
 
-                if (list[0].equals("CREATE")){
-                    method = new CreateUser();
-                    method.executeCommand(list);
+                    GenericCommand object = JsonUtils.deserialize(line, GenericCommand.class);
+                    Method method = Method.getMethod(object.getMethod());
+                    CommandStrategy command = RequestUtils.getRequestStrategyByMethod(method);
+                    command.executeCommand(object);
 
-                } else if (list[0].equals("DELETE")){
-                    method = new DeleteUser();
-                    method.executeCommand(list);
-
-                } else if (list[0].equals("UPDATE")) {
-                    method = new UpdateUser();
-                    method.executeCommand(list);
+                } catch (ServerException e) {
+                    System.out.println(e.getMessage());
                 }
-
             }
             file.close();
         }catch(IOException ioe){
