@@ -1,7 +1,28 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+# Trabalho 1 : Sistemas Distribuidos : (UFU 2019.1)
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+
+
+Grupo:
+
++ Guilherme Fagotti
++ João Marcos Gomes
++ Marilia Leal
++ Rafael Morais de Assis
+
+## Executar
+
+
+
+#### Comandos
+
+`javac File_java.java` : Compila o arquivo `File_java.java`
+
+`java File_java `: Executa o arquivo `File_java.class` (o ByteCode)
+
+### Etapas para executar
+
+No prompt execute `java Servidor` para subir o servidor que espera requisições
+
+No prompt execute `java Cliente` para criar um cliente que ligará ao servidor
