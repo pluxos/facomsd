@@ -8,10 +8,10 @@ Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter
 
 
 Integrantes Grupo:
--Rafael Faria Macedo          11621BSI243
--Isadora Rocha de Paula       11421BSI246
--Gabriel Vieira Dias		  11321BSI240
--Rafael Francisco Cunha Reis  11521BSI255
+ - Rafael Faria Macedo          11621BSI243
+ - Isadora Rocha de Paula       11421BSI246
+ - Gabriel Vieira Dias		    11321BSI240
+ - Rafael Francisco Cunha Reis  11521BSI255
 
 
 EXECUÇÃO:
