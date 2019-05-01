@@ -1,7 +1,18 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
+"# Sistemas-Distribuidos" 
+----------------------------
+Alexandre Pereira Marcos
+Natan Luis Silva Rodvalho
+Gustavo Miranda
+Lara Caroline
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
+---------------------------------------------------------------------------------------------------------
+Projeto foi construído pela IDLE NetBeans 8.2,  todas as classes estão na pasta src/sistemas_districuidos
+basta abrir o projeto pela IDLE executar os passos a seguir.
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+Para rodar o banco primeiro é necessário executar a classe servidor, na qual as portas e o 
+host que o cliente precisarão para fazer conexão estão definidas no arquivo Porta_e_host.txt.
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+Depois para a interação com a classe servidor deve ser executado a classe cliente, que já está
+a porta e o host, portanto é só executar a classe. Porém, como foi usado threads, delimitamos o
+número de clientes a serem atendidos que são de no máximo 15, se mais clientes forem conectados
+eles aguardam em uma fila thread até ser liberado.
