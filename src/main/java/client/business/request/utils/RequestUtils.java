@@ -11,7 +11,7 @@ import client.commons.exceptions.InvalidCommandException;
 
 public class RequestUtils {
 
-	public static RequestStrategy getRequestStrategyByMethod(Method method) throws InvalidCommandException {
+	public static RequestStrategy getRequestStrategyByMethod(Method method) {
 		switch (method) {
 		case CREATE :
 			return new CreateUser();
@@ -22,7 +22,7 @@ public class RequestUtils {
 		case GET :
 			return new GetUser();
 		default :
-			throw new InvalidCommandException(ErrorMap.INVALID_COMMAND);
+			throw new InvalidCommandException(ErrorMap.UNDEFINED_METHOD);
 		}
 	}
 }

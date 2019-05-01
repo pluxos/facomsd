@@ -3,13 +3,11 @@ package client.business;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
-
-import client.business.validation.InputRequestValidator;
 import client.commons.domain.Method;
 import client.commons.exceptions.DomainException;
 import client.commons.exceptions.ErrorMap;
 import client.commons.utils.CommandUtils;
+import client.commons.validation.utils.InputRequestValidator;
 
 public class ClientCommands implements Runnable {
 
@@ -27,10 +25,10 @@ public class ClientCommands implements Runnable {
 			printCommands();
 			String userInput = CommandUtils.modelateRequest(scanner.nextLine());
 			try {
-				InputRequestValidator.validateInput(userInput);
 				if (CommandUtils.getMethodByUserInput(userInput).equals(Method.SAIR)) {
 					break;
 				}
+				InputRequestValidator.validateInput(userInput);
 				UserProcessor.sendCommand(userInput, this.output);
 			} catch (DomainException e) {
 				System.err.println(e.getErrorMessage());
