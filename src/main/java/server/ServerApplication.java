@@ -12,7 +12,7 @@ import server.receptor.*;
 public class ServerApplication {
 
 	public static void main(String[] args) throws IOException {
-		Logger.getLogger(ServerApplication.class).info("Teste!");
+		//Logger.getLogger(ServerApplication.class).info("Teste!");
 		ServerSocket serverSocket = SocketConnection.getServerSocket();
 		System.out.println("Server TCP startado na porta 12345");
 		
