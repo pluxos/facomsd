@@ -1,18 +1,28 @@
 package client;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
 import client.business.ClientCommands;
 import client.business.ServerResponse;
+import client.commons.exceptions.ErrorMap;
+import client.commons.utils.SocketConnection;
 
 public class ClientApplication {
 	
-	public static void main(String[] args) throws IOException {
-		Socket client = new Socket("127.0.0.1", 12345);
-		PrintStream output = new PrintStream(client.getOutputStream());
-		Scanner input = new Scanner(client.getInputStream());
+	public static void main(String[] args) {
+		Socket client = null;
+		PrintStream output = null;
+		Scanner input = null;
+		try {
+			client = SocketConnection.getSocket();
+			output = new PrintStream(client.getOutputStream());
+			input = new Scanner(client.getInputStream());
+		} catch (IOException e) {
+			System.err.println(ErrorMap.CONNECTION_ERROR);
+		}
 		
 		ClientCommands clientCommands = new ClientCommands(output);
 		Thread threadCommands = new Thread(clientCommands);
@@ -26,10 +36,8 @@ public class ClientApplication {
 		try {
 			threadCommands.join();
 			Thread.sleep(5000);
-			System.out.println("Finalizando Cliente!");
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.err.println(ErrorMap.UNEXPECTED_ERROR);
 		}
-		client.close();
 	}
 }
