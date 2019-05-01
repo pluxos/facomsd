@@ -1,11 +1,9 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
-Grupo:  Danilo Vieira
-        João Jacó
-        Pedro Henrique Fernandes
-        Vinicius Riquieri
-
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+Grupo:  Danilo Vieira |
+        João Jacó |
+        Pedro Henrique Fernandes |
+        Vinicius Riquieri |
 
 INSTRUÇÕES
 
