@@ -1,17 +1,17 @@
 package server.commons.Rows;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import server.commons.domain.GenericCommand;
 
-import java.util.ArrayList;
-
 public class RowF1 {
-    private static volatile ArrayList<GenericCommand> f1 = new ArrayList<>();
+    private volatile static LinkedBlockingQueue<GenericCommand> f1 = new LinkedBlockingQueue<>();
 
-    public synchronized static void addItem(GenericCommand item) {
-        f1.add(item);
+    public static LinkedBlockingQueue<GenericCommand> getFifo() {
+    	return f1;
     }
-
-    public synchronized static GenericCommand removeItem() {
-        return f1.remove(0);
+    
+    public synchronized static void addItem(GenericCommand item) {
+        f1.offer(item);
     }
 }
