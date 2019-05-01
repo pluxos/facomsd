@@ -1,7 +1,11 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
+Grupo composto por:
+- Daniel Marques
+- Laura Banhareli
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
+O servidor é iniciado executando o arquivo ServerThread.java. o mesmo aceita conexoes, cria uma thread para atender a requisição e continua aguardando por novasconexões.
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+O cliente é iniciado executando o arquivo SocketClient.java. o mesmo lista e valida localmente os comandos (create, readAll, update, delete) e, caso o comando seja válido, o envia para o servidor.
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+o database está no arquivo Database.java, e as informações dos comandos executados pelos clientes são salvos em um arquivo de texto, data.txt. Ao reiniciar a aplicaçao, os comandos são lidos no arquivo de texto e executados, evitando a perda de consistência.
+
