@@ -10,7 +10,7 @@ public class ClienteMenu implements Runnable {
 	public void run() {
 
 		try{
-			Scanner scanner = new Scanner(new File("port.txt"));
+			Scanner scanner = new Scanner(new File("port1.txt"));
 			while (scanner.hasNextInt()) {
 				port = scanner.nextInt();
 			}
@@ -32,7 +32,6 @@ public class ClienteMenu implements Runnable {
 				System.out.println("U - Update");
 				System.out.println("D - Delete");
 				System.out.println("X - eXit");
-				System.out.println();
 				
 				
 				input = scanIn.nextLine();
@@ -100,8 +99,8 @@ public class ClienteMenu implements Runnable {
 									break;
 						case "X": 
 									scanIn.close(); 
-									menu.close(); 
-									return;
+									menu.close();
+									return ;
 						default: 
 									System.out.println("opcao inválida"); break;
 						
@@ -111,8 +110,10 @@ public class ClienteMenu implements Runnable {
 					System.out.println("Operação não realizada");
 				} // tratamento de chave inválida
 				  // continua dentro do loop
+				scanner.close();
 			}
 		}catch (IOException e) {
+			e.printStackTrace();
 		}
   }
 	

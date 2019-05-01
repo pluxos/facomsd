@@ -1,7 +1,5 @@
-import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
-import java.net.*;
 
 public class Servidor3 implements Runnable{
 
@@ -15,9 +13,8 @@ public class Servidor3 implements Runnable{
         
         try {
             Comando c;
-            Comando a;
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("log.txt", true));
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("log.txt"));
+            FileOutputStream f = new FileOutputStream(new File("log.txt"));
+            ObjectOutputStream oos = new ObjectOutputStream(f);
             
             while(true){
                 
@@ -29,7 +26,8 @@ public class Servidor3 implements Runnable{
                     }
                             
                 }
-            }    
+                // oos.close();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

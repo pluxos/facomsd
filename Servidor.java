@@ -17,23 +17,21 @@ public class Servidor implements Runnable{
 	
 	public void run() {
         try {
-			Scanner scanner = new Scanner(new File("port.txt"));
+            
+            Scanner scanner = new Scanner(new File("port1.txt"));
 			while (scanner.hasNextInt()) {
-				port = scanner.nextInt();
+                port = scanner.nextInt();
 			}
             ServerSocket servidor = new ServerSocket(port);
+            scanner.close();
             Socket menu;
-    
-            
             
             while(true){
-                
+
                 menu = servidor.accept();
-                System.out.println("conexão feita com: " + menu);
                 ObjectInputStream ois = new ObjectInputStream(menu.getInputStream());
 
                 c = (Comando) ois.readObject();
-                System.out.println(c.cmd + " " + c.chave + " " + c.valor);
 
                 switch (c.cmd) {
                     case 1: //create
@@ -54,7 +52,7 @@ public class Servidor implements Runnable{
                     } 
                     
                     // servidor.close();
-                }    
+            }
             
         } catch (IOException e) {
             e.printStackTrace();

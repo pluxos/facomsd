@@ -13,11 +13,4 @@ public class Comando implements Serializable{
         this.chave = chave;
         this.valor = valor;
     }
-
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-    }
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-    }
 }

@@ -1,12 +1,15 @@
 import java.util.*;
 import java.net.*;
-import java.io.ObjectInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.File;
 
 public class ClienteListener implements Runnable {
     
     Thread t;
     String res;
+    public int port;
+    
     ClienteListener(Thread t){
         this.t = t;
     }
@@ -14,24 +17,31 @@ public class ClienteListener implements Runnable {
 	public void run() {
       
 		try{
+            Scanner scanner = new Scanner(new File("port2.txt"));
+			while (scanner.hasNextInt()) {
+				port = scanner.nextInt();
+			}
 			InetAddress ip = InetAddress.getByName("localhost");
-			Socket listener = new Socket(ip, 5678);
+            Socket listener = new Socket(ip, port);
+            scanner.close();
 
-            ObjectInputStream ois = new ObjectInputStream(listener.getInputStream());
+            DataInputStream dis = new DataInputStream(listener.getInputStream());
 			
 			while (true){
 
                 if(!t.isAlive()){
                     while(true){
                         Thread.sleep(5000);
-                        if((res = ois.readUTF()) == ""){
+                        if((res = dis.readUTF()) == ""){
+                            System.out.println("Terminando...");
                             listener.close();
                             return;
                         }
                         System.out.println(res);
                     }
                 }else{
-                    res = ois.readUTF(); // resultado da operação
+
+                    res = dis.readUTF(); // resultado da operação
                     System.out.println(res);
                 }
 			}

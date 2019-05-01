@@ -1,6 +1,4 @@
-import java.util.*;
 import java.util.concurrent.BlockingQueue;
-import java.net.*;
 
 public class Servidor2 implements Runnable{
 
@@ -19,8 +17,8 @@ public class Servidor2 implements Runnable{
 
             if(!f1.isEmpty()){
                 c = f1.poll();
+                f3.add(c); // e f3
                 f2.add(c); // copia de f1 para f2
-                f3.add(c); // e f3 
             }
         }    
     }
