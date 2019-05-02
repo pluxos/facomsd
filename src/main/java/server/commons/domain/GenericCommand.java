@@ -3,6 +3,12 @@ package server.commons.domain;
 import java.io.PrintStream;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(value = {"output"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class GenericCommand {
 
     private PrintStream output;
