@@ -16,9 +16,10 @@ public class GetUser implements CommandStrategy {
 		byte[] res = Manipulator.getValue(code);
 
 		if(res != null){
+			genericResponse.setMsg("Sucesso");
 			genericResponse.setData(res);
 		} else {
-			genericResponse.setMsg("Erro ao realizar GET");
+			genericResponse.setMsg("Erro: Usuário não existe");
 		}
 
 		return genericResponse;
