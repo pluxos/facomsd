@@ -21,10 +21,11 @@ public class ClientApplication {
 			output = new PrintStream(client.getOutputStream());
 			input = new Scanner(client.getInputStream());
 		} catch (IOException e) {
-			System.err.println(ErrorMap.CONNECTION_ERROR);
+			System.err.println(ErrorMap.CONNECTION_ERROR.getMessage());
+			return;
 		}
-		
-		ClientCommands clientCommands = new ClientCommands(output);
+		boolean isTest = args[0] != null && args[0].equals("teste");
+		ClientCommands clientCommands = new ClientCommands(output, isTest, args[1]);
 		Thread threadCommands = new Thread(clientCommands);
 
 		ServerResponse serverResponse = new ServerResponse(input);
@@ -37,6 +38,11 @@ public class ClientApplication {
 			threadCommands.join();
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
+			System.err.println(ErrorMap.UNEXPECTED_ERROR);
+		}
+		try {
+			client.close();
+		} catch (IOException e) {
 			System.err.println(ErrorMap.UNEXPECTED_ERROR);
 		}
 	}

@@ -1,18 +1,29 @@
 package server;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.apache.log4j.Logger;
 
 import server.receptor.*;
 
 public class ServerApplication {
 
 	public static void main(String[] args) throws IOException {
-		Logger.getLogger(ServerApplication.class).info("Teste!");
+		File file = new File("comand.log");
+		if(file.exists()){
+			Thread t = new Thread(new RecoverLog(new BufferedReader(new FileReader(file))));
+			t.start();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				System.err.println("Erro ao recuperrar LOG");
+			}
+		}
+
 		ServerSocket serverSocket = SocketConnection.getServerSocket();
 		System.out.println("Server TCP startado na porta 12345");
 		
