@@ -30,13 +30,12 @@ public class ServerResponse implements Runnable {
 					System.out.println("Mensagem: " + object.getMsg());
 				else
 					System.out.println("Sem mensagem");
-				System.out.println("esta aqui");
+
 				if (object.getData() != null) {
 					User user = DataCodificator.decode(object.getData());
 					System.out.println("Nome: " + user.getName());
 					System.out.println("Email: " + user.getEmail());
 					System.out.println("Senha: " + user.getPassword());
-
 				}
 
 			}catch (Exception e){

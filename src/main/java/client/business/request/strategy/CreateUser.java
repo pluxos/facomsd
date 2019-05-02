@@ -13,8 +13,8 @@ public class CreateUser implements RequestStrategy {
 
 	@Override
 	public GenericRequest buildRequest(String[] inputParams) throws IOException {
-		User user = null;
-		GenericRequest request = new GenericRequest();
+		User user;
+		GenericRequest request;
 		try {
 			user = new User(inputParams[2], inputParams[3], inputParams[4]);
 			request = new GenericRequest();
