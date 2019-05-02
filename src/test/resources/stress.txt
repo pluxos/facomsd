@@ -1,0 +1,24 @@
+create; 456; bruno@gmail.com; 123asd; bruno
+get; 456
+update; 456; bruno@gmail.com; 123asd; updatedName
+get; 456
+delete; 456
+get; 456
+create; 457; bruno@gmail.com; 123asd; bruno
+get; 457
+update; 457; bruno@gmail.com; 123asd; updatedName
+get; 457
+delete; 457
+get; 457
+create; 456; bruno@gmail.com; 123asd; bruno
+get; 456
+update; 456; bruno@gmail.com; 123asd; updatedName
+get; 456
+delete; 456
+get; 456
+create; 457; bruno@gmail.com; 123asd; bruno
+get; 457
+update; 457; bruno@gmail.com; 123asd; updatedName
+get; 457
+delete; 457
+get; 457
