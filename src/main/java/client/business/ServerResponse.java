@@ -4,7 +4,11 @@ import client.commons.domain.User;
 import client.commons.utils.DataCodificator;
 import org.apache.commons.lang3.ObjectUtils;
 import server.commons.domain.GenericResponse;
+import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
@@ -38,9 +42,15 @@ public class ServerResponse implements Runnable {
 					System.out.println("Senha: " + user.getPassword());
 				}
 
-			}catch (Exception e){
-				System.out.println(e);
-				break;
+			}catch (NoSuchElementException e){
+				System.out.println("Infelizmente a comunicação com o servidor foi interrompida");
+				System.exit(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ServerException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 	}
