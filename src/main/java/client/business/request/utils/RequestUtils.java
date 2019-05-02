@@ -13,16 +13,16 @@ public class RequestUtils {
 
 	public static RequestStrategy getRequestStrategyByMethod(Method method) {
 		switch (method) {
-		case CREATE :
-			return new CreateUser();
-		case UPDATE :
-			return new UpdateUser();
-		case DELETE :
-			return new DeleteUser();
-		case GET :
-			return new GetUser();
-		default :
-			throw new InvalidCommandException(ErrorMap.UNDEFINED_METHOD);
+			case CREATE :
+				return new CreateUser();
+			case UPDATE :
+				return new UpdateUser();
+			case DELETE :
+				return new DeleteUser();
+			case GET :
+				return new GetUser();
+			default :
+				throw new InvalidCommandException(ErrorMap.UNDEFINED_METHOD);
 		}
 	}
 }
