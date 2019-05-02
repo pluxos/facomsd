@@ -1,80 +1,80 @@
 package integration;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import client.ClientApplication;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class IntegrationTests {
-
-	private String commandsFromFile;
 	
-	@BeforeClass
-	public static void init() throws FileNotFoundException {
-		// clears log file
-		new PrintWriter("log4j/log4j-application.log").close();
-		new PrintWriter("src/test/resources/ahah.txt").close();
+	@AfterClass
+	public static void init() throws IOException {
+		setBaseLog();
 	}
 	
-	@Before
-	public void loadTestDatabase() {
-		// load database
-		// copy database
-		// apply tests on the copy
+	@After
+	public void after() {
+		printDivision();
 	}
 	
 	@Test
-	public void serverShouldCreate() {
-		System.setIn(getUserInput("create; 123; matheus@em; 123asd; matheus"));
-		System.setIn(getUserInput("get; 123"));
-		ClientApplication.main(null);
+	public void test1_serverShouldLoadLogFile() throws FileNotFoundException {
+		System.out.println("TEST 1: LOADING LOG FILE AFTER SHUTDOWN / GETING USER BASED ON LOG\n");
+		String[] args = {"teste", "src/test/resources/get.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldUpdate() {
-		System.setIn(getUserInput("update; 123; matheus@em; 123asd; update_name"));
-		System.setIn(getUserInput("get; 123"));
-		ClientApplication.main(null);
+	public void test2_serverShouldCreate() {
+		System.out.println("TEST 2: CREATING NEW USER\n");
+		String[] args = {"teste", "src/test/resources/create.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldDelete() {
-		System.setIn(getUserInput("delete; 123"));
-		System.setIn(getUserInput("get; 123"));
-		ClientApplication.main(null);
+	public void test3_serverShouldUpdate() {
+		System.out.println("TEST 3: UPDATING EXISTING USER\n");
+		String[] args = {"teste", "src/test/resources/update.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldThrowErrorWhenCreatingDataWithAlreadyExistingId() {
-		System.setIn(getUserInput("create; 123; matheus@em; 123asd; matheus"));
-		ClientApplication.main(null);
+	public void test4_serverShouldThrowErrorWhenCreatingDataWithAlreadyExistingId() {
+		System.out.println("TEST 4: FAILING TO CREATE USER WITH EXISTING ID\n");
+		String[] args = {"teste", "src/test/resources/create.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldThrowErrorWhenUpdatingInexistentId() {
-		System.setIn(getUserInput("update; 456; matheus@em; 123asd; update_name"));
-		ClientApplication.main(null);
+	public void test5_serverShouldDelete() {
+		System.out.println("TEST 5: DELETING EXISTING USER\n");
+		String[] args = {"teste", "src/test/resources/delete.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldThrowErrorWhenDeletingInexistentId() {
-		System.setIn(getUserInput("delete; 456"));
-		ClientApplication.main(null);
+	public void test6_serverShouldThrowErrorWhenUpdatingInexistentId() {
+		System.out.println("TEST 6: FAILING TO UPDATE USER WITH INEXISTENT ID\n");
+		String[] args = {"teste", "src/test/resources/update.txt"};
+		ClientApplication.main(args);
 	}
 	
 	@Test
-	public void serverShouldNotifyEmptyGet() {
-		System.setIn(getUserInput("get; 456"));
-		ClientApplication.main(null);
+	public void test7_serverShouldThrowErrorWhenDeletingInexistentId() {
+		System.out.println("TEST 7: FAILING TO DELETE USER WITH INEXISTENT ID\n");
+		String[] args = {"teste", "src/test/resources/delete.txt"};
+		ClientApplication.main(args);
 	}
 	
-	@Test
+	/*@Test
 	public void serverShouldAcceptMultipleClients() throws IOException {
 		ClientApplication.main(null);
 	}
@@ -83,21 +83,15 @@ public class IntegrationTests {
 	public void serverShouldAcceptMultipleCommands() throws IOException {
 		PrintWriter pw = new PrintWriter("log4j/log4j-application.log");
 		pw.close();
+	}*/
+	
+	private void printDivision() {
+		System.out.println("-------------------------------------------------------------");
 	}
 	
-	@Test
-	public void serverShouldRecoverThroughLogsAfterShutdown() {
-		System.setIn(getUserInput("get; 456" + System.lineSeparator() + "get; 123" + System.lineSeparator() + "get; 789"));
-		ClientApplication.main(null);
-	}
-	
-	private ByteArrayInputStream getUserInput(String commands) {
-		return new ByteArrayInputStream((commands + System.lineSeparator() + "sair").getBytes());
-	}
-	
-	@Test
-	public void test2() throws IOException {
-		String[] args = {"teste", "persons.txt"};
-		ClientApplication.main(args);
+	private static void setBaseLog() throws FileNotFoundException {
+		PrintWriter writer = new PrintWriter("comand.log");
+		writer.println("{\"method\":\"CREATE\",\"code\":3224115,\"data\":\"rO0ABXNyABpjbGllbnQuY29tbW9ucy5kb21haW4uVXNlcgAAAAAAAAABAgADTAAFZW1haWx0ABJMamF2YS9sYW5nL1N0cmluZztMAARuYW1lcQB+AAFMAAhwYXNzd29yZHEAfgABeHB0ABFtYXRoZXVzQGdtYWlsLmNvbXQAB21hdGhldXN0AAYxMjNhc2Q=\"}");
+		writer.close();
 	}
 }

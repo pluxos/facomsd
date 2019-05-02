@@ -1,2 +1,0 @@
-get; 123
-create; 123; matheus@g.com; 123asd; matheus

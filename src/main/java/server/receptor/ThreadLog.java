@@ -1,14 +1,12 @@
 package server.receptor;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 
-import server.commons.utils.JsonUtils;
-import server.commons.domain.Method;
-import server.commons.exceptions.ServerException;
 import server.commons.Rows.RowF2;
 import server.commons.domain.GenericCommand;
+import server.commons.domain.Method;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.JsonUtils;
 
 public class ThreadLog implements Runnable {
 	
@@ -31,7 +29,6 @@ public class ThreadLog implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ServerException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

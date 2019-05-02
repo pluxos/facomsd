@@ -11,9 +11,11 @@ import java.util.concurrent.Executors;
 import server.receptor.*;
 
 public class ServerApplication {
+	
+	private static String filePath = "comand.log";
 
 	public static void main(String[] args) throws IOException {
-		File file = new File("comand.log");
+		File file = new File(filePath);
 		if(file.exists()){
 			Thread t = new Thread(new RecoverLog(new BufferedReader(new FileReader(file))));
 			t.start();

@@ -34,7 +34,7 @@ public class ClientCommands implements Runnable {
 	public void run() {
 		BufferedReader reader = getFileIfMeantForTest();
 		for (;;) {
-			String userInput = isTest? getInputFromFile(reader) : getInputFromKeyboard();
+			String userInput = isTest ? getInputFromFile(reader) : getInputFromKeyboard();
 			try {
 				if (CommandUtils.getMethodByUserInput(userInput).equals(Method.SAIR)) {
 					break;

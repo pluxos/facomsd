@@ -1,1 +1,2 @@
-delete; 123
+delete; 456
+get; 456

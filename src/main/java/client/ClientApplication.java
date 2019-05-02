@@ -24,8 +24,15 @@ public class ClientApplication {
 			System.err.println(ErrorMap.CONNECTION_ERROR.getMessage());
 			return;
 		}
-		boolean isTest = args[0] != null && args[0].equals("teste");
-		ClientCommands clientCommands = new ClientCommands(output, isTest, args[1]);
+		boolean isTest = false;
+		String testFile = null;
+		try {
+			isTest = args[0].equals("teste");
+			testFile = args[1];
+		} catch (IndexOutOfBoundsException e) {
+			isTest = false;
+		}
+		ClientCommands clientCommands = new ClientCommands(output, isTest, testFile);
 		Thread threadCommands = new Thread(clientCommands);
 
 		ServerResponse serverResponse = new ServerResponse(input);
@@ -38,11 +45,6 @@ public class ClientApplication {
 			threadCommands.join();
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			System.err.println(ErrorMap.UNEXPECTED_ERROR);
-		}
-		try {
-			client.close();
-		} catch (IOException e) {
 			System.err.println(ErrorMap.UNEXPECTED_ERROR);
 		}
 	}
