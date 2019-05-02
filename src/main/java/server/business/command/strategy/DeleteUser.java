@@ -13,12 +13,16 @@ public class DeleteUser implements CommandStrategy {
 		BigInteger code = inputParams.getCode();
 		GenericResponse genericResponse = new GenericResponse();
 
-		Manipulator.removeValue(code);
+		if(Manipulator.getValue(code) != null) {
+			Manipulator.removeValue(code);
 
-		if (!Manipulator.containKey(code)){
-			genericResponse.setMsg("Deletado com sucesso");
+			if (!Manipulator.containKey(code)){
+				genericResponse.setMsg("Deletado com sucesso");
+			} else {
+				genericResponse.setMsg("Erro ao deletar");
+			}
 		} else {
-			genericResponse.setMsg("Erro ao deletar");
+			genericResponse.setMsg("Erro: Usuário não existe");
 		}
 
 		return genericResponse;

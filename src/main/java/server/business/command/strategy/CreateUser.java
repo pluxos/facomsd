@@ -14,12 +14,16 @@ public class CreateUser implements CommandStrategy {
 		byte[] data = inputParams.getData();
 		GenericResponse genericResponse = new GenericResponse();
 
-		Manipulator.addValue(code, data);
+		if (Manipulator.getValue(code) == null) {
+			Manipulator.addValue(code, data);
 
-		if (Manipulator.containKey(code)) {
-			genericResponse.setMsg("Criado com sucesso");
+			if (Manipulator.containKey(code)) {
+				genericResponse.setMsg("Criado com sucesso");
+			} else {
+				genericResponse.setMsg("Erro ao criar usuário");
+			}
 		} else {
-			genericResponse.setMsg("Erro ao criar usuário");
+			genericResponse.setMsg("Erro: Usuário já existe!");
 		}
 
 		return genericResponse;
