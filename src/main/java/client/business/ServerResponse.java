@@ -1,6 +1,16 @@
 package client.business;
 
+import client.commons.domain.User;
+import client.commons.utils.DataCodificator;
+import org.apache.commons.lang3.ObjectUtils;
+import server.commons.domain.GenericResponse;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.JsonUtils;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
 
 public class ServerResponse implements Runnable {
 
@@ -16,12 +26,31 @@ public class ServerResponse implements Runnable {
 
 		while(true){
 			try {
-				String res = this.input.nextLine();
 
-				System.out.println(res);
-			}catch (Exception e){
-				System.out.println("TRETA");
-				break;
+				String res = this.input.nextLine();
+				GenericResponse object = JsonUtils.deserialize(res, GenericResponse.class);
+
+				if(!object.getMsg().trim().equals(""))
+					System.out.println("Mensagem: " + object.getMsg());
+				else
+					System.out.println("Sem mensagem");
+
+				if (object.getData() != null) {
+					User user = DataCodificator.decode(object.getData());
+					System.out.println("Nome: " + user.getName());
+					System.out.println("Email: " + user.getEmail());
+					System.out.println("Senha: " + user.getPassword());
+				}
+
+			}catch (NoSuchElementException e){
+				System.out.println("Infelizmente a comunicação com o servidor foi interrompida");
+				System.exit(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ServerException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 	}

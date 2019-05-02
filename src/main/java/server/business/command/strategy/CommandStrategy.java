@@ -1,17 +1,19 @@
 package server.business.command.strategy;
 
-import client.commons.utils.JsonUtils;
-import client.connector.CommandSender;
+import server.client.ResponseSender;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.JsonUtils;
 import server.commons.domain.GenericCommand;
+import server.commons.domain.GenericResponse;
 
 import java.io.PrintStream;
 
 public interface CommandStrategy {
 
-	boolean executeCommand(GenericCommand inputParams);
+	GenericResponse executeCommand(GenericCommand inputParams);
 	
-	default void makeRequest(GenericCommand request, PrintStream output) {
-		String json = JsonUtils.serialize(request);
-		CommandSender.send(json, output);
+	default void makeResponse(GenericResponse response, PrintStream output) throws ServerException {
+		String json = JsonUtils.serialize(response);
+		ResponseSender.send(json, output);
 	}
 }

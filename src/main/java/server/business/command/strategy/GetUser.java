@@ -1,12 +1,27 @@
 package server.business.command.strategy;
 
 import server.commons.domain.GenericCommand;
+import server.commons.domain.GenericResponse;
+import server.model.HashMap.Manipulator;
+
+import java.math.BigInteger;
 
 public class GetUser implements CommandStrategy {
 
 	@Override
-	public boolean executeCommand(GenericCommand inputParams) {
-		System.out.println("GET USER" + inputParams.getCode());
-		return true;
+	public GenericResponse executeCommand(GenericCommand inputParams) {
+		BigInteger code = inputParams.getCode();
+		GenericResponse genericResponse = new GenericResponse();
+
+		byte[] res = Manipulator.getValue(code);
+
+		if(res != null){
+			genericResponse.setMsg("Sucesso");
+			genericResponse.setData(res);
+		} else {
+			genericResponse.setMsg("Erro: Usuário não existe");
+		}
+
+		return genericResponse;
 	}
 }

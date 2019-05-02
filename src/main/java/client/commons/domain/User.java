@@ -12,7 +12,7 @@ public class User implements Serializable {
 
     public User(){}
 
-    public User(String name, String email, String password) {
+    public User(String email, String password, String name) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -26,7 +26,7 @@ public class User implements Serializable {
         return name;
     }
 
-    public String getPassword() {
+    public String  getPassword() {
         return password;
     }
 

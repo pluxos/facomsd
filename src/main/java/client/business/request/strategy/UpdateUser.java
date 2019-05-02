@@ -14,12 +14,12 @@ import client.connector.GenericRequest;
 public class UpdateUser implements RequestStrategy {
 	@Override
 	public GenericRequest buildRequest(String[] inputParams) throws IOException {
-		User user = null;
-		GenericRequest request = new GenericRequest();
+		User user;
+		GenericRequest request;
 		try {
 			user = new User(inputParams[2], inputParams[3], inputParams[4]);
 			request = new GenericRequest();
-			request.setMethod(Method.CREATE);
+			request.setMethod(Method.UPDATE);
 			request.setCode(DataCodificator.stringToBigInteger(inputParams[1]));
 			request.setData(DataCodificator.encode(user));
 		} catch (NullPointerException e) {
