@@ -5,7 +5,6 @@ import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
