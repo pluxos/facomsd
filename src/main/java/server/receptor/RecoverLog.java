@@ -6,17 +6,20 @@ import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 
 public class RecoverLog implements Runnable {
 
+    private final BufferedReader file;
+
+    public RecoverLog(BufferedReader file) {
+        this.file = file;
+    }
+
     @Override
     public void run (){
         try{
-            BufferedReader file = new BufferedReader(new FileReader("comand.log"));
-
             while(file.ready()){
                 String line = file.readLine();
                 try {

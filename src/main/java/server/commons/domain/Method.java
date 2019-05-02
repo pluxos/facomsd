@@ -4,7 +4,7 @@ import client.commons.exceptions.ErrorMap;
 import client.commons.exceptions.InvalidCommandException;
 
 public enum Method {
-    GET, CREATE, UPDATE, DELETE, SAIR;
+    GET, CREATE, UPDATE, DELETE;
 
     public static Method getMethod(String command) {
         try {
