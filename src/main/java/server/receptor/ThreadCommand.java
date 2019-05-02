@@ -27,5 +27,4 @@ public class ThreadCommand implements Runnable {
 			}
 		}
 	}
-
 }

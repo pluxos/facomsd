@@ -19,13 +19,11 @@ public class ThreadLog implements Runnable {
 			try {
 				GenericCommand genericCommand = RowF2.getFifo().take();
 				Method method = Method.getMethod(genericCommand.getMethod());
-
 				if(method != Method.GET) {				
 					String json = JsonUtils.serialize(genericCommand);
 					
 					log.info(json);
-				}
-				
+				}	
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ServerException e) {
@@ -34,6 +32,3 @@ public class ThreadLog implements Runnable {
 		}
 	}
 }
-
-
-
