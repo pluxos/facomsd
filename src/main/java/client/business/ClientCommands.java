@@ -52,7 +52,7 @@ public class ClientCommands implements Runnable {
 
 	private void printCommands() {
 		System.out.println("Comandos: ");
-		System.out.println("create, read, update e delete");
+		System.out.println("create, get, update e delete");
 		System.out.println("Caso queira sair, digite 'sair'");
 	}
 	

@@ -1,22 +1,18 @@
 package integration;
 
 import java.io.FileNotFoundException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import client.controller.Client;
 
 public class IntegrationTests {
 	
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-        /*System.out.println("Bem vindo ao cliente de teste!");
-
-        ExecutorService pool = Executors.newFixedThreadPool(10);
-
-        String[] clientArgs = {"teste", "src/test/resources/stress.txt"};
-
-        for (int i = 0; i < 10; i ++) {
-            pool.execute(new Client(clientArgs));
-        }*/
-    	runIntegrationTests();
+    	//runIntegrationTests();
+    	test8_shouldAcceptMultipleRequestsFromMultipleClients();
+    	test9_shouldGuaranteeCorrectnessFromPreviousRequests();
     }
     
     public static void runIntegrationTests() throws FileNotFoundException, InterruptedException {
@@ -27,6 +23,8 @@ public class IntegrationTests {
     	test5_serverShouldDelete();
     	test6_serverShouldThrowErrorWhenUpdatingInexistentId();
     	test7_serverShouldThrowErrorWhenDeletingInexistentId();
+    	test8_shouldAcceptMultipleRequestsFromMultipleClients();
+    	test9_shouldGuaranteeCorrectnessFromPreviousRequests();
     }
     
     public static void afterMethod() {
@@ -78,6 +76,41 @@ public class IntegrationTests {
     public static void test7_serverShouldThrowErrorWhenDeletingInexistentId() throws FileNotFoundException {
     	System.out.println("TEST 7: FAILING TO DELETE USER WITH INEXISTENT ID\n");
     	String[] args = {"teste", "src/test/resources/delete.txt"};
+    	new Client(args).run();
+    	afterMethod();
+    }
+    
+    public static void test8_shouldAcceptMultipleRequestsFromMultipleClients() {
+    	/*PrintStream originalStream = System.out;
+    	PrintStream hidingStream = new PrintStream(new OutputStream(){
+    	    public void write(int b) {
+    	        // NO-OP
+    	    }
+    	});
+    	System.setOut(hidingStream);*/
+    	String[][] clientArgs = {
+    			{"teste", "src/test/resources/stress1.txt"}, 
+    			{"teste", "src/test/resources/stress2.txt"}};
+    	ExecutorService pool = Executors.newFixedThreadPool(10);
+    	for (int i = 0; i < 10; i++) {
+    		pool.execute(new Client(clientArgs[i]));
+    	}
+    	pool.shutdown();
+    	try {
+			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	//System.setOut(originalStream);
+    	afterMethod();
+    }
+    
+    public static void test9_shouldGuaranteeCorrectnessFromPreviousRequests() {
+    	System.out.println("TEST 9: RUNNING INTEGRATION VERIFIER\n"
+    			+ "USERS WITH ID BETWEEN 0 AND 500 WERE CREATED\n"
+    			+ "- ID's ENDING IN 0 SHOULD HAVE BEEN DELETED\n"
+    			+ "- ID's ENDING IN 5 HOULD HAVE BEEN UPDATED (ALL UPDATED USERS HAVE THEIR NAMES UPDATED)\n");
+    	String[] args = {"teste", "src/test/resources/verify_integrity.txt"};
     	new Client(args).run();
     	afterMethod();
     }

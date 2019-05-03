@@ -54,5 +54,11 @@ public class Client implements Runnable {
         } catch (InterruptedException e) {
             System.err.println(ErrorMap.UNEXPECTED_ERROR);
         }
+        
+        try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }
