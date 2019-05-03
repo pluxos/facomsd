@@ -23,7 +23,9 @@ public class Client
 	try
 	{
             cliente = new Socket("localhost", 12345);
-            threadc = new ThreadClient();
+            
+            Runnable r = new ThreadClient(cliente);            
+            threadc = new Thread(r);
             threadc.start();
             
             toServer = new Scanner(cliente.getInputStream());
