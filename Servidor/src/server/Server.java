@@ -11,30 +11,19 @@ public class Server
     {
         ServerSocket socket;
         Socket connection;
+        Thread server;
 
         try
         {
             socket = new ServerSocket(12345);            
-            Scanner fromClient;
-            PrintStream toClient;
-            String message;
+                        
+            System.out.println("\nEsperando Conexao...\n");
             
             while(true)
-            {
+            {            
                 connection = socket.accept();
-                System.out.println("-----------------------------------------------------");
-                System.out.println("\nRecebendo conexao de " + connection + "...");
-                
-                
-                fromClient = new Scanner(connection.getInputStream());
-                message = fromClient.nextLine();
-                
-                System.out.println("Mensagem recebida: " + message);
-                
-                toClient = new PrintStream(connection.getOutputStream());
-                toClient.println("Mensagem recebida");
-
-                connection.close();
+                server = new Thread(new ThreadServer(connection));
+                server.start();
             }
             
         }
