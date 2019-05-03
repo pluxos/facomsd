@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import client.commons.domain.User;
 import client.commons.utils.DataCodificator;
-import client.commons.utils.SocketConnection;
 import server.commons.domain.GenericResponse;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
@@ -42,9 +41,6 @@ public class ServerResponse implements Runnable {
 				System.out.println();
 			} catch (NoSuchElementException e) {
 				System.out.println("Infelizmente a comunicação com o servidor foi interrompida");
-				if (!SocketConnection.isAlive()) {
-					System.exit(1);
-				}
 				return;
 			} catch (IOException e) {
 				e.printStackTrace();
