@@ -5,7 +5,7 @@
 **Alunos:** 
 * Bruno Monteiro
 * Guilherme Eustáquio
-* Mateus Benedine
+* Mateus Benedini
 * Matheus Santiago
 * Rodrigo Souza
 
