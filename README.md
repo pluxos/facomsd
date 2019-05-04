@@ -26,7 +26,7 @@
 ##### Teste de integridade da recuperação do log:
 
 ###### Executar servidor com mock no log: 
-`mvn exec:java -Dexec.mainClass="server.ServerApplication" -Dexec.args="src/test/resource/test.log"`
+`mvn exec:java -Dexec.mainClass="server.ServerApplication" -Dexec.args="src/test/resources/test.log"`
 ###### Executar rotina de testes:
 `mvn exec:java -Dexec.mainClass="integration.IntegrationTests"`
 
