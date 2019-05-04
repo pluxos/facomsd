@@ -1,9 +1,11 @@
 package server.controller;
 
+import server.commons.utils.UserControl;
 import server.receptor.*;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,10 +47,16 @@ public class Server implements Runnable {
 		tCommand.start();
 		tLog.start();
 
-		ExecutorService pool = Executors.newFixedThreadPool(10);
+		ExecutorService pool = Executors.newFixedThreadPool(2);
 		for (;;) {
 			try {
-				pool.execute(new ReceptorMain(serverSocket.accept()));
+				Socket s = serverSocket.accept();
+				if( UserControl.startThread()) {
+					UserControl.newUser();
+					pool.execute(new ReceptorMain(s));
+				} else {
+					s.close();
+				}
 			} catch (IOException e) {
 				pool.shutdown();
 				break;

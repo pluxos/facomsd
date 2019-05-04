@@ -5,6 +5,7 @@ import server.commons.domain.GenericCommand;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.commons.utils.ResponseError;
+import server.commons.utils.UserControl;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -35,5 +36,6 @@ public class ReceptorMain implements Runnable {
 				ResponseError.sendError(this.output, e.getErrorMessage());
 			}
 		}
+		UserControl.userDied();
 	}
 }
