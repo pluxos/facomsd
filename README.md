@@ -19,7 +19,7 @@
 `mvn exec:java -Dexec.mainClass="server.ServerApplication"`
 
 #### Cliente:
-`mvn exec:java -Dexec.mainClass="cliente.ClientApplication"`
+`mvn exec:java -Dexec.mainClass="client.ClientApplication"`
 
 #### Testes:
 
