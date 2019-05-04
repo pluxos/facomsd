@@ -47,7 +47,7 @@ public class Server implements Runnable {
 		tCommand.start();
 		tLog.start();
 
-		ExecutorService pool = Executors.newFixedThreadPool(2);
+		ExecutorService pool = Executors.newFixedThreadPool(10);
 		for (;;) {
 			try {
 				Socket s = serverSocket.accept();
