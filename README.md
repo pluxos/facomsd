@@ -1,7 +1,11 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
+Alunos: Luiz Eugênio de Paula
+        Isadora Matos
+        Eduardo Oliveira
+        Nivaldo
+        
+----------------------------------------------
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
-
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+# Instruções
+Executar primeiramente o arquivo Servidor, depois o Cliente.
