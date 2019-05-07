@@ -1,9 +1,9 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
 Alunos: Luiz Eugênio de Paula
-        Isadora Matos
-        Eduardo Oliveira
-        Nivaldo
+        - Isadora Matos
+        - Eduardo Oliveira
+        - Nivaldo
         
 ----------------------------------------------
 
