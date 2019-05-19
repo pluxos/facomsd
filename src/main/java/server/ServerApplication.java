@@ -1,11 +1,13 @@
 package server;
-import java.io.IOException;
 
-import server.receptor.*;
+import server.controller.Server;
 
 public class ServerApplication {
-	public static void main(String[] args) throws IOException {
-		ReceptorMain rm = new ReceptorMain();
-		rm.run();
+	
+	private static String defaultFilePath = "comand.log";
+
+	public static void main(String[] args) {
+		Thread server = new Thread(new Server(args.length > 0 ? args[0] : defaultFilePath));
+		server.start();
 	}
 }

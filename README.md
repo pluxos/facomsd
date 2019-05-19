@@ -1,7 +1,45 @@
-# Trabalhos da disciplina de Sistemas Distribuídos
+# Trabalho da disciplina de Sistemas Distribuídos
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome 2018_2_X, onde X é um identificador atribuído pelo professor para o seu grupo de trabalho. 
+### Entrega 01
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+**Alunos:** 
+* Bruno Monteiro
+* Guilherme Eustáquio
+* Mateus Benedini
+* Matheus Santiago
+* Rodrigo Souza
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+## Executar trabalho
+
+### Antes de tudo:
+#### Build do projeto:
+`mvn clean install`
+
+#### Servidor:
+`mvn exec:java -Dexec.mainClass="server.ServerApplication"`
+
+#### Cliente:
+`mvn exec:java -Dexec.mainClass="client.ClientApplication"`
+
+Para execução de comandos no cliente via teclado:
+Get:
+`get; <id>`
+
+Create:
+`create; <id>; <email>; <senha>; <nome>`
+
+Update:
+`update; <id>; <email>; <senha>; <nome>`
+
+Delete:
+`delete; <id>`
+
+#### Testes:
+
+##### Teste de integridade da recuperação do log:
+
+###### Executar servidor com mock no log: 
+`mvn exec:java -Dexec.mainClass="server.ServerApplication" -Dexec.args="src/test/resources/test.log"`
+###### Executar rotina de testes:
+`mvn exec:java -Dexec.mainClass="integration.IntegrationTests"`
+
