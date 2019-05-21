@@ -3,6 +3,11 @@
 # Edit at https://www.gitignore.io/?templates=java,code,maven,eclipse,netbeans,intellij
 
 ### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .vscode/
 
 ### Eclipse ###
