@@ -6,8 +6,16 @@ Quando estiver pronto para submeter a versao final, faca um pull request para es
 
 Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
 
-# Organização do Git
 
-Cada um desenvolve somente na sua branch. Há 2 projetos (Client e Server) para melhor organizar o conteúdo. Quando desenvolvida uma funcionalidade, deve-se criar um pull request no github para a master. 
+#Alunos:
 
-No envio, faremos uma nova branch com o nome SUBMISSAO_1.
+```
+João Paulo de Oliveira
+Lucas Rossi Rabelo
+Antônio Carlos Neto
+Gustavo de Faria Silva
+```
+
+##Build e Testes
+
+Na pasta output, basta executar o arquivo ```script.sh```
