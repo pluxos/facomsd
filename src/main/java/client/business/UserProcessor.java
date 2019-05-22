@@ -3,6 +3,7 @@ package client.business;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import io.grpc.examples.helloworld.GreeterGrpc;
 import org.apache.commons.lang3.StringUtils;
 
 import client.business.request.strategy.RequestStrategy;
@@ -14,7 +15,7 @@ import client.connector.GenericRequest;
 
 public class UserProcessor {
 	
-	public static void sendCommand(String input, PrintStream output) throws InvalidCommandException, IOException {
+	public static void sendCommand(String input, GreeterGrpc.GreeterBlockingStub output) throws InvalidCommandException, IOException {
 		String[] inputParams = CommandUtils.getInputParams(input);
 		if (inputParams != null && !StringUtils.isEmpty(inputParams[0])) {
 			Method method = Method.getMethod(inputParams[0]);

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import io.grpc.examples.helloworld.GreeterGrpc;
 import org.apache.commons.lang3.StringUtils;
 
 import client.commons.domain.Method;
@@ -18,12 +19,12 @@ import client.commons.validation.utils.InputRequestValidator;
 
 public class ClientCommands implements Runnable {
 
-	private PrintStream output;
+	private GreeterGrpc.GreeterBlockingStub output;
 	private Scanner scanner;
 	private boolean isTest;
 	private String filePath;
 
-	public ClientCommands(PrintStream output, boolean isTest, String filePath) {
+	public ClientCommands(GreeterGrpc.GreeterBlockingStub output, boolean isTest, String filePath) {
 		this.output = output;
 		this.scanner = new Scanner(System.in);
 		this.isTest = isTest;
