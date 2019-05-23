@@ -2,29 +2,28 @@
 package client.business.request.strategy;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-import client.commons.domain.Method;
 import client.commons.domain.User;
-import client.commons.exceptions.ErrorMap;
-import client.commons.exceptions.InvalidCommandException;
 import client.commons.utils.DataCodificator;
-import client.connector.GenericRequest;
+import io.grpc.*;
 
 
 public class UpdateUser implements RequestStrategy {
+
 	@Override
-	public GenericRequest buildRequest(String[] inputParams) throws IOException {
-		User user;
-		GenericRequest request;
+	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
+		User user = new User(inputParams[2], inputParams[3], inputParams[4]);
 		try {
-			user = new User(inputParams[2], inputParams[3], inputParams[4]);
-			request = new GenericRequest();
-			request.setMethod(Method.UPDATE);
-			request.setCode(DataCodificator.stringToBigInteger(inputParams[1]));
-			request.setData(DataCodificator.encode(user));
-		} catch (NullPointerException e) {
-			throw new InvalidCommandException(ErrorMap.INVALID_COMMAND);
+			UpdateRequest updateRequest = UpdateRequest.newBuilder()
+					.setId(inputParams[1])
+					.setData(Arrays.toString(DataCodificator.encode(user)))
+					.build();
+
+			UpdateResponse updateResponse = output.updateUser(updateRequest);
+			System.out.println(updateResponse);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return request;
 	}
 }

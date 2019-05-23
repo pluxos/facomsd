@@ -3,12 +3,8 @@ package client.controller;
 import client.business.ClientCommands;
 import client.commons.exceptions.ErrorMap;
 import io.grpc.ManagedChannel;
-import io.grpc.StatusRuntimeException;
-import io.grpc.examples.helloworld.CreateRequest;
-import io.grpc.examples.helloworld.CreateResponse;
-import io.grpc.examples.helloworld.GreeterGrpc;
+import io.grpc.GreeterGrpc;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Client implements Runnable {
