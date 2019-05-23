@@ -70,13 +70,13 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return io.grpc.HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
+    return HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
   }
 
   @Override
   protected FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return io.grpc.HelloWorldProto.internal_static_helloworld_GetRequest_fieldAccessorTable
+    return HelloWorldProto.internal_static_helloworld_GetRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             GetRequest.class, Builder.class);
   }
@@ -276,16 +276,16 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:helloworld.GetRequest)
-      io.grpc.GetRequestOrBuilder {
+      GetRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
+      return HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_GetRequest_fieldAccessorTable
+      return HelloWorldProto.internal_static_helloworld_GetRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               GetRequest.class, Builder.class);
     }
@@ -316,7 +316,7 @@ private static final long serialVersionUID = 0L;
     @Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
+      return HelloWorldProto.internal_static_helloworld_GetRequest_descriptor;
     }
 
     @Override

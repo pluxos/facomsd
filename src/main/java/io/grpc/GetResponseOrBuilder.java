@@ -8,21 +8,31 @@ public interface GetResponseOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string id = 1;</code>
+   * <code>string status = 1;</code>
    */
-  String getId();
+  String getStatus();
   /**
-   * <code>string id = 1;</code>
+   * <code>string status = 1;</code>
    */
   com.google.protobuf.ByteString
-      getIdBytes();
+      getStatusBytes();
 
   /**
-   * <code>string data = 2;</code>
+   * <code>string message = 2;</code>
+   */
+  String getMessage();
+  /**
+   * <code>string message = 2;</code>
+   */
+  com.google.protobuf.ByteString
+      getMessageBytes();
+
+  /**
+   * <code>string data = 3;</code>
    */
   String getData();
   /**
-   * <code>string data = 2;</code>
+   * <code>string data = 3;</code>
    */
   com.google.protobuf.ByteString
       getDataBytes();
