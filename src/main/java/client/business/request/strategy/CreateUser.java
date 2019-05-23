@@ -21,7 +21,7 @@ public class CreateUser implements RequestStrategy {
 					.build();
 
 			CreateResponse createResponse = output.createUser(createRequest);
-			System.out.println(createResponse);
+			System.out.println(createResponse.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -17,12 +17,10 @@ public class ThreadCommand implements Runnable {
 				GenericCommand genericCommand = RowF3.getFifo().take();
 				Method method = Method.getMethod(genericCommand.getMethod());
 				CommandStrategy command = RequestUtils.getRequestStrategyByMethod(method);
-				GenericResponse response = command.executeCommand(genericCommand);
-
-				command.makeResponse(response, genericCommand.getOutput());
+				command.executeCommand(genericCommand);
+//
+//				command.makeResponse(response, genericCommand.getOutput());
 			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ServerException e) {
 				e.printStackTrace();
 			}
 		}

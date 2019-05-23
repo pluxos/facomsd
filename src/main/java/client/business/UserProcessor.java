@@ -1,7 +1,5 @@
 package client.business;
 
-import java.io.IOException;
-
 import io.grpc.GreeterGrpc;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +11,7 @@ import client.commons.utils.CommandUtils;
 
 class UserProcessor {
 	
-	static void sendCommand(String input, GreeterGrpc.GreeterBlockingStub output) throws InvalidCommandException, IOException {
+	static void sendCommand(String input, GreeterGrpc.GreeterBlockingStub output) throws InvalidCommandException {
 		String[] inputParams = CommandUtils.getInputParams(input);
 		if (inputParams != null && !StringUtils.isEmpty(inputParams[0])) {
 			Method method = Method.getMethod(inputParams[0]);

@@ -2,8 +2,12 @@ package server.controller;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.examples.helloworld.*;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
+import server.commons.Rows.RowF1;
+import server.commons.domain.GenericCommand;
+import server.commons.domain.Method;
+import server.commons.utils.DataCodificator;
 import server.receptor.*;
 
 import java.io.*;
@@ -76,32 +80,50 @@ public class ServerThread implements Runnable {
 		GreeterImpl() {
 		}
 
-		public void createUser(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
+		public void createUser(CreateRequest request, StreamObserver<CreateResponse> responseObserver) {
 			System.out.println("CREATE User");
-			CreateResponse reply = CreateResponse.newBuilder().setStatus("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
+
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getId()));
+            genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+            genericCommand.setMethod(Method.CREATE.toString());
+
+            RowF1.addItem(genericCommand);
 		}
 
 		public void getUser(GetRequest request, StreamObserver<GetResponse> responseObserver) {
 			System.out.println("GET User");
-			GetResponse reply = GetResponse.newBuilder().setEmail("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
+
+			GenericCommand genericCommand = new GenericCommand();
+			genericCommand.setOutput(responseObserver);
+			genericCommand.setCode(DataCodificator.stringToBigInteger(request.getId()));
+			genericCommand.setMethod(Method.GET.toString());
+
+			RowF1.addItem(genericCommand);
 		}
 
 		public void updateUser(UpdateRequest request, StreamObserver<UpdateResponse> responseObserver) {
 			System.out.println("UPDATE User");
-			UpdateResponse reply = UpdateResponse.newBuilder().setMessage("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
+
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getId()));
+            genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+            genericCommand.setMethod(Method.UPDATE.toString());
+
+            RowF1.addItem(genericCommand);
 		}
 
 		public void deleteUser(DeleteRequest request, StreamObserver<DeleteResponse> responseObserver) {
 			System.out.println("DELETE User");
-			DeleteResponse reply = DeleteResponse.newBuilder().setMessage("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
+
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getId()));
+            genericCommand.setMethod(Method.DELETE.toString());
+
+            RowF1.addItem(genericCommand);
 		}
 	}
 }

@@ -10,6 +10,6 @@ public class GetUser implements RequestStrategy {
 	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
 		GetRequest request = GetRequest.newBuilder().setId(inputParams[1]).build();
 		GetResponse getResponse = output.getUser(request);
-		System.out.println(getResponse);
+		System.out.println(getResponse.getMessage());
 	}
 }

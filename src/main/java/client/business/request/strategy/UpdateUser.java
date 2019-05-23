@@ -21,7 +21,7 @@ public class UpdateUser implements RequestStrategy {
 					.build();
 
 			UpdateResponse updateResponse = output.updateUser(updateRequest);
-			System.out.println(updateResponse);
+			System.out.println(updateResponse.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

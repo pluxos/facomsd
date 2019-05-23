@@ -1,27 +1,37 @@
 package server.business.command.strategy;
 
+import io.grpc.GetResponse;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.GenericResponse;
+import server.commons.utils.MessageMap;
 import server.model.HashMap.Manipulator;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class GetUser implements CommandStrategy {
 
 	@Override
-	public GenericResponse executeCommand(GenericCommand inputParams) {
-		BigInteger code = inputParams.getCode();
-		GenericResponse genericResponse = new GenericResponse();
+	public void executeCommand(GenericCommand genericCommand) {
+		BigInteger code = genericCommand.getCode();
+		GetResponse getResponse;
 
 		byte[] res = Manipulator.getValue(code);
 
 		if(res != null){
-			genericResponse.setMsg("Sucesso");
-			genericResponse.setData(res);
+			getResponse = GetResponse.newBuilder()
+					.setStatus(MessageMap.SUCCESS.getMessage())
+					.setMessage(MessageMap.GET_SUCCESS.getMessage())
+					.setData(Arrays.toString(res))
+					.build();
 		} else {
-			genericResponse.setMsg("Erro: Usuário não existe");
+			getResponse = GetResponse.newBuilder()
+					.setStatus(MessageMap.ERROR.getMessage())
+					.setMessage(MessageMap.EXECUTION_ERROR.getMessage())
+					.build();
 		}
 
-		return genericResponse;
+		genericCommand.getOutput().onNext(getResponse);
+		genericCommand.getOutput().onCompleted();
 	}
 }

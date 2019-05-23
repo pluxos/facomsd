@@ -1,42 +1,42 @@
 package server.commons.domain;
 
-import java.io.PrintStream;
 import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.grpc.stub.StreamObserver;
 
 @JsonIgnoreProperties(value = {"output"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class GenericCommand {
 
-    private PrintStream output;
+    private StreamObserver output;
     private String method;
     private BigInteger code;
     private byte[] data;
 
     public GenericCommand() {}
 
-    public GenericCommand(PrintStream output, String method, BigInteger code) {
+    public GenericCommand(StreamObserver output, String method, BigInteger code) {
         this.code = code;
         this.data = null;
         this.method = method;
         this.output = output;
     }
 
-    public GenericCommand(PrintStream output, String method, BigInteger code, byte[] data) {
+    public GenericCommand(StreamObserver output, String method, BigInteger code, byte[] data) {
         this.code = code;
         this.data = data;
         this.method = method;
         this.output = output;
     }
 
-    public PrintStream getOutput() {
+    public StreamObserver getOutput() {
         return output;
     }
 
-    public void setOutput(PrintStream output) {
+    public void setOutput(StreamObserver output) {
         this.output = output;
     }
 

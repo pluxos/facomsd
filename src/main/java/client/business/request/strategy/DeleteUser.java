@@ -11,6 +11,6 @@ public class DeleteUser implements RequestStrategy {
 		DeleteRequest deleteRequest = DeleteRequest.newBuilder().setId(inputParams[1]).build();
 		DeleteResponse deleteResponse = output.deleteUser(deleteRequest);
 
-		System.out.println(deleteResponse);
+		System.out.println(deleteResponse.getMessage());
 	}
 }
