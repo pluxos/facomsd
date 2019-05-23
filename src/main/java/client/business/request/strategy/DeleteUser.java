@@ -1,22 +1,16 @@
 package client.business.request.strategy;
 
-import client.commons.domain.Method;
-import client.commons.exceptions.ErrorMap;
-import client.commons.exceptions.InvalidCommandException;
-import client.commons.utils.DataCodificator;
-import client.connector.GenericRequest;
+import io.grpc.DeleteRequest;
+import io.grpc.DeleteResponse;
+import io.grpc.GreeterGrpc;
 
 public class DeleteUser implements RequestStrategy {
 
 	@Override
-	public GenericRequest buildRequest(String[] inputParams) {
-		GenericRequest request = new GenericRequest();
-		try {
-			request.setCode(DataCodificator.stringToBigInteger(inputParams[1]));
-			request.setMethod(Method.DELETE);
-		} catch (NullPointerException e) {
-			throw new InvalidCommandException(ErrorMap.INVALID_COMMAND);
-		}
-		return request;
+	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
+		DeleteRequest deleteRequest = DeleteRequest.newBuilder().setId(inputParams[1]).build();
+		DeleteResponse deleteResponse = output.deleteUser(deleteRequest);
+
+		System.out.println(deleteResponse);
 	}
 }

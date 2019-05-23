@@ -1,36 +1,28 @@
 package client.controller;
 
 import client.business.ClientCommands;
-import client.business.ServerResponse;
 import client.commons.exceptions.ErrorMap;
-import client.commons.utils.SocketConnection;
+import io.grpc.ManagedChannel;
+import io.grpc.GreeterGrpc;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class Client implements Runnable {
 
-    private final String[] args;
+    private static final Logger logger = Logger.getLogger(Client.class.getName());
 
-    public Client(String[] arguments) {
+    private final String[] args;
+    private final ManagedChannel channel;
+    private final GreeterGrpc.GreeterBlockingStub blockingStub;
+
+    public Client(String[] arguments, ManagedChannel channel) {
         args = arguments;
+        this.channel = channel;
+        this.blockingStub = GreeterGrpc.newBlockingStub(this.channel);
     }
 
     @Override
     public void run() {
-        Socket client = null;
-        PrintStream output = null;
-        Scanner input = null;
-        try {
-            client = SocketConnection.getSocket();
-            output = new PrintStream(client.getOutputStream());
-            input = new Scanner(client.getInputStream());
-        } catch (IOException e) {
-            System.err.println(ErrorMap.CONNECTION_ERROR.getMessage());
-            return;
-        }
         boolean isTest = false;
         String testFile = null;
         try {
@@ -39,14 +31,14 @@ public class Client implements Runnable {
         } catch (IndexOutOfBoundsException e) {
             isTest = false;
         }
-        ClientCommands clientCommands = new ClientCommands(output, isTest, testFile);
+        ClientCommands clientCommands = new ClientCommands(this.blockingStub, isTest, testFile);
         Thread threadCommands = new Thread(clientCommands);
 
-        ServerResponse serverResponse = new ServerResponse(input);
-        Thread threadResponse = new Thread(serverResponse);
+//        ServerResponse serverResponse = new ServerResponse(input);
+//        Thread threadResponse = new Thread(serverResponse);
 
         threadCommands.start();
-        threadResponse.start();
+//        threadResponse.start();
 
         try {
             threadCommands.join();
@@ -55,10 +47,10 @@ public class Client implements Runnable {
             System.err.println(ErrorMap.UNEXPECTED_ERROR);
         }
         
-        try {
-			client.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//        try {
+//			client.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
     }
 }

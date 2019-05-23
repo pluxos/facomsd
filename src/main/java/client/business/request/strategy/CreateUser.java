@@ -1,29 +1,29 @@
 package client.business.request.strategy;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-import client.commons.domain.Method;
 import client.commons.domain.User;
-import client.commons.exceptions.ErrorMap;
-import client.commons.exceptions.InvalidCommandException;
 import client.commons.utils.DataCodificator;
-import client.connector.GenericRequest;
+import io.grpc.CreateRequest;
+import io.grpc.CreateResponse;
+import io.grpc.GreeterGrpc;
 
 public class CreateUser implements RequestStrategy {
 
 	@Override
-	public GenericRequest buildRequest(String[] inputParams) throws IOException {
-		User user;
-		GenericRequest request;
+	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
+		User user = new User(inputParams[2], inputParams[3], inputParams[4]);
 		try {
-			user = new User(inputParams[2], inputParams[3], inputParams[4]);
-			request = new GenericRequest();
-			request.setMethod(Method.CREATE);
-			request.setCode(DataCodificator.stringToBigInteger(inputParams[1]));
-			request.setData(DataCodificator.encode(user));
-		} catch (NullPointerException e) {
-			throw new InvalidCommandException(ErrorMap.INVALID_COMMAND);
+			CreateRequest createRequest = CreateRequest.newBuilder()
+					.setId(inputParams[1])
+					.setData(Arrays.toString(DataCodificator.encode(user)))
+					.build();
+
+			CreateResponse createResponse = output.createUser(createRequest);
+			System.out.println(createResponse);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return request;
 	}
 }

@@ -9,7 +9,7 @@ import client.controller.Client;
 
 public class IntegrationTests {
 	
-    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+    /*public static void main(String[] args) throws FileNotFoundException, InterruptedException {
     	runIntegrationTests();
     }
     
@@ -116,5 +116,5 @@ public class IntegrationTests {
     
     private static void printDivision() {
 		System.out.println("-------------------------------------------------------------");
-	}
+	}*/
 }
