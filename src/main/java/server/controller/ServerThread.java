@@ -4,13 +4,9 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.examples.helloworld.*;
 import io.grpc.stub.StreamObserver;
-import server.commons.utils.UserControl;
 import server.receptor.*;
 
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -48,15 +44,20 @@ public class ServerThread implements Runnable {
 		}*/
 
 		try {
-			this.server = ServerBuilder.forPort(12345).addService(new ServerThread.GreeterImpl()).build().start();
+
+			this.server = ServerBuilder.forPort(12345)
+					.addService(new ServerThread.GreeterImpl())
+					.executor(Executors.newFixedThreadPool(10))
+					.build()
+					.start();
+
 			logger.info("Server started, listening on " + 12345);
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				public void run() {
-					System.err.println("*** shutting down gRPC server since JVM is shutting down");
-					ServerThread.this.stop();
-					System.err.println("*** server shut down");
-				}
-			});
+
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				System.err.println("*** shutting down gRPC server since JVM is shutting down");
+				ServerThread.this.stop();
+				System.err.println("*** server shut down");
+			}));
 
 			Thread tConsumer = new Thread(new ConsumerF1());
 			Thread tCommand = new Thread(new ThreadCommand());
