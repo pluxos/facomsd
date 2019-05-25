@@ -21,13 +21,12 @@ public class ThreadLog implements Runnable {
 				Method method = Method.getMethod(genericCommand.getMethod());
 				if(method != Method.GET) {				
 					String json = JsonUtils.serialize(genericCommand);
-					
+
 					log.info(json);
 				}	
-			} catch (InterruptedException e) {
+			} catch (InterruptedException | ServerException e) {
 				e.printStackTrace();
-			} catch (ServerException e) {
-				e.printStackTrace();
+				break;
 			}
 		}
 	}

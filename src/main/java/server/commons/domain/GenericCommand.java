@@ -1,42 +1,33 @@
 package server.commons.domain;
 
-import java.math.BigInteger;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.grpc.GenericResponse;
 import io.grpc.stub.StreamObserver;
+
+import java.math.BigInteger;
 
 @JsonIgnoreProperties(value = {"output"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
 public class GenericCommand {
 
-    private StreamObserver output;
+    private StreamObserver<GenericResponse> output;
     private String method;
     private BigInteger code;
     private byte[] data;
 
     public GenericCommand() {}
 
-    public GenericCommand(StreamObserver output, String method, BigInteger code) {
-        this.code = code;
-        this.data = null;
+    public GenericCommand(StreamObserver<GenericResponse> output, String method) {
         this.method = method;
         this.output = output;
     }
 
-    public GenericCommand(StreamObserver output, String method, BigInteger code, byte[] data) {
-        this.code = code;
-        this.data = data;
-        this.method = method;
-        this.output = output;
-    }
-
-    public StreamObserver getOutput() {
+    public StreamObserver<GenericResponse> getOutput() {
         return output;
     }
 
-    public void setOutput(StreamObserver output) {
+    public void setOutput(StreamObserver<io.grpc.GenericResponse> output) {
         this.output = output;
     }
 

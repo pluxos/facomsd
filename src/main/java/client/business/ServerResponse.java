@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import client.commons.domain.User;
 import client.commons.utils.DataCodificator;
-import server.commons.domain.GenericResponse;
+import io.grpc.GenericResponse;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 
@@ -20,7 +20,7 @@ public class ServerResponse implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("Respostas do servidor startado!");
+		/*System.out.println("Respostas do servidor startado!");
 
 		while (true) {
 			try {
@@ -49,6 +49,6 @@ public class ServerResponse implements Runnable {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 }

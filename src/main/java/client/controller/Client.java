@@ -2,8 +2,8 @@ package client.controller;
 
 import client.business.ClientCommands;
 import client.commons.exceptions.ErrorMap;
-import io.grpc.ManagedChannel;
 import io.grpc.GreeterGrpc;
+import io.grpc.ManagedChannel;
 
 import java.util.logging.Logger;
 
@@ -46,7 +46,7 @@ public class Client implements Runnable {
         } catch (InterruptedException e) {
             System.err.println(ErrorMap.UNEXPECTED_ERROR);
         }
-        
+
 //        try {
 //			client.close();
 //		} catch (IOException e) {
