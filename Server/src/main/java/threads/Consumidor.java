@@ -29,7 +29,7 @@ public class Consumidor implements Runnable
 			}
 		}
 		catch (Exception e){
-			System.out.println( "Erro: " + e.getMessage() );
+			System.out.println( "Erro no consumo de F1: " + e.getMessage() );
 		}
 	}
 }

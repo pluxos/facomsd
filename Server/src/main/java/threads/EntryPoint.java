@@ -89,7 +89,7 @@ public class EntryPoint implements Runnable{
 					queue.put(justProduced);
 				}
 				catch(Exception e) {
-					System.out.println("Erro: " + e.getMessage());
+					System.out.println("Erro no entrypoint: " + e.getMessage());
 					break;
 				}
 			}

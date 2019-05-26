@@ -5,11 +5,8 @@ import threads.Consumidor;
 import threads.EntryPoint;
 import threads.Logger;
 import threads.Persistence;
-
-import java.io.FileInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Properties;
 
 class Server {
 
