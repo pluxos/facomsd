@@ -3,8 +3,8 @@
 
 package io.grpc;
 
-public interface UpdateResponseOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:helloworld.UpdateResponse)
+public interface GenericResponseOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:helloworld.GenericResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -26,4 +26,14 @@ public interface UpdateResponseOrBuilder extends
    */
   com.google.protobuf.ByteString
       getMessageBytes();
+
+  /**
+   * <code>string data = 3;</code>
+   */
+  String getData();
+  /**
+   * <code>string data = 3;</code>
+   */
+  com.google.protobuf.ByteString
+      getDataBytes();
 }

@@ -3,19 +3,19 @@
 
 package io.grpc;
 
-public interface UpdateRequestOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:helloworld.UpdateRequest)
+public interface GenericRequestOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:helloworld.GenericRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string id = 1;</code>
+   * <code>string code = 1;</code>
    */
-  String getId();
+  String getCode();
   /**
-   * <code>string id = 1;</code>
+   * <code>string code = 1;</code>
    */
   com.google.protobuf.ByteString
-      getIdBytes();
+      getCodeBytes();
 
   /**
    * <code>string data = 2;</code>

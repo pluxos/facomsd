@@ -30,30 +30,30 @@ public final class GreeterGrpc {
   public static final String SERVICE_NAME = "helloworld.Greeter";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile MethodDescriptor<io.grpc.CreateRequest,
-      io.grpc.CreateResponse> getCreateUserMethod;
+  private static volatile MethodDescriptor<GenericRequest,
+      GenericResponse> getCreateUserMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "CreateUser",
-      requestType = io.grpc.CreateRequest.class,
-      responseType = io.grpc.CreateResponse.class,
+      requestType = GenericRequest.class,
+      responseType = GenericResponse.class,
       methodType = MethodDescriptor.MethodType.UNARY)
-  public static MethodDescriptor<io.grpc.CreateRequest,
-      io.grpc.CreateResponse> getCreateUserMethod() {
-    MethodDescriptor<io.grpc.CreateRequest, io.grpc.CreateResponse> getCreateUserMethod;
+  public static MethodDescriptor<GenericRequest,
+      GenericResponse> getCreateUserMethod() {
+    MethodDescriptor<GenericRequest, GenericResponse> getCreateUserMethod;
     if ((getCreateUserMethod = GreeterGrpc.getCreateUserMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getCreateUserMethod = GreeterGrpc.getCreateUserMethod) == null) {
           GreeterGrpc.getCreateUserMethod = getCreateUserMethod = 
-              MethodDescriptor.<io.grpc.CreateRequest, io.grpc.CreateResponse>newBuilder()
+              MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "helloworld.Greeter", "CreateUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.CreateRequest.getDefaultInstance()))
+                  GenericRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.CreateResponse.getDefaultInstance()))
+                  GenericResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("CreateUser"))
                   .build();
           }
@@ -62,30 +62,30 @@ public final class GreeterGrpc {
      return getCreateUserMethod;
   }
 
-  private static volatile MethodDescriptor<io.grpc.GetRequest,
-      io.grpc.GetResponse> getGetUserMethod;
+  private static volatile MethodDescriptor<GenericRequest,
+      GenericResponse> getGetUserMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetUser",
-      requestType = io.grpc.GetRequest.class,
-      responseType = io.grpc.GetResponse.class,
+      requestType = GenericRequest.class,
+      responseType = GenericResponse.class,
       methodType = MethodDescriptor.MethodType.UNARY)
-  public static MethodDescriptor<io.grpc.GetRequest,
-      io.grpc.GetResponse> getGetUserMethod() {
-    MethodDescriptor<io.grpc.GetRequest, io.grpc.GetResponse> getGetUserMethod;
+  public static MethodDescriptor<GenericRequest,
+      GenericResponse> getGetUserMethod() {
+    MethodDescriptor<GenericRequest, GenericResponse> getGetUserMethod;
     if ((getGetUserMethod = GreeterGrpc.getGetUserMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getGetUserMethod = GreeterGrpc.getGetUserMethod) == null) {
           GreeterGrpc.getGetUserMethod = getGetUserMethod = 
-              MethodDescriptor.<io.grpc.GetRequest, io.grpc.GetResponse>newBuilder()
+              MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "helloworld.Greeter", "GetUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.GetRequest.getDefaultInstance()))
+                  GenericRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.GetResponse.getDefaultInstance()))
+                  GenericResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("GetUser"))
                   .build();
           }
@@ -94,30 +94,30 @@ public final class GreeterGrpc {
      return getGetUserMethod;
   }
 
-  private static volatile MethodDescriptor<io.grpc.UpdateRequest,
-      io.grpc.UpdateResponse> getUpdateUserMethod;
+  private static volatile MethodDescriptor<GenericRequest,
+      GenericResponse> getUpdateUserMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "UpdateUser",
-      requestType = io.grpc.UpdateRequest.class,
-      responseType = io.grpc.UpdateResponse.class,
+      requestType = GenericRequest.class,
+      responseType = GenericResponse.class,
       methodType = MethodDescriptor.MethodType.UNARY)
-  public static MethodDescriptor<io.grpc.UpdateRequest,
-      io.grpc.UpdateResponse> getUpdateUserMethod() {
-    MethodDescriptor<io.grpc.UpdateRequest, io.grpc.UpdateResponse> getUpdateUserMethod;
+  public static MethodDescriptor<GenericRequest,
+      GenericResponse> getUpdateUserMethod() {
+    MethodDescriptor<GenericRequest, GenericResponse> getUpdateUserMethod;
     if ((getUpdateUserMethod = GreeterGrpc.getUpdateUserMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getUpdateUserMethod = GreeterGrpc.getUpdateUserMethod) == null) {
           GreeterGrpc.getUpdateUserMethod = getUpdateUserMethod = 
-              MethodDescriptor.<io.grpc.UpdateRequest, io.grpc.UpdateResponse>newBuilder()
+              MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "helloworld.Greeter", "UpdateUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.UpdateRequest.getDefaultInstance()))
+                  GenericRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.UpdateResponse.getDefaultInstance()))
+                  GenericResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("UpdateUser"))
                   .build();
           }
@@ -126,30 +126,30 @@ public final class GreeterGrpc {
      return getUpdateUserMethod;
   }
 
-  private static volatile MethodDescriptor<io.grpc.DeleteRequest,
-      io.grpc.DeleteResponse> getDeleteUserMethod;
+  private static volatile MethodDescriptor<GenericRequest,
+      GenericResponse> getDeleteUserMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "DeleteUser",
-      requestType = io.grpc.DeleteRequest.class,
-      responseType = io.grpc.DeleteResponse.class,
+      requestType = GenericRequest.class,
+      responseType = GenericResponse.class,
       methodType = MethodDescriptor.MethodType.UNARY)
-  public static MethodDescriptor<io.grpc.DeleteRequest,
-      io.grpc.DeleteResponse> getDeleteUserMethod() {
-    MethodDescriptor<io.grpc.DeleteRequest, io.grpc.DeleteResponse> getDeleteUserMethod;
+  public static MethodDescriptor<GenericRequest,
+      GenericResponse> getDeleteUserMethod() {
+    MethodDescriptor<GenericRequest, GenericResponse> getDeleteUserMethod;
     if ((getDeleteUserMethod = GreeterGrpc.getDeleteUserMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getDeleteUserMethod = GreeterGrpc.getDeleteUserMethod) == null) {
           GreeterGrpc.getDeleteUserMethod = getDeleteUserMethod = 
-              MethodDescriptor.<io.grpc.DeleteRequest, io.grpc.DeleteResponse>newBuilder()
+              MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "helloworld.Greeter", "DeleteUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.DeleteRequest.getDefaultInstance()))
+                  GenericRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.DeleteResponse.getDefaultInstance()))
+                  GenericResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("DeleteUser"))
                   .build();
           }
@@ -193,29 +193,29 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void createUser(io.grpc.CreateRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.CreateResponse> responseObserver) {
+    public void createUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getCreateUserMethod(), responseObserver);
     }
 
     /**
      */
-    public void getUser(io.grpc.GetRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.GetResponse> responseObserver) {
+    public void getUser(GenericRequest request,
+                        io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getGetUserMethod(), responseObserver);
     }
 
     /**
      */
-    public void updateUser(io.grpc.UpdateRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.UpdateResponse> responseObserver) {
+    public void updateUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getUpdateUserMethod(), responseObserver);
     }
 
     /**
      */
-    public void deleteUser(io.grpc.DeleteRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.DeleteResponse> responseObserver) {
+    public void deleteUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getDeleteUserMethod(), responseObserver);
     }
 
@@ -225,29 +225,29 @@ public final class GreeterGrpc {
             getCreateUserMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.CreateRequest,
-                io.grpc.CreateResponse>(
+                GenericRequest,
+                GenericResponse>(
                   this, METHODID_CREATE_USER)))
           .addMethod(
             getGetUserMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.GetRequest,
-                io.grpc.GetResponse>(
+                GenericRequest,
+                GenericResponse>(
                   this, METHODID_GET_USER)))
           .addMethod(
             getUpdateUserMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.UpdateRequest,
-                io.grpc.UpdateResponse>(
+                GenericRequest,
+                GenericResponse>(
                   this, METHODID_UPDATE_USER)))
           .addMethod(
             getDeleteUserMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.DeleteRequest,
-                io.grpc.DeleteResponse>(
+                GenericRequest,
+                GenericResponse>(
                   this, METHODID_DELETE_USER)))
           .build();
     }
@@ -279,32 +279,32 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void createUser(io.grpc.CreateRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.CreateResponse> responseObserver) {
+    public void createUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getCreateUserMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void getUser(io.grpc.GetRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.GetResponse> responseObserver) {
+    public void getUser(GenericRequest request,
+                        io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getGetUserMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void updateUser(io.grpc.UpdateRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.UpdateResponse> responseObserver) {
+    public void updateUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getUpdateUserMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void deleteUser(io.grpc.DeleteRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.DeleteResponse> responseObserver) {
+    public void deleteUser(GenericRequest request,
+                           io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getDeleteUserMethod(), getCallOptions()), request, responseObserver);
     }
@@ -336,28 +336,28 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public io.grpc.CreateResponse createUser(io.grpc.CreateRequest request) {
+    public GenericResponse createUser(GenericRequest request) {
       return blockingUnaryCall(
           getChannel(), getCreateUserMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public io.grpc.GetResponse getUser(io.grpc.GetRequest request) {
+    public GenericResponse getUser(GenericRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetUserMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public io.grpc.UpdateResponse updateUser(io.grpc.UpdateRequest request) {
+    public GenericResponse updateUser(GenericRequest request) {
       return blockingUnaryCall(
           getChannel(), getUpdateUserMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public io.grpc.DeleteResponse deleteUser(io.grpc.DeleteRequest request) {
+    public GenericResponse deleteUser(GenericRequest request) {
       return blockingUnaryCall(
           getChannel(), getDeleteUserMethod(), getCallOptions(), request);
     }
@@ -389,32 +389,32 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.CreateResponse> createUser(
-        io.grpc.CreateRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<GenericResponse> createUser(
+        GenericRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getCreateUserMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.GetResponse> getUser(
-        io.grpc.GetRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<GenericResponse> getUser(
+        GenericRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getGetUserMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.UpdateResponse> updateUser(
-        io.grpc.UpdateRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<GenericResponse> updateUser(
+        GenericRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getUpdateUserMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.DeleteResponse> deleteUser(
-        io.grpc.DeleteRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<GenericResponse> deleteUser(
+        GenericRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getDeleteUserMethod(), getCallOptions()), request);
     }
@@ -443,20 +443,20 @@ public final class GreeterGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_CREATE_USER:
-          serviceImpl.createUser((io.grpc.CreateRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.CreateResponse>) responseObserver);
+          serviceImpl.createUser((GenericRequest) request,
+              (io.grpc.stub.StreamObserver<GenericResponse>) responseObserver);
           break;
         case METHODID_GET_USER:
-          serviceImpl.getUser((io.grpc.GetRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.GetResponse>) responseObserver);
+          serviceImpl.getUser((GenericRequest) request,
+              (io.grpc.stub.StreamObserver<GenericResponse>) responseObserver);
           break;
         case METHODID_UPDATE_USER:
-          serviceImpl.updateUser((io.grpc.UpdateRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.UpdateResponse>) responseObserver);
+          serviceImpl.updateUser((GenericRequest) request,
+              (io.grpc.stub.StreamObserver<GenericResponse>) responseObserver);
           break;
         case METHODID_DELETE_USER:
-          serviceImpl.deleteUser((io.grpc.DeleteRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.DeleteResponse>) responseObserver);
+          serviceImpl.deleteUser((GenericRequest) request,
+              (io.grpc.stub.StreamObserver<GenericResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -480,7 +480,7 @@ public final class GreeterGrpc {
 
     @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return io.grpc.HelloWorldProto.getDescriptor();
+      return GrpcProto.getDescriptor();
     }
 
     @Override

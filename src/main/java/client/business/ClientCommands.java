@@ -1,20 +1,15 @@
 package client.business;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
-
-import io.grpc.GreeterGrpc;
-import org.apache.commons.lang3.StringUtils;
-
 import client.commons.domain.Method;
 import client.commons.exceptions.DomainException;
 import client.commons.exceptions.ErrorMap;
 import client.commons.utils.CommandUtils;
 import client.commons.validation.utils.InputRequestValidator;
+import io.grpc.GreeterGrpc;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.*;
+import java.util.Scanner;
 
 public class ClientCommands implements Runnable {
 
@@ -55,7 +50,7 @@ public class ClientCommands implements Runnable {
 		System.out.println("create, get, update e delete");
 		System.out.println("Caso queira sair, digite 'sair'");
 	}
-	
+
 	private BufferedReader getFileIfMeantForTest() {
 		if (isTest && !StringUtils.isEmpty(filePath)) {
 			try {
@@ -66,12 +61,12 @@ public class ClientCommands implements Runnable {
 		}
 		return null;
 	}
-	
+
 	private String getInputFromKeyboard() {
 		printCommands();
 		return CommandUtils.modelateRequest(scanner.nextLine());
 	}
-	
+
 	private String getInputFromFile(BufferedReader reader) {
 		try {
 			if (reader != null && reader.ready()) {

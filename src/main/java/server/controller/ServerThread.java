@@ -1,36 +1,38 @@
 package server.controller;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.examples.helloworld.*;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
-import server.receptor.*;
+import server.commons.Rows.RowF1;
+import server.commons.domain.GenericCommand;
+import server.commons.domain.Method;
+import server.commons.utils.DataCodificator;
+import server.receptor.ConsumerF1;
+import server.receptor.ThreadCommand;
+import server.receptor.ThreadLog;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 public class ServerThread implements Runnable {
 
-	private String filePath;
-	private static final Logger logger = Logger.getLogger(ServerThread.class.getName());
-	private Server server;
+    private String filePath;
+    private Server server;
 
-	public ServerThread(String filePath) {
-		this.filePath = filePath;
-	}
+    public ServerThread(String filePath) {
+        this.filePath = filePath;
+    }
 
-	private void stop() {
-		if (this.server != null) {
-			this.server.shutdown();
-		}
+    private void stop() {
+        if (this.server != null) {
+            this.server.shutdown();
+        }
 
-	}
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		/*File file = new File(filePath);
+        /*File file = new File(filePath);
 		if (file.exists()) {
 			try {
 				Thread t = new Thread(new RecoverLog(new BufferedReader(new FileReader(file))));
@@ -43,65 +45,75 @@ public class ServerThread implements Runnable {
 			}
 		}*/
 
-		try {
+        try {
 
-			this.server = ServerBuilder.forPort(12345)
-					.addService(new ServerThread.GreeterImpl())
-					.executor(Executors.newFixedThreadPool(10))
-					.build()
-					.start();
+            this.server = ServerBuilder.forPort(12345)
+                    .addService(new ServerThread.GreeterImpl())
+                    .executor(Executors.newFixedThreadPool(10))
+                    .build()
+                    .start();
 
-			logger.info("Server started, listening on " + 12345);
+            System.out.println("Server started, listening on " + 12345);
 
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				System.err.println("*** shutting down gRPC server since JVM is shutting down");
-				ServerThread.this.stop();
-				System.err.println("*** server shut down");
-			}));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                ServerThread.this.stop();
+                System.err.println("*** server shut down");
+            }));
 
-			Thread tConsumer = new Thread(new ConsumerF1());
-			Thread tCommand = new Thread(new ThreadCommand());
-			Thread tLog = new Thread(new ThreadLog());
-			tConsumer.start();
-			tCommand.start();
-			tLog.start();
+            Thread tConsumer = new Thread(new ConsumerF1());
+            Thread tCommand = new Thread(new ThreadCommand());
+            Thread tLog = new Thread(new ThreadLog());
+            tConsumer.start();
+            tCommand.start();
+            tLog.start();
 
-			this.server.awaitTermination();
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+            this.server.awaitTermination();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-	static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-		GreeterImpl() {
-		}
+    static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+        GreeterImpl() {
+        }
 
-		public void createUser(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
-			System.out.println("CREATE User");
-			CreateResponse reply = CreateResponse.newBuilder().setStatus("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
-		}
+        public void createUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getCode()));
+            genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+            genericCommand.setMethod(Method.CREATE.toString());
 
-		public void getUser(GetRequest request, StreamObserver<GetResponse> responseObserver) {
-			System.out.println("GET User");
-			GetResponse reply = GetResponse.newBuilder().setEmail("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
-		}
+            RowF1.addItem(genericCommand);
+        }
 
-		public void updateUser(UpdateRequest request, StreamObserver<UpdateResponse> responseObserver) {
-			System.out.println("UPDATE User");
-			UpdateResponse reply = UpdateResponse.newBuilder().setMessage("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
-		}
+        public void getUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getCode()));
+            genericCommand.setMethod(Method.GET.toString());
 
-		public void deleteUser(DeleteRequest request, StreamObserver<DeleteResponse> responseObserver) {
-			System.out.println("DELETE User");
-			DeleteResponse reply = DeleteResponse.newBuilder().setMessage("Sucesso").build();
-			responseObserver.onNext(reply);
-			responseObserver.onCompleted();
-		}
-	}
+            RowF1.addItem(genericCommand);
+        }
+
+        public void updateUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getCode()));
+            genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+            genericCommand.setMethod(Method.UPDATE.toString());
+
+            RowF1.addItem(genericCommand);
+        }
+
+        public void deleteUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+            GenericCommand genericCommand = new GenericCommand();
+            genericCommand.setOutput(responseObserver);
+            genericCommand.setCode(DataCodificator.stringToBigInteger(request.getCode()));
+            genericCommand.setMethod(Method.DELETE.toString());
+
+            RowF1.addItem(genericCommand);
+        }
+    }
 }

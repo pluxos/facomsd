@@ -4,20 +4,20 @@
 package io.grpc;
 
 /**
- * Protobuf type {@code helloworld.CreateResponse}
+ * Protobuf type {@code helloworld.GenericRequest}
  */
-public  final class CreateResponse extends
+public  final class GenericRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:helloworld.CreateResponse)
-    CreateResponseOrBuilder {
+    // @@protoc_insertion_point(message_implements:helloworld.GenericRequest)
+    GenericRequestOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use CreateResponse.newBuilder() to construct.
-  private CreateResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use GenericRequest.newBuilder() to construct.
+  private GenericRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private CreateResponse() {
-    status_ = "";
-    message_ = "";
+  private GenericRequest() {
+    code_ = "";
+    data_ = "";
   }
 
   @Override
@@ -25,7 +25,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private CreateResponse(
+  private GenericRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -47,13 +47,13 @@ private static final long serialVersionUID = 0L;
           case 10: {
             String s = input.readStringRequireUtf8();
 
-            status_ = s;
+            code_ = s;
             break;
           }
           case 18: {
             String s = input.readStringRequireUtf8();
 
-            message_ = s;
+            data_ = s;
             break;
           }
           default: {
@@ -77,79 +77,79 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return io.grpc.HelloWorldProto.internal_static_helloworld_CreateResponse_descriptor;
+    return io.grpc.GrpcProto.internal_static_helloworld_GenericRequest_descriptor;
   }
 
   @Override
   protected FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return io.grpc.HelloWorldProto.internal_static_helloworld_CreateResponse_fieldAccessorTable
+    return io.grpc.GrpcProto.internal_static_helloworld_GenericRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            CreateResponse.class, Builder.class);
+            GenericRequest.class, Builder.class);
   }
 
-  public static final int STATUS_FIELD_NUMBER = 1;
-  private volatile Object status_;
+  public static final int CODE_FIELD_NUMBER = 1;
+  private volatile Object code_;
   /**
-   * <code>string status = 1;</code>
+   * <code>string code = 1;</code>
    */
-  public String getStatus() {
-    Object ref = status_;
+  public String getCode() {
+    Object ref = code_;
     if (ref instanceof String) {
       return (String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       String s = bs.toStringUtf8();
-      status_ = s;
+      code_ = s;
       return s;
     }
   }
   /**
-   * <code>string status = 1;</code>
+   * <code>string code = 1;</code>
    */
   public com.google.protobuf.ByteString
-      getStatusBytes() {
-    Object ref = status_;
+      getCodeBytes() {
+    Object ref = code_;
     if (ref instanceof String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (String) ref);
-      status_ = b;
+      code_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int MESSAGE_FIELD_NUMBER = 2;
-  private volatile Object message_;
+  public static final int DATA_FIELD_NUMBER = 2;
+  private volatile Object data_;
   /**
-   * <code>string message = 2;</code>
+   * <code>string data = 2;</code>
    */
-  public String getMessage() {
-    Object ref = message_;
+  public String getData() {
+    Object ref = data_;
     if (ref instanceof String) {
       return (String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       String s = bs.toStringUtf8();
-      message_ = s;
+      data_ = s;
       return s;
     }
   }
   /**
-   * <code>string message = 2;</code>
+   * <code>string data = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getMessageBytes() {
-    Object ref = message_;
+      getDataBytes() {
+    Object ref = data_;
     if (ref instanceof String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (String) ref);
-      message_ = b;
+      data_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -170,11 +170,11 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getStatusBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, status_);
+    if (!getCodeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, code_);
     }
-    if (!getMessageBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
+    if (!getDataBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, data_);
     }
     unknownFields.writeTo(output);
   }
@@ -185,11 +185,11 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getStatusBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, status_);
+    if (!getCodeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, code_);
     }
-    if (!getMessageBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
+    if (!getDataBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, data_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -201,16 +201,16 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof CreateResponse)) {
+    if (!(obj instanceof GenericRequest)) {
       return super.equals(obj);
     }
-    CreateResponse other = (CreateResponse) obj;
+    GenericRequest other = (GenericRequest) obj;
 
     boolean result = true;
-    result = result && getStatus()
-        .equals(other.getStatus());
-    result = result && getMessage()
-        .equals(other.getMessage());
+    result = result && getCode()
+        .equals(other.getCode());
+    result = result && getData()
+        .equals(other.getData());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -222,78 +222,78 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + STATUS_FIELD_NUMBER;
-    hash = (53 * hash) + getStatus().hashCode();
-    hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
-    hash = (53 * hash) + getMessage().hashCode();
+    hash = (37 * hash) + CODE_FIELD_NUMBER;
+    hash = (53 * hash) + getCode().hashCode();
+    hash = (37 * hash) + DATA_FIELD_NUMBER;
+    hash = (53 * hash) + getData().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static CreateResponse parseFrom(byte[] data)
+  public static GenericRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static CreateResponse parseFrom(java.io.InputStream input)
+  public static GenericRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static CreateResponse parseDelimitedFrom(java.io.InputStream input)
+  public static GenericRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static CreateResponse parseDelimitedFrom(
+  public static GenericRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static CreateResponse parseFrom(
+  public static GenericRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -306,7 +306,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(CreateResponse prototype) {
+  public static Builder newBuilder(GenericRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @Override
@@ -322,26 +322,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code helloworld.CreateResponse}
+   * Protobuf type {@code helloworld.GenericRequest}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:helloworld.CreateResponse)
-      io.grpc.CreateResponseOrBuilder {
+      // @@protoc_insertion_point(builder_implements:helloworld.GenericRequest)
+      io.grpc.GenericRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_CreateResponse_descriptor;
+      return io.grpc.GrpcProto.internal_static_helloworld_GenericRequest_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_CreateResponse_fieldAccessorTable
+      return io.grpc.GrpcProto.internal_static_helloworld_GenericRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              CreateResponse.class, Builder.class);
+              GenericRequest.class, Builder.class);
     }
 
-    // Construct using io.grpc.CreateResponse.newBuilder()
+    // Construct using io.grpc.GenericRequest.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -359,9 +359,9 @@ private static final long serialVersionUID = 0L;
     @Override
     public Builder clear() {
       super.clear();
-      status_ = "";
+      code_ = "";
 
-      message_ = "";
+      data_ = "";
 
       return this;
     }
@@ -369,17 +369,17 @@ private static final long serialVersionUID = 0L;
     @Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return io.grpc.HelloWorldProto.internal_static_helloworld_CreateResponse_descriptor;
+      return io.grpc.GrpcProto.internal_static_helloworld_GenericRequest_descriptor;
     }
 
     @Override
-    public CreateResponse getDefaultInstanceForType() {
-      return CreateResponse.getDefaultInstance();
+    public GenericRequest getDefaultInstanceForType() {
+      return GenericRequest.getDefaultInstance();
     }
 
     @Override
-    public CreateResponse build() {
-      CreateResponse result = buildPartial();
+    public GenericRequest build() {
+      GenericRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -387,10 +387,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @Override
-    public CreateResponse buildPartial() {
-      CreateResponse result = new CreateResponse(this);
-      result.status_ = status_;
-      result.message_ = message_;
+    public GenericRequest buildPartial() {
+      GenericRequest result = new GenericRequest(this);
+      result.code_ = code_;
+      result.data_ = data_;
       onBuilt();
       return result;
     }
@@ -429,22 +429,22 @@ private static final long serialVersionUID = 0L;
     }
     @Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof CreateResponse) {
-        return mergeFrom((CreateResponse)other);
+      if (other instanceof GenericRequest) {
+        return mergeFrom((GenericRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(CreateResponse other) {
-      if (other == CreateResponse.getDefaultInstance()) return this;
-      if (!other.getStatus().isEmpty()) {
-        status_ = other.status_;
+    public Builder mergeFrom(GenericRequest other) {
+      if (other == GenericRequest.getDefaultInstance()) return this;
+      if (!other.getCode().isEmpty()) {
+        code_ = other.code_;
         onChanged();
       }
-      if (!other.getMessage().isEmpty()) {
-        message_ = other.message_;
+      if (!other.getData().isEmpty()) {
+        data_ = other.data_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -462,11 +462,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      CreateResponse parsedMessage = null;
+      GenericRequest parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (CreateResponse) e.getUnfinishedMessage();
+        parsedMessage = (GenericRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -476,140 +476,140 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private Object status_ = "";
+    private Object code_ = "";
     /**
-     * <code>string status = 1;</code>
+     * <code>string code = 1;</code>
      */
-    public String getStatus() {
-      Object ref = status_;
+    public String getCode() {
+      Object ref = code_;
       if (!(ref instanceof String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        status_ = s;
+        code_ = s;
         return s;
       } else {
         return (String) ref;
       }
     }
     /**
-     * <code>string status = 1;</code>
+     * <code>string code = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getStatusBytes() {
-      Object ref = status_;
+        getCodeBytes() {
+      Object ref = code_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        status_ = b;
+        code_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string status = 1;</code>
+     * <code>string code = 1;</code>
      */
-    public Builder setStatus(
+    public Builder setCode(
         String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      status_ = value;
+      code_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string status = 1;</code>
+     * <code>string code = 1;</code>
      */
-    public Builder clearStatus() {
+    public Builder clearCode() {
       
-      status_ = getDefaultInstance().getStatus();
+      code_ = getDefaultInstance().getCode();
       onChanged();
       return this;
     }
     /**
-     * <code>string status = 1;</code>
+     * <code>string code = 1;</code>
      */
-    public Builder setStatusBytes(
+    public Builder setCodeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      status_ = value;
+      code_ = value;
       onChanged();
       return this;
     }
 
-    private Object message_ = "";
+    private Object data_ = "";
     /**
-     * <code>string message = 2;</code>
+     * <code>string data = 2;</code>
      */
-    public String getMessage() {
-      Object ref = message_;
+    public String getData() {
+      Object ref = data_;
       if (!(ref instanceof String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        message_ = s;
+        data_ = s;
         return s;
       } else {
         return (String) ref;
       }
     }
     /**
-     * <code>string message = 2;</code>
+     * <code>string data = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getMessageBytes() {
-      Object ref = message_;
+        getDataBytes() {
+      Object ref = data_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        message_ = b;
+        data_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string message = 2;</code>
+     * <code>string data = 2;</code>
      */
-    public Builder setMessage(
+    public Builder setData(
         String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      message_ = value;
+      data_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string message = 2;</code>
+     * <code>string data = 2;</code>
      */
-    public Builder clearMessage() {
+    public Builder clearData() {
       
-      message_ = getDefaultInstance().getMessage();
+      data_ = getDefaultInstance().getData();
       onChanged();
       return this;
     }
     /**
-     * <code>string message = 2;</code>
+     * <code>string data = 2;</code>
      */
-    public Builder setMessageBytes(
+    public Builder setDataBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      message_ = value;
+      data_ = value;
       onChanged();
       return this;
     }
@@ -626,41 +626,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:helloworld.CreateResponse)
+    // @@protoc_insertion_point(builder_scope:helloworld.GenericRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:helloworld.CreateResponse)
-  private static final CreateResponse DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:helloworld.GenericRequest)
+  private static final GenericRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new CreateResponse();
+    DEFAULT_INSTANCE = new GenericRequest();
   }
 
-  public static CreateResponse getDefaultInstance() {
+  public static GenericRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<CreateResponse>
-      PARSER = new com.google.protobuf.AbstractParser<CreateResponse>() {
+  private static final com.google.protobuf.Parser<GenericRequest>
+      PARSER = new com.google.protobuf.AbstractParser<GenericRequest>() {
     @Override
-    public CreateResponse parsePartialFrom(
+    public GenericRequest parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new CreateResponse(input, extensionRegistry);
+      return new GenericRequest(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<CreateResponse> parser() {
+  public static com.google.protobuf.Parser<GenericRequest> parser() {
     return PARSER;
   }
 
   @Override
-  public com.google.protobuf.Parser<CreateResponse> getParserForType() {
+  public com.google.protobuf.Parser<GenericRequest> getParserForType() {
     return PARSER;
   }
 
   @Override
-  public CreateResponse getDefaultInstanceForType() {
+  public GenericRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
