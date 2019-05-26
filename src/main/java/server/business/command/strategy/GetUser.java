@@ -26,7 +26,7 @@ public class GetUser implements CommandStrategy {
 		} else {
 			getResponse = GenericResponse.newBuilder()
 					.setStatus(MessageMap.ERROR.getMessage())
-					.setMessage(MessageMap.EXECUTION_ERROR.getMessage())
+					.setMessage(MessageMap.USER_NOT_FOUND.getMessage())
 					.build();
 		}
 
