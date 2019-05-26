@@ -37,7 +37,9 @@ public class UpdateUser implements CommandStrategy {
 					.build();
 		}
 
-		genericCommand.getOutput().onNext(updateResponse);
-		genericCommand.getOutput().onCompleted();
+		if(genericCommand.getOutput() != null) {
+			genericCommand.getOutput().onNext(updateResponse);
+			genericCommand.getOutput().onCompleted();
+		}
 	}
 }

@@ -37,7 +37,10 @@ public class CreateUser implements CommandStrategy {
 					.build();
 		}
 
-		genericCommand.getOutput().onNext(createResponse);
-		genericCommand.getOutput().onCompleted();
+
+		if(genericCommand.getOutput() != null) {
+			genericCommand.getOutput().onNext(createResponse);
+			genericCommand.getOutput().onCompleted();
+		}
 	}
 }
