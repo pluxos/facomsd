@@ -1,7 +1,6 @@
 package server.receptor;
 
 import org.apache.log4j.Logger;
-
 import server.commons.Rows.RowF2;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;

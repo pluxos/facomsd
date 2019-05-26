@@ -7,10 +7,11 @@ import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.utils.DataCodificator;
 import server.receptor.ConsumerF1;
+import server.receptor.RecoverLog;
 import server.receptor.ThreadCommand;
 import server.receptor.ThreadLog;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
@@ -32,7 +33,7 @@ public class ServerThread implements Runnable {
     @Override
     public void run() {
 
-        /*File file = new File(filePath);
+        File file = new File(filePath);
 		if (file.exists()) {
 			try {
 				Thread t = new Thread(new RecoverLog(new BufferedReader(new FileReader(file))));
@@ -43,7 +44,7 @@ public class ServerThread implements Runnable {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 
         try {
 

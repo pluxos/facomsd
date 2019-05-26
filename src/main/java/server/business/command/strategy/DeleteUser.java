@@ -38,7 +38,9 @@ public class DeleteUser implements CommandStrategy {
 					.build();
 		}
 
-		genericCommand.getOutput().onNext(deleteResponse);
-		genericCommand.getOutput().onCompleted();
+		if(genericCommand.getOutput() != null) {
+			genericCommand.getOutput().onNext(deleteResponse);
+			genericCommand.getOutput().onCompleted();
+		}
 	}
 }
