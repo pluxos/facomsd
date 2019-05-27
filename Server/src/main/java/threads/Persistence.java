@@ -32,7 +32,6 @@ public class Persistence implements Runnable {
         @Override
         public synchronized void run() {
             Banco.getInstance().blockDatabase();
-            System.out.println("Gravando SnapShot...");
 
             path = Paths.get("./snap." + Banco.getInstance().getNumber());
             try {

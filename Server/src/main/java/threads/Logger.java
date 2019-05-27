@@ -71,19 +71,30 @@ public class Logger implements Runnable {
         }
     }
 
-    /* Essa é a parte de recuperação apartir do arquivo log */
+    /* Essa é a parte de recuperação apartir do arquivo log e snapshot*/
     public void getListOfCommands() {
+        Banco.getInstance().blockDatabase();
+        int lastSnapNumber;
         try (Stream<Path> walk = Files.walk(Paths.get("."))) {
 
             List<String> files = walk.filter(Files::isRegularFile).map(x -> x.toString()).collect(Collectors.toList());
 
             List<String> logs = files.stream().filter(file -> file.matches("./log.*")).collect(Collectors.toList());
             List<String> snaps = files.stream().filter(file -> file.matches("./snap.*")).collect(Collectors.toList());
-            Collections.sort(logs);
-            Collections.sort(snaps);
-            logs.forEach(System.out::println);
-            snaps.forEach(System.out::println);
-            // \./log.*|\./snap.*
+            lastSnapNumber = Integer.parseInt(snaps.get(0).substring(7));
+            for(String s : snaps)
+                if ( Integer.parseInt(s.substring(7)) > lastSnapNumber )
+                    lastSnapNumber = Integer.parseInt(s.substring(7));
+            System.out.println(lastSnapNumber);
+            for ( int i = 0; i< logs.size(); i++)
+                if ( Integer.parseInt(logs.get(i).substring(6)) < lastSnapNumber )
+                    logs.remove(i);
+
+            // Restaurando todo o snap
+            for (String s : Files.readAllLines(Paths.get("./snap" + lastSnapNumber)))
+                Banco.getInstance().Insert(s);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +117,7 @@ public class Logger implements Runnable {
         // } catch (Exception e) {
         //     System.out.println("Erro na gravação dos dados: " + e);
         // }
-        // F1.setFree();
+        Banco.getInstance().freeDatabase();
+        F1.setFree();
     }
 }

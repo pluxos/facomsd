@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.netty.handler.codec.http.cors.CorsConfig.DateValueGenerator;
+
 public class Banco {
     private int x = 1;
     public Map<BigInteger, byte[]> database = new HashMap<BigInteger, byte[]>();
@@ -38,13 +40,28 @@ public class Banco {
         return x;
     }
 
+    @Override
+    public String toString(){
+        String str = new String();
+        for (Map.Entry<BigInteger, byte[]> entry : database.entrySet())
+            str += entry.getKey() + "||" + new String(entry.getValue()) + "\n";
+        return str;
+    }
+
     public Boolean Insert(BigInteger key, byte[] value) {
         if (this.database.containsKey(key)) {
             return false; // Se a chave já existir no banco, ele retorna falso
         } else {
+            this.toString();
             this.database.put(key, value); // Se não existir, ele insere a chave e retorna verdadeiro
             return true;
         }
+    }
+
+    public Boolean Insert(String par) {
+        // Insert from a String
+        String[] words = par.split("||");
+        return Insert(new BigInteger(words[0]), words[1].getBytes());
     }
 
     public byte[] Read(BigInteger key) {
