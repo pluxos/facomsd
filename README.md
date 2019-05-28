@@ -2,6 +2,8 @@
 
 ## Instruções para o grupo:
 
+### GIT
+
 #### Enviar para a master
 Cada um cria uma branch com o nome que quiser (ex. branch_atual) e desenvolve nela. Quando alguém precisar de uma alteração, fazer push para a master com o comando:
 
@@ -19,6 +21,20 @@ git pull            #( ou aquela rodinha do vscode)
 git checkout branch_atual #Sua branch de desenvolvimento
 git merge master    #Não tem equivalente na interface gráfica (não q eu saiba)
 ```
+### Maven
+
+#### Compilando o projeto
+1) Entre na pasta Client e execute: `mvn clean package`
+2) Entre na pasta Server e execute: `mvn clean package`
+
+Com esses comandos, ele vai criar o arquivo `.jar`, como configurado no pom.xml do Client e Server.
+
+#### Executando o projeto
+1) Entre na pasta output
+2) Execute o Server: `java -jar Server-1.0-SNAPSHOT.jar`
+3) Execute o Client: `java -jar Client-1.0-SNAPSHOT.jar`
+
+O Server irá criar os arquivos de log e snap na pasta atual (`output`) e recuperar se houver antigos.
 
 ## Instruções do projeto:
 Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
