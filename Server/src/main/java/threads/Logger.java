@@ -35,8 +35,10 @@ public class Logger implements Runnable {
                     number = Banco.getInstance().getNumber() - 1;
                     path = Paths.get(pathString + number);
                     try {
-                        if (!Files.exists(path))
-                            Files.createFile(path);
+                        if (Files.exists(path))
+                            Files.deleteIfExists(path);
+                        Files.createFile(path);
+
                         if (number >= 3)
                             Files.deleteIfExists(Paths.get(pathString + (number - 3)));
                     } catch (IOException e) {
@@ -55,14 +57,13 @@ public class Logger implements Runnable {
     }
 
     private void writeCommand(String comando) {
-        
+
         if (comando.substring(0, 4).equals("READ"))
             return;
         try {
-            if (!Files.exists(path)) {
-                System.out.println("Arquivo Inexistente, Criando...");
-                Files.createFile(path);
-            }
+            if (Files.exists(path))
+                Files.deleteIfExists(path);
+            Files.createFile(path);
             comando = comando + "\n";
             Files.write(path, comando.getBytes(), StandardOpenOption.APPEND);
 
@@ -71,52 +72,65 @@ public class Logger implements Runnable {
         }
     }
 
-    /* Essa é a parte de recuperação apartir do arquivo log e snapshot*/
+    /* Essa é a parte de recuperação apartir do arquivo log e snapshot */
     public void getListOfCommands() {
         Banco.getInstance().blockDatabase();
-        int lastSnapNumber;
+        int lastSnapNumber = 0;
         try (Stream<Path> walk = Files.walk(Paths.get("."))) {
-
             List<String> files = walk.filter(Files::isRegularFile).map(x -> x.toString()).collect(Collectors.toList());
+            if (files.size() == 0)
+                return;
+
+            List<String> snaps = files.stream().filter(file -> file.matches("./snap.*")).collect(Collectors.toList());
+            if (snaps.size() > 0) {
+                lastSnapNumber = Integer.parseInt(snaps.get(0).substring(7));
+                // Captura o último snapshot
+                for (String s : snaps)
+                    if (Integer.parseInt(s.substring(7)) > lastSnapNumber)
+                        lastSnapNumber = Integer.parseInt(s.substring(7));
+                // Restaurando todo o snap
+                System.out.println(lastSnapNumber);
+                for (String s : Files.readAllLines(Paths.get("./snap." + lastSnapNumber)))
+                    Banco.getInstance().Insert(s);
+            }
 
             List<String> logs = files.stream().filter(file -> file.matches("./log.*")).collect(Collectors.toList());
-            List<String> snaps = files.stream().filter(file -> file.matches("./snap.*")).collect(Collectors.toList());
-            lastSnapNumber = Integer.parseInt(snaps.get(0).substring(7));
-            for(String s : snaps)
-                if ( Integer.parseInt(s.substring(7)) > lastSnapNumber )
-                    lastSnapNumber = Integer.parseInt(s.substring(7));
-            System.out.println(lastSnapNumber);
-            for ( int i = 0; i< logs.size(); i++)
-                if ( Integer.parseInt(logs.get(i).substring(6)) < lastSnapNumber )
-                    logs.remove(i);
+            if (logs.size() > 0) {
+                // Removendo os logs que são anteriores ao último snapshot
+                for (int i = 0; i < logs.size(); i++)
+                    if (Integer.parseInt(logs.get(i).substring(6)) < lastSnapNumber)
+                        logs.remove(i);
 
-            // Restaurando todo o snap
-            for (String s : Files.readAllLines(Paths.get("./snap" + lastSnapNumber)))
-                Banco.getInstance().Insert(s);
-
+                List<String> contents;
+                ItemFila item;
+                Path path2;
+                for (String s : logs) {
+                    path2 = Paths.get(s);
+                    try {
+                        contents = Files.readAllLines(path2);
+                        for (String content : contents) {
+                            String[] commandSplited = content.split("\\s+");
+                            if (commandSplited.length == 3) {
+                                item = new ItemFila(null, commandSplited[0].getBytes(),
+                                        new BigInteger(commandSplited[1]).toByteArray(), commandSplited[2].getBytes());
+                                f3.add(item);
+                            } else if (commandSplited.length == 2) {
+                                item = new ItemFila(null, commandSplited[0].getBytes(),
+                                        new BigInteger(commandSplited[1]).toByteArray());
+                                f3.add(item);
+                            } else
+                                System.out.println("Comando desconhecido");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro na gravação dos dados: " + e);
+                    }
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // List<String> contents;
-        // ItemFila item;
-        // try {
-        //     contents = Files.readAllLines(path);
-        //     for (String content : contents) {
-        //         String[] commandSplited = content.split("\\s+");
-        //         if (commandSplited.length == 3) {
-        //             item = new ItemFila(null, commandSplited[0].getBytes(),
-        //                     new BigInteger(commandSplited[1]).toByteArray(), commandSplited[2].getBytes());
-        //             f3.add(item);
-        //         } else if (commandSplited.length == 2) {
-        //             item = new ItemFila(null, commandSplited[0].getBytes(),
-        //                     new BigInteger(commandSplited[1]).toByteArray());
-        //             f3.add(item);
-        //         }
-        //     }
-        // } catch (Exception e) {
-        //     System.out.println("Erro na gravação dos dados: " + e);
-        // }
+
         Banco.getInstance().freeDatabase();
         F1.setFree();
     }
