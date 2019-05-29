@@ -1,6 +1,8 @@
 package server;
 
 
+import io.grpc.stub.StreamObserver;
+import java.io.IOException;
 import threads.Consumidor;
 import threads.EntryPoint;
 import threads.Logger;

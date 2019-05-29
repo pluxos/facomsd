@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.netty.handler.codec.http.cors.CorsConfig.DateValueGenerator;
-
 public class Banco {
     private int x = 1;
     public Map<BigInteger, byte[]> database = new HashMap<BigInteger, byte[]>();
