@@ -103,7 +103,7 @@ public class Cliente {
           System.out.println( "ERROR => OPCAO INVALIDA " );
         }
       }
-
+      scanner.close();
       output.close();
        System.out.println(" CONEXÃO ENCERRADA !");
     }
