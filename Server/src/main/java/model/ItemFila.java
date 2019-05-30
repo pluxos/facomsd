@@ -8,6 +8,7 @@ public class ItemFila {
 	private byte[] controll;
 	private byte[] key;
 	private byte[] value;
+
 	private boolean ourResponsability = true;
 
 	public ItemFila(Socket socket, byte[] controll, byte[] key, byte[] value) {
