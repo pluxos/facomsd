@@ -8,12 +8,21 @@ public class ItemFila {
 	private byte[] controll;
 	private byte[] key;
 	private byte[] value;
+	private boolean ourResponsability = true;
 
 	public ItemFila(Socket socket, byte[] controll, byte[] key, byte[] value) {
 		this.socket = socket;
 		this.controll = controll;
 		this.key = key;
 		this.value = value;
+	}
+
+	public void setOurResponsability(boolean b){
+		this.ourResponsability = b;
+	}
+
+	public boolean getOurResponsability(){
+		return ourResponsability;
 	}
 
 	public ItemFila(Socket socket, byte[] controll, byte[] key) {
