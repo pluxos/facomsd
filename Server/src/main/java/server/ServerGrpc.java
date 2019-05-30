@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.grpc.examples.helloworld;
+package server;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
-public class HelloWorldServer {
-  private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
+public class ServerGrpc {
+  private static final Logger logger = Logger.getLogger(ServerGrpc.class.getName());
 
   private Server server;
   public Map<Integer,String> Database;
@@ -47,7 +47,7 @@ public class HelloWorldServer {
       public void run() {
         // Use stderr here since the logger may have been reset by its JVM shutdown hook.
         System.err.println("*** shutting down gRPC server since JVM is shutting down");
-        HelloWorldServer.this.stop();
+        ServerGrpc.this.stop();
         System.err.println("*** server shut down");
       }
     });
@@ -72,7 +72,7 @@ public class HelloWorldServer {
    * Main launches the server from the command line.
    */
   public static void main(String[] args) throws IOException, InterruptedException {
-    final HelloWorldServer server = new HelloWorldServer();
+    final ServerGrpc server = new ServerGrpc();
     server.start();
     server.blockUntilShutdown();
   }

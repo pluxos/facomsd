@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.grpc.examples.helloworld;
+package server;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -26,14 +26,14 @@ import java.util.logging.Logger;
 /**
  * A simple HelloWorldClient that requests a greeting from the {@link HelloWorldServer}.
  */
-public class HelloWorldClient {
-  private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
+public class ClientGrpc {
+  private static final Logger logger = Logger.getLogger(ClientGrpc.class.getName());
 
   private final ManagedChannel channel;
   private final CrudGrpc.CrudBlockingStub blockingStub;
 
-  /** Construct HelloWorldClient connecting to HelloWorld server at {@code host:port}. */
-  public HelloWorldClient(String host, int port) {
+  /** Construct ClientGrpc connecting to HelloWorld server at {@code host:port}. */
+  public ClientGrpc(String host, int port) {
     this(ManagedChannelBuilder.forAddress(host, port)
         // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
         // needing certificates.
@@ -41,8 +41,8 @@ public class HelloWorldClient {
         .build());
   }
 
-  /** Construct HelloWorldClient for accessing HelloWorld server using the existing channel. */
-  HelloWorldClient(ManagedChannel channel) {
+  /** Construct ClientGrpc for accessing HelloWorld server using the existing channel. */
+  ClientGrpc(ManagedChannel channel) {
     this.channel = channel;
     blockingStub = CrudGrpc.newBlockingStub(channel);
   }
@@ -128,7 +128,7 @@ public class HelloWorldClient {
    * greeting.
    */
   public static void main(String[] args) throws Exception {
-    HelloWorldClient client = new HelloWorldClient("localhost", 50051);
+    ClientGrpc client = new ClientGrpc("localhost", 50051);
     try {
       client.create(1,"teste");
       client.create(2, "coco");
