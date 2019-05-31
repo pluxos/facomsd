@@ -1,10 +1,12 @@
-package server.model.HashMap;
+package server.model.hashmap;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Manipulator {
-    private volatile static HashMap<BigInteger, byte[]> db = new HashMap<>();
+	
+    private static volatile HashMap<BigInteger, byte[]> db = new HashMap<>();
 
     public static void addValue(BigInteger code, byte[] data) {
         db.put(code, data);
@@ -24,5 +26,13 @@ public class Manipulator {
 
     public static boolean containKey(BigInteger code) {
         return db.containsKey(code);
+    }
+    
+    public static Map<BigInteger, byte[]> getDb() {
+    	return db;
+    }
+    
+    public static void clearDatabase() {
+    	db = new HashMap<>();
     }
 }

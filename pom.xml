@@ -6,9 +6,16 @@
 	<artifactId>trab-sistemas-distribuidos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<grpc.version>1.19.0</grpc.version><!-- CURRENT_GRPC_VERSION -->
+		<protobuf.version>3.6.1</protobuf.version>
+		<protoc.version>3.6.1</protoc.version>
+		<!-- required for jdk9 -->
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -23,16 +30,6 @@
 		</plugins>
 	</build>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<grpc.version>1.19.0</grpc.version><!-- CURRENT_GRPC_VERSION -->
-		<protobuf.version>3.6.1</protobuf.version>
-		<protoc.version>3.6.1</protoc.version>
-		<!-- required for jdk9 -->
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -46,6 +43,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
+		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-netty-shaded</artifactId>
@@ -81,28 +83,17 @@
 			<version>1.6.2</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<version>3.11.1</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 </project>
