@@ -13,6 +13,7 @@ import com.google.protobuf.ByteString;
 public class Delete implements Runnable {
   private static final Logger logger = Logger.getLogger(Delete.class.getName());
     public ByteString key;
+    public int keysize;
     private final ManagedChannel channel;
     private final CrudGrpc.CrudBlockingStub blockingStub;
   
@@ -20,6 +21,7 @@ public class Delete implements Runnable {
       this(ManagedChannelBuilder.forAddress(host, port)
       .usePlaintext()
       .build());
+      this.keysize = key.toByteArray().length;
       this.key = ByteString.copyFrom(key.toByteArray());
     }
   
@@ -34,7 +36,10 @@ public class Delete implements Runnable {
   
     public void run() {
         logger.info("Removendo elemento de chave: " + key + " ...");
-        DeleteRequest request = DeleteRequest.newBuilder().setKey(key).build();
+        DeleteRequest request = DeleteRequest.newBuilder()
+                                             .setKey(key)
+                                             .setKeysize(this.keysize)
+                                             .build();
         DeleteResponse response;
         try {
           response = blockingStub.delete(request);

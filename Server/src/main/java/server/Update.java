@@ -14,12 +14,16 @@ public class Update implements Runnable {
   private static final Logger logger = Logger.getLogger(Update.class.getName());
   public ByteString key;
   public ByteString value;  
+  public int keysize;
+  public int valuesize;
   private final ManagedChannel channel;
   private final CrudGrpc.CrudBlockingStub blockingStub;
 
   public Update(String host, int port, BigInteger key, byte[] value) {
     this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().build());
     byte[] variavel = key.toByteArray();
+    this.keysize = variavel.length;
+    this.valuesize = value.length;
     this.key = ByteString.copyFrom(variavel);
     this.value = ByteString.copyFrom(value);
   }
@@ -37,6 +41,8 @@ public class Update implements Runnable {
     logger.info("Mudando elemento de chave: " + key + " para valor: " + value + " ...");
      UpdateRequest request = UpdateRequest.newBuilder().setKey(key)
                                                        .setValue(value)
+                                                       .setKeysize(this.keysize)
+                                                       .setValuesize(this.valuesize)
                                                        .build();
      UpdateResponse response;
      try {

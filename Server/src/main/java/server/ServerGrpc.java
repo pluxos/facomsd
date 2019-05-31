@@ -89,9 +89,8 @@ public class ServerGrpc {
 
     @Override
     public void create(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
-      System.out.println("teste");
-      byte[] chave = new byte[1];
-      byte[] value = new byte[1];
+      byte[] chave = new byte[req.getKeysize()];
+      byte[] value = new byte[req.getValuesize()];
       req.getKey().copyTo(chave, 0);
       req.getValue().copyTo(value, 0);
 
@@ -103,22 +102,39 @@ public class ServerGrpc {
 
     @Override
     public void read(ReadRequest req, StreamObserver<ReadResponse> responseObserver) {
+      byte[] chave = new byte[req.getKeysize()];
+      req.getKey().copyTo(chave, 0);
+      System.out.println("READ: < " + new BigInteger(chave) + " >");
       String coco = "coco";
       byte[] value = coco.getBytes();
-      ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value)).build();
+      int valuesize = value.length;
+      ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value))
+                                                                            .setValuesize(valuesize)
+                                                                            .build();
       responseObserver.onNext(response);   
       responseObserver.onCompleted();
     }
 
     @Override
     public void update(UpdateRequest req, StreamObserver<UpdateResponse> responseObserver) {
+      byte[] chave = new byte[req.getKeysize()];
+      byte[] value = new byte[req.getValuesize()];
+      req.getKey().copyTo(chave, 0);
+      req.getValue().copyTo(value, 0);
+
+      System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+
+      
       UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
 
     @Override
-    public void delete(DeleteRequest req, StreamObserver<DeleteResponse> responseObserver) {
+    public void delete(DeleteRequest req, StreamObserver<DeleteResponse> responseObserver) { 
+      byte[] chave = new byte[req.getKeysize()];
+      req.getKey().copyTo(chave, 0);
+      System.out.println("DELETE: < " + new BigInteger(chave) + " >");
       DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
       responseObserver.onNext(response);
       responseObserver.onCompleted();

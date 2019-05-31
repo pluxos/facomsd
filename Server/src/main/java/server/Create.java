@@ -14,12 +14,16 @@ public class Create implements Runnable {
   private static final Logger logger = Logger.getLogger(Create.class.getName());
   public ByteString key;
   public ByteString value;  
+  public int keysize;
+  public int valuesize;
   private final ManagedChannel channel;
   private final CrudGrpc.CrudBlockingStub blockingStub;
 
   public Create(String host, int port, BigInteger chave, byte[] value) {
       this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().build());
       byte[] variavel = chave.toByteArray();
+      this.keysize = variavel.length;
+      this.valuesize = value.length;
       this.key = ByteString.copyFrom(variavel);
       this.value = ByteString.copyFrom(value);
   }
@@ -37,7 +41,10 @@ public class Create implements Runnable {
     logger.info("Tentando enviar " + this.key + " ...");
     CreateRequest request = CreateRequest.newBuilder()
                                          .setKey(this.key)
-                                         .setValue(this.value).build();
+                                         .setValue(this.value)
+                                         .setKeysize(this.keysize)
+                                         .setValuesize(this.valuesize).
+                                         build();
     CreateResponse response;
     try {
       response = blockingStub.create(request);
