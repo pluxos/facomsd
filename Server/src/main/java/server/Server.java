@@ -6,7 +6,6 @@ import java.io.IOException;
 import threads.Consumidor;
 import threads.EntryPoint;
 import threads.Logger;
-import threads.Persistence;
 import java.net.ServerSocket;
 import java.net.Socket;
 

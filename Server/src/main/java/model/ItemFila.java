@@ -1,23 +1,24 @@
 package model;
 
-import java.net.Socket;
 import java.math.BigInteger;
+import com.google.protobuf.GeneratedMessageV3;
+import io.grpc.stub.StreamObserver;
 
 public class ItemFila {
-	private Socket socket;
-	private byte[] controll;
+    private StreamObserver<GeneratedMessageV3> response;
+    private byte[] controll; // crud controll
 	private byte[] key;
 	private byte[] value;
 
-	public ItemFila(Socket socket, byte[] controll, byte[] key, byte[] value) {
-		this.socket = socket;
+	public ItemFila(StreamObserver<GeneratedMessageV3> res, byte[] controll, byte[] key, byte[] value) {
+		this.response = res;
 		this.controll = controll;
 		this.key = key;
 		this.value = value;
 	}
 
-	public ItemFila(Socket socket, byte[] controll, byte[] key) {
-		this.socket = socket;
+	public ItemFila(StreamObserver<GeneratedMessageV3> res, byte[] controll, byte[] key) {
+		this.response = res;
 		this.controll = controll;
 		this.key = key;
 	}
@@ -46,8 +47,8 @@ public class ItemFila {
 
 	}
 
-	public Socket getSocket() {
-		return socket;
+	public StreamObserver<GeneratedMessageV3> getResponse() {
+		return this.response;
 	}
 
 	public byte[] getControll() {
