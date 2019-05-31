@@ -3,21 +3,25 @@ package server;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+
+import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.google.protobuf.ByteString;
 
 public class Update implements Runnable {
   private static final Logger logger = Logger.getLogger(Update.class.getName());
-  public int key;
-  public String value;  
+  public ByteString key;
+  public ByteString value;  
   private final ManagedChannel channel;
   private final CrudGrpc.CrudBlockingStub blockingStub;
 
-  public Update(String host, int port, int key, String value) {
+  public Update(String host, int port, BigInteger key, byte[] value) {
     this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().build());
-      this.key = key;
-      this.value = value;
+    byte[] variavel = key.toByteArray();
+    this.key = ByteString.copyFrom(variavel);
+    this.value = ByteString.copyFrom(value);
   }
 
   Update(ManagedChannel channel) {
@@ -46,5 +50,10 @@ public class Update implements Runnable {
      } else {
        logger.info("Chave inexistente");
      }
+     try {
+      this.shutdown();
+    } catch (InterruptedException e) {
+      System.out.println( e );
+    }
   }
 }

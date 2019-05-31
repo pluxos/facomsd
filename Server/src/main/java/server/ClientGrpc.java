@@ -16,129 +16,118 @@
 
 package server;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.math.BigInteger;
 
 /**
  * A simple HelloWorldClient that requests a greeting from the {@link HelloWorldServer}.
  */
 public class ClientGrpc {
-  private static final Logger logger = Logger.getLogger(ClientGrpc.class.getName());
+  String welcome = "Esse software se baseia em um banco de dados chave valor.\n Chave: Inteiro(Infinito) \n Valor: Bytes\n";
+  String options = "Opções disponivéis: \n- Create chave valor \n- Read chave \n- Update chave valor \n- Delete chave \n- Help \n- Sair \n";
+  String read = "Digite uma opção válida: ";
+  String invalid = "Opção inválida!!!";
+  String done = "Conexão concluída!!!\n";
+  String quit = "Conexão encerrada!!!";
+  String close = "Saindo....";
+  String option;
+  String command;
+  String key;
+  String value;
+  int size;
+  int spaceFirst;
+  int spaceSecond;
 
-  private final ManagedChannel channel;
-  private final CrudGrpc.CrudBlockingStub blockingStub;
+  BigInteger keyBigInteger;
 
   /** Construct ClientGrpc connecting to HelloWorld server at {@code host:port}. */
   public ClientGrpc(String host, int port) {
-    this(ManagedChannelBuilder.forAddress(host, port)
-        // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
-        // needing certificates.
-        .usePlaintext()
-        .build());
+
+      // String value = "DEU CERTO";
+      // int dez = 10;
+      // BigInteger key = BigInteger.valueOf(dez);
+
+      Scanner scanner = new Scanner( System.in );
+
+      System.out.println( welcome );
+      System.out.println( options );
+
+      while( true ) {
+        System.out.print( read );
+        option = scanner.nextLine();
+
+        try {
+          option = option.toUpperCase();
+
+          if( option.equals("SAIR") ) {
+            System.out.println( close );
+            break;
+          }
+
+          if( option.equals("HELP") ) {
+            System.out.println( options );
+            continue;
+          }
+
+          size = option.length();
+          spaceFirst = option.indexOf(" ");
+
+          if( spaceFirst == -1 ) {
+            throw new Exception();
+          }
+
+          spaceSecond = option.indexOf( " ", ( spaceFirst + 1 ) );
+          command = option.substring( 0, spaceFirst );
+
+          if( ( command.equals( "CREATE" ) || command.equals( "UPDATE" ) ) &&  ( spaceSecond == -1 ) ) {
+            throw new Exception();            
+          }
+
+          if( ( command.equals( "READ" ) || command.equals( "DELETE" ) ) && ( spaceSecond != -1 ) ) {
+            throw new Exception();
+          }
+
+          key = option.substring( ( spaceFirst + 1 ), ( ( spaceSecond == -1 ) ? size : spaceSecond ) );
+          keyBigInteger = new BigInteger( key );
+
+          if( command.equals( "CREATE" ) ) {
+            value = option.substring( ( spaceSecond + 1 ), size );
+            byte[] messageBytesValue = value.getBytes();
+            new Thread( new Create(host, port, keyBigInteger, messageBytesValue) ).start();
+            continue;  
+          }
+
+          if( command.equals( "UPDATE" ) ) {
+            value = option.substring( ( spaceSecond + 1 ), size );
+            byte[] messageBytesValue = value.getBytes();
+            new Thread( new Update(host, port, keyBigInteger, messageBytesValue) ).start();
+            continue;
+          }
+          
+          if( command.equals( "READ" ) ) {
+            new Thread( new Read(host, port, keyBigInteger) ).start();
+            continue;
+          }
+          
+          if( command.equals( "DELETE" ) ) {
+            new Thread( new Delete(host, port, keyBigInteger) ).start();
+            continue;
+          }
+
+          throw new Exception();
+        }
+        catch(Exception e) {
+          System.out.println( invalid );
+        }
+      }
+
+      System.out.println(quit);
+      scanner.close();
   }
 
-  /** Construct ClientGrpc for accessing HelloWorld server using the existing channel. */
-  ClientGrpc(ManagedChannel channel) {
-    this.channel = channel;
-    blockingStub = CrudGrpc.newBlockingStub(channel);
-  }
-
-  public void shutdown() throws InterruptedException {
-    channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-  }
-
-
-   public void create(int key, String value) {
-    logger.info("Tentando enviar " + key + " ...");
-    CreateRequest request = CreateRequest.newBuilder()
-                                         .setKey(key)
-                                         .setValue(value).build();
-    CreateResponse response;
-    try {
-      response = blockingStub.create(request);
-    } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "Rpc failed: {0}", e.getStatus());
-      return;
-    }
-    if (response.getRetorno() == true) {
-      logger.info("Dado inserido com sucesso!");
-    } else {
-      logger.info("A chave especificada já existe no banco de dados!");
-    }
-   }
-
-   public void read(int key) {
-    logger.info("Procurando o elemento de chave: " + key + " ...");
-    ReadRequest request = ReadRequest.newBuilder().setKey(key).build();
-    ReadResponse response;
-    try {
-      response = blockingStub.read(request);
-    } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "Rpc failed: {0}", e.getStatus());
-      return;
-    }
-    if(response.getValue() != null) {
-      logger.info("Recebido o valor: " + response.getValue());
-    } else {
-      logger.info("Não existe a chave especificada!");
-    }
-   }
-
-   public void update(int key, String value) {
-     logger.info("Mudando elemento de chave: " + key + " para valor: " + value + " ...");
-     UpdateRequest request = UpdateRequest.newBuilder().setKey(key)
-                                                       .setValue(value)
-                                                       .build();
-     UpdateResponse response;
-     try {
-      response = blockingStub.update(request);
-     } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "Rpc failed: {0}", e.getStatus());
-      return;
-     }
-     if (response.getRetorno() == true) {
-      logger.info("O elemento foi alterado com sucesso!");
-     } else {
-       logger.info("Chave inexistente");
-     }
-   }
-
-   public void delete(int key) {
-     logger.info("Removendo elemento de chave: " + key + " ...");
-     DeleteRequest request = DeleteRequest.newBuilder().setKey(key).build();
-     DeleteResponse response;
-     try {
-       response = blockingStub.delete(request);
-     } catch (StatusRuntimeException e) {
-      logger.log(Level.WARNING, "Rpc failed: {0}", e.getStatus());
-      return;
-     }
-     if (response.getRetorno() == true) {
-       logger.info("O elemento foi removido com sucesso!");
-     } else {
-       logger.info("Não existe a chave especificada!");
-     }
-   }
-  /**
-   * Greet server. If provided, the first element of {@code args} is the name to use in the
-   * greeting.
-   */
   public static void main(String[] args) throws Exception {
-    ClientGrpc client = new ClientGrpc("localhost", 50051);
-    try {
-      client.create(1,"teste");
-      client.create(2, "coco");
-      client.read(1);
-      client.update(1, "coco fedido");
-      client.read(1);
-      client.delete(1);
-      client.read(1);
-    } finally {
-      client.shutdown();
-    }
+    new ClientGrpc("localhost", 50051);     
   }
 }

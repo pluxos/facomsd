@@ -3,21 +3,24 @@ package server;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+
+import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.google.protobuf.ByteString;
 
 public class Delete implements Runnable {
   private static final Logger logger = Logger.getLogger(Delete.class.getName());
-    public int key;
+    public ByteString key;
     private final ManagedChannel channel;
     private final CrudGrpc.CrudBlockingStub blockingStub;
   
-    public Delete(String host, int port, int key) {
+    public Delete(String host, int port, BigInteger key) {
       this(ManagedChannelBuilder.forAddress(host, port)
       .usePlaintext()
       .build());
-      this.key = key;
+      this.key = ByteString.copyFrom(key.toByteArray());
     }
   
     Delete(ManagedChannel channel) {
@@ -43,6 +46,11 @@ public class Delete implements Runnable {
           logger.info("O elemento foi removido com sucesso!");
         } else {
           logger.info("Não existe a chave especificada!");
+        }
+        try {
+          this.shutdown();
+        } catch (InterruptedException e) {
+          System.out.println( e );
         }
     }
 

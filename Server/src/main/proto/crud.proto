@@ -15,8 +15,8 @@ service Crud {
 }
 
 message CreateRequest {
-  int32 key = 1;
-  string value = 2;  
+  bytes key = 1;
+  bytes value = 2;  
 }
 message CreateResponse
 {
@@ -24,16 +24,16 @@ message CreateResponse
 }
 
 message ReadRequest {
-  int32 key = 1;
+  bytes key = 1;
 }
 
 message ReadResponse {
-  string value = 1;
+  bytes value = 1;
 }
 
 message UpdateRequest {
-  int32 key = 1;
-  string value = 2;
+  bytes key = 1;
+  bytes value = 2;
 }
 
 message UpdateResponse {
@@ -41,7 +41,7 @@ message UpdateResponse {
 }
 
 message DeleteRequest {
-  int32 key = 1;
+  bytes key = 1;
 }
 
 message DeleteResponse {

@@ -16,11 +16,15 @@
 
 package server;
 
+import java.math.BigInteger;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import com.google.protobuf.ByteString;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,12 +35,11 @@ public class ServerGrpc {
   private static final Logger logger = Logger.getLogger(ServerGrpc.class.getName());
 
   private Server server;
-  public Map<Integer,String> Database;
+  public Map<BigInteger, byte[]> Database = new HashMap<BigInteger, byte[]>();
 
   private void start() throws IOException {
     /* The port on which the server should run */
     int port = 50051;
-    this.Database = new HashMap<Integer, String>();
     server = ServerBuilder.forPort(port)
         .addService(new CrudImpl(this.Database))
         .build()
@@ -78,62 +81,46 @@ public class ServerGrpc {
   }
 
   static class CrudImpl extends CrudGrpc.CrudImplBase {
-    Map<Integer,String> Database;
-    CrudImpl(Map<Integer,String> pai)
+    Map<BigInteger, byte[]> Database;
+    CrudImpl(Map<BigInteger, byte[]> pai)
     {
       this.Database = pai;
     }
 
     @Override
     public void create(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
-      if (this.Database.containsKey(req.getKey()))
-      {
-        CreateResponse response = CreateResponse.newBuilder().setRetorno(false).build();
-        responseObserver.onNext(response);
-      } else {
-        this.Database.put(req.getKey(), req.getValue());
-        CreateResponse response = CreateResponse.newBuilder().setRetorno(true).build();
-        responseObserver.onNext(response);
-      }
+      System.out.println("teste");
+      byte[] chave = new byte[1];
+      byte[] value = new byte[1];
+      req.getKey().copyTo(chave, 0);
+      req.getValue().copyTo(value, 0);
+
+      System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+      CreateResponse response = CreateResponse.newBuilder().setRetorno(true).build();
+      responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
 
     @Override
     public void read(ReadRequest req, StreamObserver<ReadResponse> responseObserver) {
-      if (this.Database.containsKey(req.getKey())) {
-        String value = this.Database.get(req.getKey());
-        ReadResponse response = ReadResponse.newBuilder().setValue(value).build();
-        responseObserver.onNext(response);
-      } else {
-        ReadResponse response = ReadResponse.newBuilder().setValue(null).build();
-        responseObserver.onNext(response);
-      }
+      String coco = "coco";
+      byte[] value = coco.getBytes();
+      ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value)).build();
+      responseObserver.onNext(response);   
       responseObserver.onCompleted();
     }
 
     @Override
     public void update(UpdateRequest req, StreamObserver<UpdateResponse> responseObserver) {
-      if (this.Database.containsKey(req.getKey())) {
-        this.Database.put(req.getKey(), req.getValue());
-        UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
-        responseObserver.onNext(response);
-      } else {
-        UpdateResponse response = UpdateResponse.newBuilder().setRetorno(false).build();
-        responseObserver.onNext(response);
-      }
+      UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
+      responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
 
     @Override
     public void delete(DeleteRequest req, StreamObserver<DeleteResponse> responseObserver) {
-      if (this.Database.containsKey(req.getKey())) {
-        this.Database.remove(req.getKey());
-        DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
-        responseObserver.onNext(response);
-      } else {
-        DeleteResponse response = DeleteResponse.newBuilder().setRetorno(false).build();
-        responseObserver.onNext(response);
-      }
+      DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
+      responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
 
