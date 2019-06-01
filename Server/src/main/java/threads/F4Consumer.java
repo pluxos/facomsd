@@ -1,6 +1,6 @@
 package threads;
 
-import model.ItemFila;
+import server.ItemFila;
 import singletons.F4;
 
 import java.util.concurrent.BlockingQueue;
