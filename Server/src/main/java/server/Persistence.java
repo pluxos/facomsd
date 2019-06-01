@@ -1,6 +1,6 @@
 package server;
 
-import model.ItemFila;
+import server.ItemFila;;
 import java.math.BigInteger;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -61,44 +61,53 @@ public class Persistence implements Runnable {
     public void run() {
         String callback = null; // Mensagem de sucesso ou falha
         ItemFila obj;
-        // int type; // type == 1 string, type == 2 byte
-        // DataOutputStream output = null;
-        GeneratedMessageV3 response;
+        CreateResponse responseC = null;
+        UpdateResponse responseU = null;
+        ReadResponse responseR = null;
+        DeleteResponse responseD = null;
 
         try {
             while (true) {
                 if (Banco.getInstance().isFree()) {
                     obj = f3.take();
 
-                    if (new String(obj.getControll()).toLowerCase().equals("c")) {
-                        response = (Database.Insert(new BigInteger(obj.getKey()), obj.getValue()))
+                    if (obj.getControll().toUpperCase().equals("CREATE")) {
+                        responseC = (Database.Insert(new BigInteger(obj.getKey()), obj.getValue()))
                                 ? CreateResponse.newBuilder().setRetorno(true).build()
                                 : CreateResponse.newBuilder().setRetorno(false).build();
-                    } else if (new String(obj.getControll()).toLowerCase().equals("u")) {
-                        response = (Database.Update(new BigInteger(obj.getKey()), obj.getValue()))
+                        obj.getResponseC().onNext(responseC);
+                        obj.getResponseC().onCompleted();
+
+                    } else if (obj.getControll().toUpperCase().equals("UPDATE")) {
+                        responseU = (Database.Update(new BigInteger(obj.getKey()), obj.getValue()))
                                 ? UpdateResponse.newBuilder().setRetorno(true).build()
                                 : UpdateResponse.newBuilder().setRetorno(false).build();
-                    } else if (new String(obj.getControll()).toLowerCase().equals("d")) {
-                        response = (Database.Delete(new BigInteger(obj.getKey())))
+                        obj.getResponseU().onNext(responseU);
+                        obj.getResponseU().onCompleted();
+
+                    } else if (obj.getControll().toUpperCase().equals("DELETE")) {
+                        responseD = (Database.Delete(new BigInteger(obj.getKey())))
                                 ? DeleteResponse.newBuilder().setRetorno(true).build()
                                 : DeleteResponse.newBuilder().setRetorno(false).build();
-                    } else if (new String(obj.getControll()).toLowerCase().equals("r")) {
+                        obj.getResponseD().onNext(responseD);
+                        obj.getResponseD().onCompleted();
+
+                    } else if (obj.getControll().toUpperCase().equals("READ")) {
                         byte[] resposta = Database.Read(new BigInteger(obj.getKey()));
                         ByteString retorno;
                         int size;
                         if (resposta != null) {
                             retorno = ByteString.copyFrom(resposta);
                             size = resposta.length;
-                            response = ReadResponse.newBuilder().setValue(retorno).setValuesize(size).build();
+                            responseR = ReadResponse.newBuilder().setValue(retorno).setValuesize(size).build();
                         } else {
                             retorno = ByteString.copyFrom((new String("READ FAILL!!!").getBytes()));
                             size = (new String("READ FAILL!!!").getBytes()).length;
-                            response = ReadResponse.newBuilder().setValue(retorno).setValuesize(size).build();
+                            responseR = ReadResponse.newBuilder().setValue(retorno).setValuesize(size).build();
                         }
-
+                        obj.getResponseR().onNext(responseR);
+                        obj.getResponseR().onCompleted();
                     }
-                    obj.getResponse().onNext(response);
-                    obj.getResponse().onCompleted();
                 }
 
             }

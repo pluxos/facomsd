@@ -1,6 +1,6 @@
 package singletons;
 
-import model.ItemFila;
+import server.ItemFila;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

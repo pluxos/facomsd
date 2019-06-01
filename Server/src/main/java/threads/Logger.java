@@ -1,6 +1,6 @@
 package threads;
 
-import model.ItemFila;
+import server.ItemFila;
 import singletons.*;
 
 import java.io.*;
@@ -110,13 +110,22 @@ public class Logger implements Runnable {
                         contents = Files.readAllLines(path2);
                         for (String content : contents) {
                             String[] commandSplited = content.split("\\s+");
+                            item = new ItemFila();
                             if (commandSplited.length == 3) {
-                                item = new ItemFila(null, commandSplited[0].getBytes(),
-                                        new BigInteger(commandSplited[1]).toByteArray(), commandSplited[2].getBytes());
+                                if (commandSplited[0].equals("CREATE")) {
+                                    item.itemFilaCreate(null, new BigInteger(commandSplited[1]).toByteArray(),
+                                            commandSplited[2].getBytes());
+                                } else if (commandSplited[0].equals("UPDATE")) {
+                                    item.itemFilaUpdate(null, new BigInteger(commandSplited[1]).toByteArray(),
+                                            commandSplited[2].getBytes());
+                                }
                                 f3.add(item);
                             } else if (commandSplited.length == 2) {
-                                item = new ItemFila(null, commandSplited[0].getBytes(),
-                                        new BigInteger(commandSplited[1]).toByteArray());
+                                if (commandSplited[0].equals("DELETE")) {
+                                    item.itemFilaDelete(null, new BigInteger(commandSplited[1]).toByteArray());
+                                } else if (commandSplited[0].equals("READ")) {
+                                    item.itemFilaRead(null, new BigInteger(commandSplited[1]).toByteArray());
+                                }
                                 f3.add(item);
                             } else
                                 System.out.println("Comando desconhecido");

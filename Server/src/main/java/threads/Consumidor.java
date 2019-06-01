@@ -1,6 +1,6 @@
 package threads;
 
-import model.ItemFila;
+import server.ItemFila;
 import singletons.F1;
 import singletons.F2;
 import singletons.F3;

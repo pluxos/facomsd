@@ -17,13 +17,18 @@
 package server;
 
 import java.math.BigInteger;
+
+import com.google.protobuf.GeneratedMessageV3;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
-
+import java.lang.String;
 import com.google.protobuf.ByteString;
+import server.ItemFila;
+import singletons.F1;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,113 +37,123 @@ import java.util.Map;
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
 public class ServerGrpc {
-  private static final Logger logger = Logger.getLogger(ServerGrpc.class.getName());
+    private static final BlockingQueue<ItemFila> f1 = F1.getInstance();
+    private static final Logger logger = Logger.getLogger(ServerGrpc.class.getName());
 
-  private Server server;
-  public Map<BigInteger, byte[]> Database = new HashMap<BigInteger, byte[]>();
+    private Server server;
+    public Map<BigInteger, byte[]> Database = new HashMap<BigInteger, byte[]>();
 
-  private void start() throws IOException {
-    /* The port on which the server should run */
-    int port = 50051;
-    server = ServerBuilder.forPort(port)
-        .addService(new CrudImpl(this.Database))
-        .build()
-        .start();
-    logger.info("Server started, listening on " + port);
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-        System.err.println("*** shutting down gRPC server since JVM is shutting down");
-        ServerGrpc.this.stop();
-        System.err.println("*** server shut down");
-      }
-    });
-  }
-
-  private void stop() {
-    if (server != null) {
-      server.shutdown();
-    }
-  }
-
-  /**
-   * Await termination on the main thread since the grpc library uses daemon threads.
-   */
-  private void blockUntilShutdown() throws InterruptedException {
-    if (server != null) {
-      server.awaitTermination();
-    }
-  }
-
-  /**
-   * Main launches the server from the command line.
-   */
-  public static void main(String[] args) throws IOException, InterruptedException {
-    final ServerGrpc server = new ServerGrpc();
-    server.start();
-    server.blockUntilShutdown();
-  }
-
-  static class CrudImpl extends CrudGrpc.CrudImplBase {
-    Map<BigInteger, byte[]> Database;
-    CrudImpl(Map<BigInteger, byte[]> pai)
-    {
-      this.Database = pai;
+    private void start() throws IOException {
+        /* The port on which the server should run */
+        int port = 50051;
+        server = ServerBuilder.forPort(port)
+                .addService(new CrudImpl(this.Database))
+                .build()
+                .start();
+        logger.info("Server started, listening on " + port);
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                // Use stderr here since the logger may have been reset by its JVM shutdown hook.
+                System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                ServerGrpc.this.stop();
+                System.err.println("*** server shut down");
+            }
+        });
     }
 
-    @Override
-    public void create(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
-      byte[] chave = new byte[req.getKeysize()];
-      byte[] value = new byte[req.getValuesize()];
-      req.getKey().copyTo(chave, 0);
-      req.getValue().copyTo(value, 0);
-
-      System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
-      CreateResponse response = CreateResponse.newBuilder().setRetorno(true).build();
-      responseObserver.onNext(response);
-      responseObserver.onCompleted();
+    private void stop() {
+        if (server != null) {
+            server.shutdown();
+        }
     }
 
-    @Override
-    public void read(ReadRequest req, StreamObserver<ReadResponse> responseObserver) {
-      byte[] chave = new byte[req.getKeysize()];
-      req.getKey().copyTo(chave, 0);
-      System.out.println("READ: < " + new BigInteger(chave) + " >");
-      String coco = "coco";
-      byte[] value = coco.getBytes();
-      int valuesize = value.length;
-      ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value))
-                                                                            .setValuesize(valuesize)
-                                                                            .build();
-      responseObserver.onNext(response);   
-      responseObserver.onCompleted();
+    /**
+     * Await termination on the main thread since the grpc library uses daemon threads.
+     */
+    private void blockUntilShutdown() throws InterruptedException {
+        if (server != null) {
+            server.awaitTermination();
+        }
     }
 
-    @Override
-    public void update(UpdateRequest req, StreamObserver<UpdateResponse> responseObserver) {
-      byte[] chave = new byte[req.getKeysize()];
-      byte[] value = new byte[req.getValuesize()];
-      req.getKey().copyTo(chave, 0);
-      req.getValue().copyTo(value, 0);
-
-      System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
-
-      
-      UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
-      responseObserver.onNext(response);
-      responseObserver.onCompleted();
+    /**
+     * Main launches the server from the command line.
+     */
+    public static void main(String[] args) throws IOException, InterruptedException {
+        final ServerGrpc server = new ServerGrpc();
+        server.start();
+        server.blockUntilShutdown();
     }
 
-    @Override
-    public void delete(DeleteRequest req, StreamObserver<DeleteResponse> responseObserver) { 
-      byte[] chave = new byte[req.getKeysize()];
-      req.getKey().copyTo(chave, 0);
-      System.out.println("DELETE: < " + new BigInteger(chave) + " >");
-      DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
-      responseObserver.onNext(response);
-      responseObserver.onCompleted();
-    }
+    static class CrudImpl extends CrudGrpc.CrudImplBase {
+        Map<BigInteger, byte[]> Database;
+        
+        CrudImpl(Map<BigInteger, byte[]> pai)
+        {
+            this.Database = pai;
+        }
 
-  }
+        @Override
+        public void create(CreateRequest req, StreamObserver<CreateResponse> responseObserver) {
+            byte[] chave = new byte[req.getKeysize()];
+            ItemFila itemfila = new ItemFila();
+            byte[] value = new byte[req.getValuesize()];
+            req.getKey().copyTo(chave, 0);
+            req.getValue().copyTo(value, 0);
+
+            System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+            CreateResponse response = CreateResponse.newBuilder().setRetorno(true).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+            itemfila.itemFilaCreate(responseObserver, chave, value);
+        }
+
+        @Override
+        public void read(ReadRequest req, StreamObserver<ReadResponse> responseObserver) {
+            byte[] chave = new byte[req.getKeysize()];
+            ItemFila itemfila = new ItemFila();
+            req.getKey().copyTo(chave, 0);
+            System.out.println("READ: < " + new BigInteger(chave) + " >");
+            String coco = "coco";
+            byte[] value = coco.getBytes();
+            int valuesize = value.length;
+            ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value))
+                    .setValuesize(valuesize)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+            itemfila.itemFilaRead(responseObserver, chave);
+        }
+
+        @Override
+        public void update(UpdateRequest req, StreamObserver<UpdateResponse> responseObserver) {
+            byte[] chave = new byte[req.getKeysize()];
+            ItemFila itemfila = new ItemFila();
+            byte[] value = new byte[req.getValuesize()];
+            req.getKey().copyTo(chave, 0);
+            req.getValue().copyTo(value, 0);
+
+            System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+
+
+            UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+            itemfila.itemFilaUpdate(responseObserver, chave, value);
+        }
+
+        @Override
+        public void delete(DeleteRequest req, StreamObserver<DeleteResponse> responseObserver) {
+            byte[] chave = new byte[req.getKeysize()];
+            ItemFila itemfila = new ItemFila();
+            req.getKey().copyTo(chave, 0);
+            System.out.println("DELETE: < " + new BigInteger(chave) + " >");
+            DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
+            itemfila.itemFilaDelete(responseObserver, chave);
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+    }
 }
