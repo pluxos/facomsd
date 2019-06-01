@@ -1,7 +1,7 @@
 package server.commons.domain;
 
-import client.commons.exceptions.ErrorMap;
-import client.commons.exceptions.InvalidCommandException;
+import server.commons.exceptions.ErrorMap;
+import server.commons.exceptions.InvalidCommandException;
 
 public enum Method {
     GET, CREATE, UPDATE, DELETE;
@@ -10,7 +10,7 @@ public enum Method {
         try {
             return Method.valueOf(command.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
-            throw new InvalidCommandException(ErrorMap.UNDEFINED_METHOD);
+            throw new InvalidCommandException(ErrorMap.BAD_REQUEST);
         }
     }
 }

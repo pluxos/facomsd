@@ -7,8 +7,8 @@ import java.util.Scanner;
 import client.commons.domain.User;
 import client.commons.utils.DataCodificator;
 import io.grpc.GenericResponse;
-import server.commons.exceptions.ServerException;
-import server.commons.utils.JsonUtils;
+//import server.commons.exceptions.ServerException;
+//import server.commons.utils.JsonUtils;
 
 public class ServerResponse implements Runnable {
 

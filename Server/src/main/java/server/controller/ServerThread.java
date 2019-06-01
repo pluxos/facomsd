@@ -23,6 +23,11 @@ import server.receptor.routine.FileRoutine;
 public class ServerThread implements Runnable {
 
 	private Server server;
+	private int port;
+
+	public ServerThread(String[] args) {
+		this.port = Integer.parseInt(args[0]);
+	}
 
 	private void stop() {
 		if (this.server != null) {
@@ -32,19 +37,21 @@ public class ServerThread implements Runnable {
 
 	@Override
 	public void run() {
-		try {
+		/*try {
 			Thread t = new Thread(new RecoverLog());
 			t.start();
 			t.join();
 		} catch (InterruptedException e) {
 			System.err.println("Erro ao recuperrar LOG");
-		}
+		}*/
 
 		try {
-			this.server = ServerBuilder.forPort(12345).addService(new ServerThread.GreeterImpl())
-					.executor(Executors.newFixedThreadPool(10)).build().start();
+			this.server = ServerBuilder.forPort(this.port)
+					.addService(new ServerThread.GreeterImpl())
+					.executor(Executors.newFixedThreadPool(10))
+					.build().start();
 
-			System.out.println("Server started, listening on " + 12345);
+			System.out.println("Server started, listening on " + this.port);
 
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 				System.err.println("*** shutting down gRPC server since JVM is shutting down");
@@ -52,7 +59,7 @@ public class ServerThread implements Runnable {
 				System.err.println("*** server shut down");
 			}));
 
-			startSnapshotRoutine();
+			//startSnapshotRoutine();
 			Thread tConsumer = new Thread(new ConsumerF1());
 			Thread tCommand = new Thread(new ThreadCommand());
 			Thread tLog = new Thread(new ThreadLog());

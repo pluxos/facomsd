@@ -1,9 +1,9 @@
 package server.business.command;
 
-import client.commons.exceptions.ErrorMap;
-import client.commons.exceptions.InvalidCommandException;
+import server.commons.exceptions.ErrorMap;
 import server.business.command.strategy.*;
 import server.commons.domain.Method;
+import server.commons.exceptions.InvalidCommandException;
 
 public class RequestUtils {
 
@@ -18,7 +18,7 @@ public class RequestUtils {
             case DELETE :
                 return new DeleteUser();
             default :
-                throw new InvalidCommandException(ErrorMap.UNDEFINED_METHOD);
+                throw new InvalidCommandException(ErrorMap.BAD_REQUEST);
         }
     }
 }

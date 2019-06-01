@@ -1,0 +1,86 @@
+create; 0; email0@gmail.com; pass0; Cazoirer
+create; 1; email1@gmail.com; pass1; Cazoirmed
+create; 2; email2@gmail.com; pass2; Zedmaracark
+create; 3; email3@gmail.com; pass3; Madloriark
+create; 4; email4@gmail.com; pass4; Lukloriure
+create; 5; email5@gmail.com; pass5; Morairmur
+create; 6; email6@gmail.com; pass6; Merzoirarc
+create; 7; email7@gmail.com; pass7; Cazerark
+create; 8; email8@gmail.com; pass8; Zorksored
+create; 9; email9@gmail.com; pass9; Creocratron
+create; 10; email10@gmail.com; pass10; Zorkmaractron
+update; 0; email0@gmail.com; pass0; UPDATEDMrokarcarc
+update; 5; email5@gmail.com; pass5; UPDATEDCrucrazur
+update; 10; email10@gmail.com; pass10; UPDATEDMadarktron
+create; 25; email25@gmail.com; pass25; Reiarkarc
+create; 26; email26@gmail.com; pass26; Krmeeed
+create; 27; email27@gmail.com; pass27; Krlorimur
+create; 28; email28@gmail.com; pass28; Jararccred
+create; 29; email29@gmail.com; pass29; Jagmeeed
+create; 30; email30@gmail.com; pass30; Rayuraked
+create; 31; email31@gmail.com; pass31; Azurzoirarc
+create; 32; email32@gmail.com; pass32; Brearkark
+create; 33; email33@gmail.com; pass33; Morirure
+create; 34; email34@gmail.com; pass34; Azakreder
+create; 35; email35@gmail.com; pass35; Reisorark
+create; 36; email36@gmail.com; pass36; Cairzur
+create; 37; email37@gmail.com; pass37; Bremiritron
+create; 38; email38@gmail.com; pass38; Madslamarer
+create; 39; email39@gmail.com; pass39; Madsored
+create; 40; email40@gmail.com; pass40; Drakmiried
+update; 25; email25@gmail.com; pass25; UPDATEDMarsalmarmed
+update; 30; email30@gmail.com; pass30; UPDATEDCromeees
+update; 35; email35@gmail.com; pass35; UPDATEDCrumured
+create; 41; email41@gmail.com; pass41; Mermirier
+create; 42; email42@gmail.com; pass42; Cruaired
+create; 43; email43@gmail.com; pass43; Cazoires
+create; 44; email44@gmail.com; pass44; Azurlorid
+create; 45; email45@gmail.com; pass45; Madslamartron
+update; 40; email40@gmail.com; pass40; UPDATEDKrurakark
+update; 45; email45@gmail.com; pass45; UPDATEDCrozoirmed
+create; 80; email80@gmail.com; pass80; Cameemed
+create; 81; email81@gmail.com; pass81; Cruzoirmed
+create; 82; email82@gmail.com; pass82; Zorkloried
+create; 83; email83@gmail.com; pass83; Merzerark
+create; 84; email84@gmail.com; pass84; Zorkmaracure
+create; 85; email85@gmail.com; pass85; Azaksalmararc
+create; 86; email86@gmail.com; pass86; Azursorure
+create; 87; email87@gmail.com; pass87; Krzoirzur
+create; 88; email88@gmail.com; pass88; Azakmures
+create; 89; email89@gmail.com; pass89; Jarzerark
+create; 90; email90@gmail.com; pass90; Marredmed
+create; 91; email91@gmail.com; pass91; Jarmeearc
+create; 92; email92@gmail.com; pass92; Caredder
+create; 93; email93@gmail.com; pass93; Azakmirizur
+create; 94; email94@gmail.com; pass94; Raird
+create; 95; email95@gmail.com; pass95; Drakmaraccred
+create; 96; email96@gmail.com; pass96; Mjolurakes
+create; 97; email97@gmail.com; pass97; Camaraczur
+create; 98; email98@gmail.com; pass98; Jarirmur
+create; 99; email99@gmail.com; pass99; Azurcresmed
+create; 100; email100@gmail.com; pass100; Drakmeemur
+create; 101; email101@gmail.com; pass101; Zedsored
+create; 102; email102@gmail.com; pass102; Croclozur
+create; 103; email103@gmail.com; pass103; Zedsores
+create; 104; email104@gmail.com; pass104; Zedloried
+create; 105; email105@gmail.com; pass105; Lukclomed
+create; 106; email106@gmail.com; pass106; Marmimur
+create; 107; email107@gmail.com; pass107; Mararkder
+create; 108; email108@gmail.com; pass108; Raycraark
+create; 109; email109@gmail.com; pass109; Zurirure
+create; 110; email110@gmail.com; pass110; Jarcreses
+update; 80; email80@gmail.com; pass80; UPDATEDJagloriure
+update; 85; email85@gmail.com; pass85; UPDATEDRalorimur
+delete; 30
+delete; 40
+update; 90; email90@gmail.com; pass90; UPDATEDCareded
+update; 95; email95@gmail.com; pass95; UPDATEDZurloried
+update; 100; email100@gmail.com; pass100; UPDATEDJagredcred
+update; 105; email105@gmail.com; pass105; UPDATEDJagreded
+update; 110; email110@gmail.com; pass110; UPDATEDBrearkmur
+delete; 0
+delete; 10
+delete; 80
+delete; 90
+delete; 100
+delete; 110
