@@ -3,7 +3,7 @@ package server.business.command.strategy;
 import io.grpc.GenericResponse;
 import server.commons.domain.GenericCommand;
 import server.commons.utils.MessageMap;
-import server.model.HashMap.Manipulator;
+import server.model.hashmap.Manipulator;
 
 import java.math.BigInteger;
 
