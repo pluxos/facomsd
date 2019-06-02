@@ -158,6 +158,70 @@ public final class GreeterGrpc {
      return getDeleteUserMethod;
   }
 
+  private static volatile MethodDescriptor<FindMessage,
+      FindResponse> getFindNodeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "FindNode",
+      requestType = FindMessage.class,
+      responseType = FindResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<FindMessage,
+      FindResponse> getFindNodeMethod() {
+    MethodDescriptor<FindMessage, FindResponse> getFindNodeMethod;
+    if ((getFindNodeMethod = GreeterGrpc.getFindNodeMethod) == null) {
+      synchronized (GreeterGrpc.class) {
+        if ((getFindNodeMethod = GreeterGrpc.getFindNodeMethod) == null) {
+          GreeterGrpc.getFindNodeMethod = getFindNodeMethod = 
+              MethodDescriptor.<FindMessage, FindResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "helloworld.Greeter", "FindNode"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  FindMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  FindResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("FindNode"))
+                  .build();
+          }
+        }
+     }
+     return getFindNodeMethod;
+  }
+
+  private static volatile MethodDescriptor<GetRangeRequest,
+      GetRangeResponse> getGetRangeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetRange",
+      requestType = GetRangeRequest.class,
+      responseType = GetRangeResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<GetRangeRequest,
+      GetRangeResponse> getGetRangeMethod() {
+    MethodDescriptor<GetRangeRequest, GetRangeResponse> getGetRangeMethod;
+    if ((getGetRangeMethod = GreeterGrpc.getGetRangeMethod) == null) {
+      synchronized (GreeterGrpc.class) {
+        if ((getGetRangeMethod = GreeterGrpc.getGetRangeMethod) == null) {
+          GreeterGrpc.getGetRangeMethod = getGetRangeMethod = 
+              MethodDescriptor.<GetRangeRequest, GetRangeResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "helloworld.Greeter", "GetRange"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  GetRangeRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  GetRangeResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("GetRange"))
+                  .build();
+          }
+        }
+     }
+     return getGetRangeMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -219,6 +283,20 @@ public final class GreeterGrpc {
       asyncUnimplementedUnaryCall(getDeleteUserMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void findNode(FindMessage request,
+                         io.grpc.stub.StreamObserver<FindResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getFindNodeMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void getRange(GetRangeRequest request,
+                         io.grpc.stub.StreamObserver<GetRangeResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getGetRangeMethod(), responseObserver);
+    }
+
     @Override public final ServerServiceDefinition bindService() {
       return ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -249,6 +327,20 @@ public final class GreeterGrpc {
                 GenericRequest,
                 GenericResponse>(
                   this, METHODID_DELETE_USER)))
+          .addMethod(
+            getFindNodeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                FindMessage,
+                FindResponse>(
+                  this, METHODID_FIND_NODE)))
+          .addMethod(
+            getGetRangeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                GetRangeRequest,
+                GetRangeResponse>(
+                  this, METHODID_GET_RANGE)))
           .build();
     }
   }
@@ -308,6 +400,22 @@ public final class GreeterGrpc {
       asyncUnaryCall(
           getChannel().newCall(getDeleteUserMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void findNode(FindMessage request,
+                         io.grpc.stub.StreamObserver<FindResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getFindNodeMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getRange(GetRangeRequest request,
+                         io.grpc.stub.StreamObserver<GetRangeResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getGetRangeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -360,6 +468,20 @@ public final class GreeterGrpc {
     public GenericResponse deleteUser(GenericRequest request) {
       return blockingUnaryCall(
           getChannel(), getDeleteUserMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public FindResponse findNode(FindMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getFindNodeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public GetRangeResponse getRange(GetRangeRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getGetRangeMethod(), getCallOptions(), request);
     }
   }
 
@@ -418,12 +540,30 @@ public final class GreeterGrpc {
       return futureUnaryCall(
           getChannel().newCall(getDeleteUserMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<FindResponse> findNode(
+        FindMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getFindNodeMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<GetRangeResponse> getRange(
+        GetRangeRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getGetRangeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_USER = 0;
   private static final int METHODID_GET_USER = 1;
   private static final int METHODID_UPDATE_USER = 2;
   private static final int METHODID_DELETE_USER = 3;
+  private static final int METHODID_FIND_NODE = 4;
+  private static final int METHODID_GET_RANGE = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -457,6 +597,14 @@ public final class GreeterGrpc {
         case METHODID_DELETE_USER:
           serviceImpl.deleteUser((GenericRequest) request,
               (io.grpc.stub.StreamObserver<GenericResponse>) responseObserver);
+          break;
+        case METHODID_FIND_NODE:
+          serviceImpl.findNode((FindMessage) request,
+              (io.grpc.stub.StreamObserver<FindResponse>) responseObserver);
+          break;
+        case METHODID_GET_RANGE:
+          serviceImpl.getRange((GetRangeRequest) request,
+              (io.grpc.stub.StreamObserver<GetRangeResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -523,6 +671,8 @@ public final class GreeterGrpc {
               .addMethod(getGetUserMethod())
               .addMethod(getUpdateUserMethod())
               .addMethod(getDeleteUserMethod())
+              .addMethod(getFindNodeMethod())
+              .addMethod(getGetRangeMethod())
               .build();
         }
       }
