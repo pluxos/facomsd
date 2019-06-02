@@ -8,14 +8,9 @@ public interface GenericRequestOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string code = 1;</code>
+   * <code>int32 code = 1;</code>
    */
-  String getCode();
-  /**
-   * <code>string code = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getCodeBytes();
+  int getCode();
 
   /**
    * <code>string data = 2;</code>

@@ -14,7 +14,7 @@ public class UpdateUser implements RequestStrategy {
 		String data = DataCodificator.prepareInputs(inputParams);
 
 		GenericRequest updateRequest = GenericRequest.newBuilder()
-				.setCode(inputParams[1])
+				.setCode(Integer.parseInt(inputParams[1]))
 				.setData(data)
 				.build();
 

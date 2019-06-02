@@ -8,10 +8,6 @@ public class CommunicationManager {
     private static ManagedChannel channel;
 
     public static GreeterGrpc.GreeterStub initCommunication(String ip, int port) {
-        if (channel != null) {
-            shutdownCommunication();
-        }
-
         if(ip.equals("")) {
             ip = "localhost";
         }

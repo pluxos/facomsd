@@ -1,6 +1,8 @@
 package server.model.hashmap;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,5 +36,19 @@ public class Manipulator {
     
     public static void clearDatabase() {
     	db = new HashMap<>();
+    }
+
+    public static HashMap<BigInteger, byte[]> removeValues(ArrayList<Integer> range) {
+        HashMap<BigInteger, byte[]> res = new HashMap<>();
+
+        range.forEach((key) -> {
+
+            if(db.containsKey(BigInteger.valueOf(key))){
+                res.put(BigInteger.valueOf(key), db.get(BigInteger.valueOf(key)));
+                db.remove(BigInteger.valueOf(key));
+            }
+        });
+
+        return res;
     }
 }

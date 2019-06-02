@@ -9,7 +9,7 @@ public class GetUser implements RequestStrategy {
 	@Override
 	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
 		GenericRequest request = GenericRequest.newBuilder()
-				.setCode(inputParams[1])
+				.setCode(Integer.parseInt(inputParams[1]))
 				.build();
 
 		GenericResponse getResponse = output.getUser(request);

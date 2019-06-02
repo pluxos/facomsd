@@ -9,7 +9,7 @@ public class DeleteUser implements RequestStrategy {
 	@Override
 	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
 		GenericRequest deleteRequest = GenericRequest.newBuilder()
-				.setCode(inputParams[1])
+				.setCode(Integer.parseInt(inputParams[1]))
 				.build();
 
 		GenericResponse deleteResponse = output.deleteUser(deleteRequest);

@@ -3,42 +3,64 @@ package server.controller;
 import java.util.ArrayList;
 
 public class Chord {
-    private static int key;
-    private static ArrayList<Integer> range = new ArrayList<Integer>();
-    private static String ip;
-    private static int port;
+    private int key;
+    private ArrayList<Integer> range = new ArrayList<Integer>();
+    private String ip;
+    private int port;
 
-    public static int getKey() {
+    public int getKey() {
         return key;
     }
 
-    public static void setKey(int key) {
-        Chord.key = key;
+    public void setKey(int key) {
+        this.key = key;
     }
 
-    public static ArrayList<Integer> getRange() {
+    public ArrayList<Integer> getRange() {
         return range;
     }
 
-    public static void setRange(int low, int high) {
+    public void setRangeWithArray(ArrayList<Integer> arr) {
+        this.range = arr;
+    }
+
+    public void setRange(int low, int high) {
         for(int i = low; i < high; i ++){
             range.add(i);
         }
     }
 
-    public static String getIp() {
+    public ArrayList<Integer> updateRange(int low, int high){
+        ArrayList<Integer> res = new ArrayList<>();
+        for (Integer integer : this.range) {
+            if(low < high) {
+                if (integer > low && integer <= high) {
+                    res.add(integer);
+                }
+            }
+            else {
+                if(integer <= high || integer > low)
+                    res.add(integer);
+            }
+        }
+        this.range.removeAll(res);
+
+        return res;
+    }
+
+    public String getIp() {
         return ip;
     }
 
-    public static void setIp(String ip) {
-        Chord.ip = ip;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public static int getPort() {
+    public int getPort() {
         return port;
     }
 
-    public static void setPort(int port) {
-        Chord.port = port;
+    public void setPort(int port) {
+        this.port = port;
     }
 }
