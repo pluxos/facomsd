@@ -1,14 +1,6 @@
 package server.receptor;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-
 import server.business.command.RequestUtils;
 import server.business.command.strategy.CommandStrategy;
 import server.commons.domain.GenericCommand;
@@ -19,9 +11,19 @@ import server.commons.utils.JsonUtils;
 import server.model.hashmap.Manipulator;
 import server.receptor.routine.Counter;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+
 public class RecoverLog implements Runnable {
 
-	private static final String BASE_PATH = "src/main/resources/";
+	private String BASE_PATH;
+	public RecoverLog(String path) {
+		BASE_PATH = path;
+	}
 
 	@Override
 	public void run() {

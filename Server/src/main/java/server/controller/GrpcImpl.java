@@ -2,6 +2,8 @@ package server.controller;
 
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
+import server.commons.Chord.Chord;
+import server.commons.Chord.FingerTable;
 import server.commons.Rows.RowF1;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
@@ -12,14 +14,15 @@ import server.model.hashmap.Manipulator;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
     private Chord node;
+    private FingerTable ft;
 
-    GrpcImpl(Chord node){
+    GrpcImpl(Chord node, FingerTable ft){
         this.node = node;
+        this.ft = ft;
     }
 
     public void createUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
@@ -97,6 +100,8 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
                 e.printStackTrace();
             }
             responseObserver.onCompleted();
+
+            /* Update Tabela de rota */
 
         } else {
             /* Mesma Chave! reportar erro! */

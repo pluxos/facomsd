@@ -1,13 +1,12 @@
 package server.commons.utils;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import server.commons.exceptions.ErrorMap;
 import server.commons.exceptions.ServerException;
+
+import java.io.IOException;
 
 public class JsonUtils {
 

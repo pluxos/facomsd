@@ -1,4 +1,4 @@
-package server.controller;
+package server.commons.Chord;
 
 import java.util.ArrayList;
 

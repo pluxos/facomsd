@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Counter {
 	
-	private static final String PATH  = "src/main/resources/counter.log";
+	private static String PATH  = "counter.log";
 	private static Long counter = (long) 0;
 	
 	static {
@@ -17,6 +17,10 @@ public class Counter {
 		if (counter != (long) 0) {
 			counter++;
 		}
+	}
+
+	public static void setPath(String path) {
+		PATH = path + PATH;
 	}
 	
 	public static long getCounter() {

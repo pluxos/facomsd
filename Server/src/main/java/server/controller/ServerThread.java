@@ -4,11 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import server.client.CommunicationManager;
+import server.commons.Chord.Chord;
+import server.commons.Chord.FingerTable;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
 import server.commons.utils.JsonUtils;
 import server.model.hashmap.Manipulator;
 import server.receptor.ConsumerF1;
+import server.receptor.RecoverLog;
 import server.receptor.ThreadCommand;
 import server.receptor.ThreadLog;
 import server.receptor.routine.FileRoutine;
@@ -21,16 +24,20 @@ import java.util.concurrent.Executors;
 public class ServerThread implements Runnable {
 
 	private Chord myNode;
+	private FingerTable ft;
+	private String logDirectory;
 	private Server server;
 	private String chordIp = null;
 	private int chordPort;
 
 	public ServerThread(String[] args) {
-		myNode = new Chord();
-		myNode.setPort(Integer.parseInt(args[0]));
-		if(args.length == 3) {
-			this.chordIp = args[1];
-			this.chordPort = Integer.parseInt(args[2]);
+		this.myNode = new Chord();
+		this.ft = new FingerTable();
+		this.logDirectory = args[0];
+		this.myNode.setPort(Integer.parseInt(args[1]));
+		if(args.length == 4) {
+			this.chordIp = args[2];
+			this.chordPort = Integer.parseInt(args[3]);
 		}
 	}
 
@@ -42,17 +49,17 @@ public class ServerThread implements Runnable {
 
 	@Override
 	public void run() {
-//		try {
-//			Thread t = new Thread(new RecoverLog());
-//			t.start();
-//			t.join();
-//		} catch (InterruptedException e) {
-//			System.err.println("Erro ao recuperrar LOG");
-//		}
+		try {
+			Thread t = new Thread(new RecoverLog(this.logDirectory));
+			t.start();
+			t.join();
+		} catch (InterruptedException e) {
+			System.err.println("Erro ao recuperrar LOG");
+		}
 
 		try {
 			this.server = ServerBuilder.forPort(myNode.getPort())
-					.addService(new GrpcImpl(myNode))
+					.addService(new GrpcImpl(myNode, ft))
 					.executor(Executors.newFixedThreadPool(10))
 					.build().start();
 
@@ -69,7 +76,7 @@ public class ServerThread implements Runnable {
 			else
 				firstServer();
 
-//			startSnapshotRoutine();
+			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new ConsumerF1());
 			Thread tCommand = new Thread(new ThreadCommand());
 			Thread tLog = new Thread(new ThreadLog());
@@ -84,7 +91,7 @@ public class ServerThread implements Runnable {
 	}
 
 	private void startSnapshotRoutine() {
-		new Timer().schedule(new FileRoutine(), 0, 25000);
+		new Timer().schedule(new FileRoutine(this.logDirectory), 0, 25000);
 	}
 
 	private void firstServer() {

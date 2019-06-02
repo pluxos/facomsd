@@ -13,7 +13,7 @@ import server.receptor.routine.Counter;
 
 public class ThreadLog implements Runnable {
 	
-	private static final String LOG_PATH = "src/main/resources/log";
+	private static final String LOG_PATH = "log";
 
 	@Override
 	public void run() {
