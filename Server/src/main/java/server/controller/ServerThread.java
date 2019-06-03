@@ -104,6 +104,9 @@ public class ServerThread implements Runnable {
 
 			myNode.setRange(val, fim+1);
 			myNode.setRange(0, val);
+			ft.setKey(val);
+			ft.addNode(myNode);
+			//ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
 			System.out.println("KEY: " + val);
 			System.out.println(myNode.getRange());
 		} catch (IOException e) {
@@ -119,11 +122,13 @@ public class ServerThread implements Runnable {
 			int val = new Random().nextInt(fim);
 
 			myNode.setKey(val);
+			ft.setKey(val);
+			this.ft.addNode(myNode);
+			this.ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
 
 			System.out.println("KEY: " + val);
 
 			findNode(this.chordIp, this.chordPort);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,40 +141,47 @@ public class ServerThread implements Runnable {
 		output.findNode(FindMessage.newBuilder().setKey(myNode.getKey()).build(), observer);
 	}
 
-	private void getRange(FindResponse findResponse) {
+	private void getRange(FindResponse findResponse) throws ServerException {
 		GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
 
-		output.getRange(GetRangeRequest.newBuilder().setNode(myNode.getKey()).build(), new StreamObserver<GetRangeResponse>() {
-			@Override
-			public void onNext(GetRangeResponse getRangeResponse) {
-				try {
-					/* Recover Data */
-					TypeReference<HashMap<BigInteger, byte[]>> dbRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
-					HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(getRangeResponse.getData(), dbRef);
-					for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
-						Manipulator.addValue(entry.getKey(), entry.getValue());
+		output.getRange(
+				GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(this.myNode)).build(),
+				new StreamObserver<GetRangeResponse>() {
+					@Override
+					public void onNext(GetRangeResponse getRangeResponse) {
+						try {
+							Chord newNode = JsonUtils.deserialize(getRangeResponse.getNode(), Chord.class);
+							/* Recover Data */
+							TypeReference<HashMap<BigInteger, byte[]>> dbRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
+							HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(getRangeResponse.getData(), dbRef);
+							for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
+								Manipulator.addValue(entry.getKey(), entry.getValue());
+							}
+
+							/* Set Range */
+							TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {};
+							myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+							ft.addNode(myNode);
+
+							/* Update Tabela de rotas */
+							System.err.println("ATUALIZANDO TABELA DE ROTAS");
+							ft.addNode(newNode);
+							ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
+						} catch (ServerException e) {
+							e.printStackTrace();
+						}
 					}
 
-					/* Set Range */
-					TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {};
-					myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+					@Override
+					public void onError(Throwable throwable) {
 
-					/* Update Tabela de rotas */
-				} catch (ServerException e) {
-					e.printStackTrace();
-				}
-			}
+					}
 
-			@Override
-			public void onError(Throwable throwable) {
+					@Override
+					public void onCompleted() {
 
-			}
-
-			@Override
-			public void onCompleted() {
-
-			}
-		});
+					}
+				});
 	}
 
 	class ObserverResponse implements StreamObserver<FindResponse> {
@@ -177,9 +189,12 @@ public class ServerThread implements Runnable {
 		public void onNext(FindResponse findResponse) {
 			if(!findResponse.getResponse()) {
 				findNode(findResponse.getIp(), findResponse.getPort());
-			} else {
-				System.out.println("Encontrado");
-				getRange(findResponse);
+			} else {;
+				try {
+					getRange(findResponse);
+				} catch (ServerException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

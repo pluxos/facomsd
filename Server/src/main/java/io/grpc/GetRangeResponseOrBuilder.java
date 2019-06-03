@@ -8,9 +8,14 @@ public interface GetRangeResponseOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 node = 1;</code>
+   * <code>string node = 1;</code>
    */
-  int getNode();
+  String getNode();
+  /**
+   * <code>string node = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getNodeBytes();
 
   /**
    * <code>string range = 2;</code>

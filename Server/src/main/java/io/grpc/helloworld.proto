@@ -53,11 +53,11 @@ message FindResponse {
 }
 
 message GetRangeRequest {
-  int32 node = 1;
+  string node = 1;
 }
 
 message GetRangeResponse {
-  int32 node = 1;
+  string node = 1;
   string range = 2;
   string data = 3;
 }

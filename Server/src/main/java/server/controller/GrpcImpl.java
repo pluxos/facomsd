@@ -13,7 +13,6 @@ import server.commons.utils.JsonUtils;
 import server.model.hashmap.Manipulator;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
@@ -65,35 +64,57 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void findNode(FindMessage request, StreamObserver<FindResponse> responseObserver) {
+        /* Verificar se a key é igual a minha, para que ele troque */
+
         if( this.node.getRange().contains(request.getKey()) ) {
             responseObserver.onNext(FindResponse.newBuilder().setResponse(true).setPort(this.node.getPort()).build());
             responseObserver.onCompleted();
         } else {
             /* Procurar na FT quem poderia ser responsável por essa key */
-            responseObserver.onNext(FindResponse.newBuilder().setResponse(false).build());
+            Chord nodeResponsible = this.ft.catchResponsibleNode(request.getKey());
+
+            if(nodeResponsible.getIp() == null)
+                nodeResponsible.setIp("localhost");
+
+            responseObserver.onNext(
+                    FindResponse.newBuilder()
+                            .setResponse(false)
+                            .setIp(nodeResponsible.getIp())
+                            .setPort(nodeResponsible.getPort())
+                            .build()
+            );
             responseObserver.onCompleted();
         }
     }
 
     @Override
     public void getRange(GetRangeRequest request, StreamObserver<GetRangeResponse> responseObserver) {
+        Chord newNode = null;
+        try {
+            newNode = JsonUtils.deserialize(request.getNode(), Chord.class);
+        } catch (ServerException e) {
+            e.printStackTrace();
+        }
 
-        if(request.getNode() != this.node.getKey()) {
+        assert newNode != null;
+        if(newNode.getKey() != this.node.getKey()) {
             /* Defino o Range de dados que preciso retornar, dado o nó vindo do request */
             /* Redefinir o meu range */
-            ArrayList<Integer> rangeRes = this.node.updateRange(this.node.getKey(), request.getNode());
+            Chord node = new Chord();
+            node.setKey(newNode.getKey());
+            node.setRangeWithArray(this.node.updateRange(this.node.getKey(), newNode.getKey()));
 
             /* Pego todos os dados correspondente a este range que está na HT */
 
-            HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(rangeRes);
+            HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(node.getRange());
 
             /* Enviar resposta com o meu nó! o range que estou enviando, e os dados */
             try {
                 responseObserver.onNext(
                         GetRangeResponse.newBuilder()
-                                .setNode(this.node.getKey())
+                                .setNode(JsonUtils.serialize(this.node))
                                 .setData(JsonUtils.serialize(dbRecovery))
-                                .setRange(JsonUtils.serialize(rangeRes))
+                                .setRange(JsonUtils.serialize(node.getRange()))
                                 .build()
                 );
             } catch (ServerException e) {
@@ -103,6 +124,10 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
             /* Update Tabela de rota */
 
+            this.ft.addNode(node);
+            this.ft.getFt().forEach((key, value) -> {
+                System.err.println("key: "+key+" -> "+value.getRange());
+            });
         } else {
             /* Mesma Chave! reportar erro! */
         }

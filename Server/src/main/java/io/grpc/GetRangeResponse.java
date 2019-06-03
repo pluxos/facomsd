@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private GetRangeResponse() {
-    node_ = 0;
+    node_ = "";
     range_ = "";
     data_ = "";
   }
@@ -45,9 +45,10 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
+          case 10: {
+            String s = input.readStringRequireUtf8();
 
-            node_ = input.readInt32();
+            node_ = s;
             break;
           }
           case 18: {
@@ -95,12 +96,37 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int NODE_FIELD_NUMBER = 1;
-  private int node_;
+  private volatile Object node_;
   /**
-   * <code>int32 node = 1;</code>
+   * <code>string node = 1;</code>
    */
-  public int getNode() {
-    return node_;
+  public String getNode() {
+    Object ref = node_;
+    if (ref instanceof String) {
+      return (String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      String s = bs.toStringUtf8();
+      node_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string node = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getNodeBytes() {
+    Object ref = node_;
+    if (ref instanceof String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (String) ref);
+      node_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   public static final int RANGE_FIELD_NUMBER = 2;
@@ -185,8 +211,8 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (node_ != 0) {
-      output.writeInt32(1, node_);
+    if (!getNodeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, node_);
     }
     if (!getRangeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, range_);
@@ -203,9 +229,8 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (node_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, node_);
+    if (!getNodeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, node_);
     }
     if (!getRangeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, range_);
@@ -229,8 +254,8 @@ private static final long serialVersionUID = 0L;
     GetRangeResponse other = (GetRangeResponse) obj;
 
     boolean result = true;
-    result = result && (getNode()
-        == other.getNode());
+    result = result && getNode()
+        .equals(other.getNode());
     result = result && getRange()
         .equals(other.getRange());
     result = result && getData()
@@ -247,7 +272,7 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + NODE_FIELD_NUMBER;
-    hash = (53 * hash) + getNode();
+    hash = (53 * hash) + getNode().hashCode();
     hash = (37 * hash) + RANGE_FIELD_NUMBER;
     hash = (53 * hash) + getRange().hashCode();
     hash = (37 * hash) + DATA_FIELD_NUMBER;
@@ -353,7 +378,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:helloworld.GetRangeResponse)
-      io.grpc.GetRangeResponseOrBuilder {
+      GetRangeResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return GrpcProto.internal_static_helloworld_GetRangeResponse_descriptor;
@@ -385,7 +410,7 @@ private static final long serialVersionUID = 0L;
     @Override
     public Builder clear() {
       super.clear();
-      node_ = 0;
+      node_ = "";
 
       range_ = "";
 
@@ -468,8 +493,9 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(GetRangeResponse other) {
       if (other == GetRangeResponse.getDefaultInstance()) return this;
-      if (other.getNode() != 0) {
-        setNode(other.getNode());
+      if (!other.getNode().isEmpty()) {
+        node_ = other.node_;
+        onChanged();
       }
       if (!other.getRange().isEmpty()) {
         range_ = other.range_;
@@ -508,28 +534,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int node_ ;
+    private Object node_ = "";
     /**
-     * <code>int32 node = 1;</code>
+     * <code>string node = 1;</code>
      */
-    public int getNode() {
-      return node_;
+    public String getNode() {
+      Object ref = node_;
+      if (!(ref instanceof String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        node_ = s;
+        return s;
+      } else {
+        return (String) ref;
+      }
     }
     /**
-     * <code>int32 node = 1;</code>
+     * <code>string node = 1;</code>
      */
-    public Builder setNode(int value) {
-      
+    public com.google.protobuf.ByteString
+        getNodeBytes() {
+      Object ref = node_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        node_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string node = 1;</code>
+     */
+    public Builder setNode(
+        String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
       node_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 node = 1;</code>
+     * <code>string node = 1;</code>
      */
     public Builder clearNode() {
       
-      node_ = 0;
+      node_ = getDefaultInstance().getNode();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string node = 1;</code>
+     */
+    public Builder setNodeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      node_ = value;
       onChanged();
       return this;
     }

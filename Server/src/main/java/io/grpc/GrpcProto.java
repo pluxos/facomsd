@@ -54,13 +54,13 @@ public final class GrpcProto {
   static {
     String[] descriptorData = {
       "\n\020helloworld.proto\022\nhelloworld\",\n\016Generi" +
-      "cRequest\022\014\n\004code\030\001 \001(\t\022\014\n\004data\030\002 \001(\t\"@\n\017" +
+      "cRequest\022\014\n\004code\030\001 \001(\005\022\014\n\004data\030\002 \001(\t\"@\n\017" +
       "GenericResponse\022\016\n\006status\030\001 \001(\t\022\017\n\007messa" +
       "ge\030\002 \001(\t\022\014\n\004data\030\003 \001(\t\"\032\n\013FindMessage\022\013\n" +
       "\003key\030\001 \001(\005\":\n\014FindResponse\022\020\n\010response\030\001" +
       " \001(\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\"\037\n\017GetRan" +
-      "geRequest\022\014\n\004node\030\001 \001(\005\"=\n\020GetRangeRespo" +
-      "nse\022\014\n\004node\030\001 \001(\005\022\r\n\005range\030\002 \001(\t\022\014\n\004data" +
+      "geRequest\022\014\n\004node\030\001 \001(\t\"=\n\020GetRangeRespo" +
+      "nse\022\014\n\004node\030\001 \001(\t\022\r\n\005range\030\002 \001(\t\022\014\n\004data" +
       "\030\003 \001(\t2\264\003\n\007Greeter\022G\n\nCreateUser\022\032.hello" +
       "world.GenericRequest\032\033.helloworld.Generi" +
       "cResponse\"\000\022D\n\007GetUser\022\032.helloworld.Gene" +
