@@ -104,10 +104,9 @@ public class ServerThread implements Runnable {
 			myNode.setRange(myNode.getKey(), fim+1);
 			myNode.setRange(0, myNode.getKey());
 			ft.setKey(myNode.getKey());
-			ft.addNode(myNode);
+			ft.updateFT(myNode);
 
 			System.out.println("KEY: " +myNode.getKey());
-			System.out.println(myNode.getRange());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -116,8 +115,7 @@ public class ServerThread implements Runnable {
 	private void entryChord() {
 		myNode.setNewKey();
 		ft.setKey(myNode.getKey());
-		this.ft.addNode(myNode);
-		this.ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
+		this.ft.updateFT(myNode);
 
 		System.out.println("KEY: " + myNode.getKey());
 
@@ -155,12 +153,11 @@ public class ServerThread implements Runnable {
 								TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {
 								};
 								myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
-								ft.addNode(myNode);
+								ft.updateFT(myNode);
 
 								/* Update Tabela de rotas */
 								System.err.println("ATUALIZANDO TABELA DE ROTAS");
-								ft.addNode(newNode);
-								ft.getFt().forEach((key, value) -> System.err.println("key: " + key + " -> " + value.getRange()));
+								ft.updateFT(newNode);
 							} else {
 								myNode.setNewKey();
 								ft.setKey(myNode.getKey());
@@ -206,7 +203,6 @@ public class ServerThread implements Runnable {
 
 		@Override
 		public void onCompleted() {
-			System.out.println("Completed");
 		}
 	}
 }

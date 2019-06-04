@@ -124,10 +124,8 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
             /* Update Tabela de rota */
 
-            this.ft.addNode(node);
-            this.ft.getFt().forEach((key, value) -> {
-                System.err.println("key: "+key+" -> "+value.getRange());
-            });
+            this.ft.updateFT(this.node);
+            this.ft.updateFT(node);
         } else {
             /* Mesma Chave! reportar erro! */
             try {

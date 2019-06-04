@@ -61,3 +61,11 @@ message GetRangeResponse {
   string range = 2;
   string data = 3;
 }
+
+message UpdateRequest {
+
+}
+
+message UpdateResponse {
+
+}

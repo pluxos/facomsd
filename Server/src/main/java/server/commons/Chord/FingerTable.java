@@ -42,7 +42,8 @@ public class FingerTable {
         return this.ft.get(key);
     }
 
-    public void addNode(Chord node) {
+    public int addNode(Chord node) {
+        int flag = -1;
         for (int i = 1; i <= this.m; i++) {
             Integer sucessor = ChordUtils.sucessor(this.key, i);
             if(sucessor > this.range) sucessor -= this.range;
@@ -50,9 +51,12 @@ public class FingerTable {
             System.err.println("i: " + i + " suc: "+sucessor);
 
             if(node.getRange().contains(sucessor)) {
+                flag = 1;
                 this.ft.put(i, node);
             }
         }
+
+        return flag;
     }
 
     public Chord catchResponsibleNode(Integer searchKey) {
@@ -85,5 +89,17 @@ public class FingerTable {
 
     public void setKey(int key) {
         this.key = key;
+    }
+
+    public void updateFT(Chord node) {
+        if(this.addNode(node) == 1) {
+            System.out.println("TABELA ATUALIZADA");
+            this.ft.forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
+            /* Grpc atualizar tabela */
+
+        } else{
+            System.out.println("TABELA IGUAL");
+            this.ft.forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
+        }
     }
 }
