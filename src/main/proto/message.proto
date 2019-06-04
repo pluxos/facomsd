@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "serverclient.model";
+option java_outer_classname = "MessageProto";
+option objc_class_prefix = "MSG";
+
+package model;
+
+service MessageServiceProt {
+    rpc createMessage (Message) returns (Message) {}
+    rpc readMessage (Message) returns (Message) {}
+    rpc updateMessage (Message) returns (Message) {}
+    rpc deleteMessage (Message) returns (Message) {}
+}
+
+message Message {
+    int32 lastOption = 1;
+    int64 id = 2;
+    string text = 3;
+}
+
+//// The greeting service definition.
+//service Greeter {
+//    // Sends a greeting
+//    rpc SayHello (HelloRequest) returns (HelloReply) {}
+//}
+//
+//// The request message containing the user's name.
+//message HelloRequest {
+//    string name = 1;
+//}
+//
+//// The response message containing the greetings
+//message HelloReply {
+//    string message = 1;
+//}

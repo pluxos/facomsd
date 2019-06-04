@@ -1,14 +1,20 @@
-# Server-Client #
+# Server-Client
 
-## Sistemas Distribuidos - 2019/1 - Parte 1 ##
+### Sistemas Distribuidos - 2019/1 - Parte 2
+
+## Classes e Funcionamento do Projeto
+
+#### Server
+
+
 
 1. Compilar e executar o programa : 
 
-    * ./gradlew clean build
+    * ./gradlew clean build *
     * Execute primeiramente o AppServer
-    * ./src/main/java/server_client/server/AppServer.java
+    * ./src/main/java/serverclient/server/AppServer.java
     * Após, execute quantos clients você quiser.
-    * ./src/main/java/server_client/client/AppClient.java
+    * ./src/main/java/serverclient/client/AppClient.java
 
 2. Como está o projeto na parte do Client:
     * O Client possui 3 threads : A thread consumidora (AnswerPresentationThread), e a thread produtora (CommandReaderThread);
