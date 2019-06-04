@@ -2,6 +2,7 @@ package grpc;
 
 import com.google.protobuf.Empty;
 import gRPC.proto.ChaveRequest;
+import gRPC.proto.TabelaResponse;
 import gRPC.proto.ChordServiceGrpc;
 import gRPC.proto.DataNode;
 import io.grpc.Server;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 import java.io.File;
 import gRPC.proto.ServerResponse;
 import gRPC.proto.ValorRequest;
+import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import java.io.FileNotFoundException;
@@ -25,7 +27,9 @@ import java.math.*;
 import java.util.Random;
 
 public class Servidor {
-
+    private BigInteger quantidade_chaves = new BigInteger("2"); //Quantidade de chaves que o chord tera(Maior chave)
+    private BigInteger chave_responsavel = new BigInteger("1"); // Chave em que o servidor eh responsavel
+    private static FingerTable tabela; //Tabela de nos 
     private static final Logger logger = Logger.getLogger(Servidor.class.getName());
     private int quantidade_threads = 15;
     public int porta,saltoProximaPorta,numeroDeNos,numeroBitsId;
@@ -35,38 +39,58 @@ public class Servidor {
     private Fila F4;
     public Fila F1;
     private Server server;
-    private String ip;
-    public String retorno;
-
+    private String ip;    public String retorno;
+    private ComunicaThread com;
     private volatile ChordNode node;
-    public Servidor(int porta) throws IOException, Exception {
+    public Servidor(int porta,int porta_servidor) throws IOException {
         this.porta = porta;
         this.F1 = new Fila();
         this.F2 = new Fila();
         this.F3 = new Fila();
         this.F4 = new Fila();
         this.Banco = new BaseDados();
-        this.Banco.RecuperardoLog("Log.txt");
+        this.tabela = new FingerTable(this,porta_servidor);
+        this.com = new ComunicaThread();
+        //this.gerarChave();
+        this.Banco.RecuperarBanco(this.chave_responsavel.toString());
         setConfig("servers.txt");
         conectaChord();
+    }
+    
+    public BigInteger getQuantidadeChaves(){
+        return this.quantidade_chaves;
     }
 private void conectaChord() throws Exception {
         ChordConnector chordConnector = new ChordConnector(this.ip, this.primeiraPorta, this.saltoProximaPorta, this.numeroDeNos, this.numeroBitsId);
         this.node = chordConnector.connect();
     }
+    
+    public BigInteger getChave(){
+        return this.chave_responsavel;
+    }
+    
+    public void atualizarTabela(int porta){
+        this.tabela.pegarTabelaOutroServidor(porta);
+    }
+
+
     public void start() throws IOException {
+        /* The port on which the server should run */
+
         ExecutorService thds = Executors.newFixedThreadPool(this.quantidade_threads);
-        server = ServerBuilder.forPort(this.porta).addService(new ServiceImpl(this.F1)).addService(new ChordServiceImpl(this.node)).build().start();
+        server = ServerBuilder.forPort(this.porta).addService(new ServiceImpl(this.F1)).build().start();
         logger.info("Server started, listening on " + this.porta);
 
-        CopiarLista copy = new CopiarLista(this.F1, this.F2, this.F3, this.F4, this.porta,this.node);
+        CopiarLista copy = new CopiarLista(this.F1, this.F2, this.F3, this.F4, this.porta);
         new Thread(copy).start();
-        Log log = new Log(this.F2);
-        new Thread(log).start();
         AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
         new Thread(bancoDados).start();
-         VerificaServidoresReponsaveis invocaServers = new VerificaServidoresReponsaveis(this.F2, this.F3, this.F4, this,this.node);
+        VerificaServidoresReponsaveis invocaServers = new VerificaServidoresReponsaveis(this.F2, this.F3, this.F4, this);
         new Thread(invocaServers).start();
+        SnapShot snapshot = new SnapShot(this.Banco,this.com,this.chave_responsavel.toString());
+        new Thread(snapshot).start();
+        Log log = new Log(this.F2,this.com,snapshot,this.chave_responsavel.toString());
+        new Thread(log).start();
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -86,7 +110,7 @@ private void conectaChord() throws Exception {
         }
     }
 
-    public void transmitResponse(String sr) throws IOException, Exception {
+    public void transmitResponse(String sr) throws IOException , Exception  {
         if (this.porta == 59043) {
 
         } else {
@@ -94,7 +118,7 @@ private void conectaChord() throws Exception {
                 this.stop();
                 int porta;
                 porta = 59043;
-                Servidor servidor = new Servidor(porta);
+                Servidor servidor = new Servidor(porta,-1);
                 servidor.start();
                 ServerResponse response = ServerResponse.newBuilder().setResponse(sr).build();
                 System.out.println(response);
@@ -104,7 +128,12 @@ private void conectaChord() throws Exception {
             } catch (InterruptedException ex) {
                 Logger.getLogger(VerificaServidoresReponsaveis.class.getName()).log(Level.SEVERE, null, ex);
             }
-    }
+            /*        server = ServerBuilder.forPort(59043).addService(new ServiceImpl(this.F1)).build().start();
+        ServerResponse response = ServerResponse.newBuilder().setResponse(sr).build();
+        System.out.println(response);
+        server = null;
+        this.start();
+             */        }
 
     }
 
@@ -113,6 +142,11 @@ private void conectaChord() throws Exception {
         byte[] data = new byte[length];
         random.nextBytes(data);
         return new BigInteger(data);
+    }
+    
+    public void gerarChave(){
+        Random random = new Random();
+        this.chave_responsavel = new BigInteger(Integer.toString(random.nextInt(new Integer(this.quantidade_chaves.intValue()))));
     }
 
     public void setConfig(String arq) throws FileNotFoundException, IOException {
@@ -129,17 +163,19 @@ private void conectaChord() throws Exception {
                 str = linha.split(";");
             }
             String[] str2 = str;
+            System.out.println(str);
             if (str2 != null) {
+
                 this.ip = str2[0];
                 this.saltoProximaPorta = Integer.parseInt(str2[1]);
                 this.numeroBitsId = Integer.parseInt(str2[2]);
                 this.numeroDeNos = Integer.parseInt(str2[3]);
-                this.primeiraPorta = Integer.parseInt(str2[4]);
+                this.primeiraPorta = Integer.parseInt(str2[4]);                
             }
 
         }
     }
-    private int primeiraPorta;
+
     /**
      * Await termination on the main thread since the grpc library uses daemon
      * threads.
@@ -153,13 +189,23 @@ private void conectaChord() throws Exception {
     /**
      * Main launches the server from the command line.
      */
-    public static void main(String[] args) throws IOException, InterruptedException, Exception {
+    public static void main(String[] args) throws IOException, InterruptedException {
         int porta = 59043;
+        int porta2 = 59045;
         int flag = 0;
-        Servidor server1 = new Servidor(porta);
-  //      server1.setConfig("servers.txt");
-    //    server1.conectaChord();
+        Servidor server1 = new Servidor(porta,-1);
+        //Servidor server2 = new Servidor(porta2,-1);
+        //server2.atualizarTabela(59043);
+        //server1.setConfig("servers.txt");
+        BigInteger chave = new BigInteger("9");
+        
+        if(server1.tabela.verificaResponsabilidade(chave)){
+            System.out.println("responsavel");
+        } else {
+             System.out.println("nao responsavel");
+        }
         server1.start();
+    
         server1.blockUntilShutdown();
     }
 
@@ -209,10 +255,19 @@ private void conectaChord() throws Exception {
             /*            ServerResponse reply = ServerResponse.newBuilder().setResponse("Atualizando dado com chave: " + req.getChave() + " e valor: " + req.getValor()).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-             */        }
+             */     
+        }
+        @Override
+        public void getTabela(ChaveRequest req,StreamObserver<TabelaResponse> responseObserver){
+            String t = tabela.getTabelaString();
+            TabelaResponse r;
+            TabelaResponse reply = TabelaResponse.newBuilder().setTabela(t).build();
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+            
+        }
     }
-
-    static class ChordServiceImpl extends gRPC.proto.ChordServiceGrpc.ChordServiceImplBase {
+     static class ChordServiceImpl extends gRPC.proto.ChordServiceGrpc.ChordServiceImplBase {
 
         private static volatile ChordNode node;
 
@@ -249,7 +304,5 @@ responseObserver.onNext(primeiro);
 responseObserver.onCompleted();
 }
         }
-
-    }
-
+	 }
 }

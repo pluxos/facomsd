@@ -10,7 +10,6 @@ import gRPC.proto.ServerResponse;
 import gRPC.proto.ServicoGrpc;
 import gRPC.proto.ValorRequest;
 import io.grpc.StatusRuntimeException;
-import io.grpc.stub.StreamObserver;
 import java.util.Scanner;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,14 +31,12 @@ public class ImprimeMensagem implements Runnable {
         blockingStub = ServicoGrpc.newBlockingStub(cliente.channel);
         this.com = com;
     }
-    
     public ImprimeMensagem(Cliente cliente,String c, ComunicaThread com) {
         this.cliente = cliente;
         this.c = c;
         blockingStub = ServicoGrpc.newBlockingStub(cliente.channel);
         this.com = com;
-    }    
-
+    } 
     public void insertOrUpdate(String chave, String valor, String comando) {
         logger.info(comando + " no dado com chave: " + chave+ " e valor: " + valor);
         ValorRequest request = ValorRequest.newBuilder().setChave(chave).setValor(valor).build();
@@ -145,12 +142,20 @@ public class ImprimeMensagem implements Runnable {
         String cmd[] = comando.split(" ");
         cmd[0] = cmd[0].toUpperCase();
         if (cmd[0].equals("INSERT")) {
-            this.insertOrUpdate(cmd[1],cmd[2], "INSERT");
+            String valor = "";
+            for(int i = 2;i<cmd.length;i++){
+                valor = valor +" "+ cmd[i];
+            }
+            this.insertOrUpdate(cmd[1],valor, "INSERT");
         } else if (cmd[0].equals("DELETE")) {
             this.selectOrDelete(cmd[1], "DELETE");
         } else if (cmd[0].equals("SELECT")) {
             this.selectOrDelete(cmd[1], "SELECT");
         } else if (cmd[0].equals("UPDATE")) {
+            String valor = "";
+            for(int i = 2;i<cmd.length;i++){
+                valor = valor +" "+ cmd[i];
+            }
             this.insertOrUpdate(cmd[1] , cmd[2], "UPDATE");
         } else {
             System.out.println("Comando inválido , portanto não será enviado para o servidor");
