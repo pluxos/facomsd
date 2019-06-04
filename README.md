@@ -6,6 +6,10 @@ Alunos: Luiz Eugênio de Paula
         - Nivaldo
         
 ----------------------------------------------
+# Segunda entrega
+Implementação segunda etapa.
 
+----------------------------------------------
 # Instruções
 Executar primeiramente o arquivo Servidor, depois o Cliente.
+Criamos um painel para facilitar os testes.
