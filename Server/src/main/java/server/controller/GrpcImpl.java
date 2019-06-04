@@ -130,6 +130,16 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             });
         } else {
             /* Mesma Chave! reportar erro! */
+            try {
+                responseObserver.onNext(
+                        GetRangeResponse
+                                .newBuilder()
+                                .setNode(JsonUtils.serialize(this.node))
+                                .build()
+                );
+            } catch (ServerException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

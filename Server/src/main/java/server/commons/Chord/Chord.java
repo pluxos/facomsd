@@ -1,6 +1,11 @@
 package server.commons.Chord;
 
+import server.commons.utils.FileUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
+import java.util.Random;
 
 public class Chord {
     private int key;
@@ -14,6 +19,20 @@ public class Chord {
 
     public void setKey(int key) {
         this.key = key;
+    }
+
+    public void setNewKey() {
+        Properties properties;
+        try {
+            properties = FileUtils.getConfigProperties();
+
+            int fim = Integer.parseInt(properties.getProperty("chord.range"));
+            int val = new Random().nextInt(fim);
+
+            this.setKey(val);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<Integer> getRange() {

@@ -99,15 +99,14 @@ public class ServerThread implements Runnable {
 			Properties properties = FileUtils.getConfigProperties();
 
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
-			int val = new Random().nextInt(fim);
-			myNode.setKey(val);
+			myNode.setNewKey();
 
-			myNode.setRange(val, fim+1);
-			myNode.setRange(0, val);
-			ft.setKey(val);
+			myNode.setRange(myNode.getKey(), fim+1);
+			myNode.setRange(0, myNode.getKey());
+			ft.setKey(myNode.getKey());
 			ft.addNode(myNode);
-			//ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
-			System.out.println("KEY: " + val);
+
+			System.out.println("KEY: " +myNode.getKey());
 			System.out.println(myNode.getRange());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,23 +114,14 @@ public class ServerThread implements Runnable {
 	}
 
 	private void entryChord() {
-		try {
-			Properties properties = FileUtils.getConfigProperties();
-			int fim = Integer.parseInt(properties.getProperty("chord.range"));
+		myNode.setNewKey();
+		ft.setKey(myNode.getKey());
+		this.ft.addNode(myNode);
+		this.ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
 
-			int val = new Random().nextInt(fim);
+		System.out.println("KEY: " + myNode.getKey());
 
-			myNode.setKey(val);
-			ft.setKey(val);
-			this.ft.addNode(myNode);
-			this.ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
-
-			System.out.println("KEY: " + val);
-
-			findNode(this.chordIp, this.chordPort);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		findNode(this.chordIp, this.chordPort);
 	}
 
 	private void findNode(String ip, int port){
@@ -151,22 +141,32 @@ public class ServerThread implements Runnable {
 					public void onNext(GetRangeResponse getRangeResponse) {
 						try {
 							Chord newNode = JsonUtils.deserialize(getRangeResponse.getNode(), Chord.class);
-							/* Recover Data */
-							TypeReference<HashMap<BigInteger, byte[]>> dbRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
-							HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(getRangeResponse.getData(), dbRef);
-							for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
-								Manipulator.addValue(entry.getKey(), entry.getValue());
+							if(newNode.getKey() != myNode.getKey()) {
+								/* Recover Data */
+								TypeReference<HashMap<BigInteger, byte[]>> dbRef;
+								dbRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
+
+								HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(getRangeResponse.getData(), dbRef);
+								for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
+									Manipulator.addValue(entry.getKey(), entry.getValue());
+								}
+
+								/* Set Range */
+								TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {
+								};
+								myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+								ft.addNode(myNode);
+
+								/* Update Tabela de rotas */
+								System.err.println("ATUALIZANDO TABELA DE ROTAS");
+								ft.addNode(newNode);
+								ft.getFt().forEach((key, value) -> System.err.println("key: " + key + " -> " + value.getRange()));
+							} else {
+								myNode.setNewKey();
+								ft.setKey(myNode.getKey());
+								System.out.println("KEY: " + myNode.getKey());
+								findNode(chordIp, chordPort);
 							}
-
-							/* Set Range */
-							TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {};
-							myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
-							ft.addNode(myNode);
-
-							/* Update Tabela de rotas */
-							System.err.println("ATUALIZANDO TABELA DE ROTAS");
-							ft.addNode(newNode);
-							ft.getFt().forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
 						} catch (ServerException e) {
 							e.printStackTrace();
 						}
@@ -174,7 +174,7 @@ public class ServerThread implements Runnable {
 
 					@Override
 					public void onError(Throwable throwable) {
-
+						System.out.println(throwable.fillInStackTrace().getMessage());
 					}
 
 					@Override
@@ -189,8 +189,9 @@ public class ServerThread implements Runnable {
 		public void onNext(FindResponse findResponse) {
 			if(!findResponse.getResponse()) {
 				findNode(findResponse.getIp(), findResponse.getPort());
-			} else {;
+			} else {
 				try {
+					System.out.println(findResponse.getPort());
 					getRange(findResponse);
 				} catch (ServerException e) {
 					e.printStackTrace();
