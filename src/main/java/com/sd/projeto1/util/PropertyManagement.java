@@ -80,13 +80,15 @@ public class PropertyManagement {
     public String getAddress() {
         return prop.getProperty("address");
     }
-    
-    public void setMailPassword(String address) {
-        prop.setProperty("address",address);
+
+    public int getPortGRPC() {
+        return Integer.parseInt(prop.getProperty("port", "13267"));
+        // return Integer.parseInt(prop.getProperty("port", "13267"));
     }
 
-    public String getDataBaseName() {
-        return prop.getProperty("dataBaseName", "bancoProjeto1.sql");
+    public void setPortGRPC(int port) {
+        prop.setProperty("port", port + "");
     }
+
 
 }

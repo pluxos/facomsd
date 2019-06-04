@@ -1,1 +1,0 @@
-CREATE TABLE mapa (    chave INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,    tipo INTEGER    NOT NULL,    texto TEXT    NOT NULL,    data  DATE    NOT NULL);

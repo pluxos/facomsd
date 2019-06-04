@@ -5,19 +5,15 @@
  */
 package com.sd.projeto1.main;
 
+import com.sd.projeto1.dao.MapaDao;
 import com.sd.projeto1.model.Mapa;
 import com.sd.projeto1.model.MapaDTO;
-import com.sd.projeto1.util.FileUtils;
 import com.sd.projeto1.util.PropertyManagement;
-import com.sd.projeto1.util.Utils;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -26,7 +22,7 @@ import java.util.logging.Logger;
 
 public class ServerThreadDisk implements Runnable {
 
-    public static Map<BigInteger, String> mapa = new HashMap();
+
     private DatagramSocket socketServidor;
     private static PropertyManagement pm;
     private static byte[] in;
@@ -70,62 +66,9 @@ public class ServerThreadDisk implements Runnable {
         }
     }
 
-    public static void salvar(Mapa mapValue) {
-        BigInteger key = new BigInteger(String.valueOf(generateKey()));
-
-        if (mapa.containsKey(mapValue.getChave())) {
-            System.out.println("Mensagem com essa chave já adicionada");
-        }
-        FileUtils.writeFile(String.valueOf(Utils.CREATE), key, mapValue.getTexto());
-        mapa.put(key, mapValue.getTexto());
-    }
-
-    private static int generateKey() {
-        return mapa.size();
-    }
 
 
-    public static void editar(Mapa mapValue) {
-        BigInteger key = new BigInteger(String.valueOf(mapValue.getChave()));
 
-        if (!mapa.containsKey(mapValue.getChave())) {
-            System.out.println("Chave não encontrada");
-        }
-        FileUtils.writeFile(String.valueOf(Utils.UPDATE), key, mapValue.getTexto());
-        mapa.put(key, mapValue.getTexto());
-    }
-
-    public static void excluir(Mapa mapValue) {
-        BigInteger key = new BigInteger(String.valueOf(mapValue.getChave()));
-        FileUtils.writeFile(String.valueOf(Utils.DELETE), key, "");
-        mapa.remove(key);
-    }
-
-    public static String buscar(Mapa mapa1) {
-        BigInteger chave = new BigInteger(String.valueOf(mapa1.getChave()));
-        return mapa.get(chave);
-    }
-
-    public static void imprimeCRUD(Mapa mapa1) {
-
-        System.out.println("\n===============================");
-        System.out.println("Chave: " + mapa1.getChave());
-        System.out.println("Texto: " + mapa1.getTexto());
-        System.out.println("Tipo de Operaçao: " + Utils.retornaTipoOperacao(mapa1.getTipoOperacaoId()));
-        System.out.println("Data: " + mapa1.getData());
-        System.out.println("Tamanho da fila: " + mapa.size());
-        System.out.println("===============================");
-    }
-
-    public static void imprimeMapa() {
-        for (Map.Entry<BigInteger, String> map : mapa.entrySet()) {
-
-            System.out.println("\n=============================");
-            System.out.println("Chave: " + map.getKey());
-            System.out.println("Texto: " + map.getValue());
-            System.out.println("===============================");
-        }
-    }
 
     public MapaDTO tipoOperacao(Mapa mapaEntity) throws Exception {
 
@@ -137,8 +80,8 @@ public class ServerThreadDisk implements Runnable {
 
                 if (mapaEntity != null) {
                     mapaDTO.setMapa(mapaEntity);
-                    salvar(mapaEntity);
-                    imprimeCRUD(mapaEntity);
+                    MapaDao.salvar(mapaEntity);
+                    MapaDao.imprimeCRUD(mapaEntity);
                     mapaDTO.setMensagem("Inserido com Sucesso!");
 
                 } else {
@@ -149,8 +92,8 @@ public class ServerThreadDisk implements Runnable {
 
                 if (mapaEntity != null) {
                     mapaDTO.setMapa(mapaEntity);
-                    editar(mapaEntity);
-                    imprimeCRUD(mapaEntity);
+                    MapaDao.editar(mapaEntity);
+                    MapaDao.imprimeCRUD(mapaEntity);
                     mapaDTO.setMensagem("Atualizado com Sucesso!");
 
                 } else {
@@ -163,8 +106,8 @@ public class ServerThreadDisk implements Runnable {
                 if (mapaEntity != null) {
                     mapaEntity.setTipoOperacaoId(3);
                     mapaDTO.setMapa(mapaEntity);
-                    excluir(mapaEntity);
-                    imprimeCRUD(mapaEntity);
+                    MapaDao.excluir(mapaEntity);
+                    MapaDao.imprimeCRUD(mapaEntity);
                     mapaDTO.setMensagem("Excluido com Sucesso!");
 
                 } else {
@@ -177,11 +120,11 @@ public class ServerThreadDisk implements Runnable {
                 if (mapaEntity.getChave() >= 0) {
                     mapaEntity.setTipoOperacaoId(4);
 
-                    String msg = buscar(mapaEntity);
+                    String msg = MapaDao.buscar(mapaEntity);
 
                     System.out.println("Chave: " + mapaEntity.getChave());
                     System.out.println("Texto: " + msg);
-                    imprimeCRUD(mapaEntity);
+                    MapaDao.imprimeCRUD(mapaEntity);
                     mapaEntity.setTexto(msg);
                     mapaDTO.setMapa(mapaEntity);
                     mapaDTO.setMensagem(msg);

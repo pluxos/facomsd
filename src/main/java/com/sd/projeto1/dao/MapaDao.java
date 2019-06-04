@@ -1,183 +1,88 @@
 package com.sd.projeto1.dao;
 
 import com.sd.projeto1.model.Mapa;
-import com.sd.projeto1.util.SQLiteConnection;
+import com.sd.projeto1.util.FileUtils;
+import com.sd.projeto1.util.Utils;
+
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapaDao implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static Map<BigInteger, String> mapa = new HashMap();
 
-    public Mapa buscarPorId(Integer id) throws Exception {
-//        Connection con = null;
-//        PreparedStatement ps = null;
 
-//        try {
-//            con = SQLiteConnection.connect();
-//
-//            ps = con.prepareStatement("select chave, texto, tipo, data "
-//                    + "from mapa where chave = ?");
-//            ps.setInt(1, id);
-//
-//            ResultSet rs = ps.executeQuery();
+    public static void salvar(Mapa mapValue) {
+        BigInteger key = new BigInteger(String.valueOf(generateKey()));
 
-            Mapa mapa = new Mapa();
-
-           /* while (rs.next()) {
-                mapa.setChave(rs.getInt("chave"));
-                mapa.setTexto(rs.getString("texto"));
-                mapa.setTipoOperacaoId(rs.getInt("tipo"));
-                mapa.setData(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("data")));
-            }
-            rs.close();
-            con.close();*/
-
-            return mapa;
-
-//        } catch (SQLException | ParseException e) {
-//            throw new Exception("Erro ao buscar Mapa. " + e.getMessage());
-//        }
+        if (mapa.containsKey(mapValue.getChave())) {
+            System.out.println("Mensagem com essa chave já adicionada");
+        }
+        FileUtils.writeFile(String.valueOf(Utils.CREATE), key, mapValue.getTexto());
+        mapa.put(key, mapValue.getTexto());
     }
 
-    public Mapa salvar(Mapa mapa) throws Exception {
-    	Mapa m = buscarPorId(mapa.getChave());
 
-        return m;
-//        Connection con = null;
-//        PreparedStatement ps = null;
-//
-//        try {
-//            con = SQLiteConnection.connect();
-//
-//            ps = con.prepareStatement(
-//                    "insert into mapa(texto, tipo, data) "
-//                    + "VALUES (?, ?, datetime('now', 'localtime'))");
-//            ps.setString(1, mapa.getTexto());
-//            ps.setInt(2, mapa.getTipoOperacaoId());
-//
-//            if (ps.executeUpdate() == 0) {
-//                return null;
-//            }
-//
-//            ResultSet rs = ps.getGeneratedKeys();
-//            mapa.setChave(rs.getInt(1));
-//
-//            Mapa m = buscarPorId(mapa.getChave());
-//
-//            return m;
-//
-//        } catch (SQLException e) {
-//            throw new Exception("Erro ao inserir mapa. " + e.getMessage());
-//        } finally {
-//            con.close();
-//        }
+    public static void editar(Mapa mapValue) {
+        BigInteger key = new BigInteger(String.valueOf(mapValue.getChave()));
 
+        if (!mapa.containsKey(mapValue.getChave())) {
+            System.out.println("Chave não encontrada");
+        }
+        FileUtils.writeFile(String.valueOf(Utils.UPDATE), key, mapValue.getTexto());
+        mapa.put(key, mapValue.getTexto());
     }
 
-    public Mapa editar(Mapa mapa) throws Exception {
-    	Mapa m = buscarPorId(mapa.getChave());
-
-        return m;
-//        Connection con = null;
-//        PreparedStatement ps = null;
-//
-//        try {
-//
-//            if (mapa.getChave() <= 0) {
-//                return null;
-//            }
-//
-//            con = SQLiteConnection.connect();
-//            ps = con.prepareStatement("update mapa set texto = ?, tipo = ?, data = datetime('now', 'localtime') where chave = ?");
-//            ps.setString(1, mapa.getTexto());
-//            ps.setInt(2, mapa.getTipoOperacaoId());
-//            ps.setInt(3, mapa.getChave());
-//
-//            if (ps.executeUpdate() == 0) {
-//                return null;
-//            }
-//
-//            Mapa m = buscarPorId(mapa.getChave());
-//
-//            return m;
-//
-//        } catch (SQLException e) {
-//            throw new Exception("Erro ao atualizar mapa. " + e.getMessage());
-//        } finally {
-//            con.close();
-//        }
+    public static void excluir(Mapa mapValue) {
+        BigInteger key = new BigInteger(String.valueOf(mapValue.getChave()));
+        FileUtils.writeFile(String.valueOf(Utils.DELETE), key, "");
+        mapa.remove(key);
     }
 
-    public Mapa excluir(int id) throws Exception {
-    	Mapa m = buscarPorId(id);
-
-        return m;
-//        Connection con = null;
-//        PreparedStatement ps = null;
-//
-//        try {
-//            con = SQLiteConnection.connect();
-//            ps = con.prepareStatement("delete from mapa where chave = ?");
-//            ps.setInt(1, id);
-//
-//            Mapa m = buscarPorId(id);
-//
-//            if (ps.executeUpdate() > 0) {
-//                return m;
-//            } else {
-//                return null;
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new Exception("Erro ao excluir mapa. " + e.getMessage());
-//        } finally {
-//            con.close();
-//        }
-
+    public static String buscar(Mapa mapa1) {
+        BigInteger chave = new BigInteger(String.valueOf(mapa1.getChave()));
+        return mapa.get(chave);
     }
 
-    public List<Mapa> buscarTodos() throws Exception {
-    	
-        return new ArrayList<Mapa>();
-//        Connection con = null;
-//
-//        try {
-//            con = SQLiteConnection.connect();
-//            PreparedStatement pstmt = con
-//                    .prepareStatement("select chave, texto, tipo, data "
-//                            + "from mapa order by data");
-//
-//            ResultSet rs = pstmt.executeQuery();
-//
-//            List<Mapa> mapas = new ArrayList<Mapa>();
-//
-//            while (rs.next()) {
-//                Mapa mapa = new Mapa();
-//
-//                mapa.setChave(rs.getInt("chave"));
-//                mapa.setTexto(rs.getString("texto"));
-//                mapa.setTipoOperacaoId(rs.getInt("tipo"));
-//                mapa.setData(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString("data")));
-//
-//                mapas.add(mapa);
-//            }
-//
-//            con.close();
-//
-//            return mapas;
-//
-//        } catch (SQLException | ParseException e) {
-//            throw new Exception("Erro ao buscar lista de mapas. " + e.getMessage());
-//        }
+    public static void imprimeCRUD(Mapa mapa1) {
 
+        System.out.println("\n===============================");
+        System.out.println("Chave: " + mapa1.getChave());
+        System.out.println("Texto: " + mapa1.getTexto());
+        System.out.println("Tipo de Operaçao: " + Utils.retornaTipoOperacao(mapa1.getTipoOperacaoId()));
+        System.out.println("Data: " + mapa1.getData());
+        System.out.println("Tamanho da fila: " + mapa.size());
+        System.out.println("===============================");
+    }
+
+    public static void imprimeMapa() {
+        for (Map.Entry<BigInteger, String> map : mapa.entrySet()) {
+
+            System.out.println("\n=============================");
+            System.out.println("Chave: " + map.getKey());
+            System.out.println("Texto: " + map.getValue());
+            System.out.println("===============================");
+        }
+    }
+
+    public Map<BigInteger, String> getMapa() {
+        return mapa;
+    }
+
+    public static String buscarTodos() {
+        String toString = "";
+        for (Map.Entry<BigInteger, String> entry : mapa.entrySet()) {
+            toString = toString.concat("(" + entry.getKey().toString() + "," + entry.getValue().toString() + ")");
+        }
+        return toString;
+    }
+
+
+    private static int generateKey() {
+        return mapa.size();
     }
 
 }
