@@ -15,31 +15,31 @@ public class Banco {
         return ourInstance;
     }
 
-    public void blockDatabase(){
+    public void blockDatabase() {
         free = false;
     }
 
-    public void counterIncrement(){
+    public void counterIncrement() {
         x++;
     }
 
-    public void freeDatabase(){
+    public void freeDatabase() {
         free = true;
     }
 
-    public boolean isFree(){
+    public boolean isFree() {
         return free;
     }
 
     private Banco() {
     }
 
-    public int getNumber(){
+    public int getNumber() {
         return x;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String str = new String();
         for (Map.Entry<BigInteger, byte[]> entry : database.entrySet())
             str += entry.getKey() + "||" + new String(entry.getValue()) + "\n";
@@ -79,8 +79,9 @@ public class Banco {
     }
 
     public Boolean Delete(BigInteger key) {
-        if (this.database.containsKey(key)) { // Se a chave existir ele remove e retorna verdadeiro, caso contrário,
-                                              // retorna falso
+        // Se a chave existir ele remove e retorna verdadeiro, caso contrário,retorna
+        // falso
+        if (this.database.containsKey(key)) {
             this.database.remove(key);
             return true;
         } else {

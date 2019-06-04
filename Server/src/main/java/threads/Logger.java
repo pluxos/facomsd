@@ -89,7 +89,6 @@ public class Logger implements Runnable {
                     if (Integer.parseInt(s.substring(7)) > lastSnapNumber)
                         lastSnapNumber = Integer.parseInt(s.substring(7));
                 // Restaurando todo o snap
-                System.out.println(lastSnapNumber);
                 for (String s : Files.readAllLines(Paths.get("./snap." + lastSnapNumber)))
                     Banco.getInstance().Insert(s);
             }

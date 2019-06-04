@@ -52,7 +52,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
                             <mainClass>
-                                server.Server
+                                server.ServerGrpc
                             </mainClass>
                         </manifest>
                     </archive>

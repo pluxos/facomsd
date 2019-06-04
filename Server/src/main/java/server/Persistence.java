@@ -23,39 +23,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Persistence implements Runnable {
-    private Timer timer;
+    
     protected BlockingQueue<ItemFila> f3;
     private Banco Database = Banco.getInstance();
 
     public Persistence() {
         this.f3 = F3.getInstance();
-        this.timer = new Timer();
-        this.timer.scheduleAtFixedRate(new RemindTask(), 0, 1000);
     }
 
-    class RemindTask extends TimerTask {
-        private Path path;
 
-        @Override
-        public synchronized void run() {
-            Banco.getInstance().blockDatabase();
-
-            path = Paths.get("./snap." + Banco.getInstance().getNumber());
-            try {
-                if (!Files.exists(path))
-                    Files.createFile(path);
-                Files.write(path, Banco.getInstance().toString().getBytes());
-                if (Banco.getInstance().getNumber() > 3)
-                    Files.deleteIfExists(Paths.get("./snap." + (Banco.getInstance().getNumber() - 3)));
-            } catch (IOException e) {
-                System.out.println("Erro no snapshot: " + e.getMessage());
-            }
-
-            Banco.getInstance().counterIncrement();
-            Banco.getInstance().freeDatabase();
-        }
-
-    }
 
     @Override
     public void run() {
@@ -70,7 +46,6 @@ public class Persistence implements Runnable {
             while (true) {
                 if (Banco.getInstance().isFree()) {
                     obj = f3.take();
-
                     if (obj.getControll().toUpperCase().equals("CREATE")) {
                         responseC = (Database.Insert(new BigInteger(obj.getKey()), obj.getValue()))
                                 ? CreateResponse.newBuilder().setRetorno(true).build()

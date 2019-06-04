@@ -29,9 +29,11 @@ import java.lang.String;
 import com.google.protobuf.ByteString;
 import server.ItemFila;
 import singletons.F1;
+import threads.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
@@ -46,15 +48,19 @@ public class ServerGrpc {
     private void start() throws IOException {
         /* The port on which the server should run */
         int port = 50051;
-        server = ServerBuilder.forPort(port)
-                .addService(new CrudImpl(this.Database))
-                .build()
-                .start();
+        server = ServerBuilder.forPort(port).addService(new CrudImpl(this.Database)).build().start();
         logger.info("Server started, listening on " + port);
+        new Thread(new threads.Logger()).start();
+        new Thread(new Consumidor()).start();
+        new Thread(new Persistence()).start();
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new server.Snap(), 0, 1000);
+        new Thread(new F4Consumer()).start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                // Use stderr here since the logger may have been reset by its JVM shutdown hook.
+                // Use stderr here since the logger may have been reset by its JVM shutdown
+                // hook.
                 System.err.println("*** shutting down gRPC server since JVM is shutting down");
                 ServerGrpc.this.stop();
                 System.err.println("*** server shut down");
@@ -69,7 +75,8 @@ public class ServerGrpc {
     }
 
     /**
-     * Await termination on the main thread since the grpc library uses daemon threads.
+     * Await termination on the main thread since the grpc library uses daemon
+     * threads.
      */
     private void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
@@ -84,13 +91,13 @@ public class ServerGrpc {
         final ServerGrpc server = new ServerGrpc();
         server.start();
         server.blockUntilShutdown();
+
     }
 
     static class CrudImpl extends CrudGrpc.CrudImplBase {
         Map<BigInteger, byte[]> Database;
-        
-        CrudImpl(Map<BigInteger, byte[]> pai)
-        {
+
+        CrudImpl(Map<BigInteger, byte[]> pai) {
             this.Database = pai;
         }
 
@@ -103,10 +110,12 @@ public class ServerGrpc {
             req.getValue().copyTo(value, 0);
 
             System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
-            CreateResponse response = CreateResponse.newBuilder().setRetorno(true).build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
             itemfila.itemFilaCreate(responseObserver, chave, value);
+            try {
+                f1.put(itemfila);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
         }
 
         @Override
@@ -115,15 +124,12 @@ public class ServerGrpc {
             ItemFila itemfila = new ItemFila();
             req.getKey().copyTo(chave, 0);
             System.out.println("READ: < " + new BigInteger(chave) + " >");
-            String coco = "coco";
-            byte[] value = coco.getBytes();
-            int valuesize = value.length;
-            ReadResponse response = ReadResponse.newBuilder().setValue(ByteString.copyFrom(value))
-                    .setValuesize(valuesize)
-                    .build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
             itemfila.itemFilaRead(responseObserver, chave);
+            try {
+                f1.put(itemfila);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
         }
 
         @Override
@@ -135,12 +141,12 @@ public class ServerGrpc {
             req.getValue().copyTo(value, 0);
 
             System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
-
-
-            UpdateResponse response = UpdateResponse.newBuilder().setRetorno(true).build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
             itemfila.itemFilaUpdate(responseObserver, chave, value);
+            try {
+                f1.put(itemfila);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
         }
 
         @Override
@@ -149,10 +155,12 @@ public class ServerGrpc {
             ItemFila itemfila = new ItemFila();
             req.getKey().copyTo(chave, 0);
             System.out.println("DELETE: < " + new BigInteger(chave) + " >");
-            DeleteResponse response = DeleteResponse.newBuilder().setRetorno(true).build();
             itemfila.itemFilaDelete(responseObserver, chave);
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
+            try {
+                f1.put(itemfila);
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
         }
 
     }
