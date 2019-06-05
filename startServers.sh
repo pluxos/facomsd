@@ -15,5 +15,6 @@ for (( i = 1; i < 3; ++i )); do
     mkdir logs/Server${i}
     sleep 10
     echo "Iniciando Servidor " ${i}
-    gnome-terminal -- bash -c "mvn exec:java -Dexec.args=\"logs/Server${i}/  ${ports[i]} localhost ${ports[i-1]}\""
+    gnome-terminal -- bash -c "mvn exec:java -Dexec.args=\"logs/Server${i}/  ${ports[i]} localhost ${port
+	s[i-1]}\""
 done

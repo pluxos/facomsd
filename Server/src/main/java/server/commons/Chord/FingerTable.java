@@ -46,7 +46,9 @@ public class FingerTable {
         int flag = -1;
         for (int i = 1; i <= this.m; i++) {
             Integer sucessor = ChordUtils.sucessor(this.key, i);
-            if(sucessor > this.range) sucessor -= this.range;
+            if(sucessor > this.range) {
+            	sucessor -= this.range;
+            }
 
             System.err.println("i: " + i + " suc: "+sucessor);
 
