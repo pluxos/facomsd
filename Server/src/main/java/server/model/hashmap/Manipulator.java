@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Manipulator {
 	
+	private Manipulator() {}
+	
     private static volatile HashMap<BigInteger, byte[]> db = new HashMap<>();
 
     public static void addValue(BigInteger code, byte[] data) {
