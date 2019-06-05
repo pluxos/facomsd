@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FingerTable {
     private int key;
-    private HashMap<Integer, Chord> ft;
+    private HashMap<Integer, Node> ft;
     private int m;
     private int range;
 
@@ -26,23 +26,23 @@ public class FingerTable {
         }
     }
 
-    public HashMap<Integer, Chord> getFt() {
+    public HashMap<Integer, Node> getFt() {
         return ft;
     }
 
-    public void setFt(HashMap<Integer, Chord> ft) {
+    public void setFt(HashMap<Integer, Node> ft) {
         this.ft = ft;
     }
 
-    public void addToFt(Integer key, Chord node) {
+    public void addToFt(Integer key, Node node) {
         this.ft.put(key, node);
     }
 
-    public Chord getChord(Integer key) {
+    public Node getChord(Integer key) {
         return this.ft.get(key);
     }
 
-    public int addNode(Chord node) {
+    public int addNode(Node node) {
         int flag = -1;
         for (int i = 1; i <= this.m; i++) {
             Integer sucessor = ChordUtils.sucessor(this.key, i);
@@ -59,8 +59,8 @@ public class FingerTable {
         return flag;
     }
 
-    public Chord catchResponsibleNode(Integer searchKey) {
-        AtomicReference<Chord> res = new AtomicReference<>(null);
+    public Node catchResponsibleNode(Integer searchKey) {
+        AtomicReference<Node> res = new AtomicReference<>(null);
         for(int i = 1; i <= this.ft.size(); i ++) {
             if(this.ft.get(i).getRange().contains(searchKey)) {
                 res.set(this.ft.get(i));
@@ -91,7 +91,7 @@ public class FingerTable {
         this.key = key;
     }
 
-    public void updateFT(Chord node) {
+    public void updateFT(Node node) {
         if(this.addNode(node) == 1) {
             System.out.println("TABELA ATUALIZADA");
             this.ft.forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));

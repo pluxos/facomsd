@@ -1,15 +1,15 @@
 package server.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import server.client.CommunicationManager;
+import server.client.GetRangeObserver;
 import server.commons.Chord.Chord;
+import server.commons.Chord.Node;
 import server.commons.Chord.FingerTable;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
 import server.commons.utils.JsonUtils;
-import server.model.hashmap.Manipulator;
 import server.receptor.ConsumerF1;
 import server.receptor.RecoverLog;
 import server.receptor.ThreadCommand;
@@ -17,24 +17,22 @@ import server.receptor.ThreadLog;
 import server.receptor.routine.FileRoutine;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
 
-	private Chord myNode;
-	private FingerTable ft;
 	private String logDirectory;
 	private Server server;
 	private String chordIp = null;
 	private int chordPort;
 
 	public ServerThread(String[] args) {
-		this.myNode = new Chord();
-		this.ft = new FingerTable();
+		Chord.setNode(new Node());
+		Chord.setFt(new FingerTable());
+
 		this.logDirectory = args[0];
-		this.myNode.setPort(Integer.parseInt(args[1]));
+		Chord.getNode().setPort(Integer.parseInt(args[1]));
 		if(args.length == 4) {
 			this.chordIp = args[2];
 			this.chordPort = Integer.parseInt(args[3]);
@@ -58,12 +56,12 @@ public class ServerThread implements Runnable {
 		}
 
 		try {
-			this.server = ServerBuilder.forPort(myNode.getPort())
-					.addService(new GrpcImpl(myNode, ft))
+			this.server = ServerBuilder.forPort(Chord.getNode().getPort())
+					.addService(new GrpcImpl(Chord.getNode(), Chord.getFt()))
 					.executor(Executors.newFixedThreadPool(10))
 					.build().start();
 
-			System.out.println("Server started, listening on " + myNode.getPort());
+			System.out.println("Server started, listening on " + Chord.getNode().getPort());
 
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 				System.err.println("*** shutting down gRPC server since JVM is shutting down");
@@ -99,25 +97,25 @@ public class ServerThread implements Runnable {
 			Properties properties = FileUtils.getConfigProperties();
 
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
-			myNode.setNewKey();
+			Chord.getNode().setNewKey();
 
-			myNode.setRange(myNode.getKey(), fim+1);
-			myNode.setRange(0, myNode.getKey());
-			ft.setKey(myNode.getKey());
-			ft.updateFT(myNode);
+			Chord.getNode().setRange(Chord.getNode().getKey(), fim+1);
+			Chord.getNode().setRange(0, Chord.getNode().getKey());
+			Chord.getFt().setKey(Chord.getNode().getKey());
+			Chord.getFt().updateFT(Chord.getNode());
 
-			System.out.println("KEY: " +myNode.getKey());
+			System.out.println("KEY: " +Chord.getNode().getKey());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void entryChord() {
-		myNode.setNewKey();
-		ft.setKey(myNode.getKey());
-		this.ft.updateFT(myNode);
+		Chord.getNode().setNewKey();
+		Chord.getFt().setKey(Chord.getNode().getKey());
+		Chord.getFt().updateFT(Chord.getNode());
 
-		System.out.println("KEY: " + myNode.getKey());
+		System.out.println("KEY: " + Chord.getNode().getKey());
 
 		findNode(this.chordIp, this.chordPort);
 	}
@@ -126,59 +124,15 @@ public class ServerThread implements Runnable {
 		GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(ip, port);
 		StreamObserver<FindResponse> observer = new ObserverResponse();
 
-		output.findNode(FindMessage.newBuilder().setKey(myNode.getKey()).build(), observer);
+		output.findNode(FindMessage.newBuilder().setKey(Chord.getNode().getKey()).build(), observer);
 	}
 
 	private void getRange(FindResponse findResponse) throws ServerException {
 		GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
 
 		output.getRange(
-				GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(this.myNode)).build(),
-				new StreamObserver<GetRangeResponse>() {
-					@Override
-					public void onNext(GetRangeResponse getRangeResponse) {
-						try {
-							Chord newNode = JsonUtils.deserialize(getRangeResponse.getNode(), Chord.class);
-							if(newNode.getKey() != myNode.getKey()) {
-								/* Recover Data */
-								TypeReference<HashMap<BigInteger, byte[]>> dbRef;
-								dbRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
-
-								HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(getRangeResponse.getData(), dbRef);
-								for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
-									Manipulator.addValue(entry.getKey(), entry.getValue());
-								}
-
-								/* Set Range */
-								TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {
-								};
-								myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
-								ft.updateFT(myNode);
-
-								/* Update Tabela de rotas */
-								System.err.println("ATUALIZANDO TABELA DE ROTAS");
-								ft.updateFT(newNode);
-							} else {
-								myNode.setNewKey();
-								ft.setKey(myNode.getKey());
-								System.out.println("KEY: " + myNode.getKey());
-								findNode(chordIp, chordPort);
-							}
-						} catch (ServerException e) {
-							e.printStackTrace();
-						}
-					}
-
-					@Override
-					public void onError(Throwable throwable) {
-						System.out.println(throwable.fillInStackTrace().getMessage());
-					}
-
-					@Override
-					public void onCompleted() {
-
-					}
-				});
+				GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
+				new GetRangeObserver());
 	}
 
 	class ObserverResponse implements StreamObserver<FindResponse> {

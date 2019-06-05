@@ -2,7 +2,7 @@ package server.controller;
 
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
-import server.commons.Chord.Chord;
+import server.commons.Chord.Node;
 import server.commons.Chord.FingerTable;
 import server.commons.Rows.RowF1;
 import server.commons.domain.GenericCommand;
@@ -16,10 +16,10 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
-    private Chord node;
+    private Node node;
     private FingerTable ft;
 
-    GrpcImpl(Chord node, FingerTable ft){
+    GrpcImpl(Node node, FingerTable ft){
         this.node = node;
         this.ft = ft;
     }
@@ -71,7 +71,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             responseObserver.onCompleted();
         } else {
             /* Procurar na FT quem poderia ser responsável por essa key */
-            Chord nodeResponsible = this.ft.catchResponsibleNode(request.getKey());
+            Node nodeResponsible = this.ft.catchResponsibleNode(request.getKey());
 
             if(nodeResponsible.getIp() == null)
                 nodeResponsible.setIp("localhost");
@@ -89,9 +89,9 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void getRange(GetRangeRequest request, StreamObserver<GetRangeResponse> responseObserver) {
-        Chord newNode = null;
+        Node newNode = null;
         try {
-            newNode = JsonUtils.deserialize(request.getNode(), Chord.class);
+            newNode = JsonUtils.deserialize(request.getNode(), Node.class);
         } catch (ServerException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         if(newNode.getKey() != this.node.getKey()) {
             /* Defino o Range de dados que preciso retornar, dado o nó vindo do request */
             /* Redefinir o meu range */
-            Chord node = new Chord();
+            Node node = new Node();
             node.setKey(newNode.getKey());
             node.setRangeWithArray(this.node.updateRange(this.node.getKey(), newNode.getKey()));
 
