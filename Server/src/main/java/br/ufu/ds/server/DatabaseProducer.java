@@ -1,38 +1,37 @@
 package br.ufu.ds.server;
 
-import br.ufu.ds.ServerProtocol;
+import br.ufu.ds.rpc.Request;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class DatabaseProducer implements Runnable {
+public final class DatabaseProducer implements Runnable {
 
     private final Database mDatabase = Database.getInstance();
+    private final File lastLog;
 
-    public final void produce() throws IOException, DatabaseException {
-        File file = new File("log.bin");
-        if (!file.exists()) {
-            file.createNewFile();
-            return;
-        }
+    public DatabaseProducer(File lastLog) {
+        this.lastLog = lastLog;
+    }
 
-        FileInputStream log = new FileInputStream(file);
+    public final void produce() throws IOException {
+        FileInputStream log = new FileInputStream(this.lastLog);
 
-        ServerProtocol.Request request = null;
-        while ((request = ServerProtocol.Request.parseDelimitedFrom(log)) != null) {
+        Request request = null;
+        while ((request = Request.parseDelimitedFrom(log)) != null) {
             try {
                 switch (request.getRequestType().getNumber()) {
-                    case ServerProtocol.Request.RequestType.CREATE_VALUE:
+                    case Request.RequestType.CREATE_VALUE:
                         mDatabase.create(BigInteger.valueOf(request.getId()), request.getData());
                         break;
 
-                    case ServerProtocol.Request.RequestType.DELETE_VALUE:
+                    case Request.RequestType.DELETE_VALUE:
                         mDatabase.delete(BigInteger.valueOf(request.getId()));
                         break;
 
-                    case ServerProtocol.Request.RequestType.UPDATE_VALUE:
+                    case Request.RequestType.UPDATE_VALUE:
                         mDatabase.update(BigInteger.valueOf(request.getId()), request.getData());
                         break;
                 }
@@ -54,9 +53,8 @@ public class DatabaseProducer implements Runnable {
     public final void run() {
         try {
             produce();
-        } catch (IOException | DatabaseException e) {
-            e.printStackTrace();
-            System.exit(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

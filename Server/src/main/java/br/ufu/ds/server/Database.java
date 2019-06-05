@@ -1,18 +1,18 @@
 package br.ufu.ds.server;
 
+import br.ufu.ds.rpc.Request;
 import com.google.protobuf.ByteString;
 
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Marcus
  * @author Lucas Tannus
  */
-public class Database {
+public final class Database {
 
-    private Map<BigInteger, ByteString> mHashTable;
+    private HashMap<BigInteger, ByteString> mHashTable;
 
     private Database() {
         mHashTable = new HashMap<>();
@@ -31,6 +31,19 @@ public class Database {
         return instance;
     }
 
+    public synchronized void setDatabase(HashMap<BigInteger, ByteString> map) {
+        this.mHashTable = null;
+        this.mHashTable = map;
+    }
+
+    public HashMap<BigInteger, ByteString> getDb() {
+        return mHashTable;
+    }
+
+    public HashMap<BigInteger, ByteString> getDbCopy() {
+        return new HashMap<>(mHashTable);
+    }
+
     /**
      * Insere um novo registro no mHashTable
      *
@@ -41,6 +54,11 @@ public class Database {
         if (mHashTable.containsKey(key))
             throw new DatabaseException(String.format("Key %d already exists", key.longValue()));
         mHashTable.put(key, data);
+    }
+
+    public void create(Request request)
+            throws DatabaseException {
+        create(BigInteger.valueOf(request.getId()), request.getData());
     }
 
     /**
@@ -54,6 +72,10 @@ public class Database {
         return mHashTable.get(key);
     }
 
+    public ByteString read(Request key) {
+        return mHashTable.get(BigInteger.valueOf(key.getId()));
+    }
+
     /**
      * Altera um dado já existente no banco com um novo valor
      *
@@ -63,13 +85,17 @@ public class Database {
     public synchronized void update(BigInteger key, ByteString newData)
                 throws DatabaseException {
         if (!mHashTable.containsKey(key))
-            throw new DatabaseException(String.format("Key %d already exists", key.longValue()));
+            throw new DatabaseException(String.format("Key %d not found", key.longValue()));
         mHashTable.put(key, newData);
+    }
+
+    public void update(Request request)
+            throws DatabaseException {
+        update(BigInteger.valueOf(request.getId()), request.getData());
     }
 
     /**
      * Deleta um registro por meio de sua chave
-     *
      * @param key BigInteger    Chave do registro que será deletado
      * @return boolean
      */
@@ -77,4 +103,7 @@ public class Database {
         return mHashTable.remove(key);
     }
 
+    public ByteString delete(Request key) {
+        return delete(BigInteger.valueOf(key.getId()));
+    }
 }

@@ -1,10 +1,8 @@
 package br.ufu.ds;
 
+import br.ufu.ds.grpc.ServerRpc;
 import br.ufu.ds.server.*;
 
-import java.io.*;
-import java.net.InetSocketAddress;
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,50 +12,23 @@ import java.util.concurrent.Executors;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        Properties props = new Properties();
-        int port;
-        String host;
+        Config config = Config.getInstance();
 
-        File f = new File("server.config");
-        InputStream in = null;
-        try {
-            in = f.exists() ? new FileInputStream(f) :
-                    Main.class.getClassLoader().getResourceAsStream("server.config");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            props.load(in);
-            host = props.getProperty("host.name");
-            port = Integer.parseInt(props.getProperty("host.port"));
-        } catch (NumberFormatException | IOException e) {
-            port = 41234;
-            host = "localhost";
-        }
-
-        Thread populateThread = new Thread(new DatabaseProducer());
-        populateThread.start();
-        populateThread.join();
-
-        Server server = new Server(new InetSocketAddress(host, port));
-        CommandConsumer cmdConsumer = new CommandConsumer(server);
+        CommandConsumer cmdConsumer = new CommandConsumer();
         RequestConsumer reqConsumer = new RequestConsumer();
         LogConsumer logConsumer = new LogConsumer();
+        SnapshotLog snap = SnapshotLog.getInstance();
 
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        executor.execute(snap);
         executor.execute(reqConsumer);
         executor.execute(cmdConsumer);
         executor.execute(logConsumer);
-        executor.execute(() ->
-            server.addListener(((client, message) ->
-                Queues.getInstance().getRequests()
-                        .add(new Queues.Command(client, message))
-                )
-            )
-        );
 
-        server.run();
+        Thread serverThread = new Thread(new ServerRpc(config.getPort()));
+        serverThread.start();
+        serverThread.join();
+
         executor.shutdownNow();
     }
 }

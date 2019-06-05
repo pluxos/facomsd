@@ -1,6 +1,7 @@
 package br.ufu.ds;
 
 import br.ufu.ds.client.MenuListener;
+import br.ufu.ds.rpc.Request;
 import com.google.protobuf.ByteString;
 
 import java.io.IOException;
@@ -20,11 +21,11 @@ public class MenuImpl extends MenuListener {
     }
 
     protected void onCreateSelected(BigInteger key, ByteString value) {
-        ServerProtocol.Request request =
-                ServerProtocol.Request.newBuilder()
+        Request request =
+                Request.newBuilder()
                                 .setId(key.longValue())
                                 .setData(value)
-                                .setRequestType(ServerProtocol.Request.RequestType.CREATE)
+                                .setRequestType(Request.RequestType.CREATE)
                                 .build();
 
         try {
@@ -37,10 +38,10 @@ public class MenuImpl extends MenuListener {
     }
 
     protected void onReadSelected(BigInteger key) {
-        ServerProtocol.Request request =
-                ServerProtocol.Request.newBuilder()
+        Request request =
+                Request.newBuilder()
                         .setId(key.longValue())
-                        .setRequestType(ServerProtocol.Request.RequestType.READ)
+                        .setRequestType(Request.RequestType.READ)
                         .build();
 
         try {
@@ -53,11 +54,11 @@ public class MenuImpl extends MenuListener {
     }
 
     protected void onUpdateSelected(BigInteger key, ByteString value) {
-        ServerProtocol.Request request =
-                ServerProtocol.Request.newBuilder()
+        Request request =
+                Request.newBuilder()
                         .setId(key.longValue())
                         .setData(value)
-                        .setRequestType(ServerProtocol.Request.RequestType.UPDATE)
+                        .setRequestType(Request.RequestType.UPDATE)
                         .build();
 
         try {
@@ -70,10 +71,10 @@ public class MenuImpl extends MenuListener {
     }
 
     protected void onDeleteSelected(BigInteger key) {
-        ServerProtocol.Request request =
-                ServerProtocol.Request.newBuilder()
+        Request request =
+                Request.newBuilder()
                         .setId(key.longValue())
-                        .setRequestType(ServerProtocol.Request.RequestType.DELETE)
+                        .setRequestType(Request.RequestType.DELETE)
                         .build();
 
         try {
@@ -83,5 +84,10 @@ public class MenuImpl extends MenuListener {
         } catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
         }
+    }
+
+    @Override
+    protected void onExit() {
+
     }
 }

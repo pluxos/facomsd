@@ -8,3 +8,7 @@ proto/br/
 log\.bin
 
 \.idea/
+
+*.bin
+
+*.snap

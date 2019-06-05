@@ -50,6 +50,11 @@ public class MenuListenerTest {
             protected void onDeleteSelected(BigInteger key) {
                 expKey = key.longValue();
             }
+
+            @Override
+            protected void onExit() {
+
+            }
         };
     }
 

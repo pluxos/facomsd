@@ -1,6 +1,6 @@
 package br.ufu.ds.client;
 
-import br.ufu.ds.ServerProtocol;
+import br.ufu.ds.rpc.Request;
 import com.google.protobuf.ByteString;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public abstract class MenuListener implements Runnable {
             if (command.contains("create")) {
 
                 try {
-                    createOrUpdate(ServerProtocol.Request.RequestType.CREATE, command);
+                    createOrUpdate(Request.RequestType.CREATE, command);
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
@@ -56,7 +56,7 @@ public abstract class MenuListener implements Runnable {
             } else if (command.contains("read")) {
 
                 try {
-                    readOrDelete(ServerProtocol.Request.RequestType.READ, command);
+                    readOrDelete(Request.RequestType.READ, command);
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
@@ -64,7 +64,7 @@ public abstract class MenuListener implements Runnable {
             } else if (command.contains("update")) {
 
                 try {
-                    createOrUpdate(ServerProtocol.Request.RequestType.UPDATE, command);
+                    createOrUpdate(Request.RequestType.UPDATE, command);
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
@@ -72,14 +72,14 @@ public abstract class MenuListener implements Runnable {
             } else if (command.contains("delete")) {
 
                 try {
-                    readOrDelete(ServerProtocol.Request.RequestType.DELETE, command);
+                    readOrDelete(Request.RequestType.DELETE, command);
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
 
             } else if (command.equals("exit")) {
                 run = false;
-                System.out.println("\nBye!");
+                onExit();
             } else if (command.equals("help")) {
                 System.out.println('\n' + menu);
              } else {
@@ -92,8 +92,9 @@ public abstract class MenuListener implements Runnable {
     protected abstract void onReadSelected(BigInteger key);
     protected abstract void onUpdateSelected(BigInteger key, ByteString value);
     protected abstract void onDeleteSelected(BigInteger key);
+    protected abstract void onExit();
 
-    private void createOrUpdate(ServerProtocol.Request.RequestType type, String command) throws IOException {
+    private void createOrUpdate(Request.RequestType type, String command) throws IOException {
         BigInteger key;
         ByteString value;
 
@@ -111,14 +112,14 @@ public abstract class MenuListener implements Runnable {
 
         value = ByteString.copyFromUtf8(args[2].trim());
 
-        if (type == ServerProtocol.Request.RequestType.CREATE) {
+        if (type == Request.RequestType.CREATE) {
             onCreateSelected(key, value);
-        } else if (type == ServerProtocol.Request.RequestType.UPDATE) {
+        } else if (type == Request.RequestType.UPDATE) {
             onUpdateSelected(key, value);
         }
     }
 
-    private void readOrDelete(ServerProtocol.Request.RequestType type, String command) throws IOException {
+    private void readOrDelete(Request.RequestType type, String command) throws IOException {
         BigInteger key;
 
         String[] args = command.split(" ");
@@ -133,9 +134,9 @@ public abstract class MenuListener implements Runnable {
             throw new IOException("Key must be a number");
         }
 
-        if (type == ServerProtocol.Request.RequestType.READ) {
+        if (type == Request.RequestType.READ) {
             onReadSelected(key);
-        } else if (type == ServerProtocol.Request.RequestType.DELETE) {
+        } else if (type == Request.RequestType.DELETE) {
             onDeleteSelected(key);
         }
     }

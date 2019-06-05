@@ -1,8 +1,9 @@
 package br.ufu.ds.server;
 
-import br.ufu.ds.ServerProtocol;
+import br.ufu.ds.rpc.Request;
+import br.ufu.ds.rpc.Response;
+import io.grpc.stub.StreamObserver;
 
-import java.nio.channels.SocketChannel;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -13,7 +14,8 @@ public final class Queues {
 
     private BlockingQueue<Command> mQueueRequest,
                                   mQueueCmd,
-                                  mQueueLog;
+                                  mQueueLog,
+                                  mQueueAnotherServer;
 
     private static Queues instance = null;
 
@@ -21,6 +23,7 @@ public final class Queues {
         mQueueCmd = new ArrayBlockingQueue<>(20, true);
         mQueueLog = new ArrayBlockingQueue<>(20, true);
         mQueueRequest = new ArrayBlockingQueue<>(20, true);
+        mQueueAnotherServer = new ArrayBlockingQueue<>(20, true);
     }
 
     public BlockingQueue<Command> getRequests() {
@@ -35,6 +38,10 @@ public final class Queues {
         return mQueueLog;
     }
 
+    public BlockingQueue<Command> getAnotherServer() {
+        return mQueueAnotherServer;
+    }
+
     public static Queues getInstance() {
         if (instance == null) {
             synchronized (Queues.class) {
@@ -47,10 +54,10 @@ public final class Queues {
     }
 
     public static class Command {
-        public final SocketChannel client;
-        public final ServerProtocol.Request request;
+        public final StreamObserver<Response> client;
+        public final Request request;
 
-        public Command(SocketChannel client, ServerProtocol.Request request) {
+        public Command(StreamObserver<Response> client, Request request) {
             this.client = client;
             this.request = request;
         }

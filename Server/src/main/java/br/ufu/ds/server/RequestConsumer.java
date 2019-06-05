@@ -3,7 +3,7 @@ package br.ufu.ds.server;
 /**
  * @author Marcus
  */
-public class RequestConsumer extends Consumer {
+public final class RequestConsumer extends Consumer {
 
     public RequestConsumer() {
         super(Queues.getInstance().getRequests());
@@ -11,7 +11,11 @@ public class RequestConsumer extends Consumer {
 
     @Override
     public void consume(Queues.Command command) {
-        Queues.getInstance().getCommands().add(command);
-        Queues.getInstance().getLogs().add(command);
+        try {
+            Queues.getInstance().getCommands().put(command);
+            Queues.getInstance().getLogs().put(command);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
