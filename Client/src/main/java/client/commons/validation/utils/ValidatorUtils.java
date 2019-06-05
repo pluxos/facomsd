@@ -3,11 +3,7 @@ package client.commons.validation.utils;
 import client.commons.domain.Method;
 import client.commons.exceptions.ErrorMap;
 import client.commons.exceptions.InvalidCommandException;
-import client.commons.validation.strategy.CreateValidator;
-import client.commons.validation.strategy.DeleteValidator;
-import client.commons.validation.strategy.GetValidator;
-import client.commons.validation.strategy.UpdateValidator;
-import client.commons.validation.strategy.ValidatorStrategy;
+import client.commons.validation.strategy.*;
 
 public class ValidatorUtils {
 

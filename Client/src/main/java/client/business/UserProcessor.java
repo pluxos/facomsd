@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 class UserProcessor {
 	
-	static void sendCommand(String input, GreeterGrpc.GreeterBlockingStub output) throws InvalidCommandException {
+	static void sendCommand(String input, GreeterGrpc.GreeterStub output) throws InvalidCommandException {
 		String[] inputParams = CommandUtils.getInputParams(input);
 		if (inputParams != null && !StringUtils.isEmpty(inputParams[0])) {
 			Method method = Method.getMethod(inputParams[0]);

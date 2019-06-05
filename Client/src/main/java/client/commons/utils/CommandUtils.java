@@ -1,13 +1,12 @@
 package client.commons.utils;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
-import org.apache.commons.lang3.StringUtils;
-
 import client.commons.domain.Method;
 import client.commons.exceptions.ErrorMap;
 import client.commons.exceptions.InvalidCommandException;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 public class CommandUtils {
 
@@ -36,7 +35,7 @@ public class CommandUtils {
 		}
 	}
 	
-	public static void validateEmail(String[] userInput) {
+	private static void validateEmail(String[] userInput) {
 		if (StringUtils.isEmpty(userInput[2])) {
 			throw new InvalidCommandException(ErrorMap.INVALID_EMAIL);
 		}
@@ -47,13 +46,13 @@ public class CommandUtils {
 		}
 	}
 	
-	public static void validatePassword(String[] userInput) {
+	private static void validatePassword(String[] userInput) {
 		if (StringUtils.isEmpty(userInput[3]) || !userInput[3].matches("^[a-zA-Z0-9]+$")) {
 			throw new InvalidCommandException(ErrorMap.INVALID_PASSWORD);
 		}
 	}
 	
-	public static void validateName(String[] userInput) {
+	private static void validateName(String[] userInput) {
 		if (StringUtils.isEmpty(userInput[4]) || !userInput[4].matches("[a-zA-Z]+")) {
 			throw new InvalidCommandException(ErrorMap.INVALID_NAME);
 		}
