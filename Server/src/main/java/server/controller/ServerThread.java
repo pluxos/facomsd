@@ -1,15 +1,15 @@
 package server.controller;
 
-import io.grpc.*;
+import io.grpc.FindResponse;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
-import server.client.CommunicationManager;
-import server.client.GetRangeObserver;
+import server.client.grpc.GrpcCommunication;
 import server.commons.Chord.Chord;
-import server.commons.Chord.Node;
 import server.commons.Chord.FingerTable;
+import server.commons.Chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
-import server.commons.utils.JsonUtils;
 import server.receptor.ConsumerF1;
 import server.receptor.RecoverLog;
 import server.receptor.ThreadCommand;
@@ -18,7 +18,8 @@ import server.receptor.routine.Counter;
 import server.receptor.routine.FileRoutine;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Properties;
+import java.util.Timer;
 import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
@@ -37,6 +38,8 @@ public class ServerThread implements Runnable {
 		if(args.length == 4) {
 			this.chordIp = args[2];
 			this.chordPort = Integer.parseInt(args[3]);
+			GrpcCommunication.ip = args[2];
+			GrpcCommunication.port = this.chordPort;
 		}
 		Counter.startCounter(args[0]);
 	}
@@ -119,33 +122,18 @@ public class ServerThread implements Runnable {
 
 		System.out.println("KEY: " + Chord.getNode().getKey());
 
-		findNode(this.chordIp, this.chordPort);
+		GrpcCommunication.findNode(this.chordIp, this.chordPort);
 	}
 
-	private void findNode(String ip, int port){
-		GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(ip, port);
-		StreamObserver<FindResponse> observer = new ObserverResponse();
-
-		output.findNode(FindMessage.newBuilder().setKey(Chord.getNode().getKey()).build(), observer);
-	}
-
-	private void getRange(FindResponse findResponse) throws ServerException {
-		GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
-
-		output.getRange(
-				GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
-				new GetRangeObserver());
-	}
-
-	class ObserverResponse implements StreamObserver<FindResponse> {
+	public static class ObserverResponse implements StreamObserver<FindResponse> {
 		@Override
 		public void onNext(FindResponse findResponse) {
 			if(!findResponse.getResponse()) {
-				findNode(findResponse.getIp(), findResponse.getPort());
+				GrpcCommunication.findNode(findResponse.getIp(), findResponse.getPort());
 			} else {
 				try {
 					System.out.println(findResponse.getPort());
-					getRange(findResponse);
+					GrpcCommunication.getRange(findResponse);
 				} catch (ServerException e) {
 					e.printStackTrace();
 				}

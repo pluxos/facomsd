@@ -3,6 +3,7 @@ package server.client;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
 import io.grpc.stub.StreamObserver;
+import server.client.grpc.GrpcCommunication;
 import server.commons.Chord.Chord;
 import server.commons.Chord.Node;
 import server.commons.exceptions.ServerException;
@@ -15,6 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
+
+    private String chordIp;
+    private int chordPort;
+
+    public GetRangeObserver(String chordIp, int chordPort){
+        this.chordIp = chordIp;
+        this.chordPort = chordPort;
+    }
 
     @Override
     public void onNext(GetRangeResponse getRangeResponse) {
@@ -33,17 +42,17 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
                 /* Set Range */
                 TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {
                 };
-                myNode.setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
-                ft.updateFT(myNode);
+                Chord.getNode().setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+                Chord.getFt().updateFT(Chord.getNode());
 
                 /* Update Tabela de rotas */
                 System.err.println("ATUALIZANDO TABELA DE ROTAS");
-                ft.updateFT(newNode);
+                Chord.getFt().updateFT(newNode);
             } else {
-                myNode.setNewKey();
-                ft.setKey(myNode.getKey());
-                System.out.println("KEY: " + myNode.getKey());
-                findNode(chordIp, chordPort);
+                Chord.getNode().setNewKey();
+                Chord.getFt().setKey(Chord.getNode().getKey());
+                System.out.println("KEY: " + Chord.getNode().getKey());
+                GrpcCommunication.findNode(chordIp, chordPort);
             }
         } catch (ServerException e) {
             e.printStackTrace();
