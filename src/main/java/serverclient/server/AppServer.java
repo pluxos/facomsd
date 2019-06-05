@@ -11,18 +11,18 @@ public class AppServer {
 
     private static final Logger logger = Logger.getLogger(AppServer.class.getName());
 
-    private int port = 42420;
+    private static int initialPort = 42420;
     private Server server;
 
     private void start() throws Exception {
         logger.info("Starting the grpc server");
 
-        server = ServerBuilder.forPort(port)
+        server = ServerBuilder.forPort(initialPort)
                 .addService(new MessageServiceProtImpl())
                 .build()
                 .start();
 
-        logger.info("Server started. Listening on port " + port);
+        logger.info("Server started. Listening on port " + initialPort);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("*** JVM is shutting down. Turning off grpc server as well ***");
@@ -50,6 +50,14 @@ public class AppServer {
         if (server != null) {
             server.awaitTermination();
         }
+    }
+
+    public int getLastPort() {
+        return initialPort;
+    }
+
+    public void increasePort() {
+        initialPort++;
     }
 
 //    private class GreeterImpl extends GreeterGrpc.GreeterImplBase {
