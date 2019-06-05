@@ -20,34 +20,37 @@ import java.util.Map;
 
 public class RecoverLog implements Runnable {
 
-	private String BASE_PATH;
-	public RecoverLog(String path) {
-		BASE_PATH = path;
+	private String basePath;
+
+	public RecoverLog(String basePath) {
+		this.basePath = basePath;
 	}
 
 	@Override
 	public void run() {
-		Long counter = Counter.getCounter() -1;
-		int i;
-		for (i = 0; i < 3; i++) {
+		Long counter = Counter.getCounter() == 0 ? 0 : (Counter.getCounter() - 1);
+		for (int i = 0; i < 3; i++) {
 			try {
 				Manipulator.clearDatabase();
 				loadSnapshotToMemory(counter);
-				loadLogToMemory(counter);
-				break;
 			} catch (Exception e) {
 				counter--;
+				continue;
 			}
-		}
-		if (i == 4) {
-			System.err.println("Erro ao carregar o banco de dados!");
-			Manipulator.clearDatabase();
+			try {
+				loadLogToMemory(counter);
+			} catch (ServerException e) {
+				continue;
+			} catch (IOException e) {}
+			break;
 		}
 	}
 
 	private void loadSnapshotToMemory(Long counter) throws ServerException, IOException {
-		TypeReference<HashMap<BigInteger, byte[]>> typeRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
-		HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(FileUtils.read(buildFilePath("snap", counter)), typeRef);
+		TypeReference<HashMap<BigInteger, byte[]>> typeRef = new TypeReference<HashMap<BigInteger, byte[]>>() {
+		};
+		HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(FileUtils.read(buildFilePath("snap", counter)),
+				typeRef);
 		for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
 			Manipulator.addValue(entry.getKey(), entry.getValue());
 		}
@@ -68,6 +71,6 @@ public class RecoverLog implements Runnable {
 	}
 
 	private String buildFilePath(String type, Long counter) {
-		return BASE_PATH + type + counter + ".log";
+		return basePath + type + counter + ".log";
 	}
 }

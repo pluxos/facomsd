@@ -14,6 +14,7 @@ import server.receptor.ConsumerF1;
 import server.receptor.RecoverLog;
 import server.receptor.ThreadCommand;
 import server.receptor.ThreadLog;
+import server.receptor.routine.Counter;
 import server.receptor.routine.FileRoutine;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class ServerThread implements Runnable {
 			this.chordIp = args[2];
 			this.chordPort = Integer.parseInt(args[3]);
 		}
+		Counter.startCounter(args[0]);
 	}
 
 	private void stop() {

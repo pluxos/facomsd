@@ -9,18 +9,20 @@ import java.io.IOException;
 
 public class Counter {
 	
-	private static String PATH  = "counter.log";
+	private static final String COUNTER_FILE_NAME  = "counter.log";
+	private static String path;
 	private static Long counter = (long) 0;
 	
 	static {
+		
+	}
+
+	public static void startCounter(String basePath) {
+		path = basePath + COUNTER_FILE_NAME;
 		counter = getCounterValue();
 		if (counter != (long) 0) {
 			counter++;
 		}
-	}
-
-	public static void setPath(String path) {
-		PATH = path + PATH;
 	}
 	
 	public static long getCounter() {
@@ -31,11 +33,11 @@ public class Counter {
 	}
 	
 	private static boolean counterFileExists() {
-		return new File(PATH).exists();
+		return new File(path).exists();
 	}
 	
 	public static void writeCounterValue() {
-		try (FileWriter writer = new FileWriter(PATH);
+		try (FileWriter writer = new FileWriter(path);
 				BufferedWriter bw = new BufferedWriter(writer)) {
 			bw.write(String.valueOf(counter));
 		} catch (IOException e) {
@@ -50,7 +52,7 @@ public class Counter {
 	@SuppressWarnings("resource")
 	private static Long getCounterValue() {
 		try {
-			return Long.parseLong(new BufferedReader(new FileReader(PATH)).readLine());
+			return Long.parseLong(new BufferedReader(new FileReader(path)).readLine());
 		} catch (NumberFormatException | IOException e) {
 			return (long) 0;
 		}

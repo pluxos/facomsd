@@ -12,11 +12,10 @@ import server.model.hashmap.Manipulator;
 
 public class FileRoutine extends TimerTask {
 
-	private String BASE_PATH;
+	private String basePath;
 
-	public FileRoutine(String path) {
-		BASE_PATH = path;
-		Counter.setPath(path);
+	public FileRoutine(String basePath) {
+		this.basePath = basePath;
 	}
 
 	@Override
@@ -47,6 +46,6 @@ public class FileRoutine extends TimerTask {
 	}
 
 	private String buildPath(String type, Long counter) {
-		return BASE_PATH + type + counter.toString() + ".log";
+		return basePath + type + counter.toString() + ".log";
 	}
 }
