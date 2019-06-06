@@ -1,6 +1,10 @@
 package server.business.command.strategy;
 
+import io.grpc.GenericRequest;
 import io.grpc.GenericResponse;
+import io.grpc.GreeterGrpc;
+import server.client.CommunicationManager;
+import server.commons.Chord.Node;
 import server.commons.domain.GenericCommand;
 import server.commons.utils.MessageMap;
 import server.model.hashmap.Manipulator;
@@ -34,5 +38,18 @@ public class GetUser implements CommandStrategy {
 			genericCommand.getOutput().onNext(getResponse);
 			genericCommand.getOutput().onCompleted();
 		}
+	}
+
+	@Override
+	public void passCommand(GenericCommand genericCommand, Node node) {
+		System.err.println(node.getPort());
+		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
+
+		stub.getUser(
+				GenericRequest.newBuilder()
+						.setCode(genericCommand.getCode().intValue())
+						.build(),
+				new GenericResponseObserver(genericCommand.getOutput())
+		);
 	}
 }

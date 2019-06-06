@@ -1,7 +1,14 @@
 package server.business.command.strategy;
 
+import io.grpc.GenericRequest;
 import io.grpc.GenericResponse;
+import io.grpc.GreeterGrpc;
+import server.client.CommunicationManager;
+import server.commons.Chord.Node;
 import server.commons.domain.GenericCommand;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.DataCodificator;
+import server.commons.utils.JsonUtils;
 import server.commons.utils.MessageMap;
 import server.model.hashmap.Manipulator;
 
@@ -12,7 +19,7 @@ public class UpdateUser implements CommandStrategy {
 	@Override
 	public void executeCommand(GenericCommand genericCommand) {
 		BigInteger code = genericCommand.getCode();
-		byte[] data = genericCommand.getData();
+		byte[] data = DataCodificator.stringToByteArray(genericCommand.getData());
 
 		GenericResponse updateResponse;
 
@@ -41,5 +48,18 @@ public class UpdateUser implements CommandStrategy {
 			genericCommand.getOutput().onNext(updateResponse);
 			genericCommand.getOutput().onCompleted();
 		}
+	}
+
+	@Override
+	public void passCommand(GenericCommand genericCommand, Node node) {
+		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
+
+		stub.updateUser(
+				GenericRequest.newBuilder()
+						.setCode(genericCommand.getCode().intValue())
+						.setData(genericCommand.getData())
+						.build(),
+				new GenericResponseObserver(genericCommand.getOutput())
+		);
 	}
 }

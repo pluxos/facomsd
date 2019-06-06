@@ -28,7 +28,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));
-        genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+        genericCommand.setData(request.getData());
         genericCommand.setMethod(Method.CREATE.toString());
 
         RowF1.addItem(genericCommand);
@@ -47,7 +47,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));
-        genericCommand.setData(DataCodificator.stringToByteArray(request.getData()));
+        genericCommand.setData(request.getData());
         genericCommand.setMethod(Method.UPDATE.toString());
 
         RowF1.addItem(genericCommand);
@@ -100,9 +100,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         if(newNode.getKey() != this.node.getKey()) {
             /* Defino o Range de dados que preciso retornar, dado o nó vindo do request */
             /* Redefinir o meu range */
-            Node node = new Node();
-            node.setKey(newNode.getKey());
-            node.setRangeWithArray(this.node.updateRange(this.node.getKey(), newNode.getKey()));
+            newNode.setRangeWithArray(this.node.updateRange(this.node.getKey(), newNode.getKey()));
 
             /* Pego todos os dados correspondente a este range que está na HT */
 
@@ -114,7 +112,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
                         GetRangeResponse.newBuilder()
                                 .setNode(JsonUtils.serialize(this.node))
                                 .setData(JsonUtils.serialize(dbRecovery))
-                                .setRange(JsonUtils.serialize(node.getRange()))
+                                .setRange(JsonUtils.serialize(newNode.getRange()))
                                 .build()
                 );
             } catch (ServerException e) {
@@ -125,7 +123,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             /* Update Tabela de rota */
 
             this.ft.updateFT(this.node);
-            this.ft.updateFT(node);
+            this.ft.updateFT(newNode);
         } else {
             /* Mesma Chave! reportar erro! */
             try {

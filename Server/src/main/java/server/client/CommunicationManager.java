@@ -10,7 +10,7 @@ public class CommunicationManager {
     private static int statePort;
 
     public static GreeterGrpc.GreeterStub initCommunication(String ip, int port) {
-        if(ip.equals("")) {
+        if(ip == null || ip.equals("")) {
             ip = "localhost";
         }
 

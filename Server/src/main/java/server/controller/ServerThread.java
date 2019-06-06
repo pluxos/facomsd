@@ -10,10 +10,7 @@ import server.commons.Chord.FingerTable;
 import server.commons.Chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
-import server.receptor.ConsumerF1;
-import server.receptor.RecoverLog;
-import server.receptor.ThreadCommand;
-import server.receptor.ThreadLog;
+import server.receptor.*;
 import server.receptor.routine.Counter;
 import server.receptor.routine.FileRoutine;
 
@@ -83,9 +80,11 @@ public class ServerThread implements Runnable {
 			Thread tConsumer = new Thread(new ConsumerF1());
 			Thread tCommand = new Thread(new ThreadCommand());
 			Thread tLog = new Thread(new ThreadLog());
+			Thread tConsumer4 = new Thread(new ConsumerF4());
 			tConsumer.start();
 			tCommand.start();
 			tLog.start();
+			tConsumer4.start();
 
 			this.server.awaitTermination();
 		} catch (IOException | InterruptedException e) {
