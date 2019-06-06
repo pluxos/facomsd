@@ -13,12 +13,12 @@ import java.util.Scanner;
 
 public class ClientCommands implements Runnable {
 
-	private GreeterGrpc.GreeterBlockingStub output;
+	private GreeterGrpc.GreeterStub output;
 	private Scanner scanner;
 	private boolean isTest;
 	private String filePath;
 
-	public ClientCommands(GreeterGrpc.GreeterBlockingStub output, boolean isTest, String filePath) {
+	public ClientCommands(GreeterGrpc.GreeterStub output, boolean isTest, String filePath) {
 		this.output = output;
 		this.scanner = new Scanner(System.in);
 		this.isTest = isTest;
@@ -42,7 +42,6 @@ public class ClientCommands implements Runnable {
 				System.err.println(ErrorMap.UNEXPECTED_ERROR.getMessage());
 			}
 		}
-		System.out.println("Finalizando thread de Comandos...");
 	}
 
 	private void printCommands() {

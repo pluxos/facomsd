@@ -1,16 +1,16 @@
 
 package client.business.request.strategy;
 
+import client.business.request.observers.GenericObserver;
 import client.commons.utils.DataCodificator;
 import io.grpc.GenericRequest;
-import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
 
 
 public class UpdateUser implements RequestStrategy {
 
 	@Override
-	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterBlockingStub output) {
+	public void sendRequest(String[] inputParams, GreeterGrpc.GreeterStub output) {
 		String data = DataCodificator.prepareInputs(inputParams);
 
 		GenericRequest updateRequest = GenericRequest.newBuilder()
@@ -18,7 +18,9 @@ public class UpdateUser implements RequestStrategy {
 				.setData(data)
 				.build();
 
-		GenericResponse updateResponse = output.updateUser(updateRequest);
-		System.out.println(updateResponse.getMessage());
+		output.updateUser(
+				updateRequest,
+				new GenericObserver()
+		);
 	}
 }

@@ -1,10 +1,9 @@
 package client.commons.validation.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import client.commons.exceptions.ErrorMap;
 import client.commons.exceptions.InvalidCommandException;
 import client.commons.utils.CommandUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class InputRequestValidator {
 
