@@ -8,7 +8,7 @@
               Wallyson Pedrosa Ferreira - 11711BSI267, 
               Rafael Denipote Ricci - 11511BSI255.
 # Descrição 
-- Segunda etapa do projeto em que agora a comunicação entre cliente e servidor é feita via gRPC e implementação de uma rede de servidores (chord) e uma mudança no sistema de arquivos, 3 logs vão ser criados e apos os 3 encherem, no caso do teste vão ser 3 comandos por log, vai ser criado um snapshot do server e guardado em arquivo. Obs. Não conseguimos implementar o chord
+- Segunda etapa do projeto em que agora a comunicação entre cliente e servidor é feita via gRPC e implementação de uma rede de servidores (chord) e uma mudança no sistema de arquivos, 3 logs vão ser criados e apos os 3 encherem, no caso do teste vão ser 3 comandos por log, vai ser criado um snapshot do server e guardado em arquivo. Obs. Não conseguimos implementar o chord, existem algumas classe para criar o chord, coordenar os servidores e encaminhar as requisições que não são utilizadas.
 
 # Instruções do projeto
 - As classes .java estão em pacotes que ficam no diretório sd-trabalho/src/main/java.
