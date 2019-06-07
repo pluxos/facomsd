@@ -26,20 +26,25 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 import java.lang.String;
+import java.lang.Integer;
 import com.google.protobuf.ByteString;
 import server.ItemFila;
 import singletons.F1;
 import threads.*;
+import server.Table;
+import server.ChordGrpc.ChordImplBase;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
+import java.util.Scanner;
 
 /**
  * Server that manages startup/shutdown of a {@code Greeter} server.
  */
 public class ServerGrpc {
     private static final BlockingQueue<ItemFila> f1 = F1.getInstance();
+    private static Table table;
     private static final Logger logger = Logger.getLogger(ServerGrpc.class.getName());
 
     private Server server;
@@ -47,9 +52,41 @@ public class ServerGrpc {
 
     private void start() throws IOException {
         /* The port on which the server should run */
-        int port = 50051;
-        server = ServerBuilder.forPort(port).addService(new CrudImpl(this.Database)).build().start();
-        logger.info("Server started, listening on " + port);
+        Scanner scanner = new Scanner( System.in );
+
+        System.out.println("Digite uma porta:");
+        String scan = scanner.nextLine();
+        int myPort = Integer.parseInt(scan);
+        
+        System.out.println("Digite o número do servidor:");
+        scan = scanner.nextLine();
+        int myKey = Integer.parseInt(scan);
+
+        System.out.println("Digite a porta de um servidor no Chords:");
+        scan = scanner.nextLine();
+        int friendPort = Integer.parseInt(scan);
+
+        String myIP = "localhost";
+        String friendIP = "localhost";
+
+        Table.createInstance(myKey, myIP, myPort);
+        Table tabela = Table.getInstance();
+        ServerGrpc.table = tabela;
+
+        scanner.close();
+
+        if (friendPort != myPort) {
+            // Adicionar esse servidor no Chord
+            new Thread( new AddServer(friendIP, friendPort, myKey, myIP, myPort, tabela) ).start();
+        }
+
+        server = ServerBuilder.forPort(myPort)
+                .addService(new CrudImpl(this.Database))
+                .addService(new ChordImpl())
+                .build()
+                .start();
+
+        logger.info("Server started, listening on " + myPort);
         new Thread(new threads.Logger()).start();
         new Thread(new Consumidor()).start();
         new Thread(new Persistence()).start();
@@ -163,5 +200,201 @@ public class ServerGrpc {
             }
         }
 
+    }
+    static class ChordImpl extends ChordImplBase {
+        
+        @Override
+        public void addServidor(AddRequest req, StreamObserver<AddResponse> responseObserver) {
+            
+            // System.out.println("ADDSERVER: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
+
+            boolean needResponse = true;
+
+            int myKey = table.myKey;
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int serverKey = req.getKey();
+            String serverIP = req.getIp();
+            int serverPort = req.getPort();
+            
+            int nextKey = Integer.parseInt(table.table[0][1]);
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            int responseKey = 0;
+            String responseIP = "ERROR";
+            int responsePort = 0;
+
+            
+            if (myKey == serverKey) {
+                System.out.println("ERRO!!! SERVIDOR JÁ EXISTENTE ");
+            }
+            else if (nextKey == 0) {
+                table.setTable(serverKey, serverIP, serverPort);
+                responseKey = myKey;
+                responseIP = myIP;
+                responsePort = myPort;
+            }
+            else if (serverKey > myKey && (serverKey < nextKey || nextKey < myKey)) {
+                table.insertTable(serverKey, serverIP, serverPort, 0);
+                responseKey = nextKey;
+                responseIP = nextIP;
+                responsePort = nextPort;
+            }
+            else if (nextKey < myKey && serverKey < nextKey) {
+                table.insertTable(serverKey, serverIP, serverPort, 0);
+                responseKey = nextKey;
+                responseIP = nextIP;
+                responsePort = nextPort;
+            }
+            else {
+                needResponse = false;
+
+                // Se entrou aki é necessário repassar para o proximo
+                // if (first) {
+                //     needResponse = false;
+                // }
+                // else {
+                //     responseKey = -1;
+                //     responseIP = "NEXT";
+                //     responsePort = -1;
+                // }
+                // RETIRAR TABLE DEPOIS, ELA É ESTATICA
+                new Thread( new AddServer(nextIP, nextPort, serverKey, serverIP, serverPort, table, responseObserver) ).start();
+            }
+
+            if (needResponse) {
+                AddResponse response = AddResponse.newBuilder().setIp(responseIP).setPort(responsePort).setKey(responseKey).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
+        }
+    
+        @Override
+        public void deleteServidor(DelRequest req, StreamObserver<DelResponse> responseObserver) {
+            // System.out.println("DELSERVER: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
+            DelResponse response = DelResponse.newBuilder().setRetorno(true).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    
+        @Override
+        public void notifyServidor(NotifyRequest req, StreamObserver<NotifyResponse> responseObserver) {
+
+            int myKey = table.myKey;
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int serverKey = req.getNewkey();
+            String serverIP = req.getNewip();
+            int serverPort = req.getNewport();
+            
+            int nextKey = Integer.parseInt(table.table[0][1]);
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            if(myKey != serverKey) {
+
+                for (int i = 1; i < table.table.length; i++) {
+                    int expKeyX = Integer.parseInt(table.table[i][0]);
+                    int keyX = Integer.parseInt(table.table[i][1]);
+
+                    //SHOW DE IFs
+                    if (myKey > nextKey) {
+                        expKeyX = expKeyX - myKey;
+                    }
+
+                    if (expKeyX == keyX) {
+                        continue;
+                    }
+                    else if (expKeyX == serverKey) {
+                        table.insertTable(serverKey, serverIP, serverPort, i);
+                        continue;
+                    }
+                    else if (expKeyX < serverKey && serverKey < keyX) {
+                        table.insertTable(serverKey, serverIP, serverPort, i);
+                        continue;
+                    }
+                    else if (expKeyX > keyX) {
+                        // RECALCULAR
+                        new Thread( new UpdateServer(nextIP, nextPort, myKey, expKeyX, i) ).start();
+                        // new Thread( new UpdateServer(nextIP, nextPort, myKey, Integer.parseInt(table.table[i][0]), i) ).start();
+                    }
+                }
+
+                if(nextKey != serverKey) {
+                    // CONTINUAR ATUALIZANDO
+                    new Thread( new NotifyAllServers(nextIP, nextPort, serverKey, serverIP, serverPort) ).start();
+                }
+                    
+            }
+
+            NotifyResponse response = NotifyResponse.newBuilder().setOk("OK").build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+        @Override
+        public void updateServidor(UpRequest req, StreamObserver<UpResponse> responseObserver) {
+            // System.out.println("UPDATESERVER: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
+            
+            boolean needResponse = true;
+
+            int myKey = table.myKey;
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int serverKey = req.getMykey();
+            int serverPosition = req.getPosition();
+            int serverExpKey = req.getExpkey();
+            
+            int nextKey = Integer.parseInt(table.table[0][1]);
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            int responseKey = 0;
+            String responseIP = "ERROR";
+            int responsePort = 0;
+
+            if(nextKey == serverKey) {
+                responseKey = myKey;
+                responseIP = myIP;
+                responsePort = myPort;
+            }
+            else if (myKey == serverKey) {
+                System.out.println("NAO DEVIRIA ENTRAR AKI, NAO ACHOU CANDIDATO");
+            }
+            else if (myKey >= serverExpKey) {
+                responseKey = myKey;
+                responseIP = myIP;
+                responsePort = myPort;
+            }
+            else if (myKey > nextKey && serverExpKey > myKey) {
+                // BOLA PARA FRENTE POREM EXP KEY = -MYNUM
+                needResponse = false;
+                new Thread( new UpdateServer(nextIP, nextPort, serverKey, (serverExpKey - myKey), serverPosition, responseObserver) ).start();
+            }
+            else {
+                // BOLA PARA FRENTE POREM EXP KEY = -MYNUM
+                needResponse = false;
+                new Thread( new UpdateServer(nextIP, nextPort, serverKey, serverExpKey, serverPosition, responseObserver) ).start();
+            }
+
+            if (needResponse) {
+                UpResponse response = UpResponse.newBuilder().setIp(responseIP).setPort(responsePort).setKey(responseKey).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
+            
+        }
+    
+        @Override
+        public void searchFirst(SearchRequest req, StreamObserver<SearchResponse> responseObserver) {
+            System.out.println("SEARCHFIRST: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
+            SearchResponse response = SearchResponse.newBuilder().setIp(req.getIp()).setPort(req.getPort()).setKey(req.getKey()).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
     }
 }

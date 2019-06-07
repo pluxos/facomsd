@@ -25,7 +25,7 @@ public class Consumidor implements Runnable {
 		try {
 			while (true) {
                 ItemFila obj = f1.take();
-                if(obj!=null) System.out.println("asdfsdf");
+                // if(obj!=null) System.out.println("asdfsdf");
 				if (obj.getOurResponsability()) {
 					f2.put(obj);
 					f3.put(obj);
