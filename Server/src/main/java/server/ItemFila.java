@@ -12,7 +12,7 @@ public class ItemFila {
     private byte[] key;
     private byte[] value;
     private String controll;
-    boolean ourResponsability = true;
+    public boolean ourResponsability = true;
 
     public void itemFilaCreate(StreamObserver<CreateResponse> res, byte[] key, byte[] value) {
         this.responseC = res;

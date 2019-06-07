@@ -145,14 +145,14 @@ public class ServerGrpc {
             byte[] value = new byte[req.getValuesize()];
             req.getKey().copyTo(chave, 0);
             req.getValue().copyTo(value, 0);
-
-            System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+            
             itemfila.itemFilaCreate(responseObserver, chave, value);
-            try {
-                f1.put(itemfila);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            // System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
         }
 
         @Override
@@ -161,12 +161,18 @@ public class ServerGrpc {
             ItemFila itemfila = new ItemFila();
             req.getKey().copyTo(chave, 0);
             System.out.println("READ: < " + new BigInteger(chave) + " >");
+
             itemfila.itemFilaRead(responseObserver, chave);
-            try {
-                f1.put(itemfila);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+            
+            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            // try {
+            //     f1.put(itemfila);
+            // } catch (Exception e) {
+            //     System.out.println("Erro: " + e.getMessage());
+            // }
         }
 
         @Override
@@ -177,13 +183,19 @@ public class ServerGrpc {
             req.getKey().copyTo(chave, 0);
             req.getValue().copyTo(value, 0);
 
-            System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+            // System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
             itemfila.itemFilaUpdate(responseObserver, chave, value);
-            try {
-                f1.put(itemfila);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+            
+            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+
+            // try {
+            //     f1.put(itemfila);
+            // } catch (Exception e) {
+            //     System.out.println("Erro: " + e.getMessage());
+            // }
         }
 
         @Override
@@ -191,13 +203,20 @@ public class ServerGrpc {
             byte[] chave = new byte[req.getKeysize()];
             ItemFila itemfila = new ItemFila();
             req.getKey().copyTo(chave, 0);
-            System.out.println("DELETE: < " + new BigInteger(chave) + " >");
+            // System.out.println("DELETE: < " + new BigInteger(chave) + " >");
+
             itemfila.itemFilaDelete(responseObserver, chave);
-            try {
-                f1.put(itemfila);
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
-            }
+
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+
+            // try {
+            //     f1.put(itemfila);
+            // } catch (Exception e) {
+            //     System.out.println("Erro: " + e.getMessage());
+            // }
         }
 
     }
@@ -274,7 +293,34 @@ public class ServerGrpc {
         @Override
         public void deleteServidor(DelRequest req, StreamObserver<DelResponse> responseObserver) {
             // System.out.println("DELSERVER: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
-            DelResponse response = DelResponse.newBuilder().setRetorno(true).build();
+
+            int myKey = table.myKey;
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int serverKey = req.getKey();
+            
+            int nextKey = Integer.parseInt(table.table[0][1]);
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            if(myKey != serverKey) {
+                for (int i = 0; i < table.table.length; i++) {
+                    int expKeyX = Integer.parseInt(table.table[i][0]);
+                    int keyX = Integer.parseInt(table.table[i][1]);
+
+                    if (keyX == serverKey) {
+                        new Thread( new UpdateServer(nextIP, nextPort, myKey, expKeyX, i) ).start();
+                    }
+                }
+                // CONTINUAR ATUALIZANDO
+                new Thread( new DeleteServer(nextIP, nextPort, serverKey) ).start();
+            }
+            else {
+                // FECHAR SERVIDOR DEPOIS DE DEIXAR A LISTA VAZIA
+            }
+
+            DelResponse response = DelResponse.newBuilder().build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }
@@ -391,10 +437,42 @@ public class ServerGrpc {
     
         @Override
         public void searchFirst(SearchRequest req, StreamObserver<SearchResponse> responseObserver) {
-            System.out.println("SEARCHFIRST: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
-            SearchResponse response = SearchResponse.newBuilder().setIp(req.getIp()).setPort(req.getPort()).setKey(req.getKey()).build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
+            // System.out.println("SEARCHFIRST: < " + req.getKey() + " - " + req.getIp() + " - " + req.getPort()  + " >");
+
+            boolean needResponse = true;
+            
+            int myKey = table.myKey;
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int nextKey = Integer.parseInt(table.table[0][1]);
+            String nextIP = table.table[0][2];
+            int nextPort = Integer.parseInt(table.table[0][3]);
+
+            int responseKey = 0;
+            String responseIP = "ERROR";
+            int responsePort = 0;
+
+            if (nextKey == 0) {
+                responseKey = myKey;
+                responseIP = myIP;
+                responsePort = myPort;
+            }
+            else if (myKey > nextKey) {
+                responseKey = nextKey;
+                responseIP = nextIP;
+                responsePort = nextPort;
+            }
+            else {
+                needResponse = false;
+                new Thread( new SearchFirst(nextIP, nextPort, responseObserver) ).start();
+            }
+
+            if (needResponse) {
+                SearchResponse response = SearchResponse.newBuilder().setIp(responseIP).setPort(responsePort).build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
         }
     }
 }

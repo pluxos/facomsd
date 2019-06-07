@@ -81,12 +81,9 @@ message AddResponse {
 
 message DelRequest {
   int32 key = 1;
-  int32 port = 2;
-  string ip = 3;
 }
 
 message DelResponse {
-  bool retorno = 1;
 }
 
 message UpRequest {
@@ -102,15 +99,11 @@ message UpResponse {
 }
 
 message SearchRequest {
-  int32 key = 1;
-  int32 port = 2;
-  string ip = 3;
 }
 
 message SearchResponse {
-  int32 key = 1;
+  string ip = 1;
   int32 port = 2;
-  string ip = 3;
 }
 
 message NotifyRequest {

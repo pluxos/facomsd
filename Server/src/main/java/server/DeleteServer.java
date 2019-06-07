@@ -3,28 +3,28 @@ package server;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import server.ChordGrpc.ChordImplBase;
 
-import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.google.protobuf.ByteString;
+
+import server.Table;
 
 public class DeleteServer implements Runnable {
   private static final Logger logger = Logger.getLogger(DeleteServer.class.getName());
-  public int key;
-  public int port;
-  public String ip;
+  public int serverKey;
+
+  public Table table;
+
   private final ManagedChannel channel;
   private final ChordGrpc.ChordBlockingStub blockingStub; // Descobri que vc faz um blocking stub pra cada serviço
   
-
-  public DeleteServer(String host, int port, int key, int portM, String ip) {
-      this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().build());
-      this.key = key;
-      this.port = portM;
-      this.ip = ip;
-    }
+  public DeleteServer(String serverIP, int serverPort, int serverKey) {
+    this(ManagedChannelBuilder.forAddress(serverIP, serverPort).usePlaintext().build());
+    this.serverKey = serverKey;
+    this.table = Table.getInstance();
+  }
 
   DeleteServer(ManagedChannel channel) {
     this.channel = channel;
@@ -36,22 +36,20 @@ public class DeleteServer implements Runnable {
   }
 
   public void run() {
-    logger.info("Tentando enviar " + key + " -" + port + " - " + ip + " ...");
+    // logger.info("Tentando enviar " + key + " -" + port + " - " + ip + " ...");
     DelRequest request = DelRequest.newBuilder()
-                                         .setKey(key)
-                                         .setPort(port)
-                                         .setIp(ip).
-                                         build();
+                                         .setKey(serverKey)
+                                         .build();
+
     DelResponse response;
+
     try {
       response = this.blockingStub.deleteServidor(request);
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARNING, "Rpc failed: {0}", e.getStatus());
       return;
     }
-    if (response.getRetorno() == true) {
-      System.out.println("Servidor deletado com sucesso");
-    }
+
     try {
       this.shutdown();
     } catch (InterruptedException e) {

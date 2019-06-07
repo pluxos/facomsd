@@ -22,7 +22,6 @@ public class NotifyAllServers implements Runnable {
   private final ManagedChannel channel;
   private final ChordGrpc.ChordBlockingStub blockingStub; // Descobri que vc faz um blocking stub pra cada serviço
   
-
   public NotifyAllServers(String serverIP, int serverPort, int newKey, String newIP, int newPort) {
     this(ManagedChannelBuilder.forAddress(serverIP, serverPort).usePlaintext().build());
     this.newKey = newKey;
