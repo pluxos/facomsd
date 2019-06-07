@@ -79,18 +79,18 @@ public class Logger implements Runnable {
     public void getListOfCommands() {
         Banco.getInstance().blockDatabase();
         int lastSnapNumber = 0;
-        try (Stream<Path> walk = Files.walk(Paths.get("."))) {
+        try (Stream<Path> walk = Files.walk(Paths.get(Integer.toString(Table.getInstance().getMyKey())))) {
             List<String> files = walk.filter(Files::isRegularFile).map(x -> x.toString()).collect(Collectors.toList());
             if (files.size() == 0)
                 return;
 
             List<String> snaps = files.stream().filter(file -> file.matches(Table.getInstance().getMyKey() + "/snap.*")).collect(Collectors.toList());
             if (snaps.size() > 0) {
-                lastSnapNumber = Integer.parseInt(snaps.get(0).substring(7));
+                lastSnapNumber = Integer.parseInt(snaps.get(0).substring( snaps.get(0).lastIndexOf('.') + 1 ));
                 // Captura o último snapshot
                 for (String s : snaps)
-                    if (Integer.parseInt(s.substring(7)) > lastSnapNumber)
-                        lastSnapNumber = Integer.parseInt(s.substring(7));
+                    if (Integer.parseInt(s.substring(s.lastIndexOf('.')+1)) > lastSnapNumber)
+                        lastSnapNumber = Integer.parseInt(s.substring(s.lastIndexOf('s')+1));
                 // Restaurando todo o snap
                 for (String s : Files.readAllLines(Paths.get(Table.getInstance().getMyKey() + "/snap." + lastSnapNumber)))
                     Banco.getInstance().Insert(s);
