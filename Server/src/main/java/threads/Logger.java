@@ -1,6 +1,7 @@
 package threads;
 
 import server.ItemFila;
+import server.Table;
 import singletons.*;
 
 import java.io.*;
@@ -16,10 +17,12 @@ public class Logger implements Runnable {
     protected BlockingQueue<ItemFila> f2;
     protected BlockingQueue<ItemFila> f3;
     Path path;
-    String pathString = "./log.";
+    String pathString = new String();
     int number;
 
     public Logger() {
+        pathString += Table.getInstance().getMyKey();
+        pathString += "/log.";
         this.f1 = F1.getInstance();
         this.f2 = F2.getInstance();
         this.f3 = F3.getInstance();
@@ -81,7 +84,7 @@ public class Logger implements Runnable {
             if (files.size() == 0)
                 return;
 
-            List<String> snaps = files.stream().filter(file -> file.matches("./snap.*")).collect(Collectors.toList());
+            List<String> snaps = files.stream().filter(file -> file.matches(Table.getInstance().getMyKey() + "/snap.*")).collect(Collectors.toList());
             if (snaps.size() > 0) {
                 lastSnapNumber = Integer.parseInt(snaps.get(0).substring(7));
                 // Captura o último snapshot
@@ -89,11 +92,11 @@ public class Logger implements Runnable {
                     if (Integer.parseInt(s.substring(7)) > lastSnapNumber)
                         lastSnapNumber = Integer.parseInt(s.substring(7));
                 // Restaurando todo o snap
-                for (String s : Files.readAllLines(Paths.get("./snap." + lastSnapNumber)))
+                for (String s : Files.readAllLines(Paths.get(Table.getInstance().getMyKey() + "/snap." + lastSnapNumber)))
                     Banco.getInstance().Insert(s);
             }
 
-            List<String> logs = files.stream().filter(file -> file.matches("./log.*")).collect(Collectors.toList());
+            List<String> logs = files.stream().filter(file -> file.matches(Table.getInstance().getMyKey() + "/log.*")).collect(Collectors.toList());
             if (logs.size() > 0) {
                 // Removendo os logs que são anteriores ao último snapshot
                 for (int i = 0; i < logs.size(); i++)
