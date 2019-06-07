@@ -1,0 +1,55 @@
+syntax = "proto3";
+package com.sd.etapa2.grpc;
+
+service ServerRequestService {
+    rpc creat (CreateRequest) returns (CreateResponse);
+    rpc read (ReadRequest) returns(ReadResponse);
+    rpc update(UpdateRequest)returns(UpdateResponse);
+    rpc delete(DeleteRequest)returns(DeleteResponse);
+    rpc readvalues(ReadValuesRequest)returns(stream ReadResponse);
+    rpc sair(SairRequest)returns(SairResponse);
+}
+message CreateRequest{
+	int32 chave = 1;
+	string valor = 2;
+}
+message CreateResponse{
+	string mensagem = 1;
+	bool redir = 2;
+}
+message ReadRequest {
+    int32 chave = 1;
+}
+message ReadResponse{
+	int32 chave = 1;
+	string valor = 2;
+	string mensagem = 3;
+	bool redir = 4;
+}
+message UpdateRequest {
+	int32 chave = 1;
+	string valor = 2;
+}
+message UpdateResponse{
+	string mensagem = 1;
+	bool redir = 2;
+}
+
+message DeleteRequest{
+	int32 chave = 1;
+	
+}
+message DeleteResponse{
+	string mensagem = 1;
+	bool redir = 2;
+}
+
+message ReadValuesRequest{
+}
+
+message SairRequest{
+}
+message SairResponse{
+	string mensagem = 1;
+}
+
