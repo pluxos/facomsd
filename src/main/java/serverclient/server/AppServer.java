@@ -1,72 +1,71 @@
 package serverclient.server;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import serverclient.server.services.impl.MessageServiceProtImpl;
+import serverclient.model.Message;
+import serverclient.model.MessageOld;
+import serverclient.server.chord.chordring.Node;
+import serverclient.server.threads.handlers.MessageData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Logger;
+
+import static serverclient.server.chord.chordring.ChordRing.fix_nodes;
 
 public class AppServer {
 
     private static final Logger logger = Logger.getLogger(AppServer.class.getName());
 
-    private static int initialPort = 42420;
-    private Server server;
+    private static volatile BlockingQueue<MessageData> fila1;
+    private static volatile BlockingQueue<MessageOld> fila2;
+    private static volatile BlockingQueue<MessageData> fila3;
+    private static volatile BlockingQueue<Message> fila4;
 
-    private void start() throws Exception {
-        logger.info("Starting the grpc server");
+    private ExecutorService queueThreadPool = Executors.newFixedThreadPool(4);
 
-        server = ServerBuilder.forPort(initialPort)
-                .addService(new MessageServiceProtImpl())
-                .build()
-                .start();
-
-        logger.info("Server started. Listening on port " + initialPort);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.err.println("*** JVM is shutting down. Turning off grpc server as well ***");
-            AppServer.this.stop();
-            System.err.println("*** shutdown complete ***");
-        }));
+    static {
+        fila1 = new LinkedBlockingDeque<>();
+        fila2 = new LinkedBlockingDeque<>();
+        fila3 = new LinkedBlockingDeque<>();
+        fila4 = new LinkedBlockingDeque<>();
     }
 
-    private void stop() {
-        if (server != null) {
-            server.shutdown();
-        }
-    }
-
+    public static volatile List<Node> nodelist = new ArrayList<Node>();
 
     public static void main(String[] args) throws Exception {
         logger.info("Server startup. Args = " + Arrays.toString(args));
-        final AppServer server = new AppServer();
 
-        server.start();
-        server.blockUntilShutdown();
-    }
+        //System.out.println("Please enter the <number of desired nodes>: ");
+        int initialNumberOfNodes = 10;//Integer.parseInt(input.readLine());
+        //System.out.println("Please enter the <log of ring size>: ");
+        int ringSize = 64;
+        //Number of replicas
+        int numberOfReplicas = 5;
+        int acrescimoPort = 1;
 
-    private void blockUntilShutdown() throws InterruptedException {
-        if (server != null) {
-            server.awaitTermination();
+        System.out.printf("Initial number of nodes: %d\n ring size: %d\n replication factor: %d\n\n",
+                initialNumberOfNodes, ringSize, numberOfReplicas);
+
+        // create initial ring
+        for ( ; acrescimoPort <= initialNumberOfNodes; acrescimoPort++){
+            Node n = new Node("localhost", Integer.toString(acrescimoPort), ringSize ,numberOfReplicas);
+            nodelist.add(n);
+        }
+
+        fix_nodes(nodelist);
+
+        for (Node n: nodelist){
+            n.start();
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e1) {
+            System.out.println("Main couldn't sleep!");
         }
     }
 
-    public int getLastPort() {
-        return initialPort;
-    }
-
-    public void increasePort() {
-        initialPort++;
-    }
-
-//    private class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-//
-//        @Override
-//        public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
-//            HelloResponse response = HelloResponse.newBuilder().setMessage("Hello " + request.getName()).build();
-//            responseObserver.onNext(response);
-//            responseObserver.onCompleted();
-//        }
-//    }
 }

@@ -8,10 +8,10 @@ option objc_class_prefix = "MSG";
 package model;
 
 service MessageServiceProt {
-    rpc createMessage (Message) returns (Message) {}
-    rpc readMessage (Message) returns (Message) {}
-    rpc updateMessage (Message) returns (Message) {}
-    rpc deleteMessage (Message) returns (Message) {}
+    rpc createMessage (stream Message) returns (stream Message) {}
+    rpc readMessage (stream Message) returns (stream Message) {}
+    rpc updateMessage (stream Message) returns (stream Message) {}
+    rpc deleteMessage (stream Message) returns (stream Message) {}
 }
 
 message Message {

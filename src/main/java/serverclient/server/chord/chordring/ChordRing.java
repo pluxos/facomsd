@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static serverclient.server.AppServer.nodelist;
 //import java.lang.StringBuilder;
 /*
  * COMMAND EXAMPLES:
@@ -70,49 +72,20 @@ public class ChordRing {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
-		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		//System.out.println("Please enter the <number of desired nodes>: ");
-		int initialNumberOfNodes = 10;//Integer.parseInt(input.readLine());
-		//System.out.println("Please enter the <log of ring size>: ");
-		int ringSize = 64;
-		//Number of replicas
-		int numberOfReplicas = 5;
-		int acrescimoPort = 1;
-		List<Node> nodelist = new ArrayList<Node>();
-		
-		System.out.printf("Initial number of nodes: %d\n ring size: %d\n replication factor: %d\n\n",
-				initialNumberOfNodes, ringSize, numberOfReplicas);
-		
-		// create initial ring
-		for ( ; acrescimoPort <= initialNumberOfNodes; acrescimoPort++){
-			Node n = new Node("localhost", Integer.toString(acrescimoPort), ringSize ,numberOfReplicas);
-			nodelist.add(n);
-		}
 
-		fix_nodes(nodelist);
-		/*(for (Node n: nodelist){
-			System.out.println(n.getmyId());
-		}*/
-		for (Node n: nodelist){
-			n.start();
-		}
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e1) {
-			System.out.println("Main couldn't sleep!");
-		}
 		while(true){
 			System.out.println("Type your command: ");
 			String command = input.readLine();	
 			//System.out.println("command IS: "+ command);
 			String option = command.split(",")[0]; //insert,query,delete,join,depart
 			if (option.equals("insert") || option.equals("delete") || option.equals("query")) {
+
 				int len = nodelist.size();
-				
+
+				// Momento em que busca se conectar com um node aleatório da lista
 				int randomNum = ThreadLocalRandom.current().nextInt(0, len-1);
 				Node init = nodelist.get(randomNum);
+
 				main_forward_to(command + "-" + init.getMyname()+"-"+ init.getmyPort()+"\n", numberOfReplicas, init.getMyname(), init.getmyPort());
 			//	main_forward_to("join-"+n.successor.getmyId() +"\n", k, nodelist.get(0).getMyname(), nodelist.get(0).getmyPort());
 				System.out.println("Main says: I forwarded the command to Node with ID: " + init.getmyId());
@@ -173,7 +146,7 @@ public class ChordRing {
 		
 	}
 
-	private static void fix_nodes(List<Node> nodelist) {
+	public static void fix_nodes(List<Node> nodelist) {
 		int len = nodelist.size();
 		Collections.sort(nodelist);
 		for (int i=0; i<len; i++){

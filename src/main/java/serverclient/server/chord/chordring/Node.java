@@ -1,12 +1,14 @@
 package serverclient.server.chord.chordring;
 
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import serverclient.server.AppServer;
+import serverclient.server.services.impl.MessageServiceProtImpl;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //needed for catch(IOException e)
 import java.io.*;
@@ -14,8 +16,13 @@ import java.net.ServerSocket;
 //needed for socket setup
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
 public class Node extends Thread implements Comparable<Node> {
+
+	private static final Logger logger = Logger.getLogger(Node.class.getName());
+
+	//private Server server;
 
 	private static final int firstPort = 49162;
 	private static int nextPort = 0;
@@ -638,5 +645,34 @@ public class Node extends Thread implements Comparable<Node> {
 
 		return value.intValue();
 
+	}
+
+	private void startServer() throws Exception {
+		logger.info("Starting the grpc server");
+
+		server = ServerBuilder.forPort(myport)
+				.addService(new MessageServiceProtImpl())
+				.build()
+				.start();
+
+		logger.info("Server started. Listening on port " + myport);
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			System.err.println("*** JVM is shutting down. Turning off grpc server as well ***");
+			this.stop();
+			System.err.println("*** shutdown complete ***");
+		}));
+	}
+
+	private void stopServer() {
+		if (server != null) {
+			server.shutdown();
+		}
+	}
+
+	private void blockUntilShutdown() throws InterruptedException {
+		if (server != null) {
+			server.awaitTermination();
+		}
 	}
 }

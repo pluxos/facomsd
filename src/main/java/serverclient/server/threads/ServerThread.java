@@ -31,7 +31,7 @@ public class ServerThread implements Runnable {
     private static int port;
     private ServerSocket serverSocket = null;
     private ExecutorService clientThreadPool = Executors.newFixedThreadPool(10);
-    private ExecutorService queueThreadPool = Executors.newFixedThreadPool(3);
+    private ExecutorService queueThreadPool = Executors.newFixedThreadPool(4);
 
     static {
         fila1 = new LinkedBlockingDeque<>();
