@@ -1,16 +1,17 @@
-package server.commons.Chord;
-
-import server.commons.utils.FileUtils;
+package server.commons.chord;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import server.commons.utils.FileUtils;
+
 public class FingerTable {
     private int key;
-    private HashMap<Integer, Node> ft;
+    private Map<Integer, Node> ft;
     private int m;
     private int range;
 
@@ -26,11 +27,11 @@ public class FingerTable {
         }
     }
 
-    public HashMap<Integer, Node> getFt() {
+    public Map<Integer, Node> getFt() {
         return ft;
     }
 
-    public void setFt(HashMap<Integer, Node> ft) {
+    public void setFt(Map<Integer, Node> ft) {
         this.ft = ft;
     }
 

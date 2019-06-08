@@ -1,6 +1,6 @@
 package server.business.command.strategy;
 
-import server.commons.Chord.Node;
+import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
 
 public interface CommandStrategy {

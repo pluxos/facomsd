@@ -1,4 +1,4 @@
-package server.commons.Chord;
+package server.commons.chord;
 
 import server.commons.utils.FileUtils;
 

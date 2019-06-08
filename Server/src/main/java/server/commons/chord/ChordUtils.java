@@ -1,4 +1,4 @@
-package server.commons.Chord;
+package server.commons.chord;
 
 public class ChordUtils {
     public static Integer sucessor(Integer p, Integer i) {

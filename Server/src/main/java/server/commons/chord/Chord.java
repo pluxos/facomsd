@@ -1,4 +1,4 @@
-package server.commons.Chord;
+package server.commons.chord;
 
 public class Chord {
     private static FingerTable ft;

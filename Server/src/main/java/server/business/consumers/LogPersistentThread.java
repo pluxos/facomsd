@@ -1,17 +1,17 @@
-package server.receptor;
+package server.business.consumers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import server.commons.Rows.RowF2;
+import server.business.persistence.routine.Counter;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
+import server.commons.rows.RowF2;
 import server.commons.utils.JsonUtils;
-import server.receptor.routine.Counter;
 
-public class ThreadLog implements Runnable {
+public class LogPersistentThread implements Runnable {
 	
 	private static final String LOG_PATH = "log";
 

@@ -1,4 +1,4 @@
-package server.receptor.routine;
+package server.business.persistence.routine;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,15 +6,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.TimerTask;
 
+import server.business.persistence.Manipulator;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
-import server.model.hashmap.Manipulator;
 
-public class FileRoutine extends TimerTask {
+public class FileRoutineThread extends TimerTask {
 
 	private String basePath;
 
-	public FileRoutine(String basePath) {
+	public FileRoutineThread(String basePath) {
 		this.basePath = basePath;
 	}
 
