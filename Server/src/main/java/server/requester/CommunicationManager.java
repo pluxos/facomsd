@@ -1,17 +1,19 @@
-package server.client;
+package server.requester;
 
 import io.grpc.GreeterGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 public class CommunicationManager {
+	
     private static ManagedChannel channel;
     private static String stateIp;
     private static int statePort;
+    private static final String LOCALHOST = "localhost";
 
     public static GreeterGrpc.GreeterStub initCommunication(String ip, int port) {
         if(ip == null || ip.equals("")) {
-            ip = "localhost";
+            ip = LOCALHOST;
         }
 
         if(ip.equals(stateIp) && port == statePort) {

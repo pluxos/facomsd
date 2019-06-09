@@ -1,19 +1,24 @@
-package server.controller;
-
-import io.grpc.*;
-import io.grpc.stub.StreamObserver;
-import server.commons.Chord.Node;
-import server.commons.Chord.FingerTable;
-import server.commons.Rows.RowF1;
-import server.commons.domain.GenericCommand;
-import server.commons.domain.Method;
-import server.commons.exceptions.ServerException;
-import server.commons.utils.DataCodificator;
-import server.commons.utils.JsonUtils;
-import server.model.hashmap.Manipulator;
+package server.receptor;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+
+import io.grpc.FindMessage;
+import io.grpc.FindResponse;
+import io.grpc.GenericRequest;
+import io.grpc.GenericResponse;
+import io.grpc.GetRangeRequest;
+import io.grpc.GetRangeResponse;
+import io.grpc.GreeterGrpc;
+import io.grpc.stub.StreamObserver;
+import server.business.persistence.Manipulator;
+import server.commons.chord.FingerTable;
+import server.commons.chord.Node;
+import server.commons.domain.GenericCommand;
+import server.commons.domain.Method;
+import server.commons.exceptions.ServerException;
+import server.commons.rows.RowF1;
+import server.commons.utils.JsonUtils;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
     private Node node;

@@ -1,23 +1,27 @@
-package server.controller;
-
-import io.grpc.FindResponse;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.stub.StreamObserver;
-import server.client.grpc.GrpcCommunication;
-import server.commons.Chord.Chord;
-import server.commons.Chord.FingerTable;
-import server.commons.Chord.Node;
-import server.commons.exceptions.ServerException;
-import server.commons.utils.FileUtils;
-import server.receptor.*;
-import server.receptor.routine.Counter;
-import server.receptor.routine.FileRoutine;
+package server.receptor;
 
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.Executors;
+
+import io.grpc.FindResponse;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
+import server.business.consumers.OrchestratorThread;
+import server.business.consumers.ServerConnectorThread;
+import server.business.consumers.LogPersistentThread;
+import server.business.consumers.CommandExecutorThread;
+import server.business.persistence.recovery.LogRecovererThread;
+import server.business.persistence.routine.Counter;
+import server.business.persistence.routine.FileRoutineThread;
+import server.commons.chord.Chord;
+import server.commons.chord.FingerTable;
+import server.commons.chord.Node;
+import server.commons.exceptions.ServerException;
+import server.commons.utils.FileUtils;
+import server.requester.GrpcCommunication;
 
 public class ServerThread implements Runnable {
 
@@ -50,7 +54,7 @@ public class ServerThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Thread t = new Thread(new RecoverLog(this.logDirectory));
+			Thread t = new Thread(new LogRecovererThread(this.logDirectory));
 			t.start();
 			t.join();
 		} catch (InterruptedException e) {
@@ -77,10 +81,10 @@ public class ServerThread implements Runnable {
 				firstServer();
 
 			startSnapshotRoutine();
-			Thread tConsumer = new Thread(new ConsumerF1());
-			Thread tCommand = new Thread(new ThreadCommand());
-			Thread tLog = new Thread(new ThreadLog());
-			Thread tConsumer4 = new Thread(new ConsumerF4());
+			Thread tConsumer = new Thread(new OrchestratorThread());
+			Thread tCommand = new Thread(new CommandExecutorThread());
+			Thread tLog = new Thread(new LogPersistentThread());
+			Thread tConsumer4 = new Thread(new ServerConnectorThread());
 			tConsumer.start();
 			tCommand.start();
 			tLog.start();
@@ -93,7 +97,7 @@ public class ServerThread implements Runnable {
 	}
 
 	private void startSnapshotRoutine() {
-		new Timer().schedule(new FileRoutine(this.logDirectory), 0, 25000);
+		new Timer().schedule(new FileRoutineThread(this.logDirectory), 0, 25000);
 	}
 
 	private void firstServer() {

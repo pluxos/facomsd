@@ -32,7 +32,6 @@ public class JsonUtils {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
             throw new ServerException(ErrorMap.INTERNAL_SERVER_ERROR);
         }
     }

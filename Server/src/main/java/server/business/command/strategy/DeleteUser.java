@@ -1,15 +1,15 @@
 package server.business.command.strategy;
 
-import io.grpc.GenericRequest;
+import java.math.BigInteger;
+
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
-import server.client.CommunicationManager;
-import server.commons.Chord.Node;
+import server.business.command.RequestUtils;
+import server.business.persistence.Manipulator;
+import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
-import server.commons.utils.MessageMap;
-import server.model.hashmap.Manipulator;
-
-import java.math.BigInteger;
+import server.commons.exceptions.MessageMap;
+import server.requester.CommunicationManager;
 
 public class DeleteUser implements CommandStrategy {
 
@@ -51,9 +51,7 @@ public class DeleteUser implements CommandStrategy {
 		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
 
 		stub.deleteUser(
-				GenericRequest.newBuilder()
-						.setCode(genericCommand.getCode().intValue())
-						.build(),
+				RequestUtils.getGenericRequest(genericCommand),
 				new GenericResponseObserver(genericCommand.getOutput())
 		);
 	}

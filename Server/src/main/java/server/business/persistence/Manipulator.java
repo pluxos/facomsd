@@ -1,4 +1,4 @@
-package server.model.hashmap;
+package server.business.persistence;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

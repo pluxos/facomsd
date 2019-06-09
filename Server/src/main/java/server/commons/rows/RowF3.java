@@ -1,17 +1,18 @@
-package server.commons.Rows;
+package server.commons.rows;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 import server.commons.domain.GenericCommand;
 
-public class RowF2 {
-	private static volatile LinkedBlockingQueue<GenericCommand> f2 = new LinkedBlockingQueue<>();
+public class RowF3 {
+	
+	private static volatile LinkedBlockingQueue<GenericCommand> f3 = new LinkedBlockingQueue<GenericCommand>();
 	
 	public static LinkedBlockingQueue<GenericCommand> getFifo() {
-		return f2;
+		return f3;
 	}
 	
 	public static void addItem(GenericCommand item) {
-		f2.offer(item);
+		f3.offer(item);
 	}
 }

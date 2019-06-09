@@ -1,4 +1,4 @@
-package server.commons.utils;
+package server.commons.exceptions;
 
 public enum MessageMap {
     SUCCESS("success"),
