@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "br.com.ufu.javaServer";
+package br.com.ufu.javaServer;
+
+message InsertRequest {
+    string content = 1;
+}
+
+message InsertResponse {
+    string response = 1;
+}
+
+service CrudService {
+    rpc insert(InsertRequest) returns (InsertResponse);
+}
