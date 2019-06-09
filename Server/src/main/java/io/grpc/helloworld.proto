@@ -29,6 +29,7 @@ service Greeter {
   rpc DeleteUser (GenericRequest) returns (GenericResponse) {}
   rpc FindNode (FindMessage) returns (FindResponse) {}
   rpc GetRange (GetRangeRequest) returns (GetRangeResponse) {}
+  rpc UpdateFT (UpdateFTRequest) returns (UpdateFTResponse) {}
 }
 
 message GenericRequest {
@@ -62,10 +63,11 @@ message GetRangeResponse {
   string data = 3;
 }
 
-message UpdateRequest {
-
+message UpdateFTRequest {
+  string fingerT = 1;
 }
 
-message UpdateResponse {
-
+message UpdateFTResponse {
+  string fingerT = 1;
+  bool update = 2;
 }

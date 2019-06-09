@@ -11,7 +11,7 @@ mkdir logs/Server0
 
 gnome-terminal -- bash -c "mvn exec:java -Dexec.args=\"logs/Server0/ ${ports[0]}\""
 
-for (( i = 1; i < 3; ++i )); do
+for (( i = 1; i < 4; ++i )); do
     mkdir logs/Server${i}
     sleep 10
     echo "Iniciando Servidor " ${i}

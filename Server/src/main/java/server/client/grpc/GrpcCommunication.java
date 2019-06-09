@@ -27,7 +27,6 @@ public class GrpcCommunication {
     public static void getRange(FindResponse findResponse) throws ServerException {
         GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
 
-        System.out.println("MINHA PORTA: " + Chord.getNode().getPort());
         output.getRange(
                 GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
                 new GetRangeObserver(ip, port));

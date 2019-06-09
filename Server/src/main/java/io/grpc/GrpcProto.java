@@ -44,6 +44,16 @@ public final class GrpcProto {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_helloworld_GetRangeResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_helloworld_UpdateFTRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_helloworld_UpdateFTRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_helloworld_UpdateFTResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_helloworld_UpdateFTResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -61,19 +71,23 @@ public final class GrpcProto {
       " \001(\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\"\037\n\017GetRan" +
       "geRequest\022\014\n\004node\030\001 \001(\t\"=\n\020GetRangeRespo" +
       "nse\022\014\n\004node\030\001 \001(\t\022\r\n\005range\030\002 \001(\t\022\014\n\004data" +
-      "\030\003 \001(\t2\264\003\n\007Greeter\022G\n\nCreateUser\022\032.hello" +
-      "world.GenericRequest\032\033.helloworld.Generi" +
-      "cResponse\"\000\022D\n\007GetUser\022\032.helloworld.Gene" +
-      "ricRequest\032\033.helloworld.GenericResponse\"" +
-      "\000\022G\n\nUpdateUser\022\032.helloworld.GenericRequ" +
-      "est\032\033.helloworld.GenericResponse\"\000\022G\n\nDe" +
-      "leteUser\022\032.helloworld.GenericRequest\032\033.h" +
-      "elloworld.GenericResponse\"\000\022?\n\010FindNode\022" +
-      "\027.helloworld.FindMessage\032\030.helloworld.Fi" +
-      "ndResponse\"\000\022G\n\010GetRange\022\033.helloworld.Ge" +
-      "tRangeRequest\032\034.helloworld.GetRangeRespo" +
-      "nse\"\000B\034\n\007io.grpcB\tGrpcProtoP\001\242\002\003HLWb\006pro" +
-      "to3"
+      "\030\003 \001(\t\"\"\n\017UpdateFTRequest\022\017\n\007fingerT\030\001 \001" +
+      "(\t\"3\n\020UpdateFTResponse\022\017\n\007fingerT\030\001 \001(\t\022" +
+      "\016\n\006update\030\002 \001(\0102\375\003\n\007Greeter\022G\n\nCreateUse" +
+      "r\022\032.helloworld.GenericRequest\032\033.hellowor" +
+      "ld.GenericResponse\"\000\022D\n\007GetUser\022\032.hellow" +
+      "orld.GenericRequest\032\033.helloworld.Generic" +
+      "Response\"\000\022G\n\nUpdateUser\022\032.helloworld.Ge" +
+      "nericRequest\032\033.helloworld.GenericRespons" +
+      "e\"\000\022G\n\nDeleteUser\022\032.helloworld.GenericRe" +
+      "quest\032\033.helloworld.GenericResponse\"\000\022?\n\010" +
+      "FindNode\022\027.helloworld.FindMessage\032\030.hell" +
+      "oworld.FindResponse\"\000\022G\n\010GetRange\022\033.hell" +
+      "oworld.GetRangeRequest\032\034.helloworld.GetR" +
+      "angeResponse\"\000\022G\n\010UpdateFT\022\033.helloworld." +
+      "UpdateFTRequest\032\034.helloworld.UpdateFTRes" +
+      "ponse\"\000B\034\n\007io.grpcB\tGrpcProtoP\001\242\002\003HLWb\006p" +
+      "roto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -123,6 +137,18 @@ public final class GrpcProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_helloworld_GetRangeResponse_descriptor,
         new String[] { "Node", "Range", "Data", });
+    internal_static_helloworld_UpdateFTRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_helloworld_UpdateFTRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_helloworld_UpdateFTRequest_descriptor,
+        new String[] { "FingerT", });
+    internal_static_helloworld_UpdateFTResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_helloworld_UpdateFTResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_helloworld_UpdateFTResponse_descriptor,
+        new String[] { "FingerT", "Update", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

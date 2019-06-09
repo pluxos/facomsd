@@ -1,19 +1,20 @@
 package server.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
-import server.commons.Chord.Node;
 import server.commons.Chord.FingerTable;
+import server.commons.Chord.Node;
 import server.commons.Rows.RowF1;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
-import server.commons.utils.DataCodificator;
 import server.commons.utils.JsonUtils;
 import server.model.hashmap.Manipulator;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
     private Node node;
@@ -121,8 +122,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             responseObserver.onCompleted();
 
             /* Update Tabela de rota */
-
-            this.ft.updateFT(this.node);
             this.ft.updateFT(newNode);
         } else {
             /* Mesma Chave! reportar erro! */
@@ -137,5 +136,19 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void updateFT(UpdateFTRequest request, StreamObserver<UpdateFTResponse> responseObserver) {
+        try {
+            TypeReference<Map<Integer, Node>> typeRef = new TypeReference<Map<Integer, Node>>() {};
+            Map<Integer, Node> ft = JsonUtils.deserialize(request.getFingerT(), typeRef);
+            this.ft.updateFT(ft);
+        } catch (ServerException e) {
+            e.printStackTrace();
+        }
+
+        responseObserver.onNext(UpdateFTResponse.newBuilder().setUpdate(true).build());
+        responseObserver.onCompleted();
     }
 }

@@ -3,14 +3,16 @@ package server.commons.Chord;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FingerTable {
     private int key;
-    private HashMap<Integer, Node> ft;
+    private Map<Integer, Node> ft;
     private int m;
     private int range;
 
@@ -20,17 +22,17 @@ public class FingerTable {
             this.range = Integer.parseInt(configProperties.getProperty("chord.range"));
             this.m = Integer.parseInt(configProperties.getProperty("chord.m"));
 
-            this.ft = new HashMap<>(this.m);
+            this.ft = Collections.synchronizedMap(new HashMap<>(this.m));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public HashMap<Integer, Node> getFt() {
+    public Map<Integer, Node> getFt() {
         return ft;
     }
 
-    public void setFt(HashMap<Integer, Node> ft) {
+    public void setFt(Map<Integer, Node> ft) {
         this.ft = ft;
     }
 
@@ -49,8 +51,6 @@ public class FingerTable {
             if(sucessor > this.range) {
             	sucessor -= this.range;
             }
-
-            System.err.println("i: " + i + " suc: "+sucessor);
 
             if(node.getRange().contains(sucessor)) {
                 flag = 1;
@@ -92,16 +92,22 @@ public class FingerTable {
     public void setKey(int key) {
         this.key = key;
     }
+    public Integer getKey() {
+        return this.key;
+    }
 
     public void updateFT(Node node) {
         if(this.addNode(node) == 1) {
-            System.out.println("TABELA ATUALIZADA");
-            this.ft.forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
-            /* Grpc atualizar tabela */
-
-        } else{
-            System.out.println("TABELA IGUAL");
-            this.ft.forEach((key, value) -> System.err.println("key: "+key+" -> "+value.getRange()));
+            ChordUtils.notifyUpdateFT(this.ft);
         }
+    }
+
+    public void updateFT(Map<Integer, Node> ft) {
+        ft.forEach((key, node) -> {
+            if(Chord.getNode().getKey() != node.getKey())
+                if (this.addNode(node) == 1) {
+                    ChordUtils.notifyUpdateFT(this.ft);
+                }
+        });
     }
 }

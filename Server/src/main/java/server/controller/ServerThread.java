@@ -86,6 +86,9 @@ public class ServerThread implements Runnable {
 			tLog.start();
 			tConsumer4.start();
 
+			Thread utils = new Thread(new UtilsCommands());
+			utils.start();
+
 			this.server.awaitTermination();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
@@ -106,9 +109,6 @@ public class ServerThread implements Runnable {
 			Chord.getNode().setRange(Chord.getNode().getKey(), fim+1);
 			Chord.getNode().setRange(0, Chord.getNode().getKey());
 			Chord.getFt().setKey(Chord.getNode().getKey());
-			Chord.getFt().updateFT(Chord.getNode());
-
-			System.out.println("KEY: " +Chord.getNode().getKey());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,9 +117,6 @@ public class ServerThread implements Runnable {
 	private void entryChord() {
 		Chord.getNode().setNewKey();
 		Chord.getFt().setKey(Chord.getNode().getKey());
-		Chord.getFt().updateFT(Chord.getNode());
-
-		System.out.println("KEY: " + Chord.getNode().getKey());
 
 		GrpcCommunication.findNode(this.chordIp, this.chordPort);
 	}
@@ -131,7 +128,6 @@ public class ServerThread implements Runnable {
 				GrpcCommunication.findNode(findResponse.getIp(), findResponse.getPort());
 			} else {
 				try {
-					System.out.println(findResponse.getPort());
 					GrpcCommunication.getRange(findResponse);
 				} catch (ServerException e) {
 					e.printStackTrace();

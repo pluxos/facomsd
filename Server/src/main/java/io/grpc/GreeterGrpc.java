@@ -222,6 +222,38 @@ public final class GreeterGrpc {
      return getGetRangeMethod;
   }
 
+  private static volatile MethodDescriptor<UpdateFTRequest,
+      UpdateFTResponse> getUpdateFTMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdateFT",
+      requestType = UpdateFTRequest.class,
+      responseType = UpdateFTResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<UpdateFTRequest,
+      UpdateFTResponse> getUpdateFTMethod() {
+    MethodDescriptor<UpdateFTRequest, UpdateFTResponse> getUpdateFTMethod;
+    if ((getUpdateFTMethod = GreeterGrpc.getUpdateFTMethod) == null) {
+      synchronized (GreeterGrpc.class) {
+        if ((getUpdateFTMethod = GreeterGrpc.getUpdateFTMethod) == null) {
+          GreeterGrpc.getUpdateFTMethod = getUpdateFTMethod = 
+              MethodDescriptor.<UpdateFTRequest, UpdateFTResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "helloworld.Greeter", "UpdateFT"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  UpdateFTRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  UpdateFTResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("UpdateFT"))
+                  .build();
+          }
+        }
+     }
+     return getUpdateFTMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -297,6 +329,13 @@ public final class GreeterGrpc {
       asyncUnimplementedUnaryCall(getGetRangeMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void updateFT(UpdateFTRequest request,
+                         io.grpc.stub.StreamObserver<UpdateFTResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getUpdateFTMethod(), responseObserver);
+    }
+
     @Override public final ServerServiceDefinition bindService() {
       return ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -341,6 +380,13 @@ public final class GreeterGrpc {
                 GetRangeRequest,
                 GetRangeResponse>(
                   this, METHODID_GET_RANGE)))
+          .addMethod(
+            getUpdateFTMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                UpdateFTRequest,
+                UpdateFTResponse>(
+                  this, METHODID_UPDATE_FT)))
           .build();
     }
   }
@@ -416,6 +462,14 @@ public final class GreeterGrpc {
       asyncUnaryCall(
           getChannel().newCall(getGetRangeMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void updateFT(UpdateFTRequest request,
+                         io.grpc.stub.StreamObserver<UpdateFTResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getUpdateFTMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -482,6 +536,13 @@ public final class GreeterGrpc {
     public GetRangeResponse getRange(GetRangeRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetRangeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public UpdateFTResponse updateFT(UpdateFTRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getUpdateFTMethod(), getCallOptions(), request);
     }
   }
 
@@ -556,6 +617,14 @@ public final class GreeterGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetRangeMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<UpdateFTResponse> updateFT(
+        UpdateFTRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getUpdateFTMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_USER = 0;
@@ -564,6 +633,7 @@ public final class GreeterGrpc {
   private static final int METHODID_DELETE_USER = 3;
   private static final int METHODID_FIND_NODE = 4;
   private static final int METHODID_GET_RANGE = 5;
+  private static final int METHODID_UPDATE_FT = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -605,6 +675,10 @@ public final class GreeterGrpc {
         case METHODID_GET_RANGE:
           serviceImpl.getRange((GetRangeRequest) request,
               (io.grpc.stub.StreamObserver<GetRangeResponse>) responseObserver);
+          break;
+        case METHODID_UPDATE_FT:
+          serviceImpl.updateFT((UpdateFTRequest) request,
+              (io.grpc.stub.StreamObserver<UpdateFTResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -673,6 +747,7 @@ public final class GreeterGrpc {
               .addMethod(getDeleteUserMethod())
               .addMethod(getFindNodeMethod())
               .addMethod(getGetRangeMethod())
+              .addMethod(getUpdateFTMethod())
               .build();
         }
       }

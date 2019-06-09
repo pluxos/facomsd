@@ -46,12 +46,11 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
                 Chord.getFt().updateFT(Chord.getNode());
 
                 /* Update Tabela de rotas */
-                System.err.println("ATUALIZANDO TABELA DE ROTAS");
                 Chord.getFt().updateFT(newNode);
             } else {
                 Chord.getNode().setNewKey();
                 Chord.getFt().setKey(Chord.getNode().getKey());
-                System.out.println("KEY: " + Chord.getNode().getKey());
+
                 GrpcCommunication.findNode(chordIp, chordPort);
             }
         } catch (ServerException e) {
