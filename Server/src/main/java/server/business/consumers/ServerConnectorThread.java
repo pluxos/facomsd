@@ -1,14 +1,14 @@
-package server.receptor;
+package server.business.consumers;
 
 import server.business.command.RequestUtils;
 import server.business.command.strategy.CommandStrategy;
-import server.commons.Chord.Chord;
-import server.commons.Chord.Node;
-import server.commons.Rows.RowF4;
+import server.commons.chord.Chord;
+import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
+import server.commons.rows.RowF4;
 
-public class ConsumerF4 implements Runnable {
+public class ServerConnectorThread implements Runnable {
     @Override
     public void run() {
         for(;;) {

@@ -1,4 +1,4 @@
-package server.receptor.routine;
+package server.business.persistence.routine;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,10 +12,6 @@ public class Counter {
 	private static final String COUNTER_FILE_NAME  = "counter.log";
 	private static String path;
 	private static Long counter = (long) 0;
-	
-	static {
-		
-	}
 
 	public static void startCounter(String basePath) {
 		path = basePath + COUNTER_FILE_NAME;

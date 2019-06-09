@@ -1,10 +1,10 @@
-package server.commons.Chord;
+package server.commons.chord;
 
 import io.grpc.GreeterGrpc;
 import io.grpc.UpdateFTRequest;
-import server.client.CommunicationManager;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
+import server.requester.CommunicationManager;
 
 import java.util.Map;
 

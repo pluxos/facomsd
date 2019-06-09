@@ -1,12 +1,12 @@
-package server.receptor;
+package server.business.consumers;
 
 import server.business.command.RequestUtils;
 import server.business.command.strategy.CommandStrategy;
-import server.commons.Rows.RowF3;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
+import server.commons.rows.RowF3;
 
-public class ThreadCommand implements Runnable {
+public class CommandExecutorThread implements Runnable {
 
 	@Override
 	public void run() {

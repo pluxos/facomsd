@@ -1,13 +1,13 @@
-package server.receptor;
+package server.business.consumers;
 
-import server.commons.Chord.Chord;
-import server.commons.Rows.RowF1;
-import server.commons.Rows.RowF2;
-import server.commons.Rows.RowF3;
-import server.commons.Rows.RowF4;
+import server.commons.chord.Chord;
 import server.commons.domain.GenericCommand;
+import server.commons.rows.RowF1;
+import server.commons.rows.RowF2;
+import server.commons.rows.RowF3;
+import server.commons.rows.RowF4;
 
-public class ConsumerF1 implements Runnable {
+public class OrchestratorThread implements Runnable {
 
 	@Override
 	public void run() {

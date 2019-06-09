@@ -1,16 +1,14 @@
-package server.client.grpc;
+package server.requester;
 
 import io.grpc.FindMessage;
 import io.grpc.FindResponse;
 import io.grpc.GetRangeRequest;
 import io.grpc.GreeterGrpc;
 import io.grpc.stub.StreamObserver;
-import server.client.CommunicationManager;
-import server.client.GetRangeObserver;
-import server.commons.Chord.Chord;
+import server.commons.chord.Chord;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
-import server.controller.ServerThread;
+import server.receptor.ServerThread;
 
 public class GrpcCommunication {
 

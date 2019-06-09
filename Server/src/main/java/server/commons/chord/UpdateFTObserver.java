@@ -1,4 +1,4 @@
-package server.commons.Chord;
+package server.commons.chord;
 
 import io.grpc.UpdateFTResponse;
 import io.grpc.stub.StreamObserver;

@@ -1,6 +1,4 @@
-package server.commons.Chord;
-
-import server.commons.utils.FileUtils;
+package server.commons.chord;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -9,6 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+
+import server.commons.utils.FileUtils;
 
 public class FingerTable {
     private int key;

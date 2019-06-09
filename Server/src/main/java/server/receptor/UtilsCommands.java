@@ -1,6 +1,6 @@
 package server.receptor;
 
-import server.commons.Chord.Chord;
+import server.commons.chord.Chord;
 
 import java.util.Scanner;
 

@@ -1,6 +1,6 @@
 package server;
 
-import server.controller.ServerThread;
+import server.receptor.ServerThread;
 
 public class ServerApplication {
 

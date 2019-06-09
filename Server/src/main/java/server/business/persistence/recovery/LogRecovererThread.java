@@ -1,15 +1,15 @@
-package server.receptor;
+package server.business.persistence.recovery;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import server.business.command.RequestUtils;
 import server.business.command.strategy.CommandStrategy;
+import server.business.persistence.Manipulator;
+import server.business.persistence.routine.Counter;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
 import server.commons.utils.JsonUtils;
-import server.model.hashmap.Manipulator;
-import server.receptor.routine.Counter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,11 +18,11 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RecoverLog implements Runnable {
+public class LogRecovererThread implements Runnable {
 
 	private String basePath;
 
-	public RecoverLog(String basePath) {
+	public LogRecovererThread(String basePath) {
 		this.basePath = basePath;
 	}
 
@@ -47,10 +47,8 @@ public class RecoverLog implements Runnable {
 	}
 
 	private void loadSnapshotToMemory(Long counter) throws ServerException, IOException {
-		TypeReference<HashMap<BigInteger, byte[]>> typeRef = new TypeReference<HashMap<BigInteger, byte[]>>() {
-		};
-		HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(FileUtils.read(buildFilePath("snap", counter)),
-				typeRef);
+		TypeReference<HashMap<BigInteger, byte[]>> typeRef = new TypeReference<HashMap<BigInteger, byte[]>>() {};
+		HashMap<BigInteger, byte[]> map = JsonUtils.deserialize(FileUtils.read(buildFilePath("snap", counter)), typeRef);
 		for (Map.Entry<BigInteger, byte[]> entry : map.entrySet()) {
 			Manipulator.addValue(entry.getKey(), entry.getValue());
 		}
