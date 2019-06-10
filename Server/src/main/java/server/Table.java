@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.lang.Integer;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -115,4 +116,16 @@ public class Table {
         }
     }
 
+    public int getMaisProximo(BigInteger key) {
+        int maiorIndice = 0;
+        int maior = Integer.parseInt(this.table[0][1]);
+        for (int i = 1; i < this.table.length; i++) {
+            int num = Integer.parseInt(this.table[i][1]);
+            if( !(key.compareTo( BigInteger.valueOf(num) ) < 0) && maiorIndice > num ) {
+                maiorIndice = i;
+                maior = Integer.parseInt(this.table[i][1]);
+            }
+        }
+        return maiorIndice;
+    }
 }

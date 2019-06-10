@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.lang.*;
+
 public class Banco {
     private int x = 1;
     public Map<BigInteger, byte[]> database = new HashMap<BigInteger, byte[]>();
@@ -47,6 +49,7 @@ public class Banco {
     }
 
     public Boolean Insert(BigInteger key, byte[] value) {
+        System.out.println( "Insert <" + key + "," + new String(value) + ">" );
         if (this.database.containsKey(key)) {
             return false; // Se a chave já existir no banco, ele retorna falso
         } else {
@@ -63,6 +66,7 @@ public class Banco {
     }
 
     public byte[] Read(BigInteger key) {
+        System.out.println( "Read <" + key + ">" );
         if (this.database.containsKey(key)) {
             return this.database.get(key);
         } else
@@ -70,6 +74,7 @@ public class Banco {
     }
 
     public Boolean Update(BigInteger key, byte[] value) {
+        System.out.println( "Update <" + key + "," + new String(value) + ">" );
         if (this.database.containsKey(key)) {
             this.database.put(key, value); // Se a chave já existir, o valor dela é sobrescrito
             return true;
@@ -79,6 +84,7 @@ public class Banco {
     }
 
     public Boolean Delete(BigInteger key) {
+        System.out.println( "Delete <" + key + ">" );
         // Se a chave existir ele remove e retorna verdadeiro, caso contrário,retorna
         // falso
         if (this.database.containsKey(key)) {

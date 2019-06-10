@@ -61,21 +61,25 @@ public class SearchFirst implements Runnable {
 
     String responseIP = response.getIp();
     int responsePort = response.getPort();
+    // System.out.println("EU " + table.myKey + " sei que o primeiro é " + responsePort);
 
     if (this.responseObserver != null) {
       SearchResponse originalResponse = SearchResponse.newBuilder().setIp(responseIP).setPort(responsePort).build();
       responseObserver.onNext(originalResponse);
       responseObserver.onCompleted();
-    } else {
+    }
+    else {
       if (this.itemfila == null) {
         System.out.println("nao devia entrar aqui");
-      } else {
-        if ( responseIP == table.myIP && responsePort == table.myPort){
+      }
+      else {
+        System.out.println("FIRST: " + responsePort);
+        if ( responseIP.equals(table.myIP) && responsePort == table.myPort){
           try {
-              if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(this.itemfila.getKey()) ) < 0 ) {
-                this.itemfila.ourResponsability = false;
-              }
-              F1.getInstance().put(itemfila);
+            if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(this.itemfila.getKey()) ) < 0 ) {
+              this.itemfila.ourResponsability = false;
+            }
+            F1.getInstance().put(itemfila);
           } catch (Exception e) {
               System.out.println("Erro: " + e.getMessage());
           }
@@ -84,19 +88,19 @@ public class SearchFirst implements Runnable {
           String command = this.itemfila.getControll();
           
           if( command.equals( "CREATE" ) ) {            
-            new Thread( new Create(responseIP, responsePort, new BigInteger(this.itemfila.getKey()),  this.itemfila.getValue()) ).start();
+            new Thread( new Create(responseIP, responsePort, new BigInteger(this.itemfila.getKey()),  this.itemfila.getValue(), this.itemfila.getResponseC()) ).start();
           }
 
           if( command.equals( "UPDATE" ) ) {
-            new Thread( new Update(responseIP, responsePort, new BigInteger(this.itemfila.getKey()),  this.itemfila.getValue()) ).start();
+            new Thread( new Update(responseIP, responsePort, new BigInteger(this.itemfila.getKey()),  this.itemfila.getValue(), this.itemfila.getResponseU()) ).start();
           }
           
           if( command.equals( "READ" ) ) {
-            new Thread( new Read(responseIP, responsePort, new BigInteger(this.itemfila.getKey())) ).start();
+            new Thread( new Read(responseIP, responsePort, new BigInteger(this.itemfila.getKey()), this.itemfila.getResponseR()) ).start();
           }
           
           if( command.equals( "DELETE" ) ) {
-            new Thread( new Delete(responseIP, responsePort, new BigInteger(this.itemfila.getKey())) ).start();
+            new Thread( new Delete(responseIP, responsePort, new BigInteger(this.itemfila.getKey()), this.itemfila.getResponseD()) ).start();
           }
 
         }

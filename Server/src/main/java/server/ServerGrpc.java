@@ -62,9 +62,10 @@ public class ServerGrpc {
         scan = scanner.nextLine();
         int myKey = Integer.parseInt(scan);
 
-        System.out.println("Digite a porta de um servidor no Chords:");
-        scan = scanner.nextLine();
-        int friendPort = Integer.parseInt(scan);
+        // System.out.println("Digite a porta de um servidor no Chords:");
+        // scan = scanner.nextLine();
+        // int friendPort = Integer.parseInt(scan);
+        int friendPort = 2000;
 
         String myIP = "localhost";
         String friendIP = "localhost";
@@ -146,13 +147,31 @@ public class ServerGrpc {
             req.getKey().copyTo(chave, 0);
             req.getValue().copyTo(value, 0);
             
+            boolean client = req.getClient();
+
             itemfila.itemFilaCreate(responseObserver, chave, value);
 
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int nextKey = Integer.parseInt(table.table[0][1]);
             String nextIP = table.table[0][2];
             int nextPort = Integer.parseInt(table.table[0][3]);
 
-            // System.out.println("CREATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
-            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            if( nextKey == 0 || !client ) {
+                try {
+                    if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(itemfila.getKey()) ) < 0 ) {
+                        itemfila.ourResponsability = false;
+                        // System.out.println("UNICO SERVER, QUE NÃO TRATA A KEY - LOOP");
+                    }
+                    f1.put(itemfila);
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getMessage());
+                }
+            }
+            else {
+                new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            }
         }
 
         @Override
@@ -160,19 +179,32 @@ public class ServerGrpc {
             byte[] chave = new byte[req.getKeysize()];
             ItemFila itemfila = new ItemFila();
             req.getKey().copyTo(chave, 0);
-            System.out.println("READ: < " + new BigInteger(chave) + " >");
+
+            boolean client = req.getClient();
 
             itemfila.itemFilaRead(responseObserver, chave);
 
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int nextKey = Integer.parseInt(table.table[0][1]);
             String nextIP = table.table[0][2];
             int nextPort = Integer.parseInt(table.table[0][3]);
-            
-            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
-            // try {
-            //     f1.put(itemfila);
-            // } catch (Exception e) {
-            //     System.out.println("Erro: " + e.getMessage());
-            // }
+
+            if( nextKey == 0 || !client ) {
+                try {
+                    if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(itemfila.getKey()) ) < 0 ) {
+                        itemfila.ourResponsability = false;
+                        // System.out.println("UNICO SERVER, QUE NÃO TRATA A KEY - LOOP");
+                    }
+                    f1.put(itemfila);
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getMessage());
+                }
+            }
+            else {
+                new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            }
         }
 
         @Override
@@ -183,19 +215,31 @@ public class ServerGrpc {
             req.getKey().copyTo(chave, 0);
             req.getValue().copyTo(value, 0);
 
-            // System.out.println("UPDATE: < " + new BigInteger(chave) + " , " + new String(value) + " >");
+            boolean client = req.getClient();
+
             itemfila.itemFilaUpdate(responseObserver, chave, value);
 
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int nextKey = Integer.parseInt(table.table[0][1]);
             String nextIP = table.table[0][2];
             int nextPort = Integer.parseInt(table.table[0][3]);
-            
-            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
 
-            // try {
-            //     f1.put(itemfila);
-            // } catch (Exception e) {
-            //     System.out.println("Erro: " + e.getMessage());
-            // }
+            if( nextKey == 0 || !client ) {
+                try {
+                    if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(itemfila.getKey()) ) < 0 ) {
+                        itemfila.ourResponsability = false;
+                        // System.out.println("UNICO SERVER, QUE NÃO TRATA A KEY - LOOP");
+                    }
+                    f1.put(itemfila);
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getMessage());
+                }
+            }
+            else {
+                new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            }
         }
 
         @Override
@@ -205,18 +249,31 @@ public class ServerGrpc {
             req.getKey().copyTo(chave, 0);
             // System.out.println("DELETE: < " + new BigInteger(chave) + " >");
 
+            boolean client = req.getClient();
+
             itemfila.itemFilaDelete(responseObserver, chave);
 
+            String myIP = table.myIP;
+            int myPort = table.myPort;
+
+            int nextKey = Integer.parseInt(table.table[0][1]);
             String nextIP = table.table[0][2];
             int nextPort = Integer.parseInt(table.table[0][3]);
 
-            new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
-
-            // try {
-            //     f1.put(itemfila);
-            // } catch (Exception e) {
-            //     System.out.println("Erro: " + e.getMessage());
-            // }
+            if( nextKey == 0 || !client ) {
+                try {
+                    if( BigInteger.valueOf(table.myKey).compareTo( new BigInteger(itemfila.getKey()) ) < 0 ) {
+                        itemfila.ourResponsability = false;
+                        // System.out.println("UNICO SERVER, QUE NÃO TRATA A KEY - LOOP");
+                    }
+                    f1.put(itemfila);
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getMessage());
+                }
+            }
+            else {
+                new Thread( new SearchFirst(nextIP, nextPort, itemfila) ).start();
+            }
         }
 
     }
@@ -449,17 +506,14 @@ public class ServerGrpc {
             String nextIP = table.table[0][2];
             int nextPort = Integer.parseInt(table.table[0][3]);
 
-            int responseKey = 0;
             String responseIP = "ERROR";
             int responsePort = 0;
 
             if (nextKey == 0) {
-                responseKey = myKey;
                 responseIP = myIP;
                 responsePort = myPort;
             }
             else if (myKey > nextKey) {
-                responseKey = nextKey;
                 responseIP = nextIP;
                 responsePort = nextPort;
             }

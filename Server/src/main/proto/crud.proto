@@ -29,6 +29,7 @@ message CreateRequest {
   bytes value = 2;
   int32 keysize = 3;
   int32 valuesize = 4;
+  bool client = 5;
 }
 
 message CreateResponse {
@@ -38,6 +39,7 @@ message CreateResponse {
 message ReadRequest {
   bytes key = 1;
   int32 keysize = 2;
+  bool client = 3;
 }
 
 message ReadResponse {
@@ -50,6 +52,7 @@ message UpdateRequest {
   bytes value = 2;
   int32 keysize = 3;
   int32 valuesize = 4;
+  bool client = 5;
 }
 
 message UpdateResponse {
@@ -59,6 +62,7 @@ message UpdateResponse {
 message DeleteRequest {
   bytes key = 1;
   int32 keysize = 2;
+  bool client = 3;
 }
 
 message DeleteResponse {

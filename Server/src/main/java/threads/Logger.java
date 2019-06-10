@@ -90,7 +90,7 @@ public class Logger implements Runnable {
                 // Captura o último snapshot
                 for (String s : snaps)
                     if (Integer.parseInt(s.substring(s.lastIndexOf('.')+1)) > lastSnapNumber)
-                        lastSnapNumber = Integer.parseInt(s.substring(s.lastIndexOf('s')+1));
+                        lastSnapNumber = Integer.parseInt(s.substring(s.lastIndexOf('.')+1));
                 // Restaurando todo o snap
                 for (String s : Files.readAllLines(Paths.get(Table.getInstance().getMyKey() + "/snap." + lastSnapNumber)))
                     Banco.getInstance().Insert(s);
@@ -100,7 +100,7 @@ public class Logger implements Runnable {
             if (logs.size() > 0) {
                 // Removendo os logs que são anteriores ao último snapshot
                 for (int i = 0; i < logs.size(); i++)
-                    if (Integer.parseInt(logs.get(i).substring(6)) < lastSnapNumber)
+                    if (Integer.parseInt(logs.get(i).substring(logs.get(i).lastIndexOf('.') + 1)) < lastSnapNumber)
                         logs.remove(i);
 
                 List<String> contents;
