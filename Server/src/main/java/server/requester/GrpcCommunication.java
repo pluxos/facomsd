@@ -1,9 +1,6 @@
 package server.requester;
 
-import io.grpc.FindMessage;
-import io.grpc.FindResponse;
-import io.grpc.GetRangeRequest;
-import io.grpc.GreeterGrpc;
+import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import server.commons.chord.Chord;
 import server.commons.exceptions.ServerException;
@@ -16,17 +13,20 @@ public class GrpcCommunication {
     public static int port;
 
     public static void findNode(String ip, int port){
-        GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(ip, port);
-        StreamObserver<FindResponse> observer = new ServerThread.ObserverResponse();
+        ManagedChannel channel = CommunicationManager.initCommunication(ip, port);
+        GreeterGrpc.GreeterStub output = GreeterGrpc.newStub(channel);
+
+        StreamObserver<FindResponse> observer = new ServerThread.ObserverResponse(channel);
 
         output.findNode(FindMessage.newBuilder().setKey(Chord.getNode().getKey()).build(), observer);
     }
 
     public static void getRange(FindResponse findResponse) throws ServerException {
-        GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
+        ManagedChannel channel = CommunicationManager.initCommunication("localhost", findResponse.getPort());
+        GreeterGrpc.GreeterStub output = GreeterGrpc.newStub(channel);
 
         output.getRange(
                 GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
-                new GetRangeObserver(ip, port));
+                new GetRangeObserver(ip, port, channel));
     }
 }

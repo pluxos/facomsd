@@ -22,7 +22,7 @@ public class UtilsCommands implements Runnable {
                     System.out.println(Chord.getFt().getKey());
                     break;
                 case "ft":
-                    Chord.getFt().getFt().forEach((key, value) -> System.out.println("pos: " + key + " -> " + value.getRange()));
+                    Chord.getFt().getMap().forEach((key, value) -> System.out.println("pos: " + key + " -> " + value.getRange()));
                     break;
                 default:
                     System.err.println(Chord.getNode().getRange());

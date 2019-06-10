@@ -2,6 +2,7 @@ package server.requester;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
+import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Chord;
@@ -18,10 +19,12 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
     private String chordIp;
     private int chordPort;
+    private ManagedChannel channel;
 
-    public GetRangeObserver(String chordIp, int chordPort){
+    public GetRangeObserver(String chordIp, int chordPort, ManagedChannel channel){
         this.chordIp = chordIp;
         this.chordPort = chordPort;
+        this.channel = channel;
     }
 
     @Override
@@ -32,7 +35,6 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
             if (newNode.getKey() != Chord.getNode().getKey()) {
                 loadDatabase(getRangeResponse);
                 setRange(getRangeResponse);
-                System.err.println("ATUALIZANDO TABELA DE ROTAS");
 
                 Chord.getFt().updateFT(newNode);
             } else {
@@ -75,6 +77,6 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
     @Override
     public void onCompleted() {
-
+        channel.shutdownNow();
     }
 }

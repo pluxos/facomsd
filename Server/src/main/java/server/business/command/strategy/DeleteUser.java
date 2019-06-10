@@ -4,6 +4,8 @@ import java.math.BigInteger;
 
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import server.business.command.RequestUtils;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Node;
@@ -48,11 +50,12 @@ public class DeleteUser implements CommandStrategy {
 
 	@Override
 	public void passCommand(GenericCommand genericCommand, Node node) {
-		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
+		ManagedChannel channel = CommunicationManager.initCommunication(node.getIp(), node.getPort());
+		GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
 
 		stub.deleteUser(
 				RequestUtils.getGenericRequest(genericCommand),
-				new GenericResponseObserver(genericCommand.getOutput())
+				new GenericResponseObserver(genericCommand.getOutput(), channel)
 		);
 	}
 }

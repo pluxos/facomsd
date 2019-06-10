@@ -1,8 +1,8 @@
 package server.commons.chord;
 
 public class Chord {
-    private static FingerTable ft;
-    private static Node node;
+    private volatile static FingerTable ft;
+    private volatile static Node node;
 
     public static FingerTable getFt() {
         return ft;
@@ -12,11 +12,11 @@ public class Chord {
         return node;
     }
 
-    public static void setNode(Node node) {
+    public synchronized static void setNode(Node node) {
         Chord.node = node;
     }
 
-    public static void setFt(FingerTable ft) {
+    public synchronized static void setFt(FingerTable ft) {
         Chord.ft = ft;
     }
 }

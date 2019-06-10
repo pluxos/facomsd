@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.concurrent.Executors;
 
 import io.grpc.FindResponse;
+import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -35,11 +36,12 @@ public class ServerThread implements Runnable {
 		Chord.setFt(new FingerTable());
 
 		this.logDirectory = args[0];
-		Chord.getNode().setPort(Integer.parseInt(args[1]));
-		if(args.length == 4) {
-			this.chordIp = args[2];
-			this.chordPort = Integer.parseInt(args[3]);
-			GrpcCommunication.ip = args[2];
+		Chord.getNode().setIp(args[1]);
+		Chord.getNode().setPort(Integer.parseInt(args[2]));
+		if(args.length == 5) {
+			this.chordIp = args[3];
+			this.chordPort = Integer.parseInt(args[4]);
+			GrpcCommunication.ip = args[3];
 			GrpcCommunication.port = this.chordPort;
 		}
 		Counter.startCounter(args[0]);
@@ -63,8 +65,8 @@ public class ServerThread implements Runnable {
 
 		try {
 			this.server = ServerBuilder.forPort(Chord.getNode().getPort())
-					.addService(new GrpcImpl(Chord.getNode(), Chord.getFt()))
-					.executor(Executors.newFixedThreadPool(10))
+					.addService(new GrpcImpl())
+					.executor(Executors.newFixedThreadPool(20))
 					.build().start();
 
 			System.out.println("Server started, listening on " + Chord.getNode().getPort());
@@ -126,6 +128,12 @@ public class ServerThread implements Runnable {
 	}
 
 	public static class ObserverResponse implements StreamObserver<FindResponse> {
+		private ManagedChannel channel;
+
+		public ObserverResponse(ManagedChannel c){
+			this.channel = c;
+		}
+
 		@Override
 		public void onNext(FindResponse findResponse) {
 			if(!findResponse.getResponse()) {
@@ -146,6 +154,7 @@ public class ServerThread implements Runnable {
 
 		@Override
 		public void onCompleted() {
+			this.channel.shutdownNow();
 		}
 	}
 }

@@ -22,12 +22,12 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.19.0)",
-    comments = "Source: helloworld.proto")
+    comments = "Source: GrpcServer.proto")
 public final class GreeterGrpc {
 
   private GreeterGrpc() {}
 
-  public static final String SERVICE_NAME = "helloworld.Greeter";
+  public static final String SERVICE_NAME = "io.grpc.Greeter";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile MethodDescriptor<GenericRequest,
@@ -48,7 +48,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "CreateUser"))
+                  "io.grpc.Greeter", "CreateUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   GenericRequest.getDefaultInstance()))
@@ -80,7 +80,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "GetUser"))
+                  "io.grpc.Greeter", "GetUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   GenericRequest.getDefaultInstance()))
@@ -112,7 +112,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "UpdateUser"))
+                  "io.grpc.Greeter", "UpdateUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   GenericRequest.getDefaultInstance()))
@@ -144,7 +144,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<GenericRequest, GenericResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "DeleteUser"))
+                  "io.grpc.Greeter", "DeleteUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   GenericRequest.getDefaultInstance()))
@@ -176,7 +176,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<FindMessage, FindResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "FindNode"))
+                  "io.grpc.Greeter", "FindNode"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   FindMessage.getDefaultInstance()))
@@ -208,7 +208,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<GetRangeRequest, GetRangeResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "GetRange"))
+                  "io.grpc.Greeter", "GetRange"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   GetRangeRequest.getDefaultInstance()))
@@ -240,7 +240,7 @@ public final class GreeterGrpc {
               MethodDescriptor.<UpdateFTRequest, UpdateFTResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "helloworld.Greeter", "UpdateFT"))
+                  "io.grpc.Greeter", "UpdateFT"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   UpdateFTRequest.getDefaultInstance()))
@@ -252,6 +252,38 @@ public final class GreeterGrpc {
         }
      }
      return getUpdateFTMethod;
+  }
+
+  private static volatile MethodDescriptor<io.grpc.NewNodeRequest,
+      io.grpc.NewNodeResponse> getNewNodeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "NewNode",
+      requestType = io.grpc.NewNodeRequest.class,
+      responseType = io.grpc.NewNodeResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<io.grpc.NewNodeRequest,
+      io.grpc.NewNodeResponse> getNewNodeMethod() {
+    MethodDescriptor<io.grpc.NewNodeRequest, io.grpc.NewNodeResponse> getNewNodeMethod;
+    if ((getNewNodeMethod = GreeterGrpc.getNewNodeMethod) == null) {
+      synchronized (GreeterGrpc.class) {
+        if ((getNewNodeMethod = GreeterGrpc.getNewNodeMethod) == null) {
+          GreeterGrpc.getNewNodeMethod = getNewNodeMethod = 
+              MethodDescriptor.<io.grpc.NewNodeRequest, io.grpc.NewNodeResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "io.grpc.Greeter", "NewNode"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  io.grpc.NewNodeRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  io.grpc.NewNodeResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("NewNode"))
+                  .build();
+          }
+        }
+     }
+     return getNewNodeMethod;
   }
 
   /**
@@ -336,6 +368,13 @@ public final class GreeterGrpc {
       asyncUnimplementedUnaryCall(getUpdateFTMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void newNode(io.grpc.NewNodeRequest request,
+        io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getNewNodeMethod(), responseObserver);
+    }
+
     @Override public final ServerServiceDefinition bindService() {
       return ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -387,6 +426,13 @@ public final class GreeterGrpc {
                 UpdateFTRequest,
                 UpdateFTResponse>(
                   this, METHODID_UPDATE_FT)))
+          .addMethod(
+            getNewNodeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                io.grpc.NewNodeRequest,
+                io.grpc.NewNodeResponse>(
+                  this, METHODID_NEW_NODE)))
           .build();
     }
   }
@@ -470,6 +516,14 @@ public final class GreeterGrpc {
       asyncUnaryCall(
           getChannel().newCall(getUpdateFTMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void newNode(io.grpc.NewNodeRequest request,
+        io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getNewNodeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -543,6 +597,13 @@ public final class GreeterGrpc {
     public UpdateFTResponse updateFT(UpdateFTRequest request) {
       return blockingUnaryCall(
           getChannel(), getUpdateFTMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public io.grpc.NewNodeResponse newNode(io.grpc.NewNodeRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getNewNodeMethod(), getCallOptions(), request);
     }
   }
 
@@ -625,6 +686,14 @@ public final class GreeterGrpc {
       return futureUnaryCall(
           getChannel().newCall(getUpdateFTMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<io.grpc.NewNodeResponse> newNode(
+        io.grpc.NewNodeRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getNewNodeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_USER = 0;
@@ -634,6 +703,7 @@ public final class GreeterGrpc {
   private static final int METHODID_FIND_NODE = 4;
   private static final int METHODID_GET_RANGE = 5;
   private static final int METHODID_UPDATE_FT = 6;
+  private static final int METHODID_NEW_NODE = 7;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -680,6 +750,10 @@ public final class GreeterGrpc {
           serviceImpl.updateFT((UpdateFTRequest) request,
               (io.grpc.stub.StreamObserver<UpdateFTResponse>) responseObserver);
           break;
+        case METHODID_NEW_NODE:
+          serviceImpl.newNode((io.grpc.NewNodeRequest) request,
+              (io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -702,7 +776,7 @@ public final class GreeterGrpc {
 
     @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return GrpcProto.getDescriptor();
+      return ServerProto.getDescriptor();
     }
 
     @Override
@@ -748,6 +822,7 @@ public final class GreeterGrpc {
               .addMethod(getFindNodeMethod())
               .addMethod(getGetRangeMethod())
               .addMethod(getUpdateFTMethod())
+              .addMethod(getNewNodeMethod())
               .build();
         }
       }

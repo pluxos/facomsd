@@ -3,8 +3,8 @@
 
 package io.grpc;
 
-public interface UpdateFTResponseOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:io.grpc.UpdateFTResponse)
+public interface NewNodeResponseOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:io.grpc.NewNodeResponse)
     com.google.protobuf.MessageOrBuilder {
 
   /**

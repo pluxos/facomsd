@@ -15,10 +15,10 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "io.grpc";
-option java_outer_classname = "GrpcProto";
+option java_outer_classname = "ServerProto";
 option objc_class_prefix = "HLW";
 
-package helloworld;
+package io.grpc;
 
 // The greeting service definition.
 service Greeter {
@@ -30,6 +30,7 @@ service Greeter {
   rpc FindNode (FindMessage) returns (FindResponse) {}
   rpc GetRange (GetRangeRequest) returns (GetRangeResponse) {}
   rpc UpdateFT (UpdateFTRequest) returns (UpdateFTResponse) {}
+  rpc NewNode (NewNodeRequest) returns (NewNodeResponse) {}
 }
 
 message GenericRequest {
@@ -68,6 +69,16 @@ message UpdateFTRequest {
 }
 
 message UpdateFTResponse {
+  string fingerT = 1;
+  bool update = 2;
+}
+
+message NewNodeRequest {
+  string node = 1;
+  string newNode = 2;
+}
+
+message NewNodeResponse {
   string fingerT = 1;
   bool update = 2;
 }
