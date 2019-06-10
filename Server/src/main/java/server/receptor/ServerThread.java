@@ -1,19 +1,13 @@
 package server.receptor;
 
-import java.io.IOException;
-import java.util.Properties;
-import java.util.Timer;
-import java.util.concurrent.Executors;
-
 import io.grpc.FindResponse;
-import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
+import server.business.consumers.CommandExecutorThread;
+import server.business.consumers.LogPersistentThread;
 import server.business.consumers.OrchestratorThread;
 import server.business.consumers.ServerConnectorThread;
-import server.business.consumers.LogPersistentThread;
-import server.business.consumers.CommandExecutorThread;
 import server.business.persistence.recovery.LogRecovererThread;
 import server.business.persistence.routine.Counter;
 import server.business.persistence.routine.FileRoutineThread;
@@ -23,6 +17,11 @@ import server.commons.chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
 import server.requester.GrpcCommunication;
+
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
 
@@ -128,11 +127,8 @@ public class ServerThread implements Runnable {
 	}
 
 	public static class ObserverResponse implements StreamObserver<FindResponse> {
-		private ManagedChannel channel;
 
-		public ObserverResponse(ManagedChannel c){
-			this.channel = c;
-		}
+		public ObserverResponse(){}
 
 		@Override
 		public void onNext(FindResponse findResponse) {
@@ -148,13 +144,9 @@ public class ServerThread implements Runnable {
 		}
 
 		@Override
-		public void onError(Throwable throwable) {
-			System.err.println(throwable.getMessage());
-		}
+		public void onError(Throwable throwable) { }
 
 		@Override
-		public void onCompleted() {
-			this.channel.shutdownNow();
-		}
+		public void onCompleted() { }
 	}
 }

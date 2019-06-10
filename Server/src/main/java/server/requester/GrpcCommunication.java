@@ -27,6 +27,6 @@ public class GrpcCommunication {
 
         output.getRange(
                 GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
-                new GetRangeObserver(ip, port, channel));
+                new GetRangeObserver(ip, port));
     }
 }

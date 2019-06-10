@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import server.business.command.RequestUtils;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Node;
@@ -57,7 +56,7 @@ public class UpdateUser implements CommandStrategy {
 
 		stub.updateUser(
 				RequestUtils.getGenericRequestWithData(genericCommand),
-				new GenericResponseObserver(genericCommand.getOutput(), channel)
+				new GenericResponseObserver(genericCommand.getOutput())
 		);
 	}
 }

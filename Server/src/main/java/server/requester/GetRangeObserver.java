@@ -2,7 +2,6 @@ package server.requester;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
-import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Chord;
@@ -19,12 +18,10 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
     private String chordIp;
     private int chordPort;
-    private ManagedChannel channel;
 
-    public GetRangeObserver(String chordIp, int chordPort, ManagedChannel channel){
+    GetRangeObserver(String chordIp, int chordPort){
         this.chordIp = chordIp;
         this.chordPort = chordPort;
-        this.channel = channel;
     }
 
     @Override
@@ -71,12 +68,8 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
     }
 
     @Override
-    public void onError(Throwable throwable) {
-
-    }
+    public void onError(Throwable throwable) { }
 
     @Override
-    public void onCompleted() {
-        channel.shutdownNow();
-    }
+    public void onCompleted() { }
 }

@@ -1,17 +1,14 @@
 package server.business.command.strategy;
 
 import io.grpc.GenericResponse;
-import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 
 public class GenericResponseObserver implements StreamObserver<GenericResponse> {
 
     private StreamObserver<GenericResponse> output;
-    private ManagedChannel channel;
 
-    GenericResponseObserver(StreamObserver<GenericResponse> output, ManagedChannel channel) {
+    GenericResponseObserver(StreamObserver<GenericResponse> output) {
         this.output = output;
-        this.channel = channel;
     }
 
     @Override
@@ -21,12 +18,8 @@ public class GenericResponseObserver implements StreamObserver<GenericResponse> 
     }
 
     @Override
-    public void onError(Throwable throwable) {
-
-    }
+    public void onError(Throwable throwable) { }
 
     @Override
-    public void onCompleted() {
-        this.channel.shutdownNow();
-    }
+    public void onCompleted() { }
 }

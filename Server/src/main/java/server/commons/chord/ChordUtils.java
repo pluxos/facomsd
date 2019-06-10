@@ -6,8 +6,6 @@ import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.requester.CommunicationManager;
 
-import java.util.Map;
-
 public class ChordUtils {
     private static Node flagUpdate;
     private static Node flagNew;
@@ -28,7 +26,7 @@ public class ChordUtils {
                                     .newBuilder()
                                     .setFingerT(JsonUtils.serialize(Chord.getFt().getMap()))
                                     .build(),
-                            new UpdateFTObserver(channel)
+                            new UpdateFTObserver()
                     );
                     flagUpdate = value;
                 } catch (ServerException e) {
