@@ -31,7 +31,7 @@ git merge master    #Não tem equivalente na interface gráfica (não q eu saiba
 5) Execute quantos Clients forem necessários, não é necessário fazer nenhum ajuste adicional. O Client deverá se conectar com o servidor com a porta 2000.
 
 Foi deixado Prints para acompanhar a lógica do código.
-O Server irá criar os arquivos de log e snap na pasta atual (`Server`) e recuperar se houver antigos. "DEVERIA PELO MENOS".
+O Server irá criar os arquivos de log e snap na pasta atual (`Server`) e recuperar se houver antigos. "DEVERIA PELO MENOS". ***NÃO FOI IMPLEMENTADA DELEÇÃO DE SERVIDORES***
 
 ## Instruções do projeto:
 Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
