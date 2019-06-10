@@ -92,8 +92,10 @@ public class Logger implements Runnable {
                     if (Integer.parseInt(s.substring(s.lastIndexOf('.')+1)) > lastSnapNumber)
                         lastSnapNumber = Integer.parseInt(s.substring(s.lastIndexOf('.')+1));
                 // Restaurando todo o snap
-                for (String s : Files.readAllLines(Paths.get(Table.getInstance().getMyKey() + "/snap." + lastSnapNumber)))
+                for (String s : Files.readAllLines(Paths.get(Table.getInstance().getMyKey() + "/snap." + lastSnapNumber))){
                     Banco.getInstance().Insert(s);
+
+                }
             }
 
             List<String> logs = files.stream().filter(file -> file.matches(Table.getInstance().getMyKey() + "/log.*")).collect(Collectors.toList());

@@ -44,12 +44,12 @@ public class Banco {
     public String toString() {
         String str = new String();
         for (Map.Entry<BigInteger, byte[]> entry : database.entrySet())
-            str += entry.getKey() + "||" + new String(entry.getValue()) + "\n";
+            str += entry.getKey() + " " + new String(entry.getValue()) + "\n";
         return str;
     }
 
     public Boolean Insert(BigInteger key, byte[] value) {
-        System.out.println( "Insert <" + key + "," + new String(value) + ">" );
+        System.out.println("Insert <" + key + "," + new String(value) + ">");
         if (this.database.containsKey(key)) {
             return false; // Se a chave já existir no banco, ele retorna falso
         } else {
@@ -61,12 +61,13 @@ public class Banco {
 
     public Boolean Insert(String par) {
         // Insert from a String
-        String[] words = par.split("||");
+        String[] words = new String[2];
+        words = par.split(" ");
         return Insert(new BigInteger(words[0]), words[1].getBytes());
     }
 
     public byte[] Read(BigInteger key) {
-        System.out.println( "Read <" + key + ">" );
+        System.out.println("Read <" + key + ">");
         if (this.database.containsKey(key)) {
             return this.database.get(key);
         } else
@@ -74,7 +75,7 @@ public class Banco {
     }
 
     public Boolean Update(BigInteger key, byte[] value) {
-        System.out.println( "Update <" + key + "," + new String(value) + ">" );
+        System.out.println("Update <" + key + "," + new String(value) + ">");
         if (this.database.containsKey(key)) {
             this.database.put(key, value); // Se a chave já existir, o valor dela é sobrescrito
             return true;
@@ -84,7 +85,7 @@ public class Banco {
     }
 
     public Boolean Delete(BigInteger key) {
-        System.out.println( "Delete <" + key + ">" );
+        System.out.println("Delete <" + key + ">");
         // Se a chave existir ele remove e retorna verdadeiro, caso contrário,retorna
         // falso
         if (this.database.containsKey(key)) {
