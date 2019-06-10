@@ -14,20 +14,32 @@ service Crud {
   rpc Delete (DeleteRequest) returns (DeleteResponse) {}
 }
 
+service Chord {
+  rpc AddServidor (AddRequest) returns (AddResponse) {}
+  rpc DeleteServidor (DelRequest) returns (DelResponse) {}
+  rpc UpdateServidor (UpRequest) returns (UpResponse) {}
+  rpc NotifyServidor (NotifyRequest) returns (NotifyResponse) {}
+  rpc SearchFirst (SearchRequest) returns (SearchResponse) {}
+}
+
+// Mensagens do Crud
+
 message CreateRequest {
   bytes key = 1;
   bytes value = 2;
   int32 keysize = 3;
-  int32 valuesize = 4;  
+  int32 valuesize = 4;
+  bool client = 5;
 }
-message CreateResponse
-{
+
+message CreateResponse {
    bool retorno = 1;
 }
 
 message ReadRequest {
   bytes key = 1;
   int32 keysize = 2;
+  bool client = 3;
 }
 
 message ReadResponse {
@@ -40,6 +52,7 @@ message UpdateRequest {
   bytes value = 2;
   int32 keysize = 3;
   int32 valuesize = 4;
+  bool client = 5;
 }
 
 message UpdateResponse {
@@ -49,8 +62,60 @@ message UpdateResponse {
 message DeleteRequest {
   bytes key = 1;
   int32 keysize = 2;
+  bool client = 3;
 }
 
 message DeleteResponse {
   bool retorno = 1;
+}
+
+// Mensagens de controle entre servers
+
+message AddRequest {
+  int32 key = 1;
+  int32 port = 2;
+  string ip = 3;
+}
+
+message AddResponse {
+  int32 key = 1;
+  int32 port = 2;
+  string ip = 3;
+}
+
+message DelRequest {
+  int32 key = 1;
+}
+
+message DelResponse {
+}
+
+message UpRequest {
+  int32 mykey = 1;
+  int32 position = 2;
+  int32 expkey = 3;
+}
+
+message UpResponse {
+  int32 key = 1;
+  int32 port = 2;
+  string ip = 3;
+}
+
+message SearchRequest {
+}
+
+message SearchResponse {
+  string ip = 1;
+  int32 port = 2;
+}
+
+message NotifyRequest {
+  int32 newkey = 1;
+  int32 newport = 2;
+  string newip = 3;
+}
+
+message NotifyResponse {
+  string ok = 1;
 }

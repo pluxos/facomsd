@@ -95,24 +95,24 @@ public class ClientGrpc {
           if( command.equals( "CREATE" ) ) {
             value = option.substring( ( spaceSecond + 1 ), size );
             byte[] messageBytesValue = value.getBytes();
-            new Thread( new Create(host, port, keyBigInteger, messageBytesValue) ).start();
+            new Thread( new Create(host, port, keyBigInteger, messageBytesValue, true) ).start();
             continue;  
           }
 
           if( command.equals( "UPDATE" ) ) {
             value = option.substring( ( spaceSecond + 1 ), size );
             byte[] messageBytesValue = value.getBytes();
-            new Thread( new Update(host, port, keyBigInteger, messageBytesValue) ).start();
+            new Thread( new Update(host, port, keyBigInteger, messageBytesValue, true) ).start();
             continue;
           }
           
           if( command.equals( "READ" ) ) {
-            new Thread( new Read(host, port, keyBigInteger) ).start();
+            new Thread( new Read(host, port, keyBigInteger, true) ).start();
             continue;
           }
           
           if( command.equals( "DELETE" ) ) {
-            new Thread( new Delete(host, port, keyBigInteger) ).start();
+            new Thread( new Delete(host, port, keyBigInteger, true) ).start();
             continue;
           }
 
@@ -128,6 +128,6 @@ public class ClientGrpc {
   }
 
   public static void main(String[] args) throws Exception {
-    new ClientGrpc("localhost", 50051);     
+    new ClientGrpc("localhost", 2000);     
   }
 }
