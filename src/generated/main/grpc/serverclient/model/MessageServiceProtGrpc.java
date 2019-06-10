@@ -28,131 +28,67 @@ public final class MessageServiceProtGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getCreateMessageMethod;
+      serverclient.model.Message> getCreateUpdateMessageMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "createMessage",
+      fullMethodName = SERVICE_NAME + '/' + "createUpdateMessage",
       requestType = serverclient.model.Message.class,
       responseType = serverclient.model.Message.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getCreateMessageMethod() {
-    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getCreateMessageMethod;
-    if ((getCreateMessageMethod = MessageServiceProtGrpc.getCreateMessageMethod) == null) {
+      serverclient.model.Message> getCreateUpdateMessageMethod() {
+    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getCreateUpdateMessageMethod;
+    if ((getCreateUpdateMessageMethod = MessageServiceProtGrpc.getCreateUpdateMessageMethod) == null) {
       synchronized (MessageServiceProtGrpc.class) {
-        if ((getCreateMessageMethod = MessageServiceProtGrpc.getCreateMessageMethod) == null) {
-          MessageServiceProtGrpc.getCreateMessageMethod = getCreateMessageMethod = 
+        if ((getCreateUpdateMessageMethod = MessageServiceProtGrpc.getCreateUpdateMessageMethod) == null) {
+          MessageServiceProtGrpc.getCreateUpdateMessageMethod = getCreateUpdateMessageMethod = 
               io.grpc.MethodDescriptor.<serverclient.model.Message, serverclient.model.Message>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "model.MessageServiceProt", "createMessage"))
+                  "model.MessageServiceProt", "createUpdateMessage"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   serverclient.model.Message.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   serverclient.model.Message.getDefaultInstance()))
-                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("createMessage"))
+                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("createUpdateMessage"))
                   .build();
           }
         }
      }
-     return getCreateMessageMethod;
+     return getCreateUpdateMessageMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getReadMessageMethod;
+      serverclient.model.Message> getReadDeleteMessageMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "readMessage",
+      fullMethodName = SERVICE_NAME + '/' + "readDeleteMessage",
       requestType = serverclient.model.Message.class,
       responseType = serverclient.model.Message.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getReadMessageMethod() {
-    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getReadMessageMethod;
-    if ((getReadMessageMethod = MessageServiceProtGrpc.getReadMessageMethod) == null) {
+      serverclient.model.Message> getReadDeleteMessageMethod() {
+    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getReadDeleteMessageMethod;
+    if ((getReadDeleteMessageMethod = MessageServiceProtGrpc.getReadDeleteMessageMethod) == null) {
       synchronized (MessageServiceProtGrpc.class) {
-        if ((getReadMessageMethod = MessageServiceProtGrpc.getReadMessageMethod) == null) {
-          MessageServiceProtGrpc.getReadMessageMethod = getReadMessageMethod = 
+        if ((getReadDeleteMessageMethod = MessageServiceProtGrpc.getReadDeleteMessageMethod) == null) {
+          MessageServiceProtGrpc.getReadDeleteMessageMethod = getReadDeleteMessageMethod = 
               io.grpc.MethodDescriptor.<serverclient.model.Message, serverclient.model.Message>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "model.MessageServiceProt", "readMessage"))
+                  "model.MessageServiceProt", "readDeleteMessage"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   serverclient.model.Message.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   serverclient.model.Message.getDefaultInstance()))
-                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("readMessage"))
+                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("readDeleteMessage"))
                   .build();
           }
         }
      }
-     return getReadMessageMethod;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getUpdateMessageMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "updateMessage",
-      requestType = serverclient.model.Message.class,
-      responseType = serverclient.model.Message.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
-  public static io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getUpdateMessageMethod() {
-    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getUpdateMessageMethod;
-    if ((getUpdateMessageMethod = MessageServiceProtGrpc.getUpdateMessageMethod) == null) {
-      synchronized (MessageServiceProtGrpc.class) {
-        if ((getUpdateMessageMethod = MessageServiceProtGrpc.getUpdateMessageMethod) == null) {
-          MessageServiceProtGrpc.getUpdateMessageMethod = getUpdateMessageMethod = 
-              io.grpc.MethodDescriptor.<serverclient.model.Message, serverclient.model.Message>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
-              .setFullMethodName(generateFullMethodName(
-                  "model.MessageServiceProt", "updateMessage"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  serverclient.model.Message.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  serverclient.model.Message.getDefaultInstance()))
-                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("updateMessage"))
-                  .build();
-          }
-        }
-     }
-     return getUpdateMessageMethod;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getDeleteMessageMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "deleteMessage",
-      requestType = serverclient.model.Message.class,
-      responseType = serverclient.model.Message.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
-  public static io.grpc.MethodDescriptor<serverclient.model.Message,
-      serverclient.model.Message> getDeleteMessageMethod() {
-    io.grpc.MethodDescriptor<serverclient.model.Message, serverclient.model.Message> getDeleteMessageMethod;
-    if ((getDeleteMessageMethod = MessageServiceProtGrpc.getDeleteMessageMethod) == null) {
-      synchronized (MessageServiceProtGrpc.class) {
-        if ((getDeleteMessageMethod = MessageServiceProtGrpc.getDeleteMessageMethod) == null) {
-          MessageServiceProtGrpc.getDeleteMessageMethod = getDeleteMessageMethod = 
-              io.grpc.MethodDescriptor.<serverclient.model.Message, serverclient.model.Message>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
-              .setFullMethodName(generateFullMethodName(
-                  "model.MessageServiceProt", "deleteMessage"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  serverclient.model.Message.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  serverclient.model.Message.getDefaultInstance()))
-                  .setSchemaDescriptor(new MessageServiceProtMethodDescriptorSupplier("deleteMessage"))
-                  .build();
-          }
-        }
-     }
-     return getDeleteMessageMethod;
+     return getReadDeleteMessageMethod;
   }
 
   /**
@@ -184,62 +120,34 @@ public final class MessageServiceProtGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> createMessage(
+    public void createUpdateMessage(serverclient.model.Message request,
         io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncUnimplementedStreamingCall(getCreateMessageMethod(), responseObserver);
+      asyncUnimplementedUnaryCall(getCreateUpdateMessageMethod(), responseObserver);
     }
 
     /**
      */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> readMessage(
+    public void readDeleteMessage(serverclient.model.Message request,
         io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncUnimplementedStreamingCall(getReadMessageMethod(), responseObserver);
-    }
-
-    /**
-     */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> updateMessage(
-        io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncUnimplementedStreamingCall(getUpdateMessageMethod(), responseObserver);
-    }
-
-    /**
-     */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> deleteMessage(
-        io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncUnimplementedStreamingCall(getDeleteMessageMethod(), responseObserver);
+      asyncUnimplementedUnaryCall(getReadDeleteMessageMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
-            getCreateMessageMethod(),
-            asyncBidiStreamingCall(
+            getCreateUpdateMessageMethod(),
+            asyncUnaryCall(
               new MethodHandlers<
                 serverclient.model.Message,
                 serverclient.model.Message>(
-                  this, METHODID_CREATE_MESSAGE)))
+                  this, METHODID_CREATE_UPDATE_MESSAGE)))
           .addMethod(
-            getReadMessageMethod(),
-            asyncBidiStreamingCall(
+            getReadDeleteMessageMethod(),
+            asyncUnaryCall(
               new MethodHandlers<
                 serverclient.model.Message,
                 serverclient.model.Message>(
-                  this, METHODID_READ_MESSAGE)))
-          .addMethod(
-            getUpdateMessageMethod(),
-            asyncBidiStreamingCall(
-              new MethodHandlers<
-                serverclient.model.Message,
-                serverclient.model.Message>(
-                  this, METHODID_UPDATE_MESSAGE)))
-          .addMethod(
-            getDeleteMessageMethod(),
-            asyncBidiStreamingCall(
-              new MethodHandlers<
-                serverclient.model.Message,
-                serverclient.model.Message>(
-                  this, METHODID_DELETE_MESSAGE)))
+                  this, METHODID_READ_DELETE_MESSAGE)))
           .build();
     }
   }
@@ -264,34 +172,18 @@ public final class MessageServiceProtGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> createMessage(
+    public void createUpdateMessage(serverclient.model.Message request,
         io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncBidiStreamingCall(
-          getChannel().newCall(getCreateMessageMethod(), getCallOptions()), responseObserver);
+      asyncUnaryCall(
+          getChannel().newCall(getCreateUpdateMessageMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> readMessage(
+    public void readDeleteMessage(serverclient.model.Message request,
         io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncBidiStreamingCall(
-          getChannel().newCall(getReadMessageMethod(), getCallOptions()), responseObserver);
-    }
-
-    /**
-     */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> updateMessage(
-        io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncBidiStreamingCall(
-          getChannel().newCall(getUpdateMessageMethod(), getCallOptions()), responseObserver);
-    }
-
-    /**
-     */
-    public io.grpc.stub.StreamObserver<serverclient.model.Message> deleteMessage(
-        io.grpc.stub.StreamObserver<serverclient.model.Message> responseObserver) {
-      return asyncBidiStreamingCall(
-          getChannel().newCall(getDeleteMessageMethod(), getCallOptions()), responseObserver);
+      asyncUnaryCall(
+          getChannel().newCall(getReadDeleteMessageMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -312,6 +204,20 @@ public final class MessageServiceProtGrpc {
         io.grpc.CallOptions callOptions) {
       return new MessageServiceProtBlockingStub(channel, callOptions);
     }
+
+    /**
+     */
+    public serverclient.model.Message createUpdateMessage(serverclient.model.Message request) {
+      return blockingUnaryCall(
+          getChannel(), getCreateUpdateMessageMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public serverclient.model.Message readDeleteMessage(serverclient.model.Message request) {
+      return blockingUnaryCall(
+          getChannel(), getReadDeleteMessageMethod(), getCallOptions(), request);
+    }
   }
 
   /**
@@ -331,12 +237,26 @@ public final class MessageServiceProtGrpc {
         io.grpc.CallOptions callOptions) {
       return new MessageServiceProtFutureStub(channel, callOptions);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<serverclient.model.Message> createUpdateMessage(
+        serverclient.model.Message request) {
+      return futureUnaryCall(
+          getChannel().newCall(getCreateUpdateMessageMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<serverclient.model.Message> readDeleteMessage(
+        serverclient.model.Message request) {
+      return futureUnaryCall(
+          getChannel().newCall(getReadDeleteMessageMethod(), getCallOptions()), request);
+    }
   }
 
-  private static final int METHODID_CREATE_MESSAGE = 0;
-  private static final int METHODID_READ_MESSAGE = 1;
-  private static final int METHODID_UPDATE_MESSAGE = 2;
-  private static final int METHODID_DELETE_MESSAGE = 3;
+  private static final int METHODID_CREATE_UPDATE_MESSAGE = 0;
+  private static final int METHODID_READ_DELETE_MESSAGE = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -355,6 +275,14 @@ public final class MessageServiceProtGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_CREATE_UPDATE_MESSAGE:
+          serviceImpl.createUpdateMessage((serverclient.model.Message) request,
+              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
+          break;
+        case METHODID_READ_DELETE_MESSAGE:
+          serviceImpl.readDeleteMessage((serverclient.model.Message) request,
+              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -365,18 +293,6 @@ public final class MessageServiceProtGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CREATE_MESSAGE:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.createMessage(
-              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
-        case METHODID_READ_MESSAGE:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.readMessage(
-              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
-        case METHODID_UPDATE_MESSAGE:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.updateMessage(
-              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
-        case METHODID_DELETE_MESSAGE:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.deleteMessage(
-              (io.grpc.stub.StreamObserver<serverclient.model.Message>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -428,10 +344,8 @@ public final class MessageServiceProtGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new MessageServiceProtFileDescriptorSupplier())
-              .addMethod(getCreateMessageMethod())
-              .addMethod(getReadMessageMethod())
-              .addMethod(getUpdateMessageMethod())
-              .addMethod(getDeleteMessageMethod())
+              .addMethod(getCreateUpdateMessageMethod())
+              .addMethod(getReadDeleteMessageMethod())
               .build();
         }
       }

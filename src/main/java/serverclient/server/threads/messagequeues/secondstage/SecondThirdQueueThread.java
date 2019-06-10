@@ -1,7 +1,8 @@
 package serverclient.server.threads.messagequeues.secondstage;
 
+import serverclient.model.Message;
 import serverclient.model.MessageOld;
-import serverclient.server.threads.ServerThread;
+import serverclient.server.threads.ServerGRPC;
 import serverclient.server.threads.handlers.MessageData;
 
 import java.util.logging.Logger;
@@ -17,29 +18,38 @@ public class SecondThirdQueueThread implements Runnable{
 
             while (messageData == null) {
                 try {
-                    messageData = ServerThread.getFila1().take();
+                    messageData = ServerGRPC.getFila1().take();
                     LOGGER.info("Mensagem " + messageData.getMessage() + " pega da Fila1.");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            MessageOld messageDB = messageData.getMessage();
-            messageDB = new MessageOld(messageDB.getLastOption(), messageDB.getId(), messageDB.getMessage());
+            Message messageDB = messageData.getMessage();
+            messageDB = Message.newBuilder()
+                    .setLastOption(messageDB.getLastOption())
+                    .setId(messageDB.getId())
+                    .setText(messageDB.getText())
+                    .build();
+            //messageDB = new Message(, , );
             messageData.setMessage(messageDB);
             try {
                 LOGGER.info("Mensagem " + messageData.getMessage() + " será colocada na Fila3.");
-                ServerThread.getFila3().put(messageData);
+                ServerGRPC.getFila3().put(messageData);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             if (messageData.getMessage().getLastOption() != 2) {
-                MessageOld messageLog = messageData.getMessage();
-                messageLog = new MessageOld(messageLog.getLastOption(), messageLog.getId(), messageLog.getMessage());
+                Message messageLog = messageData.getMessage();
+                messageLog = Message.newBuilder()
+                        .setLastOption(messageLog.getLastOption())
+                        .setId(messageLog.getId())
+                        .setText(messageLog.getText())
+                        .build();
                 try {
                     LOGGER.info("Mensagem " + messageLog + " será colocada na Fila2.");
-                    ServerThread.getFila2().put(messageLog);
+                    ServerGRPC.getFila2().put(messageLog);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

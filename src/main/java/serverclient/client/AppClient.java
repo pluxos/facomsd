@@ -3,6 +3,7 @@ package serverclient.client;
 import java.util.logging.Logger;
 
 import serverclient.client.threads.Client;
+import serverclient.client.view.TerminalView;
 import serverclient.model.Message;
 
 public class AppClient {
@@ -18,8 +19,11 @@ public class AppClient {
             client = new Client("localhost", Integer.parseInt(args[0]));
         }
 
+        TerminalView terminalView = new TerminalView(client);
+
         while (true) {
-            Message msgRequest = client.getTerminalView().startReadMessage();
+
+            client.sendRequisitionReceiveAnswer(terminalView.startReadMessage());
             Message msgResponse = client.sendRequisitionReceiveAnswer(msgRequest);
 
             client.getTerminalView().readMessage(msgResponse);

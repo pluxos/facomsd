@@ -30,14 +30,11 @@ public final class MessageProto {
     java.lang.String[] descriptorData = {
       "\n\rmessage.proto\022\005model\"7\n\007Message\022\022\n\nlas" +
       "tOption\030\001 \001(\005\022\n\n\002id\030\002 \001(\003\022\014\n\004text\030\003 \001(\t2" +
-      "\356\001\n\022MessageServiceProt\0225\n\rcreateMessage\022" +
-      "\016.model.Message\032\016.model.Message\"\000(\0010\001\0223\n" +
-      "\013readMessage\022\016.model.Message\032\016.model.Mes" +
-      "sage\"\000(\0010\001\0225\n\rupdateMessage\022\016.model.Mess" +
-      "age\032\016.model.Message\"\000(\0010\001\0225\n\rdeleteMessa" +
-      "ge\022\016.model.Message\032\016.model.Message\"\000(\0010\001" +
-      "B*\n\022serverclient.modelB\014MessageProtoP\001\242\002" +
-      "\003MSGb\006proto3"
+      "\204\001\n\022MessageServiceProt\0227\n\023createUpdateMe" +
+      "ssage\022\016.model.Message\032\016.model.Message\"\000\022" +
+      "5\n\021readDeleteMessage\022\016.model.Message\032\016.m" +
+      "odel.Message\"\000B*\n\022serverclient.modelB\014Me" +
+      "ssageProtoP\001\242\002\003MSGb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

@@ -1,28 +1,28 @@
 package serverclient.server.threads.handlers;
 
-import serverclient.model.MessageOld;
+import serverclient.model.Message;
 
 import java.util.concurrent.BlockingQueue;
 
 public class MessageData {
 
-    private MessageOld message;
-    private BlockingQueue<MessageOld> answerQueue;
+    private Message message;
+    private BlockingQueue<Message> answerQueue;
 
-    public MessageData(MessageOld message, BlockingQueue<MessageOld> answerQueue) {
+    public MessageData(Message message, BlockingQueue<Message> answerQueue) {
         this.message = message;
         this.answerQueue = answerQueue;
     }
 
-    public synchronized MessageOld getMessage() {
+    public synchronized Message getMessage() {
         return message;
     }
 
-    public synchronized void setMessage(MessageOld message) {
+    public synchronized void setMessage(Message message) {
         this.message = message;
     }
 
-    public synchronized BlockingQueue<MessageOld> getAnswerQueue() {
+    public synchronized BlockingQueue<Message> getAnswerQueue() {
         return answerQueue;
     }
 }

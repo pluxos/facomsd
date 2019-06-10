@@ -1,5 +1,6 @@
 package serverclient.client.view;
 
+import serverclient.client.threads.Client;
 import serverclient.constants.StringsConstants;
 import serverclient.model.Message;
 import serverclient.model.MessageOld;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 public class TerminalView {
 
     private final static Logger LOGGER = Logger.getLogger(TerminalView.class.getName());
+    private final Client client;
 
     private Scanner scanner = new Scanner(System.in);
 
@@ -20,7 +22,8 @@ public class TerminalView {
 
     //private volatile boolean wait = false;
 
-    public TerminalView() {
+    public TerminalView(Client client) {
+        this.client = client;
     }
 
     public Message startReadMessage() {
