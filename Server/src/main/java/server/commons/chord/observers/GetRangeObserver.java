@@ -1,13 +1,15 @@
-package server.requester;
+package server.commons.chord.observers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Chord;
+import server.commons.chord.FingerTable;
 import server.commons.chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
+import server.requester.GrpcCommunication;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
     private String chordIp;
     private int chordPort;
 
-    GetRangeObserver(String chordIp, int chordPort){
+    public GetRangeObserver(String chordIp, int chordPort){
         this.chordIp = chordIp;
         this.chordPort = chordPort;
     }
@@ -61,7 +63,6 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
         try {
             TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {};
             Chord.getNode().setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
-            Chord.getFt().updateFT(Chord.getNode());
         } catch (ServerException e) {
             e.printStackTrace();
         }

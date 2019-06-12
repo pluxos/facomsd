@@ -60,8 +60,9 @@ message GetRangeRequest {
 
 message GetRangeResponse {
   string node = 1;
-  string range = 2;
-  string data = 3;
+  string fingerT = 2;
+  string range = 3;
+  string data = 4;
 }
 
 message UpdateFTRequest {

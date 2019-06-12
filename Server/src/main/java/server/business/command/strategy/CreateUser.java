@@ -2,6 +2,7 @@ package server.business.command.strategy;
 
 import java.math.BigInteger;
 
+import io.grpc.Context;
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
 import io.grpc.ManagedChannel;
@@ -51,12 +52,18 @@ public class CreateUser implements CommandStrategy {
 
 	@Override
 	public void passCommand(GenericCommand genericCommand, Node node) {
-		ManagedChannel channel = CommunicationManager.initCommunication(node.getIp(), node.getPort());
-		GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
+		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
 
-		stub.createUser(
-				RequestUtils.getGenericRequestWithData(genericCommand),
-				new GenericResponseObserver(genericCommand.getOutput())
-		);
+		Context forked = Context.current().fork();
+		Context old = forked.attach();
+
+		try {
+			stub.createUser(
+					RequestUtils.getGenericRequestWithData(genericCommand),
+					new GenericResponseObserver(genericCommand.getOutput())
+			);
+		} finally {
+			forked.detach(old);
+		}
 	}
 }

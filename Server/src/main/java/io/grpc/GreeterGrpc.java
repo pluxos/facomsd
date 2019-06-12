@@ -254,30 +254,30 @@ public final class GreeterGrpc {
      return getUpdateFTMethod;
   }
 
-  private static volatile MethodDescriptor<io.grpc.NewNodeRequest,
-      io.grpc.NewNodeResponse> getNewNodeMethod;
+  private static volatile MethodDescriptor<NewNodeRequest,
+      NewNodeResponse> getNewNodeMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "NewNode",
-      requestType = io.grpc.NewNodeRequest.class,
-      responseType = io.grpc.NewNodeResponse.class,
+      requestType = NewNodeRequest.class,
+      responseType = NewNodeResponse.class,
       methodType = MethodDescriptor.MethodType.UNARY)
-  public static MethodDescriptor<io.grpc.NewNodeRequest,
-      io.grpc.NewNodeResponse> getNewNodeMethod() {
-    MethodDescriptor<io.grpc.NewNodeRequest, io.grpc.NewNodeResponse> getNewNodeMethod;
+  public static MethodDescriptor<NewNodeRequest,
+      NewNodeResponse> getNewNodeMethod() {
+    MethodDescriptor<NewNodeRequest, NewNodeResponse> getNewNodeMethod;
     if ((getNewNodeMethod = GreeterGrpc.getNewNodeMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getNewNodeMethod = GreeterGrpc.getNewNodeMethod) == null) {
           GreeterGrpc.getNewNodeMethod = getNewNodeMethod = 
-              MethodDescriptor.<io.grpc.NewNodeRequest, io.grpc.NewNodeResponse>newBuilder()
+              MethodDescriptor.<NewNodeRequest, NewNodeResponse>newBuilder()
               .setType(MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "io.grpc.Greeter", "NewNode"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.NewNodeRequest.getDefaultInstance()))
+                  NewNodeRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.grpc.NewNodeResponse.getDefaultInstance()))
+                  NewNodeResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("NewNode"))
                   .build();
           }
@@ -370,8 +370,8 @@ public final class GreeterGrpc {
 
     /**
      */
-    public void newNode(io.grpc.NewNodeRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse> responseObserver) {
+    public void newNode(NewNodeRequest request,
+                        io.grpc.stub.StreamObserver<NewNodeResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getNewNodeMethod(), responseObserver);
     }
 
@@ -430,8 +430,8 @@ public final class GreeterGrpc {
             getNewNodeMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.grpc.NewNodeRequest,
-                io.grpc.NewNodeResponse>(
+                NewNodeRequest,
+                NewNodeResponse>(
                   this, METHODID_NEW_NODE)))
           .build();
     }
@@ -519,8 +519,8 @@ public final class GreeterGrpc {
 
     /**
      */
-    public void newNode(io.grpc.NewNodeRequest request,
-        io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse> responseObserver) {
+    public void newNode(NewNodeRequest request,
+                        io.grpc.stub.StreamObserver<NewNodeResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNewNodeMethod(), getCallOptions()), request, responseObserver);
     }
@@ -601,7 +601,7 @@ public final class GreeterGrpc {
 
     /**
      */
-    public io.grpc.NewNodeResponse newNode(io.grpc.NewNodeRequest request) {
+    public NewNodeResponse newNode(NewNodeRequest request) {
       return blockingUnaryCall(
           getChannel(), getNewNodeMethod(), getCallOptions(), request);
     }
@@ -689,8 +689,8 @@ public final class GreeterGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.NewNodeResponse> newNode(
-        io.grpc.NewNodeRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<NewNodeResponse> newNode(
+        NewNodeRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getNewNodeMethod(), getCallOptions()), request);
     }
@@ -751,8 +751,8 @@ public final class GreeterGrpc {
               (io.grpc.stub.StreamObserver<UpdateFTResponse>) responseObserver);
           break;
         case METHODID_NEW_NODE:
-          serviceImpl.newNode((io.grpc.NewNodeRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.NewNodeResponse>) responseObserver);
+          serviceImpl.newNode((NewNodeRequest) request,
+              (io.grpc.stub.StreamObserver<NewNodeResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();

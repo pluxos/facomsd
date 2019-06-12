@@ -1,13 +1,15 @@
-package server.commons.chord;
+package server.commons.chord.observers;
 
 import io.grpc.UpdateFTResponse;
 import io.grpc.stub.StreamObserver;
+import server.commons.chord.Chord;
+import server.commons.chord.FingerTable;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 
 public class UpdateFTObserver implements StreamObserver<UpdateFTResponse> {
 
-    UpdateFTObserver() {
+    public UpdateFTObserver() {
     }
 
     @Override

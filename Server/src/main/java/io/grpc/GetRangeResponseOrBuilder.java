@@ -18,21 +18,31 @@ public interface GetRangeResponseOrBuilder extends
       getNodeBytes();
 
   /**
-   * <code>string range = 2;</code>
+   * <code>string fingerT = 2;</code>
+   */
+  String getFingerT();
+  /**
+   * <code>string fingerT = 2;</code>
+   */
+  com.google.protobuf.ByteString
+      getFingerTBytes();
+
+  /**
+   * <code>string range = 3;</code>
    */
   String getRange();
   /**
-   * <code>string range = 2;</code>
+   * <code>string range = 3;</code>
    */
   com.google.protobuf.ByteString
       getRangeBytes();
 
   /**
-   * <code>string data = 3;</code>
+   * <code>string data = 4;</code>
    */
   String getData();
   /**
-   * <code>string data = 3;</code>
+   * <code>string data = 4;</code>
    */
   com.google.protobuf.ByteString
       getDataBytes();

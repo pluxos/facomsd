@@ -115,6 +115,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
                 responseObserver.onNext(
                         GetRangeResponse.newBuilder()
                                 .setNode(JsonUtils.serialize(Chord.getNode()))
+                                .setFingerT(JsonUtils.serialize(Chord.getFt()))
                                 .setData(JsonUtils.serialize(dbRecovery))
                                 .setRange(JsonUtils.serialize(newNode.getRange()))
                                 .build()
@@ -165,7 +166,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void newNode(NewNodeRequest request, StreamObserver<NewNodeResponse> responseObserver) {
-        System.out.println("New node");
         try {
             Node node = JsonUtils.deserialize(request.getNode(), Node.class);
             Node newNode = JsonUtils.deserialize(request.getNewNode(), Node.class);

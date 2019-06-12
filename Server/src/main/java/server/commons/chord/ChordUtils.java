@@ -1,7 +1,11 @@
 package server.commons.chord;
 
-import io.grpc.*;
-import io.grpc.stub.StreamObserver;
+import io.grpc.Context;
+import io.grpc.GreeterGrpc;
+import io.grpc.NewNodeRequest;
+import io.grpc.UpdateFTRequest;
+import server.commons.chord.observers.NewNodeObserver;
+import server.commons.chord.observers.UpdateFTObserver;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.requester.CommunicationManager;
@@ -17,8 +21,10 @@ public class ChordUtils {
     public static void notifyUpdateFT() {
         Chord.getFt().getMap().forEach((key, value) -> {
             if(flagUpdate != value){
-                ManagedChannel channel = CommunicationManager.initCommunication(value.getIp(), value.getPort());
-                GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
+                GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(value.getIp(), value.getPort());
+
+                Context forked = Context.current().fork();
+                Context old = forked.attach();
 
                 try {
                     stub.updateFT(
@@ -31,6 +37,8 @@ public class ChordUtils {
                     flagUpdate = value;
                 } catch (ServerException e) {
                     e.printStackTrace();
+                } finally {
+                    forked.detach(old);
                 }
             }
         });
@@ -42,8 +50,10 @@ public class ChordUtils {
                 .getMap()
                 .forEach((key, value) -> {
                     if (flagNew != value) {
-                        ManagedChannel channel = CommunicationManager.initCommunication(value.getIp(), value.getPort());
-                        GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
+                        GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(value.getIp(), value.getPort());
+
+                        Context forked = Context.current().fork();
+                        Context old = forked.attach();
 
                         try {
                             System.out.println("New Node Request " +value.getIp() +":"+value.getPort());
@@ -53,38 +63,13 @@ public class ChordUtils {
                                             .setNode(JsonUtils.serialize(Chord.getNode()))
                                             .setNewNode(JsonUtils.serialize(node))
                                             .build(),
-                                    new StreamObserver<NewNodeResponse>() {
-                                        @Override
-                                        public void onNext(NewNodeResponse newNodeResponse) {
-                                            System.out.println("New Node Response");
-                                            if (newNodeResponse.getUpdate()) {
-                                                try {
-                                                    FingerTable ft = JsonUtils.deserialize(
-                                                            newNodeResponse.getFingerT(),
-                                                            FingerTable.class
-                                                    );
-
-                                                    Chord.getFt().updateFT(ft.getMap());
-
-                                                } catch (ServerException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable throwable) {
-
-                                        }
-
-                                        @Override
-                                        public void onCompleted() {
-                                        }
-                                    }
+                                    new NewNodeObserver()
                             );
                             flagNew = value;
                         } catch (ServerException e) {
                             e.printStackTrace();
+                        } finally {
+                            forked.detach(old);
                         }
                     }
                 });

@@ -1,9 +1,7 @@
 package server.receptor;
 
-import io.grpc.FindResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.stub.StreamObserver;
 import server.business.consumers.CommandExecutorThread;
 import server.business.consumers.LogPersistentThread;
 import server.business.consumers.OrchestratorThread;
@@ -14,7 +12,6 @@ import server.business.persistence.routine.FileRoutineThread;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
 import server.commons.chord.Node;
-import server.commons.exceptions.ServerException;
 import server.commons.utils.FileUtils;
 import server.requester.GrpcCommunication;
 
@@ -65,7 +62,7 @@ public class ServerThread implements Runnable {
 		try {
 			this.server = ServerBuilder.forPort(Chord.getNode().getPort())
 					.addService(new GrpcImpl())
-					.executor(Executors.newFixedThreadPool(20))
+					.executor(Executors.newCachedThreadPool())
 					.build().start();
 
 			System.out.println("Server started, listening on " + Chord.getNode().getPort());
@@ -124,29 +121,5 @@ public class ServerThread implements Runnable {
 		Chord.getFt().setKey(Chord.getNode().getKey());
 
 		GrpcCommunication.findNode(this.chordIp, this.chordPort);
-	}
-
-	public static class ObserverResponse implements StreamObserver<FindResponse> {
-
-		public ObserverResponse(){}
-
-		@Override
-		public void onNext(FindResponse findResponse) {
-			if(!findResponse.getResponse()) {
-				GrpcCommunication.findNode(findResponse.getIp(), findResponse.getPort());
-			} else {
-				try {
-					GrpcCommunication.getRange(findResponse);
-				} catch (ServerException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		public void onError(Throwable throwable) { }
-
-		@Override
-		public void onCompleted() { }
 	}
 }

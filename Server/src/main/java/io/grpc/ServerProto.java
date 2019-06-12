@@ -79,28 +79,28 @@ public final class ServerProto {
       "\002 \001(\t\022\014\n\004data\030\003 \001(\t\"\032\n\013FindMessage\022\013\n\003ke" +
       "y\030\001 \001(\005\":\n\014FindResponse\022\020\n\010response\030\001 \001(" +
       "\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\"\037\n\017GetRangeR" +
-      "equest\022\014\n\004node\030\001 \001(\t\"=\n\020GetRangeResponse" +
-      "\022\014\n\004node\030\001 \001(\t\022\r\n\005range\030\002 \001(\t\022\014\n\004data\030\003 " +
-      "\001(\t\"\"\n\017UpdateFTRequest\022\017\n\007fingerT\030\001 \001(\t\"" +
-      "3\n\020UpdateFTResponse\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006" +
-      "update\030\002 \001(\010\"/\n\016NewNodeRequest\022\014\n\004node\030\001" +
-      " \001(\t\022\017\n\007newNode\030\002 \001(\t\"2\n\017NewNodeResponse" +
-      "\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006update\030\002 \001(\0102\223\004\n\007Gr" +
-      "eeter\022A\n\nCreateUser\022\027.io.grpc.GenericReq" +
-      "uest\032\030.io.grpc.GenericResponse\"\000\022>\n\007GetU" +
-      "ser\022\027.io.grpc.GenericRequest\032\030.io.grpc.G" +
-      "enericResponse\"\000\022A\n\nUpdateUser\022\027.io.grpc" +
-      ".GenericRequest\032\030.io.grpc.GenericRespons" +
-      "e\"\000\022A\n\nDeleteUser\022\027.io.grpc.GenericReque" +
-      "st\032\030.io.grpc.GenericResponse\"\000\0229\n\010FindNo" +
-      "de\022\024.io.grpc.FindMessage\032\025.io.grpc.FindR" +
-      "esponse\"\000\022A\n\010GetRange\022\030.io.grpc.GetRange" +
-      "Request\032\031.io.grpc.GetRangeResponse\"\000\022A\n\010" +
-      "UpdateFT\022\030.io.grpc.UpdateFTRequest\032\031.io." +
-      "grpc.UpdateFTResponse\"\000\022>\n\007NewNode\022\027.io." +
-      "grpc.NewNodeRequest\032\030.io.grpc.NewNodeRes" +
-      "ponse\"\000B\036\n\007io.grpcB\013ServerProtoP\001\242\002\003HLWb" +
-      "\006proto3"
+      "equest\022\014\n\004node\030\001 \001(\t\"N\n\020GetRangeResponse" +
+      "\022\014\n\004node\030\001 \001(\t\022\017\n\007fingerT\030\002 \001(\t\022\r\n\005range" +
+      "\030\003 \001(\t\022\014\n\004data\030\004 \001(\t\"\"\n\017UpdateFTRequest\022" +
+      "\017\n\007fingerT\030\001 \001(\t\"3\n\020UpdateFTResponse\022\017\n\007" +
+      "fingerT\030\001 \001(\t\022\016\n\006update\030\002 \001(\010\"/\n\016NewNode" +
+      "Request\022\014\n\004node\030\001 \001(\t\022\017\n\007newNode\030\002 \001(\t\"2" +
+      "\n\017NewNodeResponse\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006up" +
+      "date\030\002 \001(\0102\223\004\n\007Greeter\022A\n\nCreateUser\022\027.i" +
+      "o.grpc.GenericRequest\032\030.io.grpc.GenericR" +
+      "esponse\"\000\022>\n\007GetUser\022\027.io.grpc.GenericRe" +
+      "quest\032\030.io.grpc.GenericResponse\"\000\022A\n\nUpd" +
+      "ateUser\022\027.io.grpc.GenericRequest\032\030.io.gr" +
+      "pc.GenericResponse\"\000\022A\n\nDeleteUser\022\027.io." +
+      "grpc.GenericRequest\032\030.io.grpc.GenericRes" +
+      "ponse\"\000\0229\n\010FindNode\022\024.io.grpc.FindMessag" +
+      "e\032\025.io.grpc.FindResponse\"\000\022A\n\010GetRange\022\030" +
+      ".io.grpc.GetRangeRequest\032\031.io.grpc.GetRa" +
+      "ngeResponse\"\000\022A\n\010UpdateFT\022\030.io.grpc.Upda" +
+      "teFTRequest\032\031.io.grpc.UpdateFTResponse\"\000" +
+      "\022>\n\007NewNode\022\027.io.grpc.NewNodeRequest\032\030.i" +
+      "o.grpc.NewNodeResponse\"\000B\036\n\007io.grpcB\013Ser" +
+      "verProtoP\001\242\002\003HLWb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -149,7 +149,7 @@ public final class ServerProto {
     internal_static_io_grpc_GetRangeResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_GetRangeResponse_descriptor,
-        new String[] { "Node", "Range", "Data", });
+        new String[] { "Node", "FingerT", "Range", "Data", });
     internal_static_io_grpc_UpdateFTRequest_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_io_grpc_UpdateFTRequest_fieldAccessorTable = new

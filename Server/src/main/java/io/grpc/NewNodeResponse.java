@@ -303,7 +303,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:io.grpc.NewNodeResponse)
-      io.grpc.NewNodeResponseOrBuilder {
+      NewNodeResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ServerProto.internal_static_io_grpc_NewNodeResponse_descriptor;

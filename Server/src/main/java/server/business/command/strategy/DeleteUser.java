@@ -1,16 +1,16 @@
 package server.business.command.strategy;
 
-import java.math.BigInteger;
-
+import io.grpc.Context;
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
-import io.grpc.ManagedChannel;
 import server.business.command.RequestUtils;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
 import server.commons.exceptions.MessageMap;
 import server.requester.CommunicationManager;
+
+import java.math.BigInteger;
 
 public class DeleteUser implements CommandStrategy {
 
@@ -49,12 +49,18 @@ public class DeleteUser implements CommandStrategy {
 
 	@Override
 	public void passCommand(GenericCommand genericCommand, Node node) {
-		ManagedChannel channel = CommunicationManager.initCommunication(node.getIp(), node.getPort());
-		GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
+		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
 
-		stub.deleteUser(
-				RequestUtils.getGenericRequest(genericCommand),
-				new GenericResponseObserver(genericCommand.getOutput())
-		);
+		Context forked = Context.current().fork();
+		Context old = forked.attach();
+
+		try {
+			stub.deleteUser(
+					RequestUtils.getGenericRequest(genericCommand),
+					new GenericResponseObserver(genericCommand.getOutput())
+			);
+		} finally {
+			forked.detach(old);
+		}
 	}
 }

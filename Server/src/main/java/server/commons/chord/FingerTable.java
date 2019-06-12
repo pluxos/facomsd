@@ -53,8 +53,13 @@ public class FingerTable {
             }
 
             if(node.getRange().contains(sucessor)) {
-                flag = 1;
-                this.ft.put(i, node);
+                if(!this.ft.containsKey(i)){
+                    flag = 1;
+                    this.ft.put(i, node);
+                } else if(this.ft.get(i).getKey() != node.getKey() || this.ft.get(i).getRange() != node.getRange()) {
+                    flag = 1;
+                    this.ft.put(i, node);
+                }
             } else {
                 if (this.ft.get(i) != null && node.getKey() == this.ft.get(i).getKey()) {
                     flag = 1;
