@@ -13,7 +13,6 @@ public class NewNodeObserver implements StreamObserver<NewNodeResponse> {
 
     @Override
     public void onNext(NewNodeResponse newNodeResponse) {
-        System.out.println("New Node Response");
         if (newNodeResponse.getUpdate()) {
             try {
                 FingerTable ft = JsonUtils.deserialize(

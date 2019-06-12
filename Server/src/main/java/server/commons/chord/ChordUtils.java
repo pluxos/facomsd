@@ -14,11 +14,15 @@ public class ChordUtils {
     private static Node flagUpdate;
     private static Node flagNew;
 
-    public static Integer successor(Integer p, Integer i) {
-        return (int) (p + Math.pow(2, (i - 1)));
+    public static Integer successor(Integer keyNode, Integer i) {
+        return (int) (keyNode + Math.pow(2, (i - 1)));
     }
 
     public static void notifyUpdateFT() {
+
+        System.out.println("Notify Update!");
+        Chord.getFt().getMap().forEach((key, value) -> System.out.println("KEY: " + key + " V: " + value.getRange()));
+
         Chord.getFt().getMap().forEach((key, value) -> {
             if(flagUpdate != value){
                 GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(value.getIp(), value.getPort());
@@ -56,7 +60,6 @@ public class ChordUtils {
                         Context old = forked.attach();
 
                         try {
-                            System.out.println("New Node Request " +value.getIp() +":"+value.getPort());
                             stub.newNode(
                                     NewNodeRequest
                                             .newBuilder()

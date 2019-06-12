@@ -35,7 +35,10 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
                 loadDatabase(getRangeResponse);
                 setRange(getRangeResponse);
 
+                FingerTable newFt = JsonUtils.deserialize(getRangeResponse.getFingerT(), FingerTable.class);
+
                 Chord.getFt().updateFT(newNode);
+                Chord.getFt().updateFT(newFt.getMap());
             } else {
                 Chord.getNode().setNewKey();
                 Chord.getFt().setKey(Chord.getNode().getKey());

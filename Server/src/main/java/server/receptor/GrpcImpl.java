@@ -1,9 +1,5 @@
 package server.receptor;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
@@ -16,6 +12,10 @@ import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
 import server.commons.rows.RowF1;
 import server.commons.utils.JsonUtils;
+
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
@@ -127,8 +127,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
             /* Update Tabela de rota */
             Chord.getFt().updateFT(newNode);
-
-            ChordUtils.notifyUpdateFT();
         } else {
             /* Mesma Chave! reportar erro! */
             try {
@@ -169,7 +167,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         try {
             Node node = JsonUtils.deserialize(request.getNode(), Node.class);
             Node newNode = JsonUtils.deserialize(request.getNewNode(), Node.class);
-            System.out.println("New Node " +newNode.getKey());
 
             int flagNode = Chord.getFt().updateFT(node);
             int flagNewNode = Chord.getFt().updateFT(newNode);

@@ -62,7 +62,7 @@ public class ServerThread implements Runnable {
 		try {
 			this.server = ServerBuilder.forPort(Chord.getNode().getPort())
 					.addService(new GrpcImpl())
-					.executor(Executors.newCachedThreadPool())
+					.executor(Executors.newFixedThreadPool(10))
 					.build().start();
 
 			System.out.println("Server started, listening on " + Chord.getNode().getPort());
