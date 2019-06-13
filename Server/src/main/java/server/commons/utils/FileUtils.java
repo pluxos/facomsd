@@ -18,10 +18,10 @@ public class FileUtils {
 	
 	public static String read(String absolutePathName) throws IOException {
 
-		StringBuilder fileStr = new StringBuilder("");
+		StringBuilder fileStr = new StringBuilder();
 
 		try (Stream<String> stream = Files.lines(Paths.get(absolutePathName))) {
-			stream.forEach(line -> fileStr.append(line));
+			stream.forEach(fileStr::append);
 		}
 		return fileStr.toString();
 	}

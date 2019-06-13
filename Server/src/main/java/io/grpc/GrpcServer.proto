@@ -1,0 +1,85 @@
+// Copyright 2015 The gRPC Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc";
+option java_outer_classname = "ServerProto";
+option objc_class_prefix = "HLW";
+
+package io.grpc;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc Create (GenericRequest) returns (GenericResponse) {}
+  rpc Get (GenericRequest) returns (GenericResponse) {}
+  rpc Update (GenericRequest) returns (GenericResponse) {}
+  rpc Delete (GenericRequest) returns (GenericResponse) {}
+  rpc FindNode (FindMessage) returns (FindResponse) {}
+  rpc GetRange (GetRangeRequest) returns (GetRangeResponse) {}
+  rpc UpdateFT (UpdateFTRequest) returns (UpdateFTResponse) {}
+  rpc NewNode (NewNodeRequest) returns (NewNodeResponse) {}
+}
+
+message GenericRequest {
+  int32 code = 1;
+  string data= 2;
+}
+
+message GenericResponse {
+  string status = 1;
+  string message = 2;
+  string data = 3;
+}
+
+message FindMessage {
+  int32 key = 1;
+}
+
+message FindResponse {
+  bool response = 1;
+  string ip = 2;
+  int32 port = 3;
+}
+
+message GetRangeRequest {
+  string node = 1;
+}
+
+message GetRangeResponse {
+  string node = 1;
+  string fingerT = 2;
+  string range = 3;
+  string data = 4;
+}
+
+message UpdateFTRequest {
+  string fingerT = 1;
+}
+
+message UpdateFTResponse {
+  string fingerT = 1;
+  bool update = 2;
+}
+
+message NewNodeRequest {
+  string node = 1;
+  string newNode = 2;
+}
+
+message NewNodeResponse {
+  string fingerT = 1;
+  bool update = 2;
+}

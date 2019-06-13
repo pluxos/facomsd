@@ -1,11 +1,12 @@
 package server;
 
-import server.controller.ServerThread;
+import io.grpc.Context;
+import server.receptor.ServerThread;
 
 public class ServerApplication {
 
 	public static void main(String[] args) {
 		Thread server = new Thread(new ServerThread(args));
-		server.start();
+		Context.current().fork().run(server);
 	}
 }

@@ -14,7 +14,7 @@ public class GenericCommand {
     private StreamObserver<GenericResponse> output;
     private String method;
     private BigInteger code;
-    private byte[] data;
+    private String data;
 
     public GenericCommand() {}
 
@@ -47,11 +47,11 @@ public class GenericCommand {
         this.code = code;
     }
 
-    public byte[] getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
