@@ -20,9 +20,7 @@ option objc_class_prefix = "HLW";
 
 package io.grpc;
 
-// The greeting service definition.
 service Greeter {
-  // Sends a greeting
   rpc Create (GenericRequest) returns (GenericResponse) {}
   rpc Get (GenericRequest) returns (GenericResponse) {}
   rpc Update (GenericRequest) returns (GenericResponse) {}
@@ -31,6 +29,7 @@ service Greeter {
   rpc GetRange (GetRangeRequest) returns (GetRangeResponse) {}
   rpc UpdateFT (UpdateFTRequest) returns (UpdateFTResponse) {}
   rpc NewNode (NewNodeRequest) returns (NewNodeResponse) {}
+  rpc SafeOutput (SafeOutputRequest) returns (SafeOutputResponse) {}
 }
 
 message GenericRequest {
@@ -67,6 +66,7 @@ message GetRangeResponse {
 
 message UpdateFTRequest {
   string fingerT = 1;
+  string node = 2;
 }
 
 message UpdateFTResponse {
@@ -82,4 +82,13 @@ message NewNodeRequest {
 message NewNodeResponse {
   string fingerT = 1;
   bool update = 2;
+}
+
+message SafeOutputRequest {
+  string data = 1;
+  string node = 2;
+}
+
+message SafeOutputResponse {
+  string message = 1;
 }

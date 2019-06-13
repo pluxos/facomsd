@@ -64,6 +64,16 @@ public final class ServerProto {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_io_grpc_NewNodeResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_io_grpc_SafeOutputRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_io_grpc_SafeOutputRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_io_grpc_SafeOutputResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_io_grpc_SafeOutputResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -81,26 +91,30 @@ public final class ServerProto {
       "\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\"\037\n\017GetRangeR" +
       "equest\022\014\n\004node\030\001 \001(\t\"N\n\020GetRangeResponse" +
       "\022\014\n\004node\030\001 \001(\t\022\017\n\007fingerT\030\002 \001(\t\022\r\n\005range" +
-      "\030\003 \001(\t\022\014\n\004data\030\004 \001(\t\"\"\n\017UpdateFTRequest\022" +
-      "\017\n\007fingerT\030\001 \001(\t\"3\n\020UpdateFTResponse\022\017\n\007" +
-      "fingerT\030\001 \001(\t\022\016\n\006update\030\002 \001(\010\"/\n\016NewNode" +
-      "Request\022\014\n\004node\030\001 \001(\t\022\017\n\007newNode\030\002 \001(\t\"2" +
-      "\n\017NewNodeResponse\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006up" +
-      "date\030\002 \001(\0102\203\004\n\007Greeter\022=\n\006Create\022\027.io.gr" +
-      "pc.GenericRequest\032\030.io.grpc.GenericRespo" +
-      "nse\"\000\022:\n\003Get\022\027.io.grpc.GenericRequest\032\030." +
-      "io.grpc.GenericResponse\"\000\022=\n\006Update\022\027.io" +
-      ".grpc.GenericRequest\032\030.io.grpc.GenericRe" +
-      "sponse\"\000\022=\n\006Delete\022\027.io.grpc.GenericRequ" +
-      "est\032\030.io.grpc.GenericResponse\"\000\0229\n\010FindN" +
-      "ode\022\024.io.grpc.FindMessage\032\025.io.grpc.Find" +
-      "Response\"\000\022A\n\010GetRange\022\030.io.grpc.GetRang" +
-      "eRequest\032\031.io.grpc.GetRangeResponse\"\000\022A\n" +
-      "\010UpdateFT\022\030.io.grpc.UpdateFTRequest\032\031.io" +
-      ".grpc.UpdateFTResponse\"\000\022>\n\007NewNode\022\027.io" +
-      ".grpc.NewNodeRequest\032\030.io.grpc.NewNodeRe" +
-      "sponse\"\000B\036\n\007io.grpcB\013ServerProtoP\001\242\002\003HLW" +
-      "b\006proto3"
+      "\030\003 \001(\t\022\014\n\004data\030\004 \001(\t\"0\n\017UpdateFTRequest\022" +
+      "\017\n\007fingerT\030\001 \001(\t\022\014\n\004node\030\002 \001(\t\"3\n\020Update" +
+      "FTResponse\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006update\030\002 " +
+      "\001(\010\"/\n\016NewNodeRequest\022\014\n\004node\030\001 \001(\t\022\017\n\007n" +
+      "ewNode\030\002 \001(\t\"2\n\017NewNodeResponse\022\017\n\007finge" +
+      "rT\030\001 \001(\t\022\016\n\006update\030\002 \001(\010\"/\n\021SafeOutputRe" +
+      "quest\022\014\n\004data\030\001 \001(\t\022\014\n\004node\030\002 \001(\t\"%\n\022Saf" +
+      "eOutputResponse\022\017\n\007message\030\001 \001(\t2\314\004\n\007Gre" +
+      "eter\022=\n\006Create\022\027.io.grpc.GenericRequest\032" +
+      "\030.io.grpc.GenericResponse\"\000\022:\n\003Get\022\027.io." +
+      "grpc.GenericRequest\032\030.io.grpc.GenericRes" +
+      "ponse\"\000\022=\n\006Update\022\027.io.grpc.GenericReque" +
+      "st\032\030.io.grpc.GenericResponse\"\000\022=\n\006Delete" +
+      "\022\027.io.grpc.GenericRequest\032\030.io.grpc.Gene" +
+      "ricResponse\"\000\0229\n\010FindNode\022\024.io.grpc.Find" +
+      "Message\032\025.io.grpc.FindResponse\"\000\022A\n\010GetR" +
+      "ange\022\030.io.grpc.GetRangeRequest\032\031.io.grpc" +
+      ".GetRangeResponse\"\000\022A\n\010UpdateFT\022\030.io.grp" +
+      "c.UpdateFTRequest\032\031.io.grpc.UpdateFTResp" +
+      "onse\"\000\022>\n\007NewNode\022\027.io.grpc.NewNodeReque" +
+      "st\032\030.io.grpc.NewNodeResponse\"\000\022G\n\nSafeOu" +
+      "tput\022\032.io.grpc.SafeOutputRequest\032\033.io.gr" +
+      "pc.SafeOutputResponse\"\000B\036\n\007io.grpcB\013Serv" +
+      "erProtoP\001\242\002\003HLWb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -155,7 +169,7 @@ public final class ServerProto {
     internal_static_io_grpc_UpdateFTRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_UpdateFTRequest_descriptor,
-        new String[] { "FingerT", });
+        new String[] { "FingerT", "Node", });
     internal_static_io_grpc_UpdateFTResponse_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_io_grpc_UpdateFTResponse_fieldAccessorTable = new
@@ -174,6 +188,18 @@ public final class ServerProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_NewNodeResponse_descriptor,
         new String[] { "FingerT", "Update", });
+    internal_static_io_grpc_SafeOutputRequest_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_io_grpc_SafeOutputRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_io_grpc_SafeOutputRequest_descriptor,
+        new String[] { "Data", "Node", });
+    internal_static_io_grpc_SafeOutputResponse_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_io_grpc_SafeOutputResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_io_grpc_SafeOutputResponse_descriptor,
+        new String[] { "Message", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

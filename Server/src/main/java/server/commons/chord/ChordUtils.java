@@ -20,9 +20,6 @@ public class ChordUtils {
 
     public static void notifyUpdateFT() {
 
-        System.out.println("Notify Update!");
-        Chord.getFt().getMap().forEach((key, value) -> System.out.println("KEY: " + key + " V: " + value.getRange()));
-
         Chord.getFt().getMap().forEach((key, value) -> {
             if(flagUpdate != value){
                 GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(value.getIp(), value.getPort());
@@ -35,6 +32,7 @@ public class ChordUtils {
                             UpdateFTRequest
                                     .newBuilder()
                                     .setFingerT(JsonUtils.serialize(Chord.getFt().getMap()))
+                                    .setNode(JsonUtils.serialize(Chord.getNode()))
                                     .build(),
                             new UpdateFTObserver()
                     );

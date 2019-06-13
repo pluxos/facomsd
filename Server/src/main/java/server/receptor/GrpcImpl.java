@@ -148,6 +148,12 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             TypeReference<Map<Integer, Node>> typeRef = new TypeReference<Map<Integer, Node>>() {};
             Map<Integer, Node> ft = JsonUtils.deserialize(request.getFingerT(), typeRef);
 
+            if(!request.getNode().equals("")) {
+                Node newNode = JsonUtils.deserialize(request.getNode(), Node.class);
+                Chord.getFt().updateFT(newNode);
+            }
+
+
             Chord.getFt().updateFT(ft);
 
             responseObserver.onNext(
@@ -194,5 +200,27 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void safeOutput(SafeOutputRequest request, StreamObserver<SafeOutputResponse> responseObserver) {
+        try {
+            TypeReference<Map<BigInteger, byte[]>> typeRef = new TypeReference<Map<BigInteger, byte[]>>() {};
+            Map<BigInteger, byte[]> db = JsonUtils.deserialize(request.getData(), typeRef);
+
+            Node node = JsonUtils.deserialize(request.getNode(), Node.class);
+
+            Chord.getNode()
+                    .getRange()
+                    .addAll(node.getRange());
+
+            Manipulator.addValues(db);
+
+            Chord.getFt().removeNode(node);
+
+            ChordUtils.notifyUpdateFT();
+        } catch (ServerException e) {
+            e.printStackTrace();
+        }
     }
 }

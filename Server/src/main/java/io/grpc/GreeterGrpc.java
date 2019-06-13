@@ -16,9 +16,6 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
- * <pre>
- * The greeting service definition.
- * </pre>
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.19.0)",
@@ -286,6 +283,38 @@ public final class GreeterGrpc {
      return getNewNodeMethod;
   }
 
+  private static volatile MethodDescriptor<SafeOutputRequest,
+      SafeOutputResponse> getSafeOutputMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "SafeOutput",
+      requestType = SafeOutputRequest.class,
+      responseType = SafeOutputResponse.class,
+      methodType = MethodDescriptor.MethodType.UNARY)
+  public static MethodDescriptor<SafeOutputRequest,
+      SafeOutputResponse> getSafeOutputMethod() {
+    MethodDescriptor<SafeOutputRequest, SafeOutputResponse> getSafeOutputMethod;
+    if ((getSafeOutputMethod = GreeterGrpc.getSafeOutputMethod) == null) {
+      synchronized (GreeterGrpc.class) {
+        if ((getSafeOutputMethod = GreeterGrpc.getSafeOutputMethod) == null) {
+          GreeterGrpc.getSafeOutputMethod = getSafeOutputMethod = 
+              MethodDescriptor.<SafeOutputRequest, SafeOutputResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "io.grpc.Greeter", "SafeOutput"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  SafeOutputRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  SafeOutputResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("SafeOutput"))
+                  .build();
+          }
+        }
+     }
+     return getSafeOutputMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -310,16 +339,10 @@ public final class GreeterGrpc {
   }
 
   /**
-   * <pre>
-   * The greeting service definition.
-   * </pre>
    */
   public static abstract class GreeterImplBase implements BindableService {
 
     /**
-     * <pre>
-     * Sends a greeting
-     * </pre>
      */
     public void create(GenericRequest request,
                        io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
@@ -373,6 +396,13 @@ public final class GreeterGrpc {
     public void newNode(NewNodeRequest request,
                         io.grpc.stub.StreamObserver<NewNodeResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getNewNodeMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void safeOutput(SafeOutputRequest request,
+                           io.grpc.stub.StreamObserver<SafeOutputResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getSafeOutputMethod(), responseObserver);
     }
 
     @Override public final ServerServiceDefinition bindService() {
@@ -433,14 +463,18 @@ public final class GreeterGrpc {
                 NewNodeRequest,
                 NewNodeResponse>(
                   this, METHODID_NEW_NODE)))
+          .addMethod(
+            getSafeOutputMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                SafeOutputRequest,
+                SafeOutputResponse>(
+                  this, METHODID_SAFE_OUTPUT)))
           .build();
     }
   }
 
   /**
-   * <pre>
-   * The greeting service definition.
-   * </pre>
    */
   public static final class GreeterStub extends io.grpc.stub.AbstractStub<GreeterStub> {
     private GreeterStub(Channel channel) {
@@ -459,9 +493,6 @@ public final class GreeterGrpc {
     }
 
     /**
-     * <pre>
-     * Sends a greeting
-     * </pre>
      */
     public void create(GenericRequest request,
                        io.grpc.stub.StreamObserver<GenericResponse> responseObserver) {
@@ -524,12 +555,17 @@ public final class GreeterGrpc {
       asyncUnaryCall(
           getChannel().newCall(getNewNodeMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void safeOutput(SafeOutputRequest request,
+                           io.grpc.stub.StreamObserver<SafeOutputResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getSafeOutputMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
-   * <pre>
-   * The greeting service definition.
-   * </pre>
    */
   public static final class GreeterBlockingStub extends io.grpc.stub.AbstractStub<GreeterBlockingStub> {
     private GreeterBlockingStub(Channel channel) {
@@ -548,9 +584,6 @@ public final class GreeterGrpc {
     }
 
     /**
-     * <pre>
-     * Sends a greeting
-     * </pre>
      */
     public GenericResponse create(GenericRequest request) {
       return blockingUnaryCall(
@@ -605,12 +638,16 @@ public final class GreeterGrpc {
       return blockingUnaryCall(
           getChannel(), getNewNodeMethod(), getCallOptions(), request);
     }
+
+    /**
+     */
+    public SafeOutputResponse safeOutput(SafeOutputRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getSafeOutputMethod(), getCallOptions(), request);
+    }
   }
 
   /**
-   * <pre>
-   * The greeting service definition.
-   * </pre>
    */
   public static final class GreeterFutureStub extends io.grpc.stub.AbstractStub<GreeterFutureStub> {
     private GreeterFutureStub(Channel channel) {
@@ -629,9 +666,6 @@ public final class GreeterGrpc {
     }
 
     /**
-     * <pre>
-     * Sends a greeting
-     * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<GenericResponse> create(
         GenericRequest request) {
@@ -694,6 +728,14 @@ public final class GreeterGrpc {
       return futureUnaryCall(
           getChannel().newCall(getNewNodeMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<SafeOutputResponse> safeOutput(
+        SafeOutputRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getSafeOutputMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE = 0;
@@ -704,6 +746,7 @@ public final class GreeterGrpc {
   private static final int METHODID_GET_RANGE = 5;
   private static final int METHODID_UPDATE_FT = 6;
   private static final int METHODID_NEW_NODE = 7;
+  private static final int METHODID_SAFE_OUTPUT = 8;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -753,6 +796,10 @@ public final class GreeterGrpc {
         case METHODID_NEW_NODE:
           serviceImpl.newNode((NewNodeRequest) request,
               (io.grpc.stub.StreamObserver<NewNodeResponse>) responseObserver);
+          break;
+        case METHODID_SAFE_OUTPUT:
+          serviceImpl.safeOutput((SafeOutputRequest) request,
+              (io.grpc.stub.StreamObserver<SafeOutputResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -823,6 +870,7 @@ public final class GreeterGrpc {
               .addMethod(getGetRangeMethod())
               .addMethod(getUpdateFTMethod())
               .addMethod(getNewNodeMethod())
+              .addMethod(getSafeOutputMethod())
               .build();
         }
       }

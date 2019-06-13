@@ -13,6 +13,7 @@ import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
 import server.commons.chord.Node;
 import server.commons.utils.FileUtils;
+import server.receptor.hooks.ShutdownHook;
 import server.requester.GrpcCommunication;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class ServerThread implements Runnable {
 		Counter.startCounter(args[0]);
 	}
 
-	private void stop() {
+	public void stop() {
 		if (this.server != null) {
 			this.server.shutdown();
 		}
@@ -67,11 +68,7 @@ public class ServerThread implements Runnable {
 
 			System.out.println("Server started, listening on " + Chord.getNode().getPort());
 
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				System.err.println("*** shutting down gRPC server since JVM is shutting down");
-				ServerThread.this.stop();
-				System.err.println("*** server shut down");
-			}));
+			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
 
 			if(this.chordIp != null)
 				entryChord();

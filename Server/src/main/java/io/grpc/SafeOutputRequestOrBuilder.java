@@ -3,19 +3,19 @@
 
 package io.grpc;
 
-public interface UpdateFTRequestOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:io.grpc.UpdateFTRequest)
+public interface SafeOutputRequestOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:io.grpc.SafeOutputRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string fingerT = 1;</code>
+   * <code>string data = 1;</code>
    */
-  String getFingerT();
+  String getData();
   /**
-   * <code>string fingerT = 1;</code>
+   * <code>string data = 1;</code>
    */
   com.google.protobuf.ByteString
-      getFingerTBytes();
+      getDataBytes();
 
   /**
    * <code>string node = 2;</code>
