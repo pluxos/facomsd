@@ -12,7 +12,7 @@ public class RowF2 {
 		return f2;
 	}
 	
-	public static void addItem(GenericCommand item) {
+	public static synchronized void addItem(GenericCommand item) {
 		f2.offer(item);
 	}
 }

@@ -15,20 +15,22 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "io.grpc";
-option java_outer_classname = "GrpcProto";
+option java_outer_classname = "ServerProto";
 option objc_class_prefix = "HLW";
 
-package helloworld;
+package io.grpc;
 
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc CreateUser (GenericRequest) returns (GenericResponse) {}
-  rpc GetUser (GenericRequest) returns (GenericResponse) {}
-  rpc UpdateUser (GenericRequest) returns (GenericResponse) {}
-  rpc DeleteUser (GenericRequest) returns (GenericResponse) {}
+  rpc Create (GenericRequest) returns (GenericResponse) {}
+  rpc Get (GenericRequest) returns (GenericResponse) {}
+  rpc Update (GenericRequest) returns (GenericResponse) {}
+  rpc Delete (GenericRequest) returns (GenericResponse) {}
   rpc FindNode (FindMessage) returns (FindResponse) {}
   rpc GetRange (GetRangeRequest) returns (GetRangeResponse) {}
+  rpc UpdateFT (UpdateFTRequest) returns (UpdateFTResponse) {}
+  rpc NewNode (NewNodeRequest) returns (NewNodeResponse) {}
 }
 
 message GenericRequest {
@@ -58,14 +60,26 @@ message GetRangeRequest {
 
 message GetRangeResponse {
   string node = 1;
-  string range = 2;
-  string data = 3;
+  string fingerT = 2;
+  string range = 3;
+  string data = 4;
 }
 
-message UpdateRequest {
-
+message UpdateFTRequest {
+  string fingerT = 1;
 }
 
-message UpdateResponse {
+message UpdateFTResponse {
+  string fingerT = 1;
+  bool update = 2;
+}
 
+message NewNodeRequest {
+  string node = 1;
+  string newNode = 2;
+}
+
+message NewNodeResponse {
+  string fingerT = 1;
+  bool update = 2;
 }

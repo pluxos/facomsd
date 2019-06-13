@@ -12,7 +12,7 @@ public class GetUser implements RequestStrategy {
 				.setCode(Integer.parseInt(inputParams[1]))
 				.build();
 
-		output.getUser(
+		output.get(
 				request,
 				new GenericObserver()
 		);

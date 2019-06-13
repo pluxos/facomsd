@@ -17,7 +17,6 @@ public class LogPersistentThread implements Runnable {
 
 	@Override
 	public void run() {
-		// Consumir de f2 e persistir em LOG
 		for (;;) {
 			GenericCommand genericCommand = null;
 			try {

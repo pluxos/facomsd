@@ -1,2 +1,0 @@
-update; 456; bruno@gmail.com; 123asd; updatedName
-get; 456

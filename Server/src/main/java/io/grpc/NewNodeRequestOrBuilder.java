@@ -3,8 +3,8 @@
 
 package io.grpc;
 
-public interface GetRangeRequestOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:io.grpc.GetRangeRequest)
+public interface NewNodeRequestOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:io.grpc.NewNodeRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -16,4 +16,14 @@ public interface GetRangeRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getNodeBytes();
+
+  /**
+   * <code>string newNode = 2;</code>
+   */
+  String getNewNode();
+  /**
+   * <code>string newNode = 2;</code>
+   */
+  com.google.protobuf.ByteString
+      getNewNodeBytes();
 }

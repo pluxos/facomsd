@@ -1,14 +1,11 @@
 package server.requester;
 
-import io.grpc.FindMessage;
-import io.grpc.FindResponse;
-import io.grpc.GetRangeRequest;
-import io.grpc.GreeterGrpc;
-import io.grpc.stub.StreamObserver;
+import io.grpc.*;
 import server.commons.chord.Chord;
+import server.commons.chord.observers.FindResponseObserver;
+import server.commons.chord.observers.GetRangeObserver;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
-import server.receptor.ServerThread;
 
 public class GrpcCommunication {
 
@@ -16,18 +13,34 @@ public class GrpcCommunication {
     public static int port;
 
     public static void findNode(String ip, int port){
-        GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(ip, port);
-        StreamObserver<FindResponse> observer = new ServerThread.ObserverResponse();
+        GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(ip, port);
 
-        output.findNode(FindMessage.newBuilder().setKey(Chord.getNode().getKey()).build(), observer);
+        Context forked = Context.current().fork();
+        Context old = forked.attach();
+
+        try {
+            stub.findNode(
+                    FindMessage.newBuilder()
+                            .setKey(Chord.getNode().getKey())
+                            .build(),
+                    new FindResponseObserver());
+        } finally {
+            forked.detach(old);
+        }
+
     }
 
     public static void getRange(FindResponse findResponse) throws ServerException {
-        GreeterGrpc.GreeterStub output = CommunicationManager.initCommunication(findResponse.getIp(), findResponse.getPort());
+        GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication("localhost", findResponse.getPort());
+        Context forked = Context.current().fork();
+        Context old = forked.attach();
 
-        System.out.println("MINHA PORTA: " + Chord.getNode().getPort());
-        output.getRange(
-                GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
-                new GetRangeObserver(ip, port));
+        try {
+            stub.getRange(
+                    GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
+                    new GetRangeObserver(ip, port));
+        } finally {
+            forked.detach(old);
+        }
     }
 }
