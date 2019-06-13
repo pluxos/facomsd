@@ -5,8 +5,8 @@ import java.math.BigInteger;
 import io.grpc.Context;
 import io.grpc.GenericResponse;
 import io.grpc.GreeterGrpc;
-import io.grpc.ManagedChannel;
 import server.business.command.RequestUtils;
+import server.business.command.observer.GenericResponseObserver;
 import server.business.persistence.Manipulator;
 import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
@@ -14,38 +14,38 @@ import server.commons.exceptions.MessageMap;
 import server.commons.utils.DataCodificator;
 import server.requester.CommunicationManager;
 
-public class CreateUser implements CommandStrategy {
+public class Update implements CommandStrategy {
 
 	@Override
 	public void executeCommand(GenericCommand genericCommand) {
 		BigInteger code = genericCommand.getCode();
 		byte[] data = DataCodificator.stringToByteArray(genericCommand.getData());
 
-		GenericResponse createResponse;
+		GenericResponse updateResponse;
 
-		if (Manipulator.getValue(code) == null) {
-			Manipulator.addValue(code, data);
+		if(Manipulator.getValue(code) != null) {
+			Manipulator.updateValue(code, data);
 
 			if (Manipulator.containKey(code)) {
-				createResponse = GenericResponse.newBuilder()
-						.setMessage(MessageMap.CREATE_SUCCESS.getMessage())
+				updateResponse = GenericResponse.newBuilder()
+						.setMessage(MessageMap.UPDATE_SUCCESS.getMessage())
 						.setStatus(MessageMap.SUCCESS.getMessage())
 						.build();
 			} else {
-				createResponse = GenericResponse.newBuilder()
+				updateResponse = GenericResponse.newBuilder()
 						.setMessage(MessageMap.EXECUTION_ERROR.getMessage())
 						.setStatus(MessageMap.ERROR.getMessage())
 						.build();
 			}
 		} else {
-			createResponse = GenericResponse.newBuilder()
-					.setMessage(MessageMap.USER_EXISTS.getMessage())
+			updateResponse = GenericResponse.newBuilder()
+					.setMessage(MessageMap.USER_NOT_FOUND.getMessage())
 					.setStatus(MessageMap.ERROR.getMessage())
 					.build();
 		}
 
 		if(genericCommand.getOutput() != null) {
-			genericCommand.getOutput().onNext(createResponse);
+			genericCommand.getOutput().onNext(updateResponse);
 			genericCommand.getOutput().onCompleted();
 		}
 	}
@@ -58,7 +58,7 @@ public class CreateUser implements CommandStrategy {
 		Context old = forked.attach();
 
 		try {
-			stub.createUser(
+			stub.update(
 					RequestUtils.getGenericRequestWithData(genericCommand),
 					new GenericResponseObserver(genericCommand.getOutput())
 			);

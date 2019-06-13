@@ -12,7 +12,7 @@ public class DeleteUser implements RequestStrategy {
 				.setCode(Integer.parseInt(inputParams[1]))
 				.build();
 
-		output.deleteUser(
+		output.delete(
 				deleteRequest,
 				new GenericObserver()
 		);

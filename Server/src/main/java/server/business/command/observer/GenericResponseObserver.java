@@ -1,4 +1,4 @@
-package server.business.command.strategy;
+package server.business.command.observer;
 
 import io.grpc.GenericResponse;
 import io.grpc.stub.StreamObserver;
@@ -7,7 +7,7 @@ public class GenericResponseObserver implements StreamObserver<GenericResponse> 
 
     private StreamObserver<GenericResponse> output;
 
-    GenericResponseObserver(StreamObserver<GenericResponse> output) {
+    public GenericResponseObserver(StreamObserver<GenericResponse> output) {
         this.output = output;
     }
 

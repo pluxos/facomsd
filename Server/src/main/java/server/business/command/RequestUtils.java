@@ -1,11 +1,7 @@
 package server.business.command;
 
 import io.grpc.GenericRequest;
-import server.business.command.strategy.CommandStrategy;
-import server.business.command.strategy.CreateUser;
-import server.business.command.strategy.DeleteUser;
-import server.business.command.strategy.GetUser;
-import server.business.command.strategy.UpdateUser;
+import server.business.command.strategy.*;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ErrorMap;
@@ -16,13 +12,13 @@ public class RequestUtils {
     public static CommandStrategy getRequestStrategyByMethod(Method method) {
         switch (method) {
             case CREATE :
-                return new CreateUser();
+                return new Create();
             case UPDATE :
-                return new UpdateUser();
+                return new Update();
             case GET :
-                return new GetUser();
+                return new Get();
             case DELETE :
-                return new DeleteUser();
+                return new Delete();
             default :
                 throw new InvalidCommandException(ErrorMap.BAD_REQUEST);
         }

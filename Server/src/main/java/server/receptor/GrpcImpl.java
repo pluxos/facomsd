@@ -21,7 +21,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     GrpcImpl(){}
 
-    public void createUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+    public void create(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));
@@ -31,7 +31,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         RowF1.addItem(genericCommand);
     }
 
-    public void getUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+    public void get(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));
@@ -40,7 +40,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         RowF1.addItem(genericCommand);
     }
 
-    public void updateUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+    public void update(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));
@@ -50,7 +50,7 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         RowF1.addItem(genericCommand);
     }
 
-    public void deleteUser(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
+    public void delete(GenericRequest request, StreamObserver<GenericResponse> responseObserver) {
         GenericCommand genericCommand = new GenericCommand();
         genericCommand.setOutput(responseObserver);
         genericCommand.setCode(BigInteger.valueOf(request.getCode()));

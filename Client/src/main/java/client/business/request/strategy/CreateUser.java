@@ -17,7 +17,7 @@ public class CreateUser implements RequestStrategy {
                 .setData(data)
                 .build();
 
-        output.createUser(
+        output.create(
                 createRequest,
                 new GenericObserver()
         );

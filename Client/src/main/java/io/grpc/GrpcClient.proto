@@ -15,18 +15,18 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "io.grpc";
-option java_outer_classname = "GrpcProto";
+option java_outer_classname = "ClientProto";
 option objc_class_prefix = "HLW";
 
-package helloworld;
+package io.grpc;
 
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc CreateUser (GenericRequest) returns (GenericResponse) {}
-  rpc GetUser (GenericRequest) returns (GenericResponse) {}
-  rpc UpdateUser (GenericRequest) returns (GenericResponse) {}
-  rpc DeleteUser (GenericRequest) returns (GenericResponse) {}
+  rpc Create (GenericRequest) returns (GenericResponse) {}
+  rpc Get (GenericRequest) returns (GenericResponse) {}
+  rpc Update (GenericRequest) returns (GenericResponse) {}
+  rpc Delete (GenericRequest) returns (GenericResponse) {}
 }
 
 message GenericRequest {

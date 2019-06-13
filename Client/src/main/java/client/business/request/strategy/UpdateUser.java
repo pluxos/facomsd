@@ -18,7 +18,7 @@ public class UpdateUser implements RequestStrategy {
 				.setData(data)
 				.build();
 
-		output.updateUser(
+		output.update(
 				updateRequest,
 				new GenericObserver()
 		);

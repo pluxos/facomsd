@@ -86,21 +86,21 @@ public final class ServerProto {
       "fingerT\030\001 \001(\t\022\016\n\006update\030\002 \001(\010\"/\n\016NewNode" +
       "Request\022\014\n\004node\030\001 \001(\t\022\017\n\007newNode\030\002 \001(\t\"2" +
       "\n\017NewNodeResponse\022\017\n\007fingerT\030\001 \001(\t\022\016\n\006up" +
-      "date\030\002 \001(\0102\223\004\n\007Greeter\022A\n\nCreateUser\022\027.i" +
-      "o.grpc.GenericRequest\032\030.io.grpc.GenericR" +
-      "esponse\"\000\022>\n\007GetUser\022\027.io.grpc.GenericRe" +
-      "quest\032\030.io.grpc.GenericResponse\"\000\022A\n\nUpd" +
-      "ateUser\022\027.io.grpc.GenericRequest\032\030.io.gr" +
-      "pc.GenericResponse\"\000\022A\n\nDeleteUser\022\027.io." +
-      "grpc.GenericRequest\032\030.io.grpc.GenericRes" +
-      "ponse\"\000\0229\n\010FindNode\022\024.io.grpc.FindMessag" +
-      "e\032\025.io.grpc.FindResponse\"\000\022A\n\010GetRange\022\030" +
-      ".io.grpc.GetRangeRequest\032\031.io.grpc.GetRa" +
-      "ngeResponse\"\000\022A\n\010UpdateFT\022\030.io.grpc.Upda" +
-      "teFTRequest\032\031.io.grpc.UpdateFTResponse\"\000" +
-      "\022>\n\007NewNode\022\027.io.grpc.NewNodeRequest\032\030.i" +
-      "o.grpc.NewNodeResponse\"\000B\036\n\007io.grpcB\013Ser" +
-      "verProtoP\001\242\002\003HLWb\006proto3"
+      "date\030\002 \001(\0102\203\004\n\007Greeter\022=\n\006Create\022\027.io.gr" +
+      "pc.GenericRequest\032\030.io.grpc.GenericRespo" +
+      "nse\"\000\022:\n\003Get\022\027.io.grpc.GenericRequest\032\030." +
+      "io.grpc.GenericResponse\"\000\022=\n\006Update\022\027.io" +
+      ".grpc.GenericRequest\032\030.io.grpc.GenericRe" +
+      "sponse\"\000\022=\n\006Delete\022\027.io.grpc.GenericRequ" +
+      "est\032\030.io.grpc.GenericResponse\"\000\0229\n\010FindN" +
+      "ode\022\024.io.grpc.FindMessage\032\025.io.grpc.Find" +
+      "Response\"\000\022A\n\010GetRange\022\030.io.grpc.GetRang" +
+      "eRequest\032\031.io.grpc.GetRangeResponse\"\000\022A\n" +
+      "\010UpdateFT\022\030.io.grpc.UpdateFTRequest\032\031.io" +
+      ".grpc.UpdateFTResponse\"\000\022>\n\007NewNode\022\027.io" +
+      ".grpc.NewNodeRequest\032\030.io.grpc.NewNodeRe" +
+      "sponse\"\000B\036\n\007io.grpcB\013ServerProtoP\001\242\002\003HLW" +
+      "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
