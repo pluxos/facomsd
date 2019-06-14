@@ -61,8 +61,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void findNode(FindMessage request, StreamObserver<FindResponse> responseObserver) {
-        /* Verificar se a key é igual a minha, para que ele troque */
-
         if( Chord.getNode().getRange().contains(request.getKey()) ) {
             responseObserver.onNext(
                     FindResponse.newBuilder()
@@ -73,7 +71,6 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
             responseObserver.onCompleted();
         } else {
-            /* Procurar na FT quem poderia ser responsável por essa key */
             Node nodeResponsible = Chord.getFt().catchResponsibleNode(request.getKey());
 
             if(nodeResponsible.getIp() == null)

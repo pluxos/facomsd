@@ -94,7 +94,7 @@ public class FingerTable {
     }
 
     public void removeNode(Node node) {
-        for (int i = 1; i <= this.ft.size(); i ++) {
+        for (int i = 1; i <= this.m; i ++) {
             if(this.ft.containsKey(i)) {
                 Node node1 = this.ft.get(i);
                 if (node1.getKey() == node.getKey()) {

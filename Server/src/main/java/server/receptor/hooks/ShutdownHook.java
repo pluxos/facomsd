@@ -11,7 +11,6 @@ import server.receptor.ServerThread;
 import server.requester.CommunicationManager;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ShutdownHook implements Runnable {
@@ -26,7 +25,6 @@ public class ShutdownHook implements Runnable {
     public void run() {
         System.err.println("*** shutting down gRPC server since JVM is shutting down");
 
-        /* Chamar metodo no grpc para realizar saida controlada */
         Integer searchKey = Chord.getNode().getKey() + 1;
         Node responsibleNode = Chord.getFt().catchResponsibleNode(searchKey);
 
