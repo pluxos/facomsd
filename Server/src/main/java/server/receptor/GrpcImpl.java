@@ -99,18 +99,12 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             e.printStackTrace();
         }
 
-
         if(newNode.getKey() != Chord.getNode().getKey()) {
-            /* Defino o Range de dados que preciso retornar, dado o nó vindo do request */
-            /* Redefinir o meu range */
             newNode.setRangeWithArray(Chord.getNode().updateRange(Chord.getNode().getKey(), newNode.getKey()));
             ChordUtils.notifyNewNode(newNode);
 
-            /* Pego todos os dados correspondente a este range que está na HT */
-
             HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(Chord.getNode().getRange());
 
-            /* Enviar resposta com o meu nó! o range que estou enviando, e os dados */
             try {
                 responseObserver.onNext(
                         GetRangeResponse.newBuilder()
@@ -125,10 +119,8 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             }
             responseObserver.onCompleted();
 
-            /* Update Tabela de rota */
             Chord.getFt().updateFT(newNode);
         } else {
-            /* Mesma Chave! reportar erro! */
             try {
                 responseObserver.onNext(
                         GetRangeResponse
@@ -148,7 +140,15 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             TypeReference<Map<Integer, Node>> typeRef = new TypeReference<Map<Integer, Node>>() {};
             Map<Integer, Node> ft = JsonUtils.deserialize(request.getFingerT(), typeRef);
 
-            Chord.getFt().updateFT(ft);
+            if(!request.getNode().equals("")) {
+                Node newNode = JsonUtils.deserialize(request.getNode(), Node.class);
+                Chord.getFt().updateFT(newNode);
+            }
+
+
+            if(Chord.getFt().updateFT(ft) > -1) {
+                ChordUtils.notifyUpdateFT();
+            }
 
             responseObserver.onNext(
                     UpdateFTResponse.newBuilder()
@@ -194,5 +194,27 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void safeOutput(SafeOutputRequest request, StreamObserver<SafeOutputResponse> responseObserver) {
+        try {
+            TypeReference<Map<BigInteger, byte[]>> typeRef = new TypeReference<Map<BigInteger, byte[]>>() {};
+            Map<BigInteger, byte[]> db = JsonUtils.deserialize(request.getData(), typeRef);
+
+            Node node = JsonUtils.deserialize(request.getNode(), Node.class);
+
+            Chord.getNode()
+                    .getRange()
+                    .addAll(node.getRange());
+
+            Manipulator.addValues(db);
+
+            Chord.getFt().removeNode(node);
+
+            ChordUtils.notifyUpdateFT();
+        } catch (ServerException e) {
+            e.printStackTrace();
+        }
     }
 }

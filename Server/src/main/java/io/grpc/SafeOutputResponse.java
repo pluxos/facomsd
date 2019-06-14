@@ -4,20 +4,19 @@
 package io.grpc;
 
 /**
- * Protobuf type {@code io.grpc.UpdateFTRequest}
+ * Protobuf type {@code io.grpc.SafeOutputResponse}
  */
-public  final class UpdateFTRequest extends
+public  final class SafeOutputResponse extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:io.grpc.UpdateFTRequest)
-    UpdateFTRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:io.grpc.SafeOutputResponse)
+    SafeOutputResponseOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use UpdateFTRequest.newBuilder() to construct.
-  private UpdateFTRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use SafeOutputResponse.newBuilder() to construct.
+  private SafeOutputResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private UpdateFTRequest() {
-    fingerT_ = "";
-    node_ = "";
+  private SafeOutputResponse() {
+    message_ = "";
   }
 
   @Override
@@ -25,7 +24,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private UpdateFTRequest(
+  private SafeOutputResponse(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -47,13 +46,7 @@ private static final long serialVersionUID = 0L;
           case 10: {
             String s = input.readStringRequireUtf8();
 
-            fingerT_ = s;
-            break;
-          }
-          case 18: {
-            String s = input.readStringRequireUtf8();
-
-            node_ = s;
+            message_ = s;
             break;
           }
           default: {
@@ -77,79 +70,45 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return ServerProto.internal_static_io_grpc_UpdateFTRequest_descriptor;
+    return ServerProto.internal_static_io_grpc_SafeOutputResponse_descriptor;
   }
 
   @Override
   protected FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return ServerProto.internal_static_io_grpc_UpdateFTRequest_fieldAccessorTable
+    return ServerProto.internal_static_io_grpc_SafeOutputResponse_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            UpdateFTRequest.class, Builder.class);
+            SafeOutputResponse.class, Builder.class);
   }
 
-  public static final int FINGERT_FIELD_NUMBER = 1;
-  private volatile Object fingerT_;
+  public static final int MESSAGE_FIELD_NUMBER = 1;
+  private volatile Object message_;
   /**
-   * <code>string fingerT = 1;</code>
+   * <code>string message = 1;</code>
    */
-  public String getFingerT() {
-    Object ref = fingerT_;
+  public String getMessage() {
+    Object ref = message_;
     if (ref instanceof String) {
       return (String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       String s = bs.toStringUtf8();
-      fingerT_ = s;
+      message_ = s;
       return s;
     }
   }
   /**
-   * <code>string fingerT = 1;</code>
+   * <code>string message = 1;</code>
    */
   public com.google.protobuf.ByteString
-      getFingerTBytes() {
-    Object ref = fingerT_;
+      getMessageBytes() {
+    Object ref = message_;
     if (ref instanceof String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (String) ref);
-      fingerT_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int NODE_FIELD_NUMBER = 2;
-  private volatile Object node_;
-  /**
-   * <code>string node = 2;</code>
-   */
-  public String getNode() {
-    Object ref = node_;
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      node_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string node = 2;</code>
-   */
-  public com.google.protobuf.ByteString
-      getNodeBytes() {
-    Object ref = node_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      node_ = b;
+      message_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -170,11 +129,8 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getFingerTBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, fingerT_);
-    }
-    if (!getNodeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, node_);
+    if (!getMessageBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, message_);
     }
     unknownFields.writeTo(output);
   }
@@ -185,11 +141,8 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getFingerTBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, fingerT_);
-    }
-    if (!getNodeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, node_);
+    if (!getMessageBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, message_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -201,16 +154,14 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof UpdateFTRequest)) {
+    if (!(obj instanceof SafeOutputResponse)) {
       return super.equals(obj);
     }
-    UpdateFTRequest other = (UpdateFTRequest) obj;
+    SafeOutputResponse other = (SafeOutputResponse) obj;
 
     boolean result = true;
-    result = result && getFingerT()
-        .equals(other.getFingerT());
-    result = result && getNode()
-        .equals(other.getNode());
+    result = result && getMessage()
+        .equals(other.getMessage());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -222,78 +173,76 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + FINGERT_FIELD_NUMBER;
-    hash = (53 * hash) + getFingerT().hashCode();
-    hash = (37 * hash) + NODE_FIELD_NUMBER;
-    hash = (53 * hash) + getNode().hashCode();
+    hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+    hash = (53 * hash) + getMessage().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static UpdateFTRequest parseFrom(byte[] data)
+  public static SafeOutputResponse parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static UpdateFTRequest parseFrom(java.io.InputStream input)
+  public static SafeOutputResponse parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static UpdateFTRequest parseDelimitedFrom(java.io.InputStream input)
+  public static SafeOutputResponse parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static UpdateFTRequest parseDelimitedFrom(
+  public static SafeOutputResponse parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static UpdateFTRequest parseFrom(
+  public static SafeOutputResponse parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -306,7 +255,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(UpdateFTRequest prototype) {
+  public static Builder newBuilder(SafeOutputResponse prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @Override
@@ -322,26 +271,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code io.grpc.UpdateFTRequest}
+   * Protobuf type {@code io.grpc.SafeOutputResponse}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:io.grpc.UpdateFTRequest)
-      UpdateFTRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:io.grpc.SafeOutputResponse)
+      io.grpc.SafeOutputResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ServerProto.internal_static_io_grpc_UpdateFTRequest_descriptor;
+      return ServerProto.internal_static_io_grpc_SafeOutputResponse_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ServerProto.internal_static_io_grpc_UpdateFTRequest_fieldAccessorTable
+      return ServerProto.internal_static_io_grpc_SafeOutputResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              UpdateFTRequest.class, Builder.class);
+              SafeOutputResponse.class, Builder.class);
     }
 
-    // Construct using io.grpc.UpdateFTRequest.newBuilder()
+    // Construct using io.grpc.SafeOutputResponse.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -359,9 +308,7 @@ private static final long serialVersionUID = 0L;
     @Override
     public Builder clear() {
       super.clear();
-      fingerT_ = "";
-
-      node_ = "";
+      message_ = "";
 
       return this;
     }
@@ -369,17 +316,17 @@ private static final long serialVersionUID = 0L;
     @Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return ServerProto.internal_static_io_grpc_UpdateFTRequest_descriptor;
+      return ServerProto.internal_static_io_grpc_SafeOutputResponse_descriptor;
     }
 
     @Override
-    public UpdateFTRequest getDefaultInstanceForType() {
-      return UpdateFTRequest.getDefaultInstance();
+    public SafeOutputResponse getDefaultInstanceForType() {
+      return SafeOutputResponse.getDefaultInstance();
     }
 
     @Override
-    public UpdateFTRequest build() {
-      UpdateFTRequest result = buildPartial();
+    public SafeOutputResponse build() {
+      SafeOutputResponse result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -387,10 +334,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @Override
-    public UpdateFTRequest buildPartial() {
-      UpdateFTRequest result = new UpdateFTRequest(this);
-      result.fingerT_ = fingerT_;
-      result.node_ = node_;
+    public SafeOutputResponse buildPartial() {
+      SafeOutputResponse result = new SafeOutputResponse(this);
+      result.message_ = message_;
       onBuilt();
       return result;
     }
@@ -429,22 +375,18 @@ private static final long serialVersionUID = 0L;
     }
     @Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof UpdateFTRequest) {
-        return mergeFrom((UpdateFTRequest)other);
+      if (other instanceof SafeOutputResponse) {
+        return mergeFrom((SafeOutputResponse)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(UpdateFTRequest other) {
-      if (other == UpdateFTRequest.getDefaultInstance()) return this;
-      if (!other.getFingerT().isEmpty()) {
-        fingerT_ = other.fingerT_;
-        onChanged();
-      }
-      if (!other.getNode().isEmpty()) {
-        node_ = other.node_;
+    public Builder mergeFrom(SafeOutputResponse other) {
+      if (other == SafeOutputResponse.getDefaultInstance()) return this;
+      if (!other.getMessage().isEmpty()) {
+        message_ = other.message_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -462,11 +404,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      UpdateFTRequest parsedMessage = null;
+      SafeOutputResponse parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (UpdateFTRequest) e.getUnfinishedMessage();
+        parsedMessage = (SafeOutputResponse) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -476,140 +418,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private Object fingerT_ = "";
+    private Object message_ = "";
     /**
-     * <code>string fingerT = 1;</code>
+     * <code>string message = 1;</code>
      */
-    public String getFingerT() {
-      Object ref = fingerT_;
+    public String getMessage() {
+      Object ref = message_;
       if (!(ref instanceof String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        fingerT_ = s;
+        message_ = s;
         return s;
       } else {
         return (String) ref;
       }
     }
     /**
-     * <code>string fingerT = 1;</code>
+     * <code>string message = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getFingerTBytes() {
-      Object ref = fingerT_;
+        getMessageBytes() {
+      Object ref = message_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        fingerT_ = b;
+        message_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string fingerT = 1;</code>
+     * <code>string message = 1;</code>
      */
-    public Builder setFingerT(
+    public Builder setMessage(
         String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      fingerT_ = value;
+      message_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string fingerT = 1;</code>
+     * <code>string message = 1;</code>
      */
-    public Builder clearFingerT() {
+    public Builder clearMessage() {
       
-      fingerT_ = getDefaultInstance().getFingerT();
+      message_ = getDefaultInstance().getMessage();
       onChanged();
       return this;
     }
     /**
-     * <code>string fingerT = 1;</code>
+     * <code>string message = 1;</code>
      */
-    public Builder setFingerTBytes(
+    public Builder setMessageBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      fingerT_ = value;
-      onChanged();
-      return this;
-    }
-
-    private Object node_ = "";
-    /**
-     * <code>string node = 2;</code>
-     */
-    public String getNode() {
-      Object ref = node_;
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        node_ = s;
-        return s;
-      } else {
-        return (String) ref;
-      }
-    }
-    /**
-     * <code>string node = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNodeBytes() {
-      Object ref = node_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        node_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string node = 2;</code>
-     */
-    public Builder setNode(
-        String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      node_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string node = 2;</code>
-     */
-    public Builder clearNode() {
-      
-      node_ = getDefaultInstance().getNode();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string node = 2;</code>
-     */
-    public Builder setNodeBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      node_ = value;
+      message_ = value;
       onChanged();
       return this;
     }
@@ -626,41 +499,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:io.grpc.UpdateFTRequest)
+    // @@protoc_insertion_point(builder_scope:io.grpc.SafeOutputResponse)
   }
 
-  // @@protoc_insertion_point(class_scope:io.grpc.UpdateFTRequest)
-  private static final UpdateFTRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:io.grpc.SafeOutputResponse)
+  private static final SafeOutputResponse DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new UpdateFTRequest();
+    DEFAULT_INSTANCE = new SafeOutputResponse();
   }
 
-  public static UpdateFTRequest getDefaultInstance() {
+  public static SafeOutputResponse getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<UpdateFTRequest>
-      PARSER = new com.google.protobuf.AbstractParser<UpdateFTRequest>() {
+  private static final com.google.protobuf.Parser<SafeOutputResponse>
+      PARSER = new com.google.protobuf.AbstractParser<SafeOutputResponse>() {
     @Override
-    public UpdateFTRequest parsePartialFrom(
+    public SafeOutputResponse parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new UpdateFTRequest(input, extensionRegistry);
+      return new SafeOutputResponse(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<UpdateFTRequest> parser() {
+  public static com.google.protobuf.Parser<SafeOutputResponse> parser() {
     return PARSER;
   }
 
   @Override
-  public com.google.protobuf.Parser<UpdateFTRequest> getParserForType() {
+  public com.google.protobuf.Parser<SafeOutputResponse> getParserForType() {
     return PARSER;
   }
 
   @Override
-  public UpdateFTRequest getDefaultInstanceForType() {
+  public SafeOutputResponse getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

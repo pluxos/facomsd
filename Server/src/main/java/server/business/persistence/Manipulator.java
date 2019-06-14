@@ -15,6 +15,10 @@ public class Manipulator {
         db.put(code, data);
     }
 
+    public static void addValues(Map<BigInteger, byte[]> values) {
+        db.putAll(values);
+    }
+
     public static void removeValue(BigInteger code) {
         db.remove(code);
     }
