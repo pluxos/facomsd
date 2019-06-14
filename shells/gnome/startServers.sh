@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 rm -rf Server/logs/
 mvn clean install
 echo "iniciando Servidores!"

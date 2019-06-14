@@ -69,7 +69,9 @@ public class ClientCommands implements Runnable {
 	private String getInputFromFile(BufferedReader reader) {
 		try {
 			if (reader != null && reader.ready()) {
-				return reader.readLine();
+				String command = reader.readLine();
+				System.out.println("Command: " + command);
+				return command;
 			} else {
 				return "sair";
 			}
