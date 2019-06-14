@@ -91,15 +91,9 @@ public class IntegrationTests {
     			{"","","teste", "src/test/resources/stress1.txt"},
     			{"","","teste", "src/test/resources/stress2.txt"},
     			{"","","teste", "src/test/resources/stress3.txt"},
-    			{"","","teste", "src/test/resources/stress4.txt"},
-    			{"","","teste", "src/test/resources/stress5.txt"},
-    			{"","","teste", "src/test/resources/stress6.txt"},
-    			{"","","teste", "src/test/resources/stress7.txt"},
-    			{"","","teste", "src/test/resources/stress8.txt"},
-    			{"","","teste", "src/test/resources/stress9.txt"},
-    			{"","","teste", "src/test/resources/stress10.txt"}};
-    	ExecutorService pool = Executors.newFixedThreadPool(10);
-    	for (int i = 0; i < 10; i++) {
+    			{"","","teste", "src/test/resources/stress4.txt"}};
+    	ExecutorService pool = Executors.newFixedThreadPool(4);
+    	for (int i = 0; i < 4; i++) {
     		pool.execute(new Client(clientArgs[i], stub));
     	}
     	pool.shutdown();
@@ -113,7 +107,6 @@ public class IntegrationTests {
     
     private static void test9_shouldGuaranteeCorrectnessFromPreviousRequests() {
     	System.out.println("TEST 9: RUNNING INTEGRATION VERIFIER\n"
-    			+ "USERS WITH ID BETWEEN 0 AND 500 WERE CREATED\n"
     			+ "- ID's ENDING IN 0 SHOULD HAVE BEEN DELETED\n"
     			+ "- ID's ENDING IN 5 HOULD HAVE BEEN UPDATED (ALL UPDATED USERS HAVE THEIR NAMES UPDATED)");
     	String[] args = {"","", "teste", "src/test/resources/verify_integrity.txt"};
