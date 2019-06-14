@@ -99,18 +99,12 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             e.printStackTrace();
         }
 
-
         if(newNode.getKey() != Chord.getNode().getKey()) {
-            /* Defino o Range de dados que preciso retornar, dado o nó vindo do request */
-            /* Redefinir o meu range */
             newNode.setRangeWithArray(Chord.getNode().updateRange(Chord.getNode().getKey(), newNode.getKey()));
             ChordUtils.notifyNewNode(newNode);
 
-            /* Pego todos os dados correspondente a este range que está na HT */
-
             HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(Chord.getNode().getRange());
 
-            /* Enviar resposta com o meu nó! o range que estou enviando, e os dados */
             try {
                 responseObserver.onNext(
                         GetRangeResponse.newBuilder()
@@ -125,10 +119,8 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             }
             responseObserver.onCompleted();
 
-            /* Update Tabela de rota */
             Chord.getFt().updateFT(newNode);
         } else {
-            /* Mesma Chave! reportar erro! */
             try {
                 responseObserver.onNext(
                         GetRangeResponse
@@ -154,7 +146,9 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             }
 
 
-            Chord.getFt().updateFT(ft);
+            if(Chord.getFt().updateFT(ft) > -1) {
+                ChordUtils.notifyUpdateFT();
+            }
 
             responseObserver.onNext(
                     UpdateFTResponse.newBuilder()

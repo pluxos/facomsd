@@ -80,13 +80,13 @@ public class FingerTable {
 
     public int updateFT(Map<Integer, Node> ft) {
         int flag = -1;
-        Node nodeAnt = null;
+        int nodeAnt = Chord.getNode().getKey();
         for (int i = 1; i <= ft.size(); i ++) {
             if(ft.containsKey(i)) {
                 Node node = ft.get(i);
-                if (Chord.getNode().getKey() != node.getKey() && node != nodeAnt) {
-                    flag += this.addNode(node);
-                    nodeAnt = node;
+                if (Chord.getNode().getKey() != node.getKey() && node.getKey() != nodeAnt) {
+                    flag = this.addNode(node);
+                    nodeAnt = node.getKey();
                 }
             }
         }
@@ -116,7 +116,7 @@ public class FingerTable {
                 if(!this.ft.containsKey(i)){
                     flag = 1;
                     this.ft.put(i, node);
-                } else if(this.ft.get(i).getKey() != node.getKey() || this.ft.get(i).getRange() != node.getRange()) {
+                } else if(this.ft.get(i).getKey() != node.getKey() || !this.ft.get(i).getRange().equals(node.getRange())) {
                     flag = 1;
                     this.ft.put(i, node);
                 }
