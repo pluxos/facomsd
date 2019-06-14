@@ -78,7 +78,7 @@ public class ServerThread implements Runnable {
 			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new OrchestratorThread());
 			Thread tCommand = new Thread(new CommandExecutorThread());
-			Thread tLog = new Thread(new LogPersistentThread());
+			Thread tLog = new Thread(new LogPersistentThread(this.logDirectory));
 			Thread tConsumer4 = new Thread(new ServerConnectorThread());
 			tConsumer.start();
 			tCommand.start();

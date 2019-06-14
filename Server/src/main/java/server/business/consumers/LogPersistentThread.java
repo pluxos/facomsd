@@ -13,7 +13,11 @@ import server.commons.utils.JsonUtils;
 
 public class LogPersistentThread implements Runnable {
 	
-	private static final String LOG_PATH = "log";
+	private String path;
+	
+	public LogPersistentThread(String path) {
+		this.path = path + "log";
+	}
 
 	@Override
 	public void run() {
@@ -29,7 +33,7 @@ public class LogPersistentThread implements Runnable {
 				method = Method.getMethod(genericCommand.getMethod());
 			}
 			if (!Method.GET.equals(method)) {
-				try (FileWriter writer = new FileWriter(LOG_PATH + (Counter.getCounter() - 1) + ".log", true);
+				try (FileWriter writer = new FileWriter(path + (Counter.getCounter() - 1) + ".log", true);
 						BufferedWriter bw = new BufferedWriter(writer)) {
 					bw.append(String.valueOf(JsonUtils.serialize(genericCommand)));
 					bw.newLine();
