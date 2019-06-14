@@ -19,6 +19,7 @@ Para auxílio do desenvolvimento, foram criados os comandos 'ft' (finger table),
 ## Executar trabalho
 
 1) Executar o arquivo 'startServers.sh', para inicializar os 4 servidores (Linux).
+
 ** Em caso de outro SO, dentro do diretório Server: mvn exec:java -Dexec.args=logs/{pastaServidor}/ localhost {porta}
 
 2) Para executar o cliente, dentro do diretório Client, mvn exec:java -Dexec.args=localhost {porta} (se rodar o script, por exemplo, porta=12345)
