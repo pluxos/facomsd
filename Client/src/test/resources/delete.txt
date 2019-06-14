@@ -1,2 +1,2 @@
-delete; 456
-get; 456
+delete; 2
+get; 2
