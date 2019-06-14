@@ -2,7 +2,8 @@
 *.class
 
 # Log file
-*.log
+Server/*.log
+Server/logs
 
 # BlueJ files
 *.ctxt
@@ -33,6 +34,5 @@ log/
 bin/
 target/
 *.jar
-*.log
 *.versionsBackup
 
