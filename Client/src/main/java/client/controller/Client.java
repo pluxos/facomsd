@@ -20,8 +20,8 @@ public class Client implements Runnable {
         boolean isTest = false;
         String testFile = null;
         try {
-            isTest = args[2].equals("teste");
-            testFile = args[3];
+            isTest = !args[2].isEmpty();
+            testFile = args[2];
         } catch (IndexOutOfBoundsException e) {
             isTest = false;
         }

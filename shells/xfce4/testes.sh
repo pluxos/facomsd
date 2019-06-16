@@ -30,5 +30,5 @@ cd ../Client
 for (( i = 0; i < NUM_CLIENTS; ++i )); do
     echo "Iniciando Cliente " ${i}
     sleep 10
-    xfce4-terminal -e "mvn exec:java -Dexec.args=\"localhost ${ports[i]} teste src/test/resources/stress${i+1}.txt\""
+    xfce4-terminal -e "mvn exec:java -Dexec.args=\"localhost ${ports[i]} src/test/resources/stress${i+1}.txt\""
 done

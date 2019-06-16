@@ -23,16 +23,16 @@ public class ShutdownHook implements Runnable {
 
     @Override
     public void run() {
-        System.err.println("*** shutting down gRPC server since JVM is shutting down");
-
-        Integer searchKey = Chord.getNode().getKey() + 1;
-        Node responsibleNode = Chord.getFt().catchResponsibleNode(searchKey);
-
-        GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(responsibleNode.getIp(), responsibleNode.getPort());
-
-        Map<BigInteger, byte[]> db = Manipulator.removeValues(Chord.getNode().getRange());
-
         try {
+            System.err.println("*** shutting down gRPC server since JVM is shutting down");
+
+            Integer searchKey = Chord.getNode().getKey() + 1;
+            Node responsibleNode = Chord.getFt().catchResponsibleNode(searchKey);
+
+            GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(responsibleNode.getIp(), responsibleNode.getPort());
+
+            Map<BigInteger, byte[]> db = Manipulator.removeValues(Chord.getNode().getRange());
+
             stub.safeOutput(
                     SafeOutputRequest.newBuilder()
                             .setData(JsonUtils.serialize(db))
@@ -42,6 +42,8 @@ public class ShutdownHook implements Runnable {
             );
         } catch (ServerException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.err.println("Erro: Ninguém para contactar! :/");
         }
 
         this.server.stop();
