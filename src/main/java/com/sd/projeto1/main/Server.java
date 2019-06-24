@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.sd.projeto1.dao.MapaDao;
 import com.sd.projeto1.model.Mapa;
@@ -40,7 +41,7 @@ public class Server {
 		ThreadAlertSubscribes executorThread = new ThreadAlertSubscribes( serverSocket, logQueue, executeQueue,  observers );
 
 		ServerThreadGRPC grpcServerThread = new ServerThreadGRPC( logQueue, executeQueue,  mySettings, observers );
-
+		executor = Executors.newSingleThreadExecutor();
 		executor.execute( grpcServerThread );
 		executor.execute( executorThread );
 	}
