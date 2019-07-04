@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="49c3d895-b831-4ba0-a197-828b66d59b15" name="Default Changelist" comment="" />
+    <ignored path="$PROJECT_DIR$/classes/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="36" column="38" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="540">
+                <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-710">
+              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/server_client/model/Message.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="17" column="70" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/server_client/client/ClientThreadTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="20" column="14" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/server_client/AppTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="45" column="22" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>MemoryDB</find>
+      <find>getMap</find>
+      <find>new MessageData</find>
+      <find>MessageDa</find>
+      <find>first</find>
+      <find>secondThirdQueueThread</find>
+      <find>databaseProcessingThread</find>
+      <find>logThread</find>
+      <find>exit</find>
+      <find>Atomic</find>
+      <find>fila1</find>
+      <find>queueThreadPool</find>
+      <find>será ad</find>
+      <find>startDB</find>
+      <find>restartDB</find>
+      <find>&lt;?&gt;</find>
+      <find>?</find>
+      <find>args[1]</find>
+      <find>scann</find>
+      <find>typeMessage</find>
+      <find>empt</find>
+      <find>message</find>
+      <find>clientthread</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>String</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/handlers/MessageData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/handlers/ClientHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/ServerThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/first_stage/FirstQueueThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/third_stage/DatabaseProcessingThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/third_stage/LogThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/StartPrimitives.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/database/LogFile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/MessageServerNovo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/constants/StringsConstants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/repository/MessageRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/services/MessageService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/repository/impl/MessageRepositoryMemory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/services/impl/MessageServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/test/java/server_client/AppTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/server_client/client/ClientThreadTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/client/view/TerminalView.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/database/MemoryDB.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/Old.java" />
+        <option value="$PROJECT_DIR$/src/test/java/server_client/client/DistributedMapClientTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/model/MessageOld.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/client/ClientProfessor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/model/Message.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java" />
+        <option value="$PROJECT_DIR$/README.md" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="540" />
+    <option name="y" value="27" />
+    <option name="width" value="1380" />
+    <option name="height" value="1014" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server_client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server_client" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="facomsd" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server_client" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="server_client.server" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.DistributedMapClient0">
+    <configuration name="ClientProfessor" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.client.ClientProfessor" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="3 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DistributedMapClient0" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="server_client.client.DistributedMapClient" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="0 0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DistributedMapClient1" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.client.DistributedMapClient" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="1 1 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DistributedMapClient2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.client.DistributedMapClient" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="2 2 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MessageServer0" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="server_client.server.MessageServer" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002 127.0.0.1 5003" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MessageServer1" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.server.MessageServer" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="1 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002 127.0.0.1 5003" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MessageServer2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.server.MessageServer" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="2 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002 127.0.0.1 5003" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StartPrimitives" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="server_client.server.StartPrimitives" />
+      <module name="replication" />
+      <option name="PROGRAM_PARAMETERS" value="3 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002 127.0.0.1 5003" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server_client.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.MessageServer1" />
+      <item itemvalue="Application.MessageServer2" />
+      <item itemvalue="Application.DistributedMapClient1" />
+      <item itemvalue="Application.DistributedMapClient2" />
+      <item itemvalue="Application.ClientProfessor" />
+      <item itemvalue="Application.StartPrimitives" />
+      <item itemvalue="Application.MessageServer0" />
+      <item itemvalue="Application.DistributedMapClient0" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DistributedMapClient0" />
+        <item itemvalue="Application.MessageServer0" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="49c3d895-b831-4ba0-a197-828b66d59b15" name="Default Changelist" comment="" />
+      <created>1561948164605</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1561948164605</updated>
+      <workItem from="1561948170487" duration="5717000" />
+      <workItem from="1561983391034" duration="22284000" />
+      <workItem from="1562021322425" duration="2534000" />
+      <workItem from="1562036655151" duration="9511000" />
+      <workItem from="1562074192353" duration="12714000" />
+      <workItem from="1562096537440" duration="5599000" />
+      <workItem from="1562129224740" duration="4763000" />
+      <workItem from="1562152770944" duration="6784000" />
+      <workItem from="1562162358286" duration="14431000" />
+      <workItem from="1562187200963" duration="1884000" />
+      <workItem from="1562195066021" duration="2271000" />
+      <workItem from="1562202519258" duration="1733000" />
+      <workItem from="1562264441509" duration="789000" />
+      <workItem from="1562265692136" duration="587000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="91601000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="70" y="27" width="1850" height="1053" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989429" visible="true" weight="0.22339246" />
+      <window_info id="Structure" order="1" sideWeight="0.5010571" side_tool="true" weight="0.23447894" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="Learn" order="7" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49889135" weight="0.3380589" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3816794" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49944568" weight="0.3293348" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50166297" side_tool="true" weight="0.4351145" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49889135" weight="0.3293348" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
+      <window_info anchor="bottom" id="Version Control" order="12" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/first_stage/FirstQueueThread.java</url>
+          <line>43</line>
+          <properties />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>62</line>
+          <properties />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>63</line>
+          <properties />
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>94</line>
+          <properties />
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>80</line>
+          <properties />
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>59</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java</url>
+          <line>38</line>
+          <properties />
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>88</line>
+          <properties />
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>101</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>103</line>
+          <properties />
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>109</line>
+          <properties />
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>110</line>
+          <properties />
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java</url>
+          <line>112</line>
+          <properties />
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java</url>
+          <line>85</line>
+          <properties />
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java</url>
+          <line>83</line>
+          <properties />
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java</url>
+          <line>96</line>
+          <properties />
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/first_stage/FirstQueueThread.java</url>
+          <line>22</line>
+          <properties class="server_client.server.threads.message_queues.first_stage.FirstQueueThread">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/first_stage/FirstQueueThread.java</url>
+          <line>33</line>
+          <properties class="server_client.server.threads.message_queues.first_stage.FirstQueueThread">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>map.get(key)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/replication.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/db.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-12-oracle/lib/src.zip!/java.base/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="335" column="9" selection-start-line="335" selection-start-column="9" selection-end-line="335" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/io/atomix/atomix/3.0.11/atomix-3.0.11.jar!/io/atomix/core/map/impl/BlockingDistributedMap.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+          <folding>
+            <element signature="e#2236#2237#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/io/atomix/atomix/3.0.11/atomix-3.0.11.jar!/io/atomix/core/Atomix.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="441" column="48" selection-start-line="441" selection-start-column="48" selection-end-line="441" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/handlers/ClientHandler.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/ServerThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/handlers/MessageData.java" />
+    <entry file="jar://$MAVEN_REPOSITORY$/io/atomix/atomix/3.0.6/atomix-3.0.6.jar!/io/atomix/core/map/impl/BlockingDistributedMap.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+          <folding>
+            <element signature="e#2236#2237#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/third_stage/LogThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/StartPrimitives.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/first_stage/FirstQueueThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/second_stage/SecondThirdQueueThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/client/AppClient.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/database/LogFile.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/model/query/SendMessageQuery.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/threads/message_queues/third_stage/DatabaseProcessingThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/database/MemoryDB.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/services/MessageService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="35" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/services/impl/MessageServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/repository/MessageRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/repository/impl/MessageRepositoryMemory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/Old.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/model/MessageOld.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/client/ClientProfessor.java" />
+    <entry file="jar://$MAVEN_REPOSITORY$/io/atomix/atomix-utils/3.0.6/atomix-utils-3.0.6.jar!/io/atomix/utils/serializer/Serializer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/constants/StringsConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="61" selection-start-line="26" selection-start-column="61" selection-end-line="26" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="42" selection-start-line="14" selection-start-column="42" selection-end-line="14" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/server_client/client/DistributedMapClientTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/client/view/TerminalView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="72" selection-start-line="72" selection-end-line="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/model/Message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="17" column="70" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/server_client/client/ClientThreadTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="14" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/server_client/AppTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="22" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/client/DistributedMapClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="36" column="38" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/server_client/server/MessageServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-710">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="540">
+            <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
