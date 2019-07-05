@@ -23,7 +23,7 @@ public class Client {
   String quit = "Conexão encerrada!!!";
   String close = "Saindo....";
   String option;
-  String command;
+  Controll command;
   String key;
   String value;
   int size;
@@ -83,20 +83,20 @@ public class Client {
         }
 
         spaceSecond = option.indexOf(" ", (spaceFirst + 1));
-        command = option.substring(0, spaceFirst);
+        command = Controll.valueOf(option.substring(0, spaceFirst));
 
-        if ((command.equals("CREATE") || command.equals("UPDATE")) && (spaceSecond == -1)) {
+        if ((command.equals(Controll.CREATE) || command.equals(Controll.UPDATE)) && (spaceSecond == -1)) {
           throw new Exception();
         }
 
-        if ((command.equals("READ") || command.equals("DELETE")) && (spaceSecond != -1)) {
+        if ((command.equals(Controll.READ) || command.equals(Controll.DELETE)) && (spaceSecond != -1)) {
           throw new Exception();
         }
 
         key = option.substring((spaceFirst + 1), ((spaceSecond == -1) ? size : spaceSecond));
         keyBigInteger = new BigInteger(key);
 
-        if (command.equals("CREATE")) {
+        if (command.equals(Controll.CREATE)) {
           value = option.substring((spaceSecond + 1), size);
           byte[] messageBytesValue = value.getBytes();
           client.submit(new CreateQuery(keyBigInteger, messageBytesValue)).thenAccept(result -> {
@@ -107,7 +107,7 @@ public class Client {
           continue;
         }
 
-        if (command.equals("UPDATE")) {
+        if (command.equals(Controll.UPDATE)) {
           value = option.substring((spaceSecond + 1), size);
           byte[] messageBytesValue = value.getBytes();
           client.submit(new UpdateQuery(keyBigInteger, messageBytesValue)).thenAccept(result -> {
@@ -118,7 +118,7 @@ public class Client {
           continue;
         }
 
-        if (command.equals("READ")) {
+        if (command.equals(Controll.READ)) {
           client.submit(new ReadQuery(keyBigInteger)).thenAccept(result -> {
             System.out.println("Read com " + keyBigInteger + " deu: " + result);
           });
@@ -126,7 +126,7 @@ public class Client {
           continue;
         }
 
-        if (command.equals("DELETE")) {
+        if (command.equals(Controll.DELETE)) {
           client.submit(new DeleteQuery(keyBigInteger)).thenAccept(result -> {
             System.out.println("Delete com " + keyBigInteger + " deu: " + result);
           });
