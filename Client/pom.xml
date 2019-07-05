@@ -10,8 +10,19 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
@@ -37,11 +48,20 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/io.grpc/grpc-all -->
     <dependency>
-        <groupId>io.grpc</groupId>
-        <artifactId>grpc-all</artifactId>
-        <version>1.20.0</version>
+        <groupId>io.atomix.copycat</groupId>
+        <artifactId>copycat-server</artifactId>
+        <version>1.1.4</version>
+    </dependency>
+    <dependency>
+        <groupId>io.atomix.copycat</groupId>
+        <artifactId>copycat-client</artifactId>
+        <version>1.1.4</version>
+    </dependency>
+    <dependency>
+        <groupId>io.atomix.catalyst</groupId>
+        <artifactId>catalyst-netty</artifactId>
+        <version>1.1.1</version>
     </dependency>
 
   </dependencies>

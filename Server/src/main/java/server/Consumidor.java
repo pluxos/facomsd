@@ -1,12 +1,8 @@
 package server;
 
 import java.util.concurrent.BlockingQueue;
-import java.io.*;
-import java.net.*;
-import java.util.*;
 
-class Consumidor implements Runnable
-{
+class Consumidor implements Runnable {
     protected BlockingQueue<ItemFila> f1;
     protected BlockingQueue<ItemFila> f2;
     protected BlockingQueue<ItemFila> f3;
@@ -18,16 +14,15 @@ class Consumidor implements Runnable
     }
 
     public void run() {
-        try{
-            while (true){
+        try {
+            while (true) {
                 ItemFila obj = f1.take();
 
                 f2.put(obj);
                 f3.put(obj);
             }
-        }
-        catch (Exception e){
-            System.out.println( "Erro: " + e.getMessage() );
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 }

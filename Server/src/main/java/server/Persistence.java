@@ -1,71 +1,92 @@
 package server;
+
 import java.util.concurrent.BlockingQueue;
+
+import io.atomix.copycat.server.Commit;
+import server.query.CreateQuery;
+import server.query.DeleteQuery;
+import server.query.UpdateQuery;
+
 import java.math.BigInteger;
 import java.lang.*;
 import java.io.*;
 import java.net.*;
 
-
-public class Persistence  implements Runnable {
+public class Persistence implements Runnable {
 
     protected BlockingQueue<ItemFila> f3;
-    private Kv Database = new Kv();
+    private Kv database = new Kv();
 
-    public Persistence () {
+    public Persistence() {
         this.f3 = F3.getInstance();
     }
 
     @Override
-    public void run () {
-        String callback = null; // Mensagem de sucesso ou falha
-        byte[] response;
+    public void run() {
         ItemFila obj;
-        int type; // type == 1 string, type == 2 byte
-        DataOutputStream output = null;
+        Commit commit;
 
         try {
             while (true) {
-                response = null;
                 obj = f3.take();
-                type = 1;
-
-                if(obj.socket != null) {
-                    output = new DataOutputStream( obj.socket.getOutputStream() );
+                commit = obj.commit;
+                switch (obj.controll) {
+                case CREATE: {
+                    create(commit, obj.key, obj.value);
+                    break;
+                }
+                case UPDATE: {
+                    update(commit, obj.key, obj.value);
+                    break;
+                }
+                case READ: {
+                    read(commit, obj.key);
+                    break;
+                }
+                case DELETE: {
+                    delete(commit, obj.key);
+                    break;
+                }
+                default: {
+                    throw new UnsupportedOperationException();
                 }
 
-                if (new String(obj.controll).equals("CREATE")) {
-                    callback = ( Database.Insert(new BigInteger(obj.key), obj.value) ) ? "CREATE SUCESS!" : "CREATE FAIL!";
-                }
-                else if (new String(obj.controll).equals("UPDATE")) {
-                    callback = ( Database.Update(new BigInteger(obj.key), obj.value) ) ? "UPDATE SUCESS!" : "UPDATE FAIL!";
-                }
-                else if (new String(obj.controll).equals("DELETE")) {
-                    callback = ( Database.Delete(new BigInteger (obj.key) ) ) ? "DELETE SUCESS!" : "DELETE FAIL!";
-                }
-                else if (new String(obj.controll).equals("READ")) {
-                    response = Database.Read(new BigInteger(obj.key));
-                    callback = "READ FAIL!";
-                    if( response != null ) {
-                        type = 2;
-                    }
-                } else {
-                    System.out.println("ERROR");
-                }
-
-                if (obj.socket == null) {
-                    type = 3;
-                }
-                if( type == 1) {
-                    byte[] messageBytesCommand = callback.getBytes();
-                    output.writeInt( ( messageBytesCommand.length*10 + type ) );
-                    output.write( messageBytesCommand );
-                } else  if (type == 2) {
-                    output.writeInt( ( response.length*10 + type ) );
-                    output.write( response );
                 }
             }
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    private synchronized boolean create(Commit<CreateQuery> commit, BigInteger key, byte[] value) {
+        try {
+            return database.Insert(key, value);
+        } finally {
+            commit.close();
+        }
+    }
+
+    private synchronized boolean update(Commit<UpdateQuery> commit, BigInteger key, byte[] value) {
+        try {
+            return database.Update(key, value);
+        } finally {
+            commit.close();
+        }
+    }
+
+    private synchronized boolean delete(Commit<DeleteQuery> commit, BigInteger key) {
+        try {
+            return database.Delete(key);
+        } finally {
+            commit.close();
+        }
+    }
+
+    private synchronized byte[] read(Commit<DeleteQuery> commit, BigInteger key) {
+        try {
+            return database.Read(key);
+        } finally {
+            commit.close();
         }
     }
 

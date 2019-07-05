@@ -1,8 +1,18 @@
 package client;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+
 import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+
+import io.atomix.catalyst.transport.Address;
+import io.atomix.catalyst.transport.netty.NettyTransport;
+import io.atomix.copycat.client.CopycatClient;
+import query.CreateQuery;
+import query.DeleteQuery;
+import query.ReadQuery;
+import query.UpdateQuery;
 
 public class Client {
   String welcome = "Esse software se baseia em um banco de dados chave valor.\n Chave: Inteiro(Infinito) \n Valor: Bytes\n";
@@ -16,107 +26,125 @@ public class Client {
   String command;
   String key;
   String value;
-
   int size;
   int spaceFirst;
   int spaceSecond;
 
-  int quantityPackage; // 1 for 2 or 4 for 3
-
   BigInteger keyBigInteger;
 
-  Socket connection;
+  /**
+   * Construct ClientGrpc connecting to HelloWorld server at {@code host:port}.
+   */
+  public Client(String[] args) {
+    List<Address> addresses = new LinkedList<>();
 
-  public Client() {
-    try {
-      connection = new Socket( "localhost", 12345 );
-      System.out.println( done );
+    CopycatClient.Builder builder = CopycatClient.builder()
+        .withTransport(NettyTransport.builder().withThreads(4).build());
+    CopycatClient client = builder.build();
 
-      Runnable runnable = new ClientResponse(connection);
-      Thread thread = new Thread(runnable);
-      thread.start();
+    for (int i = 0; i < args.length; i += 2) {
+      Address address = new Address(args[i], Integer.parseInt(args[i + 1]));
+      addresses.add(address);
+    }
 
-      Scanner scanner = new Scanner( System.in );
-      DataOutputStream output = new DataOutputStream( connection.getOutputStream() );
+    CompletableFuture<CopycatClient> future = client.connect(addresses);
+    future.join();
+    // String value = "DEU CERTO";
+    // int dez = 10;
+    // BigInteger key = BigInteger.valueOf(dez);
 
-      System.out.println( welcome );
-      System.out.println( options );
-      while( true ) {
-        Thread.sleep(1000);
-        System.out.print( read );
-        option = scanner.nextLine();
+    Scanner scanner = new Scanner(System.in);
 
-        try {
-          option = option.toUpperCase();
-          quantityPackage = 1;
+    System.out.println(welcome);
+    System.out.println(options);
 
-          if( option.equals("SAIR") ) {
-            System.out.println( close );
-            byte[] messageBytesCommand = option.getBytes();
-            output.writeInt( ( ( messageBytesCommand.length*10 ) + 5 ) );
-            output.write( messageBytesCommand );
-            Thread.sleep(5000);
-            break;
-          }
+    while (true) {
+      System.out.print(read);
+      option = scanner.nextLine();
 
-          if( option.equals("HELP") ) {
-            System.out.println( options );
-            continue;
-          }
+      try {
+        option = option.toUpperCase();
 
-          size = option.length();
-          spaceFirst = option.indexOf(" ");
-
-          if( spaceFirst == -1 ) {
-            throw new Exception();
-          }
-
-          spaceSecond = option.indexOf( " ", ( spaceFirst + 1 ) );
-          command = option.substring( 0, spaceFirst );
-
-          if( command.equals( "CREATE" ) || command.equals( "UPDATE" )  ) {
-            quantityPackage = 4;
-            if( spaceSecond == -1 ) {
-              throw new Exception();
-            }
-          }
-
-          if( ( command.equals( "READ" ) || command.equals( "DELETE" ) ) && ( spaceSecond != -1 ) ) {
-            throw new Exception();
-          }
-
-          key = option.substring( ( spaceFirst + 1 ), ( ( spaceSecond == -1 ) ? size : spaceSecond ) );
-          keyBigInteger = new BigInteger( key );
-
-          byte[] messageBytesCommand = command.getBytes();
-          output.writeInt( ( ( messageBytesCommand.length*10 ) + quantityPackage ) );
-          output.write( messageBytesCommand );
-
-          byte[] messageBytesKey = keyBigInteger.toByteArray();
-          output.writeInt( ( ( messageBytesKey.length*10 ) + 2 ) );
-          output.write( messageBytesKey );
-
-          if( spaceSecond != -1 ) {
-            value = option.substring( ( spaceSecond + 1 ), size );
-            byte[] messageBytesValue = value.getBytes();
-            output.writeInt( ( ( messageBytesValue.length*10 ) + 3 ) );
-            output.write( messageBytesValue );
-          }
+        if (option.equals("SAIR")) {
+          System.out.println(close);
+          break;
         }
-        catch(Exception e) {
-          System.out.println( invalid );
+
+        if (option.equals("HELP")) {
+          System.out.println(options);
+          continue;
         }
+
+        size = option.length();
+        spaceFirst = option.indexOf(" ");
+
+        if (spaceFirst == -1) {
+          throw new Exception();
+        }
+
+        spaceSecond = option.indexOf(" ", (spaceFirst + 1));
+        command = option.substring(0, spaceFirst);
+
+        if ((command.equals("CREATE") || command.equals("UPDATE")) && (spaceSecond == -1)) {
+          throw new Exception();
+        }
+
+        if ((command.equals("READ") || command.equals("DELETE")) && (spaceSecond != -1)) {
+          throw new Exception();
+        }
+
+        key = option.substring((spaceFirst + 1), ((spaceSecond == -1) ? size : spaceSecond));
+        keyBigInteger = new BigInteger(key);
+
+        if (command.equals("CREATE")) {
+          value = option.substring((spaceSecond + 1), size);
+          byte[] messageBytesValue = value.getBytes();
+          client.submit(new CreateQuery(keyBigInteger, messageBytesValue)).thenAccept(result -> {
+            System.out.println("Create com " + keyBigInteger + messageBytesValue + " deu: " + result);
+          });
+          // new Thread( new Create(host, port, keyBigInteger, messageBytesValue, true)
+          // ).start();
+          continue;
+        }
+
+        if (command.equals("UPDATE")) {
+          value = option.substring((spaceSecond + 1), size);
+          byte[] messageBytesValue = value.getBytes();
+          client.submit(new UpdateQuery(keyBigInteger, messageBytesValue)).thenAccept(result -> {
+            System.out.println("Update com " + keyBigInteger + messageBytesValue + " deu: " + result);
+          });
+          // new Thread( new Update(host, port, keyBigInteger, messageBytesValue, true)
+          // ).start();
+          continue;
+        }
+
+        if (command.equals("READ")) {
+          client.submit(new ReadQuery(keyBigInteger)).thenAccept(result -> {
+            System.out.println("Read com " + keyBigInteger + " deu: " + result);
+          });
+          // new Thread( new Read(host, port, keyBigInteger, true) ).start();
+          continue;
+        }
+
+        if (command.equals("DELETE")) {
+          client.submit(new DeleteQuery(keyBigInteger)).thenAccept(result -> {
+            System.out.println("Delete com " + keyBigInteger + " deu: " + result);
+          });
+          // new Thread( new Delete(host, port, keyBigInteger, true) ).start();
+          continue;
+        }
+
+        throw new Exception();
+      } catch (Exception e) {
+        System.out.println(invalid);
       }
+    }
 
-      output.close();
-      System.out.println(quit);
-    }
-    catch(Exception e) {
-      System.out.println( "Erro: " + e.getMessage() );
-    }
+    System.out.println(quit);
+    scanner.close();
   }
-  public static void main(String argv[]) throws Exception {
 
-    new Client();
+  public static void main(String[] args) throws Exception {
+    new Client(args);
   }
 }

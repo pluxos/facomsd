@@ -1,9 +1,4 @@
 package client;
-import java.io.*;
-import java.net.*;
-import javax.swing.JOptionPane;
-import java.util.*;
-import java.lang.*;
 
 public class ClientResponse implements Runnable {
   Socket connection;
