@@ -1,7 +1,6 @@
 package state_machine.type;
 
 import io.atomix.copycat.server.Commit;
-
 import java.io.Serializable;
 import java.math.*;
 
