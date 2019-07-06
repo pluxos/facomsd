@@ -157,19 +157,19 @@ public final class ServerProto {
     internal_static_io_grpc_GetRangeRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_GetRangeRequest_descriptor,
-        new String[] { "Node", });
+        new String[] { "ChodNode", });
     internal_static_io_grpc_GetRangeResponse_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_io_grpc_GetRangeResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_GetRangeResponse_descriptor,
-        new String[] { "Node", "FingerT", "Range", "Data", });
+        new String[] { "ChodNode", "FingerT", "Range", "Data", });
     internal_static_io_grpc_UpdateFTRequest_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_io_grpc_UpdateFTRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_UpdateFTRequest_descriptor,
-        new String[] { "FingerT", "Node", });
+        new String[] { "FingerT", "ChodNode", });
     internal_static_io_grpc_UpdateFTResponse_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_io_grpc_UpdateFTResponse_fieldAccessorTable = new
@@ -181,7 +181,7 @@ public final class ServerProto {
     internal_static_io_grpc_NewNodeRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_NewNodeRequest_descriptor,
-        new String[] { "Node", "NewNode", });
+        new String[] { "ChodNode", "NewNode", });
     internal_static_io_grpc_NewNodeResponse_descriptor =
       getDescriptor().getMessageTypes().get(9);
     internal_static_io_grpc_NewNodeResponse_fieldAccessorTable = new
@@ -193,7 +193,7 @@ public final class ServerProto {
     internal_static_io_grpc_SafeOutputRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_io_grpc_SafeOutputRequest_descriptor,
-        new String[] { "Data", "Node", });
+        new String[] { "Data", "ChodNode", });
     internal_static_io_grpc_SafeOutputResponse_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_io_grpc_SafeOutputResponse_fieldAccessorTable = new

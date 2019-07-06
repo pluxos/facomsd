@@ -1,8 +1,10 @@
 package server.receptor;
 
+import server.business.persistence.Manipulator;
 import server.commons.chord.Chord;
 import server.commons.chord.ChordUtils;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class UtilsCommands implements Runnable {
@@ -38,8 +40,13 @@ public class UtilsCommands implements Runnable {
                     break;
 
                 case "range":
-                    System.out.println(Chord.getNode().getRange());
+                    System.out.println(Arrays.toString(Chord.getChodNode().getRange().toArray()));
                     break;
+
+                case "bd":
+                    Manipulator.getDb().forEach(
+                            (pos, value) ->  System.out.println("Key: " + pos + " ->  " + Arrays.toString(value))
+                    );
 
                 default:
                     break;

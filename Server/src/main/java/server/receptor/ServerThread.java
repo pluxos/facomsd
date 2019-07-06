@@ -1,46 +1,73 @@
 package server.receptor;
 
+import io.atomix.cluster.Node;
+import io.atomix.cluster.discovery.BootstrapDiscoveryProvider;
+import io.atomix.core.Atomix;
+import io.atomix.core.AtomixBuilder;
+import io.atomix.core.profile.ConsensusProfile;
+import io.atomix.protocols.raft.MultiRaftProtocol;
+import io.atomix.protocols.raft.ReadConsistency;
+import io.atomix.utils.net.Address;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import server.business.consumers.CommandExecutorThread;
 import server.business.consumers.LogPersistentThread;
 import server.business.consumers.OrchestratorThread;
 import server.business.consumers.ServerConnectorThread;
+import server.business.persistence.Manipulator;
 import server.business.persistence.recovery.LogRecovererThread;
 import server.business.persistence.routine.Counter;
 import server.business.persistence.routine.FileRoutineThread;
+import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
-import server.commons.chord.Node;
 import server.commons.utils.FileUtils;
 import server.receptor.hooks.ShutdownHook;
 import server.requester.GrpcCommunication;
 
 import java.io.IOException;
-import java.util.Properties;
-import java.util.Timer;
+import java.math.BigInteger;
+import java.util.*;
 import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
 
 	private String logDirectory;
 	private Server server;
+	private Atomix cluster;
 	private String chordIp = null;
 	private int chordPort;
+	private List<Address> addresses;
+	private int myId;
+
+	/*
+	* args: logs/Server0/ 12345 0 127.0.0.1 5000 127.0.0.1 5002 127.0.0.1 5004
+	* */
 
 	public ServerThread(String[] args) {
-		Chord.setNode(new Node());
-		Chord.setFt(new FingerTable());
+		Chord.setChodNode(new ChodNode());
 
 		this.logDirectory = args[0];
-		Chord.getNode().setIp(args[1]);
-		Chord.getNode().setPort(Integer.parseInt(args[2]));
-		if(args.length == 5) {
-			this.chordIp = args[3];
-			this.chordPort = Integer.parseInt(args[4]);
-			GrpcCommunication.ip = args[3];
-			GrpcCommunication.port = this.chordPort;
+
+		this.myId = Integer.parseInt(args[2]);
+		this.addresses = new LinkedList<>();
+
+		for(int i = 3; i <args.length; i+=2)
+		{
+			Address address = new Address(args[i], Integer.parseInt(args[i+1]));
+			this.addresses.add(address);
 		}
+
+		Chord.getChodNode().setIp(this.addresses.get(myId).host());
+		Chord.getChodNode().setPort(Integer.parseInt(args[1]));
+
+//		if(args.length == 5) {
+//			this.chordIp = args[3];
+//			this.chordPort = Integer.parseInt(args[4]);
+//			GrpcCommunication.ip = args[3];
+//			GrpcCommunication.port = this.chordPort;
+//		}
+
 		Counter.startCounter(args[0]);
 	}
 
@@ -61,19 +88,39 @@ public class ServerThread implements Runnable {
 		}
 
 		try {
-			this.server = ServerBuilder.forPort(Chord.getNode().getPort())
-					.addService(new GrpcImpl())
-					.executor(Executors.newFixedThreadPool(10))
-					.build().start();
+			this.cluster = this.initAtomixServer();
 
-			System.out.println("Server started, listening on " + Chord.getNode().getPort());
+			this.cluster.start().join();
+
+			System.out.println("Cluster joined");
+
+			this.server = this.initGrpcServer();
+
+			System.out.println("Server started, listening on " + Chord.getChodNode().getPort());
 
 			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
 
-			if(this.chordIp != null)
-				entryChord();
-			else
+			Chord.setFt(new FingerTable(this.cluster));
+			Chord.getChodNode().setRange(
+					this.cluster.<Integer>listBuilder("chordRange")
+						.withProtocol(
+								MultiRaftProtocol.builder()
+									.withReadConsistency(ReadConsistency.LINEARIZABLE)
+									.build()
+						)
+						.build()
+			);
+
+			if(this.myId == 0) {
+				System.out.println("First Server");
 				firstServer();
+			}
+				Manipulator.setDb(this.cluster.<BigInteger, byte[]>mapBuilder("dataBase")
+						.withCacheEnabled()
+						.withProtocol(MultiRaftProtocol.builder()
+								.withReadConsistency(ReadConsistency.LINEARIZABLE)
+								.build())
+						.build());
 
 			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new OrchestratorThread());
@@ -94,6 +141,37 @@ public class ServerThread implements Runnable {
 		}
 	}
 
+	private Server initGrpcServer() throws IOException {
+		return ServerBuilder.forPort(Chord.getChodNode().getPort())
+				.addService(new GrpcImpl())
+				.executor(Executors.newFixedThreadPool(10))
+				.build().start();
+	}
+
+	private Atomix initAtomixServer() {
+		AtomixBuilder builder = Atomix.builder();
+
+		return builder.withMemberId("member-"+myId)
+				.withAddress(addresses.get(myId))
+				.withMembershipProvider(BootstrapDiscoveryProvider.builder()
+						.withNodes( Node.builder()
+										.withId("member-0")
+										.withAddress(addresses.get(0))
+										.build(),
+								Node.builder()
+										.withId("member-1")
+										.withAddress(addresses.get(1))
+										.build(),
+								Node.builder()
+										.withId("member-2")
+										.withAddress(addresses.get(2))
+										.build())
+						.build())
+				.withMulticastEnabled()
+				.withProfiles(ConsensusProfile.builder().withDataPath("/tmp/member-"+myId).withMembers("member-1", "member-2", "member-3").build())
+				.build();
+	}
+
 	private void startSnapshotRoutine() {
 		new Timer().schedule(new FileRoutineThread(this.logDirectory), 0, 25000);
 	}
@@ -103,19 +181,20 @@ public class ServerThread implements Runnable {
 			Properties properties = FileUtils.getConfigProperties();
 
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
-			Chord.getNode().setNewKey();
+			Chord.getChodNode().setNewKey();
 
-			Chord.getNode().setRange(Chord.getNode().getKey(), fim+1);
-			Chord.getNode().setRange(0, Chord.getNode().getKey());
-			Chord.getFt().setKey(Chord.getNode().getKey());
+			Chord.getChodNode().clearRange();
+			Chord.getChodNode().setRange(Chord.getChodNode().getKey(), fim+1);
+			Chord.getChodNode().setRange(0, Chord.getChodNode().getKey());
+			Chord.getFt().setKey(Chord.getChodNode().getKey());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void entryChord() {
-		Chord.getNode().setNewKey();
-		Chord.getFt().setKey(Chord.getNode().getKey());
+		Chord.getChodNode().setNewKey();
+		Chord.getFt().setKey(Chord.getChodNode().getKey());
 
 		GrpcCommunication.findNode(this.chordIp, this.chordPort);
 	}

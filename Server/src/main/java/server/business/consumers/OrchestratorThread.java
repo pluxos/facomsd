@@ -14,7 +14,7 @@ public class OrchestratorThread implements Runnable {
 		for(;;) {
 			try {
 				GenericCommand g = RowF1.getFifo().take();
-				if (Chord.getNode().getRange().contains(g.getCode().intValue())) {
+				if (Chord.getChodNode().getRange().contains(g.getCode().intValue())) {
 					RowF2.addItem(g);
 					RowF3.addItem(g);
 				} else {

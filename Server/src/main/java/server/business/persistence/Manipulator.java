@@ -1,15 +1,22 @@
 package server.business.persistence;
 
+import io.atomix.core.map.DistributedMap;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Manipulator {
 	
 	private Manipulator() {}
 	
-    private static volatile HashMap<BigInteger, byte[]> db = new HashMap<>();
+    private static volatile DistributedMap<BigInteger, byte[]> db;
+
+	public static void setDb(DistributedMap<BigInteger, byte[]> distributedMap) {
+	    db = distributedMap;
+    }
 
     public static void addValue(BigInteger code, byte[] data) {
         db.put(code, data);
@@ -35,15 +42,15 @@ public class Manipulator {
         return db.containsKey(code);
     }
     
-    public static Map<BigInteger, byte[]> getDb() {
+    public static DistributedMap<BigInteger, byte[]> getDb() {
     	return db;
     }
     
     public static void clearDatabase() {
-    	db = new HashMap<>();
+    	db.clear();
     }
 
-    public static HashMap<BigInteger, byte[]> removeValues(ArrayList<Integer> range) {
+    public static HashMap<BigInteger, byte[]> removeValues(List<Integer> range) {
         HashMap<BigInteger, byte[]> res = new HashMap<>();
 
         range.forEach((key) -> {

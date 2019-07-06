@@ -1,17 +1,20 @@
 package server.commons.chord;
 
+import io.atomix.core.set.DistributedSet;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
-public class Node {
+public class ChodNode {
     private int key;
-    private ArrayList<Integer> range = new ArrayList<Integer>();
+    private List<Integer> range;
     private String ip;
     private int port;
+
+    public void setRange(List<Integer> distributedSet) {
+        range = distributedSet;
+    }
 
     public int getKey() {
         return key;
@@ -35,12 +38,16 @@ public class Node {
         }
     }
 
-    public ArrayList<Integer> getRange() {
+    public List<Integer> getRange() {
         return range;
     }
 
-    public void setRangeWithArray(ArrayList<Integer> arr) {
+    public void setRangeWithArray(List<Integer> arr) {
         this.range = arr;
+    }
+
+    public void clearRange() {
+        range.clear();
     }
 
     public void setRange(int low, int high) {
@@ -49,8 +56,8 @@ public class Node {
         }
     }
 
-    public ArrayList<Integer> updateRange(int low, int high){
-        ArrayList<Integer> res = new ArrayList<>();
+    public List<Integer> updateRange(int low, int high){
+        List<Integer> res = new ArrayList<>();
         for (Integer integer : this.range) {
             if(low < high) {
                 if (integer > low && integer <= high) {

@@ -21,7 +21,7 @@ public class GrpcCommunication {
         try {
             stub.findNode(
                     FindMessage.newBuilder()
-                            .setKey(Chord.getNode().getKey())
+                            .setKey(Chord.getChodNode().getKey())
                             .build(),
                     new FindResponseObserver());
         } finally {
@@ -37,7 +37,7 @@ public class GrpcCommunication {
 
         try {
             stub.getRange(
-                    GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getNode())).build(),
+                    GetRangeRequest.newBuilder().setNode(JsonUtils.serialize(Chord.getChodNode())).build(),
                     new GetRangeObserver(ip, port));
         } finally {
             forked.detach(old);

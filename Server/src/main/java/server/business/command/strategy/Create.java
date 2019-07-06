@@ -8,7 +8,7 @@ import io.grpc.GreeterGrpc;
 import server.business.command.RequestUtils;
 import server.business.command.observer.GenericResponseObserver;
 import server.business.persistence.Manipulator;
-import server.commons.chord.Node;
+import server.commons.chord.ChodNode;
 import server.commons.domain.GenericCommand;
 import server.commons.exceptions.MessageMap;
 import server.commons.utils.DataCodificator;
@@ -51,8 +51,8 @@ public class Create implements CommandStrategy {
 	}
 
 	@Override
-	public void passCommand(GenericCommand genericCommand, Node node) {
-		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(node.getIp(), node.getPort());
+	public void passCommand(GenericCommand genericCommand, ChodNode chodNode) {
+		GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(chodNode.getIp(), chodNode.getPort());
 
 		Context forked = Context.current().fork();
 		Context old = forked.attach();

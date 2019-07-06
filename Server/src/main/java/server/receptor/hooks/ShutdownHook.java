@@ -3,8 +3,8 @@ package server.receptor.hooks;
 import io.grpc.GreeterGrpc;
 import io.grpc.SafeOutputRequest;
 import server.business.persistence.Manipulator;
+import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
-import server.commons.chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.receptor.ServerThread;
@@ -26,17 +26,17 @@ public class ShutdownHook implements Runnable {
         try {
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
 
-            Integer searchKey = Chord.getNode().getKey() + 1;
-            Node responsibleNode = Chord.getFt().catchResponsibleNode(searchKey);
+            Integer searchKey = Chord.getChodNode().getKey() + 1;
+            ChodNode responsibleChodNode = Chord.getFt().catchResponsibleNode(searchKey);
 
-            GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(responsibleNode.getIp(), responsibleNode.getPort());
+            GreeterGrpc.GreeterStub stub = CommunicationManager.initCommunication(responsibleChodNode.getIp(), responsibleChodNode.getPort());
 
-            Map<BigInteger, byte[]> db = Manipulator.removeValues(Chord.getNode().getRange());
+            Map<BigInteger, byte[]> db = Manipulator.removeValues(Chord.getChodNode().getRange());
 
             stub.safeOutput(
                     SafeOutputRequest.newBuilder()
                             .setData(JsonUtils.serialize(db))
-                            .setNode(JsonUtils.serialize(Chord.getNode()))
+                            .setNode(JsonUtils.serialize(Chord.getChodNode()))
                             .build(),
                     new SafeOutputObserver()
             );

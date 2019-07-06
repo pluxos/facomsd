@@ -1,8 +1,12 @@
 package server.commons.chord;
 
+import io.atomix.core.Atomix;
+import io.atomix.protocols.raft.MultiRaftProtocol;
+import io.atomix.protocols.raft.ReadConsistency;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,23 +16,29 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FingerTable {
     private int key;
-    private volatile Map<Integer, Node> ft;
+    private volatile Map<Integer, ChodNode> ft;
     private int m;
     private int range;
 
-    public FingerTable() {
+    public FingerTable(Atomix cluster) {
         try {
             Properties configProperties = FileUtils.getConfigProperties();
             this.range = Integer.parseInt(configProperties.getProperty("chord.range")) + 1;
             this.m = Integer.parseInt(configProperties.getProperty("chord.m"));
 
-            this.ft = Collections.synchronizedMap(new HashMap<>(this.m));
+            this.ft = Collections.synchronizedMap(
+                    cluster.<Integer, ChodNode>mapBuilder("finger-table")
+                            .withProtocol(MultiRaftProtocol.builder()
+                                    .withReadConsistency(ReadConsistency.LINEARIZABLE)
+                                    .build())
+                            .build()
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Map<Integer, Node> getMap() {
+    public Map<Integer, ChodNode> getMap() {
         return ft;
     }
 
@@ -44,11 +54,11 @@ public class FingerTable {
         return this.key;
     }
 
-    public Node catchResponsibleNode(Integer searchKey) {
-        AtomicReference<Node> res = new AtomicReference<>(null);
+    public ChodNode catchResponsibleNode(Integer searchKey) {
+        AtomicReference<ChodNode> res = new AtomicReference<>(null);
 
-        for (Map.Entry<Integer, Node> entry : this.ft.entrySet()) {
-            Node v = entry.getValue();
+        for (Map.Entry<Integer, ChodNode> entry : this.ft.entrySet()) {
+            ChodNode v = entry.getValue();
             if (v.getRange().contains(searchKey)) {
                 res.set(v);
             }
@@ -74,37 +84,37 @@ public class FingerTable {
         return res.get();
     }
 
-    public int updateFT(Node node) {
-        return this.addNode(node);
+    public int updateFT(ChodNode chodNode) {
+        return this.addNode(chodNode);
     }
 
-    public int updateFT(Map<Integer, Node> ft) {
+    public int updateFT(Map<Integer, ChodNode> ft) {
         int flag = -1;
-        int nodeAnt = Chord.getNode().getKey();
+        int nodeAnt = Chord.getChodNode().getKey();
         for (int i = 1; i <= ft.size(); i ++) {
             if(ft.containsKey(i)) {
-                Node node = ft.get(i);
-                if (Chord.getNode().getKey() != node.getKey() && node.getKey() != nodeAnt) {
-                    flag = this.addNode(node);
-                    nodeAnt = node.getKey();
+                ChodNode chodNode = ft.get(i);
+                if (Chord.getChodNode().getKey() != chodNode.getKey() && chodNode.getKey() != nodeAnt) {
+                    flag = this.addNode(chodNode);
+                    nodeAnt = chodNode.getKey();
                 }
             }
         }
         return flag;
     }
 
-    public void removeNode(Node node) {
+    public void removeNode(ChodNode chodNode) {
         for (int i = 1; i <= this.m; i ++) {
             if(this.ft.containsKey(i)) {
-                Node node1 = this.ft.get(i);
-                if (node1.getKey() == node.getKey()) {
+                ChodNode chodNode1 = this.ft.get(i);
+                if (chodNode1.getKey() == chodNode.getKey()) {
                     this.ft.remove(i);
                 }
             }
         }
     }
 
-    private synchronized int addNode(Node node) {
+    private synchronized int addNode(ChodNode chodNode) {
         int flag = -1;
         for (int i = 1; i <= this.m; i++) {
             Integer sucessor = ChordUtils.successor(this.key, i);
@@ -112,16 +122,16 @@ public class FingerTable {
                 sucessor -= this.range;
             }
 
-            if(node.getRange().contains(sucessor)) {
+            if(chodNode.getRange().contains(sucessor)) {
                 if(!this.ft.containsKey(i)){
                     flag = 1;
-                    this.ft.put(i, node);
-                } else if(this.ft.get(i).getKey() != node.getKey() || !this.ft.get(i).getRange().equals(node.getRange())) {
+                    this.ft.put(i, chodNode);
+                } else if(this.ft.get(i).getKey() != chodNode.getKey() || !this.ft.get(i).getRange().equals(chodNode.getRange())) {
                     flag = 1;
-                    this.ft.put(i, node);
+                    this.ft.put(i, chodNode);
                 }
             } else {
-                if (this.ft.get(i) != null && node.getKey() == this.ft.get(i).getKey()) {
+                if (this.ft.get(i) != null && chodNode.getKey() == this.ft.get(i).getKey()) {
                     flag = 1;
                     this.ft.remove(i);
                 }

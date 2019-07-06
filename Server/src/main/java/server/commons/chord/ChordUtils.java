@@ -11,8 +11,8 @@ import server.commons.utils.JsonUtils;
 import server.requester.CommunicationManager;
 
 public class ChordUtils {
-    private static Node flagUpdate;
-    private static Node flagNew;
+    private static ChodNode flagUpdate;
+    private static ChodNode flagNew;
 
     public static Integer successor(Integer keyNode, Integer i) {
         return (int) (keyNode + Math.pow(2, (i - 1)));
@@ -32,7 +32,7 @@ public class ChordUtils {
                             UpdateFTRequest
                                     .newBuilder()
                                     .setFingerT(JsonUtils.serialize(Chord.getFt().getMap()))
-                                    .setNode(JsonUtils.serialize(Chord.getNode()))
+                                    .setNode(JsonUtils.serialize(Chord.getChodNode()))
                                     .build(),
                             new UpdateFTObserver()
                     );
@@ -47,7 +47,7 @@ public class ChordUtils {
         flagUpdate = null;
     }
 
-    public static void notifyNewNode(Node node) {
+    public static void notifyNewNode(ChodNode chodNode) {
         Chord.getFt()
                 .getMap()
                 .forEach((key, value) -> {
@@ -61,8 +61,8 @@ public class ChordUtils {
                             stub.newNode(
                                     NewNodeRequest
                                             .newBuilder()
-                                            .setNode(JsonUtils.serialize(Chord.getNode()))
-                                            .setNewNode(JsonUtils.serialize(node))
+                                            .setNode(JsonUtils.serialize(Chord.getChodNode()))
+                                            .setNewNode(JsonUtils.serialize(chodNode))
                                             .build(),
                                     new NewNodeObserver()
                             );

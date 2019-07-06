@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
+import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.ChordUtils;
-import server.commons.chord.Node;
 import server.commons.domain.GenericCommand;
 import server.commons.domain.Method;
 import server.commons.exceptions.ServerException;
@@ -61,26 +61,26 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void findNode(FindMessage request, StreamObserver<FindResponse> responseObserver) {
-        if( Chord.getNode().getRange().contains(request.getKey()) ) {
+        if( Chord.getChodNode().getRange().contains(request.getKey()) ) {
             responseObserver.onNext(
                     FindResponse.newBuilder()
                             .setResponse(true)
-                            .setPort(Chord.getNode().getPort())
+                            .setPort(Chord.getChodNode().getPort())
                             .build()
             );
 
             responseObserver.onCompleted();
         } else {
-            Node nodeResponsible = Chord.getFt().catchResponsibleNode(request.getKey());
+            ChodNode chodNodeResponsible = Chord.getFt().catchResponsibleNode(request.getKey());
 
-            if(nodeResponsible.getIp() == null)
-                nodeResponsible.setIp("localhost");
+            if(chodNodeResponsible.getIp() == null)
+                chodNodeResponsible.setIp("localhost");
 
             responseObserver.onNext(
                     FindResponse.newBuilder()
                             .setResponse(false)
-                            .setIp(nodeResponsible.getIp())
-                            .setPort(nodeResponsible.getPort())
+                            .setIp(chodNodeResponsible.getIp())
+                            .setPort(chodNodeResponsible.getPort())
                             .build()
             );
             responseObserver.onCompleted();
@@ -89,26 +89,26 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void getRange(GetRangeRequest request, StreamObserver<GetRangeResponse> responseObserver) {
-        Node newNode = null;
+        ChodNode newChodNode = null;
         try {
-            newNode = JsonUtils.deserialize(request.getNode(), Node.class);
+            newChodNode = JsonUtils.deserialize(request.getNode(), ChodNode.class);
         } catch (ServerException e) {
             e.printStackTrace();
         }
 
-        if(newNode.getKey() != Chord.getNode().getKey()) {
-            newNode.setRangeWithArray(Chord.getNode().updateRange(Chord.getNode().getKey(), newNode.getKey()));
-            ChordUtils.notifyNewNode(newNode);
+        if(newChodNode.getKey() != Chord.getChodNode().getKey()) {
+            newChodNode.setRangeWithArray(Chord.getChodNode().updateRange(Chord.getChodNode().getKey(), newChodNode.getKey()));
+            ChordUtils.notifyNewNode(newChodNode);
 
-            HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(Chord.getNode().getRange());
+            HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(Chord.getChodNode().getRange());
 
             try {
                 responseObserver.onNext(
                         GetRangeResponse.newBuilder()
-                                .setNode(JsonUtils.serialize(Chord.getNode()))
+                                .setNode(JsonUtils.serialize(Chord.getChodNode()))
                                 .setFingerT(JsonUtils.serialize(Chord.getFt()))
                                 .setData(JsonUtils.serialize(dbRecovery))
-                                .setRange(JsonUtils.serialize(newNode.getRange()))
+                                .setRange(JsonUtils.serialize(newChodNode.getRange()))
                                 .build()
                 );
             } catch (ServerException e) {
@@ -116,13 +116,13 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             }
             responseObserver.onCompleted();
 
-            Chord.getFt().updateFT(newNode);
+            Chord.getFt().updateFT(newChodNode);
         } else {
             try {
                 responseObserver.onNext(
                         GetRangeResponse
                                 .newBuilder()
-                                .setNode(JsonUtils.serialize(Chord.getNode()))
+                                .setNode(JsonUtils.serialize(Chord.getChodNode()))
                                 .build()
                 );
             } catch (ServerException e) {
@@ -134,12 +134,12 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
     @Override
     public void updateFT(UpdateFTRequest request, StreamObserver<UpdateFTResponse> responseObserver) {
         try {
-            TypeReference<Map<Integer, Node>> typeRef = new TypeReference<Map<Integer, Node>>() {};
-            Map<Integer, Node> ft = JsonUtils.deserialize(request.getFingerT(), typeRef);
+            TypeReference<Map<Integer, ChodNode>> typeRef = new TypeReference<Map<Integer, ChodNode>>() {};
+            Map<Integer, ChodNode> ft = JsonUtils.deserialize(request.getFingerT(), typeRef);
 
             if(!request.getNode().equals("")) {
-                Node newNode = JsonUtils.deserialize(request.getNode(), Node.class);
-                Chord.getFt().updateFT(newNode);
+                ChodNode newChodNode = JsonUtils.deserialize(request.getNode(), ChodNode.class);
+                Chord.getFt().updateFT(newChodNode);
             }
 
 
@@ -162,11 +162,11 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
     @Override
     public void newNode(NewNodeRequest request, StreamObserver<NewNodeResponse> responseObserver) {
         try {
-            Node node = JsonUtils.deserialize(request.getNode(), Node.class);
-            Node newNode = JsonUtils.deserialize(request.getNewNode(), Node.class);
+            ChodNode chodNode = JsonUtils.deserialize(request.getNode(), ChodNode.class);
+            ChodNode newChodNode = JsonUtils.deserialize(request.getNewNode(), ChodNode.class);
 
-            int flagNode = Chord.getFt().updateFT(node);
-            int flagNewNode = Chord.getFt().updateFT(newNode);
+            int flagNode = Chord.getFt().updateFT(chodNode);
+            int flagNewNode = Chord.getFt().updateFT(newChodNode);
 
             if(flagNode != -1 || flagNewNode != -1) {
                 ChordUtils.notifyUpdateFT();
@@ -199,15 +199,15 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
             TypeReference<Map<BigInteger, byte[]>> typeRef = new TypeReference<Map<BigInteger, byte[]>>() {};
             Map<BigInteger, byte[]> db = JsonUtils.deserialize(request.getData(), typeRef);
 
-            Node node = JsonUtils.deserialize(request.getNode(), Node.class);
+            ChodNode chodNode = JsonUtils.deserialize(request.getNode(), ChodNode.class);
 
-            Chord.getNode()
+            Chord.getChodNode()
                     .getRange()
-                    .addAll(node.getRange());
+                    .addAll(chodNode.getRange());
 
             Manipulator.addValues(db);
 
-            Chord.getFt().removeNode(node);
+            Chord.getFt().removeNode(chodNode);
 
             ChordUtils.notifyUpdateFT();
         } catch (ServerException e) {

@@ -4,17 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
+import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
-import server.commons.chord.Node;
 import server.commons.exceptions.ServerException;
 import server.commons.utils.JsonUtils;
 import server.requester.GrpcCommunication;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
@@ -29,19 +27,19 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
     @Override
     public void onNext(GetRangeResponse getRangeResponse) {
         try {
-            Node newNode = JsonUtils.deserialize(getRangeResponse.getNode(), Node.class);
+            ChodNode newChodNode = JsonUtils.deserialize(getRangeResponse.getNode(), ChodNode.class);
 
-            if (newNode.getKey() != Chord.getNode().getKey()) {
+            if (newChodNode.getKey() != Chord.getChodNode().getKey()) {
                 loadDatabase(getRangeResponse);
                 setRange(getRangeResponse);
 
                 FingerTable newFt = JsonUtils.deserialize(getRangeResponse.getFingerT(), FingerTable.class);
 
-                Chord.getFt().updateFT(newNode);
+                Chord.getFt().updateFT(newChodNode);
                 Chord.getFt().updateFT(newFt.getMap());
             } else {
-                Chord.getNode().setNewKey();
-                Chord.getFt().setKey(Chord.getNode().getKey());
+                Chord.getChodNode().setNewKey();
+                Chord.getFt().setKey(Chord.getChodNode().getKey());
 
                 GrpcCommunication.findNode(chordIp, chordPort);
             }
@@ -64,8 +62,8 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
     private void setRange(GetRangeResponse getRangeResponse) {
         try {
-            TypeReference<ArrayList<Integer>> arrayRef = new TypeReference<ArrayList<Integer>>() {};
-            Chord.getNode().setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+            TypeReference<List<Integer>> arrayRef = new TypeReference<List<Integer>>() {};
+            Chord.getChodNode().setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
         } catch (ServerException e) {
             e.printStackTrace();
         }
