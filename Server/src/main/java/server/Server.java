@@ -13,15 +13,16 @@ import io.atomix.copycat.server.CopycatServer;
 import io.atomix.copycat.server.StateMachine;
 import io.atomix.copycat.server.storage.Storage;
 import io.atomix.copycat.server.storage.StorageLevel;
-import server.query.UpdateQuery;
-import server.query.DeleteQuery;
-import server.query.ReadQuery;
-import server.query.CreateQuery;
+import server.command.UpdateCommand;
+import server.command.DeleteCommand;
+import server.command.ReadQuery;
+import server.command.CreateCommand;
 
 class Server extends StateMachine {
 
   public static void main(String[] args) {
     try {
+//      args = new String[] {"0","127.0.0.1","5000","127.0.0.1","5001","127.0.0.1","5002"};
       Properties properties = new Properties();
       FileInputStream propsFS = new FileInputStream("src/main/resources/Constants.prop");
       properties.load(propsFS);
@@ -40,7 +41,7 @@ class Server extends StateMachine {
       }
 
       CopycatServer.Builder builder = CopycatServer.builder(addresses.get(myId))
-          /* ver se procece */ .withStateMachine(Server::new)
+          /* ver se procede */ .withStateMachine(Server::new)
           .withTransport(NettyTransport.builder().withThreads(4).build())
           .withStorage(Storage.builder().withDirectory(new File("logs_" + myId)) // Must be unique
               .withStorageLevel(StorageLevel.DISK).build());
@@ -56,19 +57,71 @@ class Server extends StateMachine {
     }
   }
 
-  public void create(Commit<CreateQuery> commit) {
-    EntryPoint.create(commit);
+
+
+  public void create(Commit<CreateCommand> commit) {
+    try {
+      CreateCommand createCommand = commit.operation();
+      ItemFila newItem = new ItemFila(commit, Controll.CREATE, createCommand.key, createCommand.value);
+      System.out.println(createCommand.key + "   " + createCommand.value);
+      F1.getInstance().put(newItem);
+    } catch (InterruptedException e) {
+      commit.close();
+      e.printStackTrace();
+    }
   }
 
   public void read(Commit<ReadQuery> commit) {
-    EntryPoint.read(commit);
+    try {
+      ReadQuery readQuery = commit.operation();
+      ItemFila newItem = new ItemFila(commit, Controll.READ, readQuery.key);
+
+      F1.getInstance().put(newItem);
+    } catch (InterruptedException e) {
+      commit.close();
+      e.printStackTrace();
+    }
   }
 
-  public void update(Commit<UpdateQuery> commit) {
-    EntryPoint.update(commit);
+  public void delete(Commit<DeleteCommand> commit) {
+    try {
+      DeleteCommand deleteCommand = commit.operation();
+      ItemFila newItem = new ItemFila(commit, Controll.DELETE, deleteCommand.key);
+
+      F1.getInstance().put(newItem);
+    } catch (InterruptedException e) {
+      commit.close();
+      e.printStackTrace();
+    }
   }
 
-  public void delete(Commit<DeleteQuery> commit) {
-    EntryPoint.delete(commit);
+  public void update(Commit<UpdateCommand> commit) {
+    try {
+      UpdateCommand updateCommand = commit.operation();
+      ItemFila newItem = new ItemFila(commit, Controll.UPDATE, updateCommand.key, updateCommand.value);
+
+      F1.getInstance().put(newItem);
+    } catch (InterruptedException e) {
+      commit.close();
+      e.printStackTrace();
+    }
   }
+
+
+
+//  public void create(Commit<CreateCommand> commit) {
+//    EntryPoint.create(commit);
+//  }
+//
+//  public void read(Commit<ReadQuery> commit) {
+//    EntryPoint.read(commit);
+//  }
+//
+//  public void update(Commit<UpdateCommand> commit) {
+//    EntryPoint.update(commit);
+//  }
+//
+//  public void delete(Commit<DeleteCommand> commit) {
+//    EntryPoint.delete(commit);
+//  }
 }

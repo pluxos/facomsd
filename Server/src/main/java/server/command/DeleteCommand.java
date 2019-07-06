@@ -1,14 +1,15 @@
-package server.query;
+package server.command;
 
 import java.math.BigInteger;
 
+import io.atomix.copycat.Command;
 import io.atomix.copycat.Query;
 
-public class DeleteQuery implements Query<Boolean> {
+public class DeleteCommand implements Command<Boolean> {
   private static final long serialVersionUID = 1L;
   public BigInteger key;
 
-  public DeleteQuery(BigInteger key) {
+  public DeleteCommand(BigInteger key) {
     this.key = key;
   }
 }

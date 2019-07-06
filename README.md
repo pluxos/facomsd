@@ -16,6 +16,5 @@ mvn test
 
 Para executar o client, entre na pasta client e execute:
 ```
-mvn clean package
-mvn exec:java -Dexec.mainClass="client.Client" -Dexec.args="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
+mvn clean package exec:java -Dexec.mainClass="client.Client" -Dexec.args="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
 ```

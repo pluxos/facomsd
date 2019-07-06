@@ -3,14 +3,12 @@ package server;
 import java.util.concurrent.BlockingQueue;
 
 import io.atomix.copycat.server.Commit;
-import server.query.CreateQuery;
-import server.query.DeleteQuery;
-import server.query.UpdateQuery;
+import server.command.CreateCommand;
+import server.command.DeleteCommand;
+import server.command.UpdateCommand;
 
 import java.math.BigInteger;
 import java.lang.*;
-import java.io.*;
-import java.net.*;
 
 public class Persistence implements Runnable {
 
@@ -58,7 +56,7 @@ public class Persistence implements Runnable {
         }
     }
 
-    private synchronized boolean create(Commit<CreateQuery> commit, BigInteger key, byte[] value) {
+    private synchronized boolean create(Commit<CreateCommand> commit, BigInteger key, byte[] value) {
         try {
             return database.Insert(key, value);
         } finally {
@@ -66,7 +64,7 @@ public class Persistence implements Runnable {
         }
     }
 
-    private synchronized boolean update(Commit<UpdateQuery> commit, BigInteger key, byte[] value) {
+    private synchronized boolean update(Commit<UpdateCommand> commit, BigInteger key, byte[] value) {
         try {
             return database.Update(key, value);
         } finally {
@@ -74,7 +72,7 @@ public class Persistence implements Runnable {
         }
     }
 
-    private synchronized boolean delete(Commit<DeleteQuery> commit, BigInteger key) {
+    private synchronized boolean delete(Commit<DeleteCommand> commit, BigInteger key) {
         try {
             return database.Delete(key);
         } finally {
@@ -82,7 +80,7 @@ public class Persistence implements Runnable {
         }
     }
 
-    private synchronized byte[] read(Commit<DeleteQuery> commit, BigInteger key) {
+    private synchronized byte[] read(Commit<DeleteCommand> commit, BigInteger key) {
         try {
             return database.Read(key);
         } finally {

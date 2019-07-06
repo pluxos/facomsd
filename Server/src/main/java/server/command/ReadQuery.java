@@ -1,4 +1,4 @@
-package server.query;
+package server.command;
 
 import java.math.BigInteger;
 

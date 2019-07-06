@@ -15,12 +15,11 @@ public class AppTest extends TestCase {
      */
     public AppTest(String testName) {
         super(testName);
-        try {
-            Client.main(new String[] { "2", "127.0.0.1", "5000", "127.0.0.1", "5001", "127.0.0.1", "5002" });
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // try {
+        //     Client.main(new String[] { "2", "127.0.0.1", "5000", "127.0.0.1", "5001", "127.0.0.1", "5002" });
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     /**
