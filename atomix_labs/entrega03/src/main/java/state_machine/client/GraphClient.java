@@ -1,15 +1,11 @@
 package state_machine.client;
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.LinkedList;
 import java.util.List;
 
 import state_machine.command.*;
-import state_machine.type.Edge;
-import state_machine.type.Vertex;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
 import io.atomix.copycat.client.CopycatClient;
@@ -36,10 +32,11 @@ public class GraphClient extends StateMachine {
         CompletableFuture[] futures = new CompletableFuture[]{
             client.submit(new AddVertexCommand(1, 1, "vertice1")),
             client.submit(new AddEdgeCommand(1, 3, "Edge")),
-            client.submit(new AddItemFilaCommand("CREATE", new BigInteger("123"),"pororo".getBytes()))
+            client.submit(new AddItemCommand("CREATE", new BigInteger("123"),"pororo".getBytes()))
         };
 
         CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
+
 
         try {
             System.out.println("1: " + client.submit(new GetVertexQuery(1)).get());

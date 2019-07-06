@@ -4,12 +4,12 @@ import io.atomix.copycat.server.Commit;
 import java.io.Serializable;
 import java.math.*;
 
-public class ItemFila implements Serializable {
+public class Item implements Serializable {
   String controll;
   BigInteger key;
   byte[] value;
 
-  public ItemFila( String controll, BigInteger key, byte[] value) {
+  public Item(String controll, BigInteger key, byte[] value) {
     this.controll = controll;
     this.key = key;
     this.value = value;

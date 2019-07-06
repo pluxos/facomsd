@@ -1,17 +1,16 @@
 package state_machine.command;
 
 import io.atomix.copycat.Command;
-import io.atomix.copycat.server.Commit;
 
 import java.math.BigInteger;
 
-public class AddItemFilaCommand implements Command<Boolean> {
+public class GetItemCommand implements Command<Boolean> {
     String controll;
     BigInteger key;
     byte[] value;
 
 
-    public AddItemFilaCommand(String controll, BigInteger key, byte[] value) {
+    public GetItemCommand(String controll, BigInteger key, byte[] value) {
         this.controll = controll;
         this.key = key;
         this.value = value;
