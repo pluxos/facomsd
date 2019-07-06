@@ -7,17 +7,20 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
+public class AppTest extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
-    {
-        super( testName );
+    public AppTest(String testName) {
+        super(testName);
+        try {
+            Client.main(new String[] { "2", "127.0.0.1", "5000", "127.0.0.1", "5001", "127.0.0.1", "5002" });
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -29,7 +29,6 @@ public class Client {
   int size;
   int spaceFirst;
   int spaceSecond;
-caso preciso fale comigo por aqui
   BigInteger keyBigInteger;
 
   /**
@@ -42,7 +41,7 @@ caso preciso fale comigo por aqui
         .withTransport(NettyTransport.builder().withThreads(4).build());
     CopycatClient client = builder.build();
 
-    for (int i = 0; i < args.length; i += 2) {
+    for (int i = 1; i < args.length; i += 2) {
       Address address = new Address(args[i], Integer.parseInt(args[i + 1]));
       addresses.add(address);
     }

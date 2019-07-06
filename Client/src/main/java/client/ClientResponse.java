@@ -1,5 +1,8 @@
 package client;
 
+import java.net.Socket;
+import java.io.DataInputStream;
+
 public class ClientResponse implements Runnable {
   Socket connection;
 
