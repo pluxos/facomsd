@@ -5,19 +5,28 @@ import io.atomix.copycat.server.Commit;
 
 import java.math.BigInteger;
 
-public class AddItemFilaCommand implements Command<Boolean>
-{
-    Commit commit;
-    Controll controll;
+public class AddItemFilaCommand implements Command<Boolean> {
+    String controll;
     BigInteger key;
     byte[] value;
 
 
-    public AddItemFilaCommand(Commit commit, Controll controll, BigInteger key, byte[] value)
-    {
-        this.commit = commit;
+    public AddItemFilaCommand(String controll, BigInteger key, byte[] value) {
         this.controll = controll;
         this.key = key;
         this.value = value;
+    }
+
+    public String getControll() {
+        return controll;
+    }
+
+    public BigInteger getKey() {
+        return key;
+    }
+
+
+    public byte[] getValue() {
+        return value;
     }
 }

@@ -8,11 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import state_machine.command.AddEdgeCommand;
-import state_machine.command.AddVertexCommand;
-import state_machine.command.GetEdgeQuery;
-import state_machine.command.GetVertexQuery;
+import state_machine.command.*;
 import state_machine.type.Edge;
+import state_machine.type.ItemFila;
 import state_machine.type.Vertex;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
@@ -70,8 +68,21 @@ public class GraphStateMachine extends StateMachine
             Edge e = new Edge(aec.id, aec.id2, aec.desc);
             
             System.out.println("Adding " + e);
-            
+
             return edges.putIfAbsent(p, e) == null;
+        }finally{
+            commit.close();
+        }
+    }
+
+    public Boolean AddItemFila(Commit<AddItemFilaCommand> commit){
+        try{
+            AddItemFilaCommand aec = commit.operation();
+            ItemFila i = new ItemFila(aec.getControll(), aec.getKey(), aec.getValue());
+            System.out.println("Adding " + i);
+
+            // Adicionar ao BD
+            return Boolean.TRUE;
         }finally{
             commit.close();
         }
@@ -81,7 +92,7 @@ public class GraphStateMachine extends StateMachine
         try{
             AddVertexCommand avc = commit.operation();
             Vertex v = new Vertex(avc.id, avc.desc);
-            
+
             System.out.println("Adding " + v);
 
             return vertices.putIfAbsent(avc.id, v) == null;
