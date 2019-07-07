@@ -12,10 +12,6 @@ import java.util.List;
 
 import state_machine.client.*;
 import state_machine.server.*;
-import state_machine.command.AddEdgeCommand;
-import state_machine.command.AddVertexCommand;
-import state_machine.command.GetEdgeQuery;
-import state_machine.command.GetVertexQuery;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
 import io.atomix.copycat.client.CopycatClient;

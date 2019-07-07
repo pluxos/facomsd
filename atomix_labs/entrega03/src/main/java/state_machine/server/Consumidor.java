@@ -1,4 +1,6 @@
-package server;
+package state_machine.server;
+
+import state_machine.type.Item;
 
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
@@ -7,9 +9,9 @@ import java.util.*;
 
 class Consumidor implements Runnable
 {
-    protected BlockingQueue<ItemFila> f1;
-    protected BlockingQueue<ItemFila> f2;
-    protected BlockingQueue<ItemFila> f3;
+    protected BlockingQueue<Item> f1;
+    protected BlockingQueue<Item> f2;
+    protected BlockingQueue<Item> f3;
 
     Consumidor() {
         this.f1 = F1.getInstance();
@@ -20,8 +22,7 @@ class Consumidor implements Runnable
     public void run() {
         try{
             while (true){
-                ItemFila obj = f1.take();
-
+                Item obj = f1.take();
                 f2.put(obj);
                 f3.put(obj);
             }

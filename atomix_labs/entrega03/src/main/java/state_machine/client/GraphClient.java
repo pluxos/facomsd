@@ -30,23 +30,23 @@ public class GraphClient extends StateMachine {
         future.join();
 
         CompletableFuture[] futures = new CompletableFuture[]{
-            client.submit(new AddVertexCommand(1, 1, "vertice1")),
-            client.submit(new AddEdgeCommand(1, 3, "Edge")),
-            client.submit(new AddItemCommand("CREATE", new BigInteger("123"),"pororo".getBytes()))
+            client.submit(new CreateItemCommand(new BigInteger("123"),"pororo"))
         };
 
         CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
 
 
         try {
-            System.out.println("1: " + client.submit(new GetVertexQuery(1)).get());
-            System.out.println("2: " + client.submit(new GetVertexQuery(2)).get());
+            System.out.println("1: " + client.submit(new ReadItemQuery( new BigInteger("123") )).get());
+            client.submit(new UpdateItemCommand(new BigInteger("123"),"adfs")).get();
+            client.submit(new DeleteItemCommand(new BigInteger("123")));
+//            System.out.println("2: " + client.submit(new GetVertexQuery(2)).get());
         } catch (Exception e) {
             System.out.println("Commands may have failed.");
             e.printStackTrace();
         }
 
-        client.submit(new GetEdgeQuery(1, 2)).thenAccept(result -> {
+        client.submit(new ReadItemQuery(new BigInteger("1234"))).thenAccept(result -> {
             System.out.println("1-2: " + result);
         });
     }

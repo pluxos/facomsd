@@ -1,18 +1,20 @@
-package server;
+package state_machine.server;
+
+import state_machine.type.Item;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class F1 {
 
-	private static final  BlockingQueue<ItemFila> f1 = new LinkedBlockingQueue<>();
+	private static final BlockingQueue<Item> f1 = new LinkedBlockingQueue<>();
 	private static boolean free = false;
 
 	protected F1() {
 	}
 
 
-	public static BlockingQueue<ItemFila> getInstance() {
+	public static BlockingQueue<Item> getInstance() {
 		return f1;
 	}
 

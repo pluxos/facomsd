@@ -1,22 +1,24 @@
 package state_machine.command;
 
 import io.atomix.copycat.Command;
-import io.atomix.copycat.server.Commit;
 
 import java.math.BigInteger;
 
-public class AddItemCommand implements Command<Boolean> {
+public class UpdateItemCommand implements Command<Boolean> {
     String controll;
     BigInteger key;
-    byte[] value;
+    String value;
 
 
-    public AddItemCommand(String controll, BigInteger key, byte[] value) {
-        this.controll = controll;
+    public UpdateItemCommand( BigInteger key, String value ) {
+        this.controll = "UPDATE";
         this.key = key;
         this.value = value;
     }
 
+    public String toString() {
+        return (controll + " " + key + " " + value);
+    }
     public String getControll() {
         return controll;
     }
@@ -26,7 +28,7 @@ public class AddItemCommand implements Command<Boolean> {
     }
 
 
-    public byte[] getValue() {
+    public String getValue() {
         return value;
     }
 }

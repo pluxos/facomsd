@@ -1,16 +1,19 @@
-package server;
+package state_machine.server;
 
+import state_machine.type.Item;
+
+import java.math.BigInteger;
 import java.util.concurrent.BlockingQueue;
 import java.io.*;
 import java.net.*;
 
 class EntryPoint implements Runnable{
 
-    protected BlockingQueue<ItemFila> queue;
+    protected BlockingQueue<Item> queue;
     private Socket socketClient;
-    private byte[] controll;
-    private byte[] key;
-    private byte[] value;
+    private String controll;
+    private BigInteger key;
+    private String value;
     boolean everything;
 
     EntryPoint(Socket socketClient) {
@@ -43,8 +46,8 @@ class EntryPoint implements Runnable{
                     type = lengthWrong - (lengthRight*10);
 
                     if( lengthRight > 0 ) {
-                        controll = new byte[lengthRight];
-                        input.readFully(controll, 0, lengthRight);
+//                        controll = new byte[lengthRight];
+//                        input.readFully(controll, 0, lengthRight);
                     }
 
                     if( type == 5 ) break;
@@ -58,8 +61,8 @@ class EntryPoint implements Runnable{
                     type = lengthWrong - (lengthRight*10);
 
                     if( lengthRight > 0 ) {
-                        key = new byte[lengthRight];
-                        input.readFully(key, 0, lengthRight);
+//                        key = new byte[lengthRight];
+//                        input.readFully(key, 0, lengthRight);
                     }
 
                     error = ( type == 2 ) ? error : false;
@@ -71,8 +74,8 @@ class EntryPoint implements Runnable{
                         type = lengthWrong - (lengthRight*10);
 
                         if( lengthRight > 0 ) {
-                            value = new byte[lengthRight];
-                            input.readFully(value, 0, lengthRight);
+//                            value = new byte[lengthRight];
+//                            input.readFully(value, 0, lengthRight);
                         }
 
                         error = ( type == 3 ) ? error : false;
@@ -84,7 +87,7 @@ class EntryPoint implements Runnable{
                     }
 
                     //COLOCA NA FILA AKI, POR ENQUANTO SO VOU PRINTAR
-                    ItemFila justProduced = createItemFila();
+                    Item justProduced = createItem();
                     queue.put(justProduced);
 
                     // String x = new String(controll);
@@ -113,15 +116,15 @@ class EntryPoint implements Runnable{
         }
     }
 
-    ItemFila createItemFila(){
+    Item createItem(){
         // try{
         //   Thread.sleep(100); // simulate time passing during read
         // }
         // catch (InterruptedException ex){
         //    ex.printStackTrace();
         // }
-
-        ItemFila item = ( everything ) ? new ItemFila(socketClient, controll, key, value) : new ItemFila(socketClient, controll, key);
-        return item;
+        return null;
+//        Item item = ( everything ) ? new Item(socketClient, controll, key, value) : new Item(socketClient, controll, key);
+//        return item;
     }
 }

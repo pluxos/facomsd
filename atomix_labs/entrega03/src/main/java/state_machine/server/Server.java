@@ -1,4 +1,4 @@
-package server;
+package state_machine.server;
 
 
 import java.io.FileInputStream;
@@ -13,7 +13,7 @@ class Server {
        Properties properties = new Properties();
        FileInputStream propsFS = new FileInputStream("Server/src/main/resources/Constants.prop");
        properties.load(propsFS);
-       Integer port = Integer.parseInt(properties.getProperty("port"));
+       int port = Integer.parseInt(properties.getProperty("port"));
 
       ServerSocket server = new ServerSocket(port);
       System.out.println("Listening on port " + port);
@@ -23,8 +23,8 @@ class Server {
       new Thread(new Consumidor()).start();
 
       while( true ) {
-        Socket client = server.accept();
-        new Thread( new EntryPoint( client ) ).start();
+              Socket client = server.accept();
+              new Thread(new EntryPoint(client)).start();
       }
     }
     catch(Exception e) {

@@ -1,70 +1,48 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>client</groupId>
-    <artifactId>Client</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>client</groupId>
+  <artifactId>Client</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>libs/</classpathPrefix>
+              <mainClass>
                 client.Client
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                    <outputDirectory>../output</outputDirectory>
-                </configuration>
+              </mainClass>
+            </manifest>
+          </archive>
+          <outputDirectory>../output</outputDirectory>
+        </configuration>
 
-            </plugin>
-        </plugins>
-    </build>
+      </plugin>
+    </plugins>
+  </build>
 
-    <name>Client</name>
-    <url>http://maven.apache.org</url>
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.atomix.copycat</groupId>
-            <artifactId>copycat-server</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.atomix.copycat</groupId>
-            <artifactId>copycat-client</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.atomix.catalyst</groupId>
-            <artifactId>catalyst-netty</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+  <name>Client</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/io.grpc/grpc-all -->
+    <dependency>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-all</artifactId>
+        <version>1.20.0</version>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 </project>

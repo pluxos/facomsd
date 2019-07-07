@@ -1,44 +1,47 @@
 package server;
 
-import io.atomix.copycat.server.Commit;
-
+import java.net.Socket;
 import java.math.*;
 
 public class ItemFila {
-  Commit commit; // o objeto que "vai responder" para o cliente
-  Controll controll;
-  BigInteger key;
+  Socket socket;
+  byte[] controll;
+  byte[] key;
   byte[] value;
 
-  public ItemFila(Commit commit, Controll controll, BigInteger key, byte[] value) {
-    this.commit = commit;
+  public ItemFila(Socket socket, byte[] controll, byte[] key, byte[] value) {
+    this.socket = socket;
     this.controll = controll;
     this.key = key;
     this.value = value;
   }
 
-  public ItemFila(Commit commit, Controll controll, BigInteger key) {
-    this.commit = commit;
+  public ItemFila(Socket socket, byte[] controll, byte[] key) {
+    this.socket = socket;
     this.controll = controll;
     this.key = key;
   }
 
   public void print() {
+    String x = new String(controll);
+    BigInteger y = new BigInteger(key);
     if (value != null) {
       String z = new String(value);
-      System.out.println(controll + " " + key + " " + z);
+      System.out.println(x + " " + y + " " + z);
     } else {
-      System.out.println(controll + " " + key);
+      System.out.println(x + " " + y);
     }
   }
 
   @Override
   public String toString() {
+    String x = new String(controll);
+    BigInteger y = new BigInteger(key);
     if (value != null) {
       String z = new String(value);
-      return (controll + " " + key + " " + z);
+      return (x + " " + y + " " + z);
     } else {
-      return (controll + " " + key);
+      return (x + " " + y);
     }
 
   }

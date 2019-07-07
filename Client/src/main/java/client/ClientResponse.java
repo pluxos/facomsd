@@ -1,7 +1,9 @@
 package client;
-
-import java.net.Socket;
-import java.io.DataInputStream;
+import java.io.*;
+import java.net.*;
+import javax.swing.JOptionPane;
+import java.util.*;
+import java.lang.*;
 
 public class ClientResponse implements Runnable {
   Socket connection;
