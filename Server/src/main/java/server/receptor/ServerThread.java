@@ -7,6 +7,7 @@ import io.atomix.core.AtomixBuilder;
 import io.atomix.core.profile.ConsensusProfile;
 import io.atomix.protocols.raft.MultiRaftProtocol;
 import io.atomix.protocols.raft.ReadConsistency;
+import io.atomix.protocols.raft.session.CommunicationStrategy;
 import io.atomix.utils.net.Address;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -61,12 +62,12 @@ public class ServerThread implements Runnable {
 		Chord.getChodNode().setIp(this.addresses.get(myId).host());
 		Chord.getChodNode().setPort(Integer.parseInt(args[1]));
 
-//		if(args.length == 5) {
-//			this.chordIp = args[3];
-//			this.chordPort = Integer.parseInt(args[4]);
-//			GrpcCommunication.ip = args[3];
-//			GrpcCommunication.port = this.chordPort;
-//		}
+		if(args.length == 10) {
+			this.chordIp = args[8];
+			this.chordPort = Integer.parseInt(args[9]);
+			GrpcCommunication.ip = args[8];
+			GrpcCommunication.port = this.chordPort;
+		}
 
 		Counter.startCounter(args[0]);
 	}
@@ -101,26 +102,37 @@ public class ServerThread implements Runnable {
 			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
 
 			Chord.setFt(new FingerTable(this.cluster));
-			Chord.getChodNode().setRange(
-					this.cluster.<Integer>listBuilder("chordRange")
-						.withProtocol(
-								MultiRaftProtocol.builder()
-									.withReadConsistency(ReadConsistency.LINEARIZABLE)
-									.build()
-						)
-						.build()
-			);
 
 			if(this.myId == 0) {
-				System.out.println("First Server");
-				firstServer();
-			}
+				Chord.getChodNode().setRange(
+						this.cluster.<Integer>listBuilder("chordRange")
+								.withProtocol(
+										MultiRaftProtocol.builder()
+												.withReadConsistency(ReadConsistency.LINEARIZABLE)
+												.build()
+								)
+								.build()
+				);
+
+				if( this.chordIp != null){
+					this.entryChord();
+				} else {
+					firstServer();
+				}
+
 				Manipulator.setDb(this.cluster.<BigInteger, byte[]>mapBuilder("dataBase")
 						.withCacheEnabled()
 						.withProtocol(MultiRaftProtocol.builder()
 								.withReadConsistency(ReadConsistency.LINEARIZABLE)
+								.withCommunicationStrategy(CommunicationStrategy.LEADER)
 								.build())
 						.build());
+
+				Manipulator.getDb().addStateChangeListener(event -> System.out.println(event.toString()));
+			}else{
+				Chord.getChodNode().setRange(this.cluster.getList("chordRange"));
+				Manipulator.setDb(this.cluster.getMap("dataBase"));
+			}
 
 			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new OrchestratorThread());
@@ -168,7 +180,11 @@ public class ServerThread implements Runnable {
 										.build())
 						.build())
 				.withMulticastEnabled()
-				.withProfiles(ConsensusProfile.builder().withDataPath("/tmp/member-"+myId).withMembers("member-1", "member-2", "member-3").build())
+				.withProfiles(
+						ConsensusProfile.builder()
+								.withDataPath("/tmp/member-"+myId)
+								.withMembers("member-1", "member-2", "member-3")
+								.build())
 				.build();
 	}
 
