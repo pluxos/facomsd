@@ -21,4 +21,7 @@ public class ReadItemQuery implements Query<byte[]> {
         return key;
     }
 
+    public String getControll() {
+        return controll;
+    }
 }

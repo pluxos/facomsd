@@ -25,6 +25,7 @@ public class Logger  implements Runnable
         try{
             getListOfCommands();
             while (true) {
+                System.out.println("alo");
                 Item obj = f2.take();
                 writeCommand(obj);
             }
@@ -50,6 +51,8 @@ public class Logger  implements Runnable
     }
 
     private void getListOfCommands(){
+        if(!Files.exists(path))
+            return;
         List<String> contents;
         Item item;
         try{

@@ -14,8 +14,9 @@ public class Kv {
   }
 
 
-  public Boolean Insert (BigInteger key, String value){
+  public boolean Insert (BigInteger key, String value){
     if (this.Database.containsKey(key)){
+      System.out.println("Chave existente");
       return false;
     } else {
       this.Database.put(key, value);
@@ -30,7 +31,7 @@ public class Kv {
     else return null;
   }
 
-  public Boolean Update (BigInteger key, String value) {
+  public boolean Update (BigInteger key, String value) {
     if (this.Database.containsKey(key)) {
       this.Database.put(key, value);
       return true;
@@ -39,7 +40,7 @@ public class Kv {
     }
   }
 
-  public Boolean Delete (BigInteger key) {
+  public boolean Delete (BigInteger key) {
     if (this.Database.containsKey(key)) {
       this.Database.remove(key);
       return true;

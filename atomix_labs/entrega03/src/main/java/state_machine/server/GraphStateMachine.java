@@ -15,49 +15,67 @@ import io.atomix.copycat.server.storage.Storage;
 import io.atomix.copycat.server.storage.StorageLevel;
 
 public class GraphStateMachine extends StateMachine {
+    private final Kv database = new Kv();
     @SuppressWarnings("unused")
-    public Boolean AddItemFila(Commit<CreateItemCommand> commit) {
+    public String AddItemFila(Commit<CreateItemCommand> commit) {
+        CreateItemCommand aec = null;
         try {
-            CreateItemCommand aec = commit.operation();
-            Item i = new Item(aec.getControll(), aec.getKey(), aec.getValue());
-            System.out.println(aec.toString());
-            return Boolean.TRUE;
+            aec =  commit.operation();
+            F1.getInstance().put(new Item(aec.getControll(),aec.getKey(),aec.getValue()));
+            System.out.println(commit.operation().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             commit.close();
         }
+        return database.Insert( aec.getKey(), aec.getValue() )?  "CREATE SUCESS!!" : "CREATE FAIL!!";
     }
     @SuppressWarnings("unused")
-    public Boolean UpdateItemFila(Commit<UpdateItemCommand> commit) {
+    public String UpdateItemFila(Commit<UpdateItemCommand> commit) {
+            UpdateItemCommand aec =  null;
         try {
-            UpdateItemCommand aec = commit.operation();
-            Item i = new Item(aec.getControll(), aec.getKey(), aec.getValue());
-            System.out.println(aec.toString());
-            return Boolean.TRUE;
+            aec =  commit.operation();
+            F1.getInstance().put(new Item(aec.getControll(),aec.getKey(),aec.getValue()));
+            System.out.println(commit.operation().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             commit.close();
         }
+            return database.Update( aec.getKey(), aec.getValue() ) ?  "UPDATE SUCESS!!" : "UPDATE FAIL!!";
     }
     @SuppressWarnings("unused")
-    public Boolean DeleteItemFila(Commit<DeleteItemCommand> commit) {
+    public String DeleteItemFila(Commit<DeleteItemCommand> commit) {
+        DeleteItemCommand aec = null;
         try {
-            DeleteItemCommand aec = commit.operation();
-            Item i = new Item(aec.getControll(), aec.getKey(), null);
-            System.out.println(aec.toString());
-            return Boolean.TRUE;
+            aec =  commit.operation();
+            F1.getInstance().put(new Item(aec.getControll(),aec.getKey(), null ));
+            System.out.println(commit.operation().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             commit.close();
         }
+        return  database.Delete( aec.getKey() ) ?  "DELETE SUCESS!!" : "DELETE FAIL!!";
     }
 
     @SuppressWarnings("unused")
     public String GetItemFila(Commit<ReadItemQuery> commit) {
+            ReadItemQuery aec = null;
+            String s= new String();
         try {
-            ReadItemQuery aec = commit.operation();
-            System.out.println(aec.toString());
-            return "DEU BOM";
+            aec =  commit.operation();
+            F1.getInstance().put(new Item(aec.getControll(),aec.getKey(), null ));
+            System.out.println(commit.operation().toString());
+            s = database.Read( aec.getKey() );
+            if ( s == null )
+                return "READ FAIL!!";
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             commit.close();
         }
+        return  s;
     }
 
     public static void main(String[] args) {
@@ -78,8 +96,9 @@ public class GraphStateMachine extends StateMachine {
                         .withDirectory(new File("logs_" + myId)) //Must be unique
                         .withStorageLevel(StorageLevel.DISK)
                         .build());
+        new Thread(new Logger()).start();
         CopycatServer server = builder.build();
-
+        new Thread(new Consumidor()).start();
         if (myId == 0) {
             server.bootstrap().join();
         } else {

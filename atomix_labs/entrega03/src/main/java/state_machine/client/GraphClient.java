@@ -29,18 +29,18 @@ public class GraphClient extends StateMachine {
         CompletableFuture<CopycatClient> future = client.connect(addresses);
         future.join();
 
-        CompletableFuture[] futures = new CompletableFuture[]{
-            client.submit(new CreateItemCommand(new BigInteger("123"),"pororo"))
-        };
+//        CompletableFuture[] futures = new CompletableFuture[]{
+//            client.submit(new CreateItemCommand(new BigInteger("123"),"pororo"))
+//        };
 
-        CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
+//        CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
 
 
         try {
-            System.out.println("1: " + client.submit(new ReadItemQuery( new BigInteger("123") )).get());
-            client.submit(new UpdateItemCommand(new BigInteger("123"),"adfs")).get();
-            client.submit(new DeleteItemCommand(new BigInteger("123")));
-//            System.out.println("2: " + client.submit(new GetVertexQuery(2)).get());
+            System.out.println("1: " + client.submit(new CreateItemCommand( new BigInteger("123") , "pororo")).get());
+            System.out.println("2: " + client.submit(new ReadItemQuery( new BigInteger("123") )).get());
+            System.out.println("3: " + client.submit(new UpdateItemCommand( new BigInteger("123") , "po")).get());
+            System.out.println("4: " + client.submit(new DeleteItemCommand( new BigInteger("123") )).get());
         } catch (Exception e) {
             System.out.println("Commands may have failed.");
             e.printStackTrace();
