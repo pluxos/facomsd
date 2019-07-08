@@ -1,0 +1,3 @@
+menberID=1 memberHost1=localhost memberPort1=5001 memberSockt1=5051
+menberID=2 memberHost2=localhost memberPort2=5012 memberSockt2=5052
+menberID=3 memberHost3=localhost memberPort3=5023 memberSockt3=5053
