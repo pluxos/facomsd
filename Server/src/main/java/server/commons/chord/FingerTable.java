@@ -6,9 +6,7 @@ import io.atomix.protocols.raft.ReadConsistency;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,9 +14,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FingerTable {
     private int key;
-    private volatile Map<Integer, ChodNode> ft;
+    private volatile Map<Integer, ChodNode> map;
     private int m;
     private int range;
+
+    public FingerTable() {}
 
     public FingerTable(Atomix cluster) {
         try {
@@ -26,7 +26,7 @@ public class FingerTable {
             this.range = Integer.parseInt(configProperties.getProperty("chord.range")) + 1;
             this.m = Integer.parseInt(configProperties.getProperty("chord.m"));
 
-            this.ft = Collections.synchronizedMap(
+            this.map = Collections.synchronizedMap(
                     cluster.<Integer, ChodNode>mapBuilder("finger-table")
                             .withProtocol(MultiRaftProtocol.builder()
                                     .withReadConsistency(ReadConsistency.LINEARIZABLE)
@@ -39,7 +39,7 @@ public class FingerTable {
     }
 
     public Map<Integer, ChodNode> getMap() {
-        return ft;
+        return map;
     }
 
     public int getRange() {
@@ -57,7 +57,7 @@ public class FingerTable {
     public ChodNode catchResponsibleNode(Integer searchKey) {
         AtomicReference<ChodNode> res = new AtomicReference<>(null);
 
-        for (Map.Entry<Integer, ChodNode> entry : this.ft.entrySet()) {
+        for (Map.Entry<Integer, ChodNode> entry : this.map.entrySet()) {
             ChodNode v = entry.getValue();
             if (v.getRange().contains(searchKey)) {
                 res.set(v);
@@ -65,7 +65,7 @@ public class FingerTable {
         }
 
         if(res.get() == null) {
-            this.ft.forEach((key, value) -> {
+            this.map.forEach((key, value) -> {
                 if(value.getKey() <= searchKey)
                     res.set(value);
             });
@@ -73,12 +73,12 @@ public class FingerTable {
 
         if(res.get() == null) {
             AtomicInteger flag = new AtomicInteger(32);
-            this.ft.forEach((key, value) -> {
+            this.map.forEach((key, value) -> {
                 if(searchKey < value.getKey() && value.getKey() < flag.get())
                     flag.set(key);
             });
 
-            res.set(this.ft.get(flag.get()));
+            res.set(this.map.get(flag.get()));
         }
 
         return res.get();
@@ -105,10 +105,10 @@ public class FingerTable {
 
     public void removeNode(ChodNode chodNode) {
         for (int i = 1; i <= this.m; i ++) {
-            if(this.ft.containsKey(i)) {
-                ChodNode chodNode1 = this.ft.get(i);
+            if(this.map.containsKey(i)) {
+                ChodNode chodNode1 = this.map.get(i);
                 if (chodNode1.getKey() == chodNode.getKey()) {
-                    this.ft.remove(i);
+                    this.map.remove(i);
                 }
             }
         }
@@ -123,17 +123,17 @@ public class FingerTable {
             }
 
             if(chodNode.getRange().contains(sucessor)) {
-                if(!this.ft.containsKey(i)){
+                if(!this.map.containsKey(i)){
                     flag = 1;
-                    this.ft.put(i, chodNode);
-                } else if(this.ft.get(i).getKey() != chodNode.getKey() || !this.ft.get(i).getRange().equals(chodNode.getRange())) {
+                    this.map.put(i, chodNode);
+                } else if(this.map.get(i).getKey() != chodNode.getKey() || !this.map.get(i).getRange().equals(chodNode.getRange())) {
                     flag = 1;
-                    this.ft.put(i, chodNode);
+                    this.map.put(i, chodNode);
                 }
             } else {
-                if (this.ft.get(i) != null && chodNode.getKey() == this.ft.get(i).getKey()) {
+                if (this.map.get(i) != null && chodNode.getKey() == this.map.get(i).getKey()) {
                     flag = 1;
-                    this.ft.remove(i);
+                    this.map.remove(i);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package server.commons.chord;
 
-import io.atomix.core.value.DistributedValue;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
@@ -10,25 +9,21 @@ import java.util.Properties;
 import java.util.Random;
 
 public class ChodNode {
-    private DistributedValue<Integer> key;
+    private Integer key;
     private List<Integer> range;
     private String ip;
     private int port;
-
-    public void setDistibutedValue(DistributedValue<Integer> key) {
-        this.key = key;
-    }
 
     public void setRange(List<Integer> distributedSet) {
         range = distributedSet;
     }
 
     public int getKey() {
-        return key.get();
+        return key;
     }
 
     public void setKey(int key) {
-        this.key.set(key);
+        this.key = key;
     }
 
     public void setNewKey() {
