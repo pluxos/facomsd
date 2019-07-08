@@ -44,12 +44,11 @@ mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="3"
 - Com os servers onlines execute
 
 
-mvn exec:java -Dexec.mainClass="br.ufu.sd.main.Client" -Dexec.args="1"
+mvn exec:java -Dexec.mainClass="br.ufu.sd.main.Client" -Dexec.args="localhost 5051"
 
 
-- Apenas é necessário um argumento que representa o server que o cliente vai se conectar
-- No caso um cliente se conectando ao server de id 1, para se conectar aos outros basta mudar ( 2 ou 3)
-- Como padrão os ids dos servers são 1, 2 e 3
+- Ip e porta em que se deseja conectar o cliente como argumentos
+- Veirifar o arquivo "cluster-config.txt" para saber as portas do socket dos servidores
 
 # Testes
 
