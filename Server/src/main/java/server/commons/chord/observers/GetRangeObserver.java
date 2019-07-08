@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.GetRangeResponse;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
+import server.commons.atomix.ClusterAtomix;
 import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
@@ -39,9 +40,10 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
 
                 Chord.getFt().updateFT(newChodNode);
                 Chord.getFt().updateFT(newFt.getMap());
+
             } else {
                 Chord.getChodNode().setNewKey();
-                Chord.getFt().setKey(Chord.getChodNode().getKey());
+                ClusterAtomix.setKey(Chord.getChodNode().getKey());
 
                 GrpcCommunication.findNode(chordIp, chordPort);
             }

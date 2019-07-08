@@ -4,10 +4,7 @@ import server.commons.atomix.ClusterAtomix;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 public class ChodNode {
     private Integer key;
@@ -47,7 +44,6 @@ public class ChodNode {
 
     public void setRangeWithArray(List<Integer> arr) {
         this.range = arr;
-        ClusterAtomix.getRange().addAll(this.range);
     }
 
     public void clearRange() {
@@ -75,6 +71,7 @@ public class ChodNode {
             }
         }
         this.range.removeAll(res);
+        System.out.println(Arrays.toString(this.range.toArray()));
 
         return res;
     }

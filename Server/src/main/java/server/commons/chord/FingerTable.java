@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FingerTable {
-    private int key;
     private volatile Map<Integer, ChodNode> map;
     private int m;
     private int range;
@@ -34,15 +33,6 @@ public class FingerTable {
 
     public int getRange() {
         return this.range;
-    }
-
-    public void setKey(int key) {
-        this.key = key;
-        ClusterAtomix.setKey(key);
-    }
-
-    public Integer getKey() {
-        return this.key;
     }
 
     public ChodNode catchResponsibleNode(Integer searchKey) {
@@ -109,7 +99,7 @@ public class FingerTable {
     private synchronized int addNode(ChodNode chodNode) {
         int flag = -1;
         for (int i = 1; i <= this.m; i++) {
-            Integer sucessor = ChordUtils.successor(this.key, i);
+            Integer sucessor = ChordUtils.successor(Chord.getChodNode().getKey(), i);
             if(sucessor > this.range) {
                 sucessor -= this.range;
             }

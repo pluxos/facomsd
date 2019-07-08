@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import server.business.persistence.Manipulator;
+import server.commons.atomix.ClusterAtomix;
 import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.ChordUtils;
@@ -15,6 +16,7 @@ import server.commons.utils.JsonUtils;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
@@ -97,7 +99,8 @@ public class GrpcImpl extends GreeterGrpc.GreeterImplBase {
         }
 
         if(newChodNode.getKey() != Chord.getChodNode().getKey()) {
-            newChodNode.setRangeWithArray(Chord.getChodNode().updateRange(Chord.getChodNode().getKey(), newChodNode.getKey()));
+            List<Integer> newRange = Chord.getChodNode().updateRange(Chord.getChodNode().getKey(), newChodNode.getKey());
+            newChodNode.setRangeWithArray(newRange);
             ChordUtils.notifyNewNode(newChodNode);
 
             HashMap<BigInteger, byte[]> dbRecovery = Manipulator.removeValues(Chord.getChodNode().getRange());

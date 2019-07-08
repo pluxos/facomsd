@@ -16,6 +16,7 @@ import server.commons.chord.ChodNode;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 public class ClusterAtomix {
     private static Atomix cluster;
@@ -32,6 +33,11 @@ public class ClusterAtomix {
 
     public static Atomix getCluster() {
         return cluster;
+    }
+
+    public static void setFt(Map<Integer, ChodNode> newFt) {
+        ft.clear();
+        ft.putAll(newFt);
     }
 
     public static void setKey(Integer val) {

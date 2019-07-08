@@ -3,6 +3,7 @@ package server.receptor;
 import io.atomix.utils.net.Address;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.apache.commons.math3.ml.clustering.Cluster;
 import server.business.consumers.CommandExecutorThread;
 import server.business.consumers.LogPersistentThread;
 import server.business.consumers.OrchestratorThread;
@@ -156,7 +157,6 @@ public class ServerThread implements Runnable {
 			Chord.getChodNode().clearRange();
 			Chord.getChodNode().setRange(Chord.getChodNode().getKey(), fim+1);
 			Chord.getChodNode().setRange(0, Chord.getChodNode().getKey());
-			Chord.getFt().setKey(Chord.getChodNode().getKey());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -165,7 +165,6 @@ public class ServerThread implements Runnable {
 	private void entryChord() {
 		Chord.getChodNode().setNewKey();
 		ClusterAtomix.setKey(Chord.getChodNode().getKey());
-		Chord.getFt().setKey(Chord.getChodNode().getKey());
 
 		GrpcCommunication.findNode(this.chordIp, this.chordPort);
 	}

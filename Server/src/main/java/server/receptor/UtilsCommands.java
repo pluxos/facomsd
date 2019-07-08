@@ -30,7 +30,7 @@ public class UtilsCommands implements Runnable {
                             .getMap()
                             .forEach(
                                     (pos, value) -> {
-                                        int suc = ChordUtils.successor(Chord.getFt().getKey(), pos);
+                                        int suc = ChordUtils.successor(Chord.getChodNode().getKey(), pos);
                                         if(suc > Chord.getFt().getRange())
                                             suc -= Chord.getFt().getRange();
 
