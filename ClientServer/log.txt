@@ -1,0 +1,10 @@
+Insert Teste01
+Insert Teste02
+Insert Teste03
+Insert Teste04
+Insert Teste 04
+Insert Teste04
+Delete 4
+Delete 5
+Delete 3
+Insert Teste05
