@@ -2,47 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce388090-9c4f-468f-b5aa-dd4021b2d5c3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Client/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/main/java/client/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/main/java/client/ClientResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/test/java/client/AppTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/Consumidor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/EntryPoint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/F1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/F2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/F3.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/ItemFila.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/Kv.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/Logger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/Persistence.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/java/server/log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server/src/main/resources/Constants.prop" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/client/GraphClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/command/CreateItemCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/command/DeleteItemCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/command/ReadItemQuery.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/command/UpdateItemCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/Consumidor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/F1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/F2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/F3.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/GraphStateMachine.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/Kv.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/server/Logger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/main/java/state_machine/type/Item.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../atomix_labs/entrega03/src/test/java/state_machine/AppTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log" beforeDir="false" afterPath="$PROJECT_DIR$/log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/state_machine/client/GraphClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/state_machine/client/GraphClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/state_machine/server/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/state_machine/server/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/state_machine/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/state_machine/AppTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -52,8 +15,44 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/state_machine/client/GraphClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="93" column="75" selection-start-line="93" selection-start-column="75" selection-end-line="93" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>,</find>
+      <find>alo</find>
+      <find>quantity</find>
+      <find>size</find>
+      <find>key</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/test/java/state_machine/AppTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/state_machine/server/Logger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/state_machine/server/Kv.java" />
+        <option value="$PROJECT_DIR$/src/main/java/state_machine/client/GraphClient.java" />
+      </list>
+    </option>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -62,12 +61,106 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="27" />
     <option name="width" value="683" />
     <option name="height" value="555" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="state_machine" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="state_machine" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="state_machine" type="462c0819:PsiDirectoryNode" />
+              <item name="command" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="state_machine" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="replication" type="b2602c69:ProjectViewProjectNode" />
+              <item name="entrega03" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="state_machine" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -85,6 +178,46 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Application.Client">
+    <configuration name="Client" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="state_machine.client.GraphClient" />
+      <module name="entrega03" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server 0" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="state_machine.server.GraphStateMachine" />
+      <module name="entrega03" />
+      <option name="PROGRAM_PARAMETERS" value="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server 1" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="state_machine.server.GraphStateMachine" />
+      <module name="entrega03" />
+      <option name="PROGRAM_PARAMETERS" value="1 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server 2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="state_machine.server.GraphStateMachine" />
+      <module name="entrega03" />
+      <option name="PROGRAM_PARAMETERS" value="2 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Client" />
+      <item itemvalue="Application.Server 0" />
+      <item itemvalue="Application.Server 1" />
+      <item itemvalue="Application.Server 2" />
+    </list>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="ce388090-9c4f-468f-b5aa-dd4021b2d5c3" name="Default Changelist" comment="" />
@@ -101,14 +234,15 @@
       <window_info id="Designer" />
       <window_info id="UI Designer" />
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
+      <window_info active="true" anchor="bottom" id="Version Control" visible="true" weight="0.32901135" />
       <window_info anchor="bottom" id="Terminal" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" weight="0.32901135" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32901135" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -125,5 +259,42 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/../.." />
     </ignored-roots>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/test/java/state_machine/AppTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="47" column="8" selection-start-line="47" selection-start-column="8" selection-end-line="47" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/state_machine/server/GraphStateMachine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/state_machine/server/Logger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/state_machine/server/Kv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/state_machine/client/GraphClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="93" column="75" selection-start-line="93" selection-start-column="75" selection-end-line="93" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
