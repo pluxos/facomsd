@@ -25,7 +25,6 @@ public class ChodNode {
 
     public void setKey(int key) {
         this.key = key;
-        ClusterAtomix.getKey().set(this.key);
     }
 
     public void setNewKey() {

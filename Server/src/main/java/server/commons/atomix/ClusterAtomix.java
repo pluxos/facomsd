@@ -34,8 +34,15 @@ public class ClusterAtomix {
         return cluster;
     }
 
-    public static DistributedValue<Integer> getKey() {
-        return key;
+    public static void setKey(Integer val) {
+        key.set(val);
+    }
+
+    public static Integer getKey() {
+        if(key != null)
+            return key.get();
+        else
+            return -1;
     }
 
     public static DistributedList<Integer> getRange() {
@@ -51,7 +58,7 @@ public class ClusterAtomix {
     }
 
     public static void initVars() {
-        range = cluster.<Integer>listBuilder("chordRange")
+        range = cluster.<Integer>listBuilder("rangeChord")
                 .withProtocol(
                         MultiRaftProtocol.builder()
                                 .withReadConsistency(ReadConsistency.LINEARIZABLE)
@@ -59,14 +66,13 @@ public class ClusterAtomix {
                 )
                 .build();
 
-        key = cluster.<Integer>valueBuilder("ChordKey")
-                .withReadOnly(true)
+        key = cluster.<Integer>valueBuilder("keyChord")
                 .withProtocol(MultiRaftProtocol.builder()
                         .withReadConsistency(ReadConsistency.LINEARIZABLE)
                         .build())
                 .build();
 
-        db = cluster.<BigInteger, byte[]>mapBuilder("dataBase")
+        db = cluster.<BigInteger, byte[]>mapBuilder("db")
                 .withCacheEnabled()
                 .withProtocol(MultiRaftProtocol.builder()
                         .withReadConsistency(ReadConsistency.LINEARIZABLE)
@@ -74,7 +80,7 @@ public class ClusterAtomix {
                         .build())
                 .build();
 
-        ft = cluster.<Integer, ChodNode>mapBuilder("finger-table")
+        ft = cluster.<Integer, ChodNode>mapBuilder("fingerTable")
                 .withProtocol(MultiRaftProtocol.builder()
                         .withReadConsistency(ReadConsistency.LINEARIZABLE)
                         .build())
@@ -83,6 +89,7 @@ public class ClusterAtomix {
 
     public static void clearVars() {
         range.clear();
+        key.set(-1);
         db.clear();
         ft.clear();
     }

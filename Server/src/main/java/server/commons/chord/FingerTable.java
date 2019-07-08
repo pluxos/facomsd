@@ -38,7 +38,7 @@ public class FingerTable {
 
     public void setKey(int key) {
         this.key = key;
-        ClusterAtomix.getKey().set(key);
+        ClusterAtomix.setKey(key);
     }
 
     public Integer getKey() {

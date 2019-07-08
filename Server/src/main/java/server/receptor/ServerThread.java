@@ -84,6 +84,7 @@ public class ServerThread implements Runnable {
 
 		try {
 			ClusterAtomix.setCluster(this.addresses, this.myId).start().join();
+			ClusterAtomix.initVars();
 
 			System.out.println("Cluster joined");
 
@@ -93,22 +94,24 @@ public class ServerThread implements Runnable {
 
 			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
 
-			ClusterAtomix.initVars();
 			Chord.setFt(new FingerTable());
-
-			Chord.getChodNode().setRange(ClusterAtomix.getRange());
-			Chord.getChodNode().setKey(ClusterAtomix.getKey().get());
-			Manipulator.setDb(ClusterAtomix.getDb());
-
-			ClusterAtomix.getKey().addListener(event -> Chord.getChodNode().setKey(event.newValue()));
 
 			if(this.myId == 0) {
 				ClusterAtomix.clearVars();
+
+				Chord.getChodNode().setRange(ClusterAtomix.getRange());
+				Chord.getChodNode().setKey(ClusterAtomix.getKey());
+				Manipulator.setDb(ClusterAtomix.getDb());
+
 				if( this.chordIp != null){
 					this.entryChord();
 				} else {
 					firstServer();
 				}
+			} else {
+				Chord.getChodNode().setRange(ClusterAtomix.getRange());
+				Chord.getChodNode().setKey(ClusterAtomix.getKey());
+				Manipulator.setDb(ClusterAtomix.getDb());
 			}
 
 			startSnapshotRoutine();
@@ -148,6 +151,8 @@ public class ServerThread implements Runnable {
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
 			Chord.getChodNode().setNewKey();
 
+			ClusterAtomix.setKey(Chord.getChodNode().getKey());
+
 			Chord.getChodNode().clearRange();
 			Chord.getChodNode().setRange(Chord.getChodNode().getKey(), fim+1);
 			Chord.getChodNode().setRange(0, Chord.getChodNode().getKey());
@@ -159,6 +164,7 @@ public class ServerThread implements Runnable {
 
 	private void entryChord() {
 		Chord.getChodNode().setNewKey();
+		ClusterAtomix.setKey(Chord.getChodNode().getKey());
 		Chord.getFt().setKey(Chord.getChodNode().getKey());
 
 		GrpcCommunication.findNode(this.chordIp, this.chordPort);
