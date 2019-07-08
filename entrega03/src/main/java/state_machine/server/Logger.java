@@ -25,7 +25,6 @@ public class Logger  implements Runnable
         try{
             getListOfCommands();
             while (true) {
-                System.out.println("alo");
                 Item obj = f2.take();
                 writeCommand(obj);
             }

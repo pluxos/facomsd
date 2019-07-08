@@ -1,6 +1,7 @@
 package state_machine.client;
 
 import java.math.BigInteger;
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,25 +30,82 @@ public class GraphClient extends StateMachine {
         CompletableFuture<CopycatClient> future = client.connect(addresses);
         future.join();
 
-//        CompletableFuture[] futures = new CompletableFuture[]{
-//            client.submit(new CreateItemCommand(new BigInteger("123"),"pororo"))
-//        };
+        String welcome = "Esse software se baseia em um banco de dados chave valor.\n Chave: Inteiro(Infinito) \n Valor: Bytes\n";
+        String options = "Opções disponivéis: \n- Create chave valor \n- Read chave \n- Update chave valor \n- Delete chave \n- Help \n- Sair \n";
+        String read = "Digite uma opção válida: ";
+        String invalid = "Opção inválida!!!";
+        String quit = "Conexão encerrada!!!";
+        String close = "Saindo....";
+        String option;
+        String command;
+        String key;
+        String value;
 
-//        CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
+        int size;
+        int spaceFirst;
+        int spaceSecond;
 
-
+        BigInteger keyBigInteger;
         try {
-            System.out.println("1: " + client.submit(new CreateItemCommand( new BigInteger("123") , "pororo")).get());
-            System.out.println("2: " + client.submit(new ReadItemQuery( new BigInteger("123") )).get());
-            System.out.println("3: " + client.submit(new UpdateItemCommand( new BigInteger("123") , "po")).get());
-            System.out.println("4: " + client.submit(new DeleteItemCommand( new BigInteger("123") )).get());
-        } catch (Exception e) {
-            System.out.println("Commands may have failed.");
-            e.printStackTrace();
-        }
+            Scanner scanner = new Scanner(System.in);
+            System.out.println(welcome);
+            System.out.println(options);
+            while (true) {
+                System.out.print(read);
+                option = scanner.nextLine();
+                option = option.toUpperCase();
+                if (option.equals("SAIR")) {
+                    System.out.println(close);
+                    break;
+                }
+                if (option.equals("HELP")) {
+                    System.out.println(options);
+                    continue;
+                }
+                size = option.length();
+                spaceFirst = option.indexOf(" ");
 
-        client.submit(new ReadItemQuery(new BigInteger("1234"))).thenAccept(result -> {
-            System.out.println("1-2: " + result);
-        });
+                if( spaceFirst == -1 ) {
+                    throw new Exception();
+                }
+                command = option.substring(0, spaceFirst);
+                if (command.equals("CREATE")) {
+                    spaceSecond = option.indexOf(" ", (spaceFirst + 1));
+                    key = option.substring( ( spaceFirst + 1 ), spaceSecond );
+                    keyBigInteger = new BigInteger( key );
+                    value = option.substring( ( spaceSecond + 1 ), size );
+                    System.out.println(client.submit(new CreateItemCommand(keyBigInteger, value)).get());
+                }
+                if (command.equals("UPDATE")) {
+                    spaceSecond = option.indexOf(" ", (spaceFirst + 1));
+                    key = option.substring( ( spaceFirst + 1 ), spaceSecond );
+                    keyBigInteger = new BigInteger( key );
+                    value = option.substring( ( spaceSecond + 1 ), size );
+                    System.out.println(client.submit(new UpdateItemCommand(keyBigInteger, value)).get());
+                }
+                if (command.equals("READ")) {
+                    key = option.substring( ( spaceFirst + 1 ), size);
+                    keyBigInteger = new BigInteger( key );
+                    System.out.println(client.submit(new ReadItemQuery(keyBigInteger)).get());
+                }
+                if(command.equals("DELETE")) {
+                    key = option.substring( ( spaceFirst + 1 ), size);
+                    keyBigInteger = new BigInteger( key );
+                    System.out.println(client.submit(new DeleteItemCommand(keyBigInteger)).get());
+                }
+            }
+            System.out.println(quit);
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+//        try {
+//            System.out.println("1: " + client.submit(new CreateItemCommand(new BigInteger("123"), "pororo")).get());
+//            System.out.println("2: " + client.submit(new ReadItemQuery(new BigInteger("123"))).get());
+//            System.out.println("3: " + client.submit(new UpdateItemCommand(new BigInteger("123"), "po")).get());
+//            System.out.println("4: " + client.submit(new DeleteItemCommand(new BigInteger("123"))).get());
+//        } catch (Exception e) {
+//            System.out.println("Commands may have failed.");
+//            e.printStackTrace();
+//        }
     }
 }
