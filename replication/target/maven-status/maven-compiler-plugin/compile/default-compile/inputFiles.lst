@@ -1,0 +1,8 @@
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/command/DeleteCommand.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/command/UpdateCommand.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/command/CreateCommand.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/type/Data.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/client/Cliente.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/command/ReadQuery.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/server/Servidor.java
+/home/joao/Downloads/trabsd2-master/replication/src/main/java/atomix_lab/state_machine/client/ClienteTeste.java
