@@ -95,7 +95,7 @@ public class AplicarAoBanco {
                 if (this.banco.verifica(chave)) {
                     retorno_select = this.banco.get(chave);
                     try {
-                        retorno = new String(retorno_select, "ISO-8859-1");
+                        retorno = new String(retorno_select, "UTF-8");
                         System.out.println("RETORNO: " + retorno);
                     } catch (UnsupportedEncodingException ex) {
                         Logger.getLogger(AplicarAoBanco.class.getName()).log(Level.SEVERE, null, ex);

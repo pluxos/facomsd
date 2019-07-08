@@ -133,17 +133,16 @@ public class Servidor extends StateMachine {
     public Data Read(Commit<ReadQuery> commit) throws UnsupportedEncodingException {
         try {
             ReadQuery geq = commit.operation();
-            String dado = this.Banco.read(geq.key);
+           // String dado = this.Banco.read(geq.key);
             Comando cmd = new Comando("SELECT", geq.key);
             AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
             String retorno = bancoDados.ProcessaComando(cmd);
             if (retorno == "Chave nao existe") {
                 Data result = new Data(geq.key, retorno.getBytes());
-                this.F1.add(cmd);
                 System.out.println(retorno);
                 return result;
             } else {
-                Data result = new Data(geq.key,dado.getBytes());
+                Data result = new Data(geq.key,retorno.getBytes());
                 this.F1.add(cmd);
                 System.out.println(retorno);
                 return result;
@@ -167,7 +166,7 @@ public class Servidor extends StateMachine {
                 Data result = new Data(aec.key, this.Banco.read(aec.key).getBytes());
                 return true;
             } else {
-                return true;
+                return false;
             }
         } finally {
             commit.close();
@@ -182,7 +181,6 @@ public class Servidor extends StateMachine {
             AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
             String retorno = bancoDados.ProcessaComando(cmd);
             if (retorno == "Nao existe chave para ser deletada") {
-                System.out.println("Deletado");
                 Data result = new Data(aec.key, retorno.getBytes());
                 return false;
             } else {

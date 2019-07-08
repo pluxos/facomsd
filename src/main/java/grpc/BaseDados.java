@@ -27,6 +27,7 @@ public class BaseDados {
 
     public BaseDados(Map<BigInteger, byte[]> dm) {
         this.Banco = dm;
+        
     }
 
     public BaseDados() {

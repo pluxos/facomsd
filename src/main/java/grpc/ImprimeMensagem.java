@@ -47,7 +47,7 @@ public class ImprimeMensagem implements Runnable {
             } else if (comando.equals("UPDATE")) {
                 this.cliente.client.submit(new UpdateCommand(new BigInteger(chave), valor)).thenAccept(result -> System.out.println("Resultado do Update no dado com chave "+chave+": "+result));
             } else {
-                logger.log(Level.WARNING, "Comando inválido a ser enviado pro servidor: {0}");
+                logger.log(Level.WARNING, "Comando invÃ¡lido a ser enviado pro servidor: {0}");
 
                 return;
             }
@@ -66,7 +66,7 @@ public class ImprimeMensagem implements Runnable {
             } else if (comando.equals("DELETE")) {
                 this.cliente.client.submit(new DeleteCommand(new BigInteger(chave))).thenAccept(result -> System.out.println("Resultado do Delete no dado com chave "+chave+": "+result));
             } else {
-                logger.log(Level.WARNING, "Comando inválido a ser enviado pro servidor: {0}");
+                logger.log(Level.WARNING, "Comando invalido a ser enviado pro servidor: {0}");
                 return;
             }
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class ImprimeMensagem implements Runnable {
             }
             this.insertOrUpdate(cmd[1], cmd[2], "UPDATE");
         } else {
-            System.out.println("Comando inválido , portanto não será enviado para o servidor");
+            System.out.println("Comando invÃ¡lido , portanto nÃ£o serÃ¡ enviado para o servidor");
         }
     }
 
