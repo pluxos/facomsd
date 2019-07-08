@@ -214,6 +214,8 @@ public class ServerThread implements Runnable {
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
 			Chord.getChodNode().setNewKey();
 
+			this.cluster.<Integer>getValue("ChordKey").set(Chord.getChodNode().getKey());
+
 			Chord.getChodNode().clearRange();
 			Chord.getChodNode().setRange(Chord.getChodNode().getKey(), fim+1);
 			Chord.getChodNode().setRange(0, Chord.getChodNode().getKey());
