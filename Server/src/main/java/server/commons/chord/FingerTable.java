@@ -1,8 +1,6 @@
 package server.commons.chord;
 
-import io.atomix.core.Atomix;
-import io.atomix.protocols.raft.MultiRaftProtocol;
-import io.atomix.protocols.raft.ReadConsistency;
+import server.commons.atomix.ClusterAtomix;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
@@ -18,21 +16,13 @@ public class FingerTable {
     private int m;
     private int range;
 
-    public FingerTable() {}
-
-    public FingerTable(Atomix cluster) {
+    public FingerTable() {
         try {
             Properties configProperties = FileUtils.getConfigProperties();
             this.range = Integer.parseInt(configProperties.getProperty("chord.range")) + 1;
             this.m = Integer.parseInt(configProperties.getProperty("chord.m"));
 
-            this.map = Collections.synchronizedMap(
-                    cluster.<Integer, ChodNode>mapBuilder("finger-table")
-                            .withProtocol(MultiRaftProtocol.builder()
-                                    .withReadConsistency(ReadConsistency.LINEARIZABLE)
-                                    .build())
-                            .build()
-            );
+            this.map = Collections.synchronizedMap(ClusterAtomix.getFt());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,6 +38,7 @@ public class FingerTable {
 
     public void setKey(int key) {
         this.key = key;
+        ClusterAtomix.getKey().set(key);
     }
 
     public Integer getKey() {
@@ -109,6 +100,7 @@ public class FingerTable {
                 ChodNode chodNode1 = this.map.get(i);
                 if (chodNode1.getKey() == chodNode.getKey()) {
                     this.map.remove(i);
+                    ClusterAtomix.getFt().remove(i);
                 }
             }
         }
@@ -126,14 +118,17 @@ public class FingerTable {
                 if(!this.map.containsKey(i)){
                     flag = 1;
                     this.map.put(i, chodNode);
+                    ClusterAtomix.getFt().put(i, chodNode);
                 } else if(this.map.get(i).getKey() != chodNode.getKey() || !this.map.get(i).getRange().equals(chodNode.getRange())) {
                     flag = 1;
                     this.map.put(i, chodNode);
+                    ClusterAtomix.getFt().put(i, chodNode);
                 }
             } else {
                 if (this.map.get(i) != null && chodNode.getKey() == this.map.get(i).getKey()) {
                     flag = 1;
                     this.map.remove(i);
+                    ClusterAtomix.getFt().remove(i);
                 }
             }
         }

@@ -1,13 +1,5 @@
 package server.receptor;
 
-import io.atomix.cluster.Node;
-import io.atomix.cluster.discovery.BootstrapDiscoveryProvider;
-import io.atomix.core.Atomix;
-import io.atomix.core.AtomixBuilder;
-import io.atomix.core.profile.ConsensusProfile;
-import io.atomix.protocols.raft.MultiRaftProtocol;
-import io.atomix.protocols.raft.ReadConsistency;
-import io.atomix.protocols.raft.session.CommunicationStrategy;
 import io.atomix.utils.net.Address;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -19,6 +11,7 @@ import server.business.persistence.Manipulator;
 import server.business.persistence.recovery.LogRecovererThread;
 import server.business.persistence.routine.Counter;
 import server.business.persistence.routine.FileRoutineThread;
+import server.commons.atomix.ClusterAtomix;
 import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
@@ -27,7 +20,6 @@ import server.receptor.hooks.ShutdownHook;
 import server.requester.GrpcCommunication;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -38,7 +30,6 @@ public class ServerThread implements Runnable {
 
 	private String logDirectory;
 	private Server server;
-	private Atomix cluster;
 	private String chordIp = null;
 	private int chordPort;
 	private List<Address> addresses;
@@ -92,9 +83,7 @@ public class ServerThread implements Runnable {
 		}
 
 		try {
-			this.cluster = this.initAtomixServer();
-
-			this.cluster.start().join();
+			ClusterAtomix.setCluster(this.addresses, this.myId).start().join();
 
 			System.out.println("Cluster joined");
 
@@ -104,50 +93,22 @@ public class ServerThread implements Runnable {
 
 			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
 
-			Chord.setFt(new FingerTable(this.cluster));
+			ClusterAtomix.initVars();
+			Chord.setFt(new FingerTable());
+
+			Chord.getChodNode().setRange(ClusterAtomix.getRange());
+			Chord.getChodNode().setKey(ClusterAtomix.getKey().get());
+			Manipulator.setDb(ClusterAtomix.getDb());
+
+			ClusterAtomix.getKey().addListener(event -> Chord.getChodNode().setKey(event.newValue()));
 
 			if(this.myId == 0) {
-				Chord.getChodNode().setRange(
-						this.cluster.<Integer>listBuilder("chordRange")
-								.withProtocol(
-										MultiRaftProtocol.builder()
-												.withReadConsistency(ReadConsistency.LINEARIZABLE)
-												.build()
-								)
-								.build()
-				);
-
-
-				this.cluster.<Integer>valueBuilder("ChordKey")
-						.withReadOnly(true)
-						.withProtocol(MultiRaftProtocol.builder()
-								.withReadConsistency(ReadConsistency.LINEARIZABLE)
-								.build())
-						.build()
-						.addListener(event -> Chord.getChodNode().setKey(event.newValue()));
-
 				if( this.chordIp != null){
 					this.entryChord();
 				} else {
 					firstServer();
 				}
-
-				Manipulator.setDb(this.cluster.<BigInteger, byte[]>mapBuilder("dataBase")
-						.withCacheEnabled()
-						.withProtocol(MultiRaftProtocol.builder()
-								.withReadConsistency(ReadConsistency.LINEARIZABLE)
-								.withCommunicationStrategy(CommunicationStrategy.LEADER)
-								.build())
-						.build());
-
-			}else{
-				Chord.getChodNode().setRange(this.cluster.getList("chordRange"));
-				Manipulator.setDb(this.cluster.getMap("dataBase"));
-				Chord.getChodNode().setKey(this.cluster.<Integer>getValue("ChordKey").get());
-				this.cluster.<Integer>getValue("ChordKey")
-						.addListener(event -> Chord.getChodNode().setKey(event.newValue()));
 			}
-			Manipulator.getDb().addListener(event -> System.out.println(event.type()));
 
 			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new OrchestratorThread());
@@ -175,34 +136,6 @@ public class ServerThread implements Runnable {
 				.build().start();
 	}
 
-	private Atomix initAtomixServer() {
-		AtomixBuilder builder = Atomix.builder();
-
-		return builder.withMemberId("member-"+myId)
-				.withAddress(addresses.get(myId))
-				.withMembershipProvider(BootstrapDiscoveryProvider.builder()
-						.withNodes( Node.builder()
-										.withId("member-0")
-										.withAddress(addresses.get(0))
-										.build(),
-								Node.builder()
-										.withId("member-1")
-										.withAddress(addresses.get(1))
-										.build(),
-								Node.builder()
-										.withId("member-2")
-										.withAddress(addresses.get(2))
-										.build())
-						.build())
-				.withMulticastEnabled()
-				.withProfiles(
-						ConsensusProfile.builder()
-								.withDataPath("/tmp/member-"+myId)
-								.withMembers("member-1", "member-2", "member-3")
-								.build())
-				.build();
-	}
-
 	private void startSnapshotRoutine() {
 		new Timer().schedule(new FileRoutineThread(this.logDirectory), 0, 25000);
 	}
@@ -213,8 +146,6 @@ public class ServerThread implements Runnable {
 
 			int fim = Integer.parseInt(properties.getProperty("chord.range"));
 			Chord.getChodNode().setNewKey();
-
-			this.cluster.<Integer>getValue("ChordKey").set(Chord.getChodNode().getKey());
 
 			Chord.getChodNode().clearRange();
 			Chord.getChodNode().setRange(Chord.getChodNode().getKey(), fim+1);

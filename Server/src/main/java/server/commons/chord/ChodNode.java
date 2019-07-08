@@ -1,5 +1,6 @@
 package server.commons.chord;
 
+import server.commons.atomix.ClusterAtomix;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class ChodNode {
 
     public void setKey(int key) {
         this.key = key;
+        ClusterAtomix.getKey().set(this.key);
     }
 
     public void setNewKey() {
@@ -46,10 +48,12 @@ public class ChodNode {
 
     public void setRangeWithArray(List<Integer> arr) {
         this.range = arr;
+        ClusterAtomix.getRange().addAll(this.range);
     }
 
     public void clearRange() {
         range.clear();
+        ClusterAtomix.getRange().clear();
     }
 
     public void setRange(int low, int high) {
