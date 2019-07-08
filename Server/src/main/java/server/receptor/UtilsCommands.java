@@ -22,7 +22,7 @@ public class UtilsCommands implements Runnable {
 
             switch (command){
                 case "key":
-                    System.out.println(Chord.getFt().getKey());
+                    System.out.println(Chord.getChodNode().getKey());
                     break;
 
                 case "ft":

@@ -114,6 +114,15 @@ public class ServerThread implements Runnable {
 								.build()
 				);
 
+				Chord.getChodNode().setDistibutedValue(
+						this.cluster.<Integer>valueBuilder("ChordKey")
+								.withReadOnly(true)
+								.withProtocol(MultiRaftProtocol.builder()
+										.withReadConsistency(ReadConsistency.LINEARIZABLE)
+										.build())
+								.build()
+				);
+
 				if( this.chordIp != null){
 					this.entryChord();
 				} else {
@@ -128,11 +137,12 @@ public class ServerThread implements Runnable {
 								.build())
 						.build());
 
-				Manipulator.getDb().addStateChangeListener(event -> System.out.println(event.toString()));
 			}else{
 				Chord.getChodNode().setRange(this.cluster.getList("chordRange"));
 				Manipulator.setDb(this.cluster.getMap("dataBase"));
+				Chord.getChodNode().setDistibutedValue(this.cluster.getValue("ChordKey"));
 			}
+			Manipulator.getDb().addListener(event -> System.out.println(event.type()));
 
 			startSnapshotRoutine();
 			Thread tConsumer = new Thread(new OrchestratorThread());

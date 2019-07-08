@@ -1,27 +1,34 @@
 package server.commons.chord;
 
-import io.atomix.core.set.DistributedSet;
+import io.atomix.core.value.DistributedValue;
 import server.commons.utils.FileUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
 
 public class ChodNode {
-    private int key;
+    private DistributedValue<Integer> key;
     private List<Integer> range;
     private String ip;
     private int port;
+
+    public void setDistibutedValue(DistributedValue<Integer> key) {
+        this.key = key;
+    }
 
     public void setRange(List<Integer> distributedSet) {
         range = distributedSet;
     }
 
     public int getKey() {
-        return key;
+        return key.get();
     }
 
     public void setKey(int key) {
-        this.key = key;
+        this.key.set(key);
     }
 
     public void setNewKey() {
