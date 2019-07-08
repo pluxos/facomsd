@@ -28,7 +28,10 @@ import server.requester.GrpcCommunication;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Timer;
 import java.util.concurrent.Executors;
 
 public class ServerThread implements Runnable {
@@ -140,7 +143,9 @@ public class ServerThread implements Runnable {
 			}else{
 				Chord.getChodNode().setRange(this.cluster.getList("chordRange"));
 				Manipulator.setDb(this.cluster.getMap("dataBase"));
-				this.cluster.<Integer>getValue("ChordKey").addListener(event -> Chord.getChodNode().setKey(event.newValue()));
+				Chord.getChodNode().setKey(this.cluster.<Integer>getValue("ChordKey").get());
+				this.cluster.<Integer>getValue("ChordKey")
+						.addListener(event -> Chord.getChodNode().setKey(event.newValue()));
 			}
 			Manipulator.getDb().addListener(event -> System.out.println(event.type()));
 
