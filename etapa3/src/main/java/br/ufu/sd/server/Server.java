@@ -130,7 +130,7 @@ public class Server {
 								Node.builder().withId("member-2").withAddress(new Address(memberHost2, memberPort2)).build(),
 								Node.builder().withId("member-3").withAddress(new Address(memberHost3, memberPort3)).build())
 						.build())
-				.withProfiles(ConsensusProfile.builder().withDataPath("\\tmp\\member-" + id)
+				.withProfiles(ConsensusProfile.builder().withDataPath("/tmp/member-" + id)
 						.withMembers("member-1", "member-2", "member-3").build())
 				.build();
 	}
