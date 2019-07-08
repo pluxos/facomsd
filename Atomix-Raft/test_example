@@ -1,0 +1,10 @@
+create 1 Marcus
+create 2 Lucas
+create 3 Isadora
+update 1 MarcusAdriano
+read 1
+delete 3
+update 2 LucasT
+delete 1
+read 2
+exit
