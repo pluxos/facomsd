@@ -36,8 +36,8 @@ mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="3"
   - O terceiro é a porta do server para o atomix
   - O quarto é a porta para o ServerSocket do servidor
  - É possível passar dois comandos diretamente para os servidores em seus respectivos terminais
-  - close - para finalizar aquele servidor
-  - clear - para limpar o banco ( Util para rodar antes dos testes, pois pode haver já alguns dados naquele server que pode comprometer os resultados), muito cuidado, pois esse comando limpa todos os bancos de todos os servidores devido a natureza do atomix. 
+   - close - para finalizar aquele servidor
+   - clear - para limpar o banco ( Util para rodar antes dos testes, pois pode haver já alguns dados naquele server que pode comprometer os resultados), muito cuidado, pois esse comando limpa todos os bancos de todos os servidores devido a natureza do atomix. 
   
 # Cliente interativo
 
