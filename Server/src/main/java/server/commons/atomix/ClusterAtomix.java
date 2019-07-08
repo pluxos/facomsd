@@ -58,6 +58,7 @@ public class ClusterAtomix {
                                 .build()
                 )
                 .build();
+
         key = cluster.<Integer>valueBuilder("ChordKey")
                 .withReadOnly(true)
                 .withProtocol(MultiRaftProtocol.builder()
@@ -78,6 +79,12 @@ public class ClusterAtomix {
                         .withReadConsistency(ReadConsistency.LINEARIZABLE)
                         .build())
                 .build();
+    }
+
+    public static void clearVars() {
+        range.clear();
+        db.clear();
+        ft.clear();
     }
 
     private static Atomix initCluster(List<Address> addresses, int id) {

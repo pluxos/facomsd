@@ -103,6 +103,7 @@ public class ServerThread implements Runnable {
 			ClusterAtomix.getKey().addListener(event -> Chord.getChodNode().setKey(event.newValue()));
 
 			if(this.myId == 0) {
+				ClusterAtomix.clearVars();
 				if( this.chordIp != null){
 					this.entryChord();
 				} else {
