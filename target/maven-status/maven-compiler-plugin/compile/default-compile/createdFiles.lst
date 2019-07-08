@@ -1,0 +1,14 @@
+atomix_lab/state_machine/client/Cliente.class
+atomix_lab/state_machine/command/ReadQuery.class
+atomix_lab/state_machine/server/Servidor.class
+atomix_lab/state_machine/type/Data.class
+atomix_lab/state_machine/server/Fila1Manager.class
+atomix_lab/state_machine/server/Comando.class
+atomix_lab/state_machine/server/MapManager.class
+atomix_lab/state_machine/command/CreateCommand.class
+atomix_lab/state_machine/command/DeleteCommand.class
+atomix_lab/state_machine/command/UpdateCommand.class
+atomix_lab/state_machine/server/Record.class
+atomix_lab/state_machine/server/LogFileManager.class
+atomix_lab/state_machine/server/Mapa.class
+atomix_lab/state_machine/client/Interface.class

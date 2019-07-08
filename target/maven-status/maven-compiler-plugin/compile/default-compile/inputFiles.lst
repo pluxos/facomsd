@@ -1,0 +1,10 @@
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/command/UpdateCommand.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/server/Servidor.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/command/ReadQuery.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/server/Record.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/type/Data.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/command/DeleteCommand.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/server/LogFileManager.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/server/Comando.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/client/Cliente.java
+/home/rhavel/Downloads/trabsd-3-master/replication/src/main/java/atomix_lab/state_machine/command/CreateCommand.java
