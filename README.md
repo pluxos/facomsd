@@ -11,10 +11,7 @@ Gustavo de Faria Silva
 
 Para executar os servers, entre na pasta Server e execute:
 ```
-mvn test
+cd entrega02/
+mvn clean compile test
 ```
-
-Para executar o client, entre na pasta client e execute:
-```
-mvn clean package exec:java -Dexec.mainClass="client.Client" -Dexec.args="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
-```
+Ou executando os arquivos server e client separadamente em sua IDE.
