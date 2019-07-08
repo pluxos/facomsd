@@ -1,7 +1,7 @@
 Testes
 
-Obs. Para garantir os teste, degite o comando "clear" em qualquer um dos
-servidores de realizar os teste, pois o resultado vai ser influenciado caso ja tenha algo no banco. 
+Obs. Para garantir os teste, degite o comando "clear" em qualquer um dos servidores antes realizar dos 
+teste, pois o resultado vai ser influenciado caso ja tenha algo no banco. 
 
 Teste Ok e NOK
 Descricao
@@ -18,18 +18,18 @@ ________________________________________________________________
 
 Teste OPERACOES
 Descricao
- - Vai ser feitas todas as operacoes em 15 chaves (2 a 17)
- - Primeiro um DELETE e depois um CREATE
- - Por fim um UPDATE
+ - Vai ser feitas todas as operacoes em 15 chaves (2 a 16)
+ - Primeiro um DELETE e depois um CREATE e por fim UPDATE
  - Vao ser inseridos 5 chaves em cada servidor
  - No final o banco deve ter os valores de A a O
 
 Como executar
  - Os tres servidores tem que estar online
  - Entre na pasta do projeto pelo terminal (\etapa3)
- - Execute os script "test-operacoes.sh"
+ - Execute o script "test-operacoes.sh"
 
 ________________________________________________________________
+
 
 Teste READ
 Descricao
@@ -39,7 +39,7 @@ Descricao
 Como executar
  - Os tres servidores tem que estar online
  - Entre na pasta do projeto pelo terminal (\etapa3)
- - Execute os script "test-read.sh"
+ - Execute o script "test-read.sh"
 
 ________________________________________________________________
 
@@ -68,11 +68,11 @@ do anterior + 1
 Como executar
  - Os tres servidores tem que estar online
  - Entre na pasta do projeto pelo terminal (\etapa3)
- - Execute os script "test-ordem-exec.sh"
+ - Execute o script "test-ordem-exec.sh"
 
 ________________________________________________________________
 
-Teste Ordem de Multiplos clientes
+Teste Multiplos clientes
 Descricao
  - Teste para acesso de multiplos clientes nos servidores
  - 3 clientes em cada servidor
