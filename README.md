@@ -1,7 +1,10 @@
 # Trabalhos da disciplina de Sistemas Distribuídos
 
-Para submeter, crie um fork deste repositorio. Trabalhe no seu fork e um branch com o nome SUBMISSAO_X, onde X é o número da entrega a ser feita. 
+#### Submissão 3
 
-Quando estiver pronto para submeter a versao final, faca um pull request para este fork aqui.
+Alunos: 
+Marcus Adriano Ferreira Pereira - 11521BCC002</br>
+Lucas Tannús Vieira - 11611BCC049</br>
+Isadora Rezende Lopes - 11611BCC051</br>
 
-Para cada submissão, altere o arquivo README.md ***NO SEU BRANCH*** para conter o nome dos componentes do grupo e instruções de como executar o projeto e testes.
+Toda a documentação e utilização do projeto, estão dentro das respectivas pastas: DS-Server e DS-Client.
