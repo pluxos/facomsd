@@ -13,11 +13,11 @@ import server.requester.CommunicationManager;
 import java.math.BigInteger;
 import java.util.Map;
 
-public class ShutdownHook implements Runnable {
+public class ShutdownServerHook implements Runnable {
 
     private ServerThread server;
 
-    public ShutdownHook(ServerThread context) {
+    public ShutdownServerHook(ServerThread context) {
         this.server = context;
     }
 

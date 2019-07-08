@@ -3,7 +3,6 @@ package server.receptor;
 import io.atomix.utils.net.Address;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import org.apache.commons.math3.ml.clustering.Cluster;
 import server.business.consumers.CommandExecutorThread;
 import server.business.consumers.LogPersistentThread;
 import server.business.consumers.OrchestratorThread;
@@ -17,7 +16,7 @@ import server.commons.chord.ChodNode;
 import server.commons.chord.Chord;
 import server.commons.chord.FingerTable;
 import server.commons.utils.FileUtils;
-import server.receptor.hooks.ShutdownHook;
+import server.receptor.hooks.ShutdownServerHook;
 import server.requester.GrpcCommunication;
 
 import java.io.IOException;
@@ -93,13 +92,11 @@ public class ServerThread implements Runnable {
 
 			System.out.println("Server started, listening on " + Chord.getChodNode().getPort());
 
-			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHook(this)));
+			Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownServerHook(this)));
 
 			Chord.setFt(new FingerTable());
 
 			if(this.myId == 0) {
-				ClusterAtomix.clearVars();
-
 				Chord.getChodNode().setRange(ClusterAtomix.getRange());
 				Chord.getChodNode().setKey(ClusterAtomix.getKey());
 				Manipulator.setDb(ClusterAtomix.getDb());

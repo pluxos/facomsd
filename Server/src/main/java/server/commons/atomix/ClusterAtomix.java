@@ -13,10 +13,11 @@ import io.atomix.protocols.raft.ReadConsistency;
 import io.atomix.protocols.raft.session.CommunicationStrategy;
 import io.atomix.utils.net.Address;
 import server.commons.chord.ChodNode;
+import server.receptor.hooks.ShutdownClusterHook;
+import server.receptor.hooks.ShutdownServerHook;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 public class ClusterAtomix {
     private static Atomix cluster;
@@ -28,6 +29,8 @@ public class ClusterAtomix {
     public static Atomix setCluster(List<Address> addresses, int id) {
         cluster = initCluster(addresses, id);
 
+        Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownClusterHook(cluster)));
+
         return cluster;
     }
 
@@ -35,9 +38,8 @@ public class ClusterAtomix {
         return cluster;
     }
 
-    public static void setFt(Map<Integer, ChodNode> newFt) {
-        ft.clear();
-        ft.putAll(newFt);
+    public static void setRange(List<Integer> list) {
+        range.addAll(list);
     }
 
     public static void setKey(Integer val) {
@@ -125,6 +127,7 @@ public class ClusterAtomix {
                                 .withDataPath("/tmp/member-" + id)
                                 .withMembers("member-1", "member-2", "member-3")
                                 .build())
+                .withShutdownHook(true)
                 .build();
     }
 }

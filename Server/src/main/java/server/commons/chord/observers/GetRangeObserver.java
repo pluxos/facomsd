@@ -67,7 +67,9 @@ public class GetRangeObserver implements StreamObserver<GetRangeResponse> {
     private void setRange(GetRangeResponse getRangeResponse) {
         try {
             TypeReference<List<Integer>> arrayRef = new TypeReference<List<Integer>>() {};
-            Chord.getChodNode().setRangeWithArray(JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef));
+            final List<Integer> deserialize = JsonUtils.deserialize(getRangeResponse.getRange(), arrayRef);
+            Chord.getChodNode().setRangeWithArray(deserialize);
+            ClusterAtomix.setRange(deserialize);
         } catch (ServerException e) {
             e.printStackTrace();
         }
