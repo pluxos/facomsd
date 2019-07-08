@@ -1,308 +1,206 @@
 package grpc;
 
-import com.google.protobuf.Empty;
-import gRPC.proto.ChaveRequest;
-import gRPC.proto.TabelaResponse;
-import gRPC.proto.ChordServiceGrpc;
-import gRPC.proto.DataNode;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.stub.StreamObserver;
+import grpc.command.CreateCommand;
+import grpc.command.DeleteCommand;
+import grpc.command.ReadQuery;
+import grpc.command.UpdateCommand;
+import grpc.type.Data;
 import java.io.IOException;
 import java.util.logging.Logger;
-import java.io.File;
-import gRPC.proto.ServerResponse;
-import gRPC.proto.ValorRequest;
-import io.grpc.Grpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.math.BigInteger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.io.*;
-import java.math.*;
-import java.util.Random;
+import java.util.ArrayList;
+import io.atomix.catalyst.transport.Address;
+import io.atomix.catalyst.transport.netty.NettyTransport;
+import io.atomix.copycat.server.Commit;
+import io.atomix.copycat.server.CopycatServer;
+import io.atomix.copycat.server.StateMachine;
+import io.atomix.copycat.server.storage.Storage;
+import io.atomix.copycat.server.storage.StorageLevel;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
-public class Servidor {
-    private BigInteger quantidade_chaves = new BigInteger("2"); //Quantidade de chaves que o chord tera(Maior chave)
+public class Servidor extends StateMachine {
+
+    public int contador = 0;
+    private BigInteger quantidade_chaves = new BigInteger("2");
     private BigInteger chave_responsavel = new BigInteger("1"); // Chave em que o servidor eh responsavel
     private static FingerTable tabela; //Tabela de nos 
     private static final Logger logger = Logger.getLogger(Servidor.class.getName());
     private int quantidade_threads = 15;
-    public int porta,saltoProximaPorta,numeroDeNos,numeroBitsId;
     public BaseDados Banco;
-    private Fila F2;
-    private Fila F3;
-    private Fila F4;
-    public Fila F1;
-    private Server server;
-    private String ip;    public String retorno;
+    private static BlockingQueue< Comando> F1 = new LinkedBlockingDeque<>();
+    private static BlockingQueue< Comando> F2 = new LinkedBlockingDeque<>();
+    private static BlockingQueue< Comando> F3 = new LinkedBlockingDeque<>();
+    public String retorno;
+    public int primeiraPorta = 59043;
+    private String ip;
     private ComunicaThread com;
-    private volatile ChordNode node;
-    public Servidor(int porta,int porta_servidor) throws IOException {
-        this.porta = porta;
-        this.F1 = new Fila();
-        this.F2 = new Fila();
-        this.F3 = new Fila();
-        this.F4 = new Fila();
+    public CopycatServer server;
+    public int IdServidor = 0;
+    ArrayList<Address> enderecos;
+
+    public Servidor(int porta_servidor) throws IOException, Exception {
+
         this.Banco = new BaseDados();
-        this.tabela = new FingerTable(this,porta_servidor);
+        this.tabela = new FingerTable(this, porta_servidor);
         this.com = new ComunicaThread();
-        //this.gerarChave();
-        this.Banco.RecuperarBanco(this.chave_responsavel.toString());
-        setConfig("servers.txt");
-        conectaChord();
-    }
-    
-    public BigInteger getQuantidadeChaves(){
-        return this.quantidade_chaves;
-    }
-private void conectaChord() throws Exception {
-        ChordConnector chordConnector = new ChordConnector(this.ip, this.primeiraPorta, this.saltoProximaPorta, this.numeroDeNos, this.numeroBitsId);
-        this.node = chordConnector.connect();
-    }
-    
-    public BigInteger getChave(){
-        return this.chave_responsavel;
-    }
-    
-    public void atualizarTabela(int porta){
-        this.tabela.pegarTabelaOutroServidor(porta);
     }
 
+    public Servidor() {
+        this.Banco = new BaseDados();
+        this.com = new ComunicaThread();
+    }
+    
+    public void recuperarBanco() throws IOException{
+        this.Banco.RecuperarBanco(Integer.toString(this.IdServidor));
+    }
+    public static void main(String[] args) throws IOException, InterruptedException, Exception {
+        int IdServidor = Integer.parseInt(args[0]);
+        Servidor server1 = new Servidor();
+        server1.IdServidor = IdServidor;
+        ArrayList<Address> enderecos = new ArrayList<>();
+        server1.enderecos = enderecos;
+        for (int i = 1; i < args.length; i++) {
+            Address end = new Address(args[i], Integer.parseInt(args[i + 1]));
+            enderecos.add(end);
+            i++;
+        }
+
+        CopycatServer.Builder builder = CopycatServer.builder(enderecos.get(server1.IdServidor))
+                .withStateMachine(Servidor::new)
+                .withTransport(NettyTransport.builder()
+                        .withThreads(4)
+                        .build())
+                .withStorage(Storage.builder()
+                        .withDirectory(new File("logs_" + server1.IdServidor)) //Must be unique
+                        .withStorageLevel(StorageLevel.DISK)
+                        .build());
+
+        CopycatServer server = builder.build();
+        server1.server = server;
+        server1.recuperarBanco();
+        server1.start();
+
+    }
 
     public void start() throws IOException {
-        /* The port on which the server should run */
 
         ExecutorService thds = Executors.newFixedThreadPool(this.quantidade_threads);
-        server = ServerBuilder.forPort(this.porta).addService(new ServiceImpl(this.F1)).build().start();
-        logger.info("Server started, listening on " + this.porta);
-
-        CopiarLista copy = new CopiarLista(this.F1, this.F2, this.F3, this.F4, this.porta);
+        CopiarLista copy = new CopiarLista(this.F1, this.F2, this.F3);
         new Thread(copy).start();
         AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
-        new Thread(bancoDados).start();
-        VerificaServidoresReponsaveis invocaServers = new VerificaServidoresReponsaveis(this.F2, this.F3, this.F4, this);
-        new Thread(invocaServers).start();
-        SnapShot snapshot = new SnapShot(this.Banco,this.com,this.chave_responsavel.toString());
+        SnapShot snapshot = new SnapShot(this.Banco, this.com, Integer.toString(this.IdServidor));
         new Thread(snapshot).start();
-        Log log = new Log(this.F2,this.com,snapshot,this.chave_responsavel.toString());
+        Log log = new Log(this.F2, this.com, snapshot, Integer.toString(this.IdServidor));
         new Thread(log).start();
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                // Use stderr here since the logger may have been reset by its JVM shutdown
-                // hook.
-                System.err.println("*** shutting down gRPC server since JVM is shutting down");
-                Servidor.this.stop();
-                System.err.println("*** server shut down");
-            }
-        });
-    }
-
-    public void stop() {
-        if (server != null) {
-            server.shutdown();
-        }
-    }
-
-    public void transmitResponse(String sr) throws IOException , Exception  {
-        if (this.porta == 59043) {
-
+        if (this.IdServidor == 0) {
+            System.out.println("Server started");
+            server.bootstrap().join();
         } else {
-            try {
-                this.stop();
-                int porta;
-                porta = 59043;
-                Servidor servidor = new Servidor(porta,-1);
-                servidor.start();
-                ServerResponse response = ServerResponse.newBuilder().setResponse(sr).build();
-                System.out.println(response);
-                servidor.blockUntilShutdown();
-            } catch (IOException ex) {
-                Logger.getLogger(VerificaServidoresReponsaveis.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VerificaServidoresReponsaveis.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            /*        server = ServerBuilder.forPort(59043).addService(new ServiceImpl(this.F1)).build().start();
-        ServerResponse response = ServerResponse.newBuilder().setResponse(sr).build();
-        System.out.println(response);
-        server = null;
-        this.start();
-             */        }
+            System.out.println("Server started2");
+            server.join(this.enderecos).join();
+        }
 
     }
 
-    public BigInteger getRandom(int length) {
-        Random random = new Random();
-        byte[] data = new byte[length];
-        random.nextBytes(data);
-        return new BigInteger(data);
-    }
-    
-    public void gerarChave(){
-        Random random = new Random();
-        this.chave_responsavel = new BigInteger(Integer.toString(random.nextInt(new Integer(this.quantidade_chaves.intValue()))));
-    }
-
-    public void setConfig(String arq) throws FileNotFoundException, IOException {
-        File arquivo = new File(arq);
-        if (arquivo.exists()) {
-            FileReader arq2 = new FileReader(arquivo);
-            BufferedReader lerArq = new BufferedReader(arq2);
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(arquivo, true)));
-
-            String[] str = null;
-            String linha = "";
-            byte[] dados = null;
-            while ((linha = lerArq.readLine()) != null) {
-                str = linha.split(";");
-            }
-            String[] str2 = str;
-            System.out.println(str);
-            if (str2 != null) {
-
-                this.ip = str2[0];
-                this.saltoProximaPorta = Integer.parseInt(str2[1]);
-                this.numeroBitsId = Integer.parseInt(str2[2]);
-                this.numeroDeNos = Integer.parseInt(str2[3]);
-                this.primeiraPorta = Integer.parseInt(str2[4]);                
+    public Boolean Create(Commit<CreateCommand> commit) throws UnsupportedEncodingException {
+        try {
+            CreateCommand aec = commit.operation();
+            String dado = new String(aec.value, "UTF-8");
+            System.out.println("Valor: " +dado);
+            Comando cmd = new Comando("INSERT", dado, aec.key);
+            AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
+            String retorno = bancoDados.ProcessaComando(cmd);
+            Data e = new Data(aec.key, dado.getBytes());
+            this.F1.add(cmd);
+            if (retorno == "INSERT realizado com Sucesso") {
+                System.out.println("Inserido");
+                Data result = new Data(aec.key, this.Banco.read(aec.key).getBytes());
+                return true;
+            } else {
+                return false;
             }
 
+        } finally {
+            commit.close();
         }
     }
 
-    /**
-     * Await termination on the main thread since the grpc library uses daemon
-     * threads.
-     */
-    public void blockUntilShutdown() throws InterruptedException {
-        if (server != null) {
-            server.awaitTermination();
+    public Data Read(Commit<ReadQuery> commit) throws UnsupportedEncodingException {
+        try {
+            ReadQuery geq = commit.operation();
+            String dado = this.Banco.read(geq.key);
+            Comando cmd = new Comando("SELECT", geq.key);
+            AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
+            String retorno = bancoDados.ProcessaComando(cmd);
+            if (retorno == "Chave nao existe") {
+                Data result = new Data(geq.key, retorno.getBytes());
+                this.F1.add(cmd);
+                System.out.println(retorno);
+                return result;
+            } else {
+                Data result = new Data(geq.key,dado.getBytes());
+                this.F1.add(cmd);
+                System.out.println(retorno);
+                return result;
+            }
+
+        } finally {
+            commit.close();
         }
     }
 
-    /**
-     * Main launches the server from the command line.
-     */
-    public static void main(String[] args) throws IOException, InterruptedException {
-        int porta = 59043;
-        int porta2 = 59045;
-        int flag = 0;
-        Servidor server1 = new Servidor(porta,-1);
-        //Servidor server2 = new Servidor(porta2,-1);
-        //server2.atualizarTabela(59043);
-        //server1.setConfig("servers.txt");
-        BigInteger chave = new BigInteger("9");
-        
-        if(server1.tabela.verificaResponsabilidade(chave)){
-            System.out.println("responsavel");
-        } else {
-             System.out.println("nao responsavel");
-        }
-        server1.start();
-    
-        server1.blockUntilShutdown();
-    }
-
-    static class ServiceImpl extends gRPC.proto.ServicoGrpc.ServicoImplBase {
-
-        private Fila f1;
-
-        public ServiceImpl(Fila f1) {
-            this.f1 = f1;
-        }
-
-        @Override
-        public void select(ChaveRequest req, StreamObserver<ServerResponse> responseObserver) {
-            Comando c;
-            c = new Comando("SELECT", new BigInteger(req.getChave()), responseObserver);
-            this.f1.put(c);
-            /*    ServerResponse reply = ServerResponse.newBuilder().setResponse("Selecionando dado com chave: " + req.getChave()).build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();*/
-        }
-
-        @Override
-        public void delete(ChaveRequest req, StreamObserver<ServerResponse> responseObserver) {
-            Comando c;
-            c = new Comando("DELETE", new BigInteger(req.getChave()), responseObserver);
-            this.f1.put(c);
-            /*            ServerResponse reply = ServerResponse.newBuilder().setResponse("Deletando dado com chave: " + req.getChave()).build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
-             */        }
-
-        @Override
-        public void insert(ValorRequest req, StreamObserver<ServerResponse> responseObserver) {
-            Comando c;
-            c = new Comando("INSERT", req.getValor(), new BigInteger(req.getChave()), responseObserver);
-            this.f1.put(c);
-            /*        ServerResponse reply = ServerResponse.newBuilder().setResponse("Inserindo dado com chave: " + req.getChave() + " e valor: " + req.getValor()).build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
-             */        }
-
-        @Override
-        public void update(ValorRequest req, StreamObserver<ServerResponse> responseObserver) {
-            Comando c;
-            c = new Comando("UPDATE", req.getValor(), new BigInteger(req.getChave()), responseObserver);
-            this.f1.put(c);
-            /*            ServerResponse reply = ServerResponse.newBuilder().setResponse("Atualizando dado com chave: " + req.getChave() + " e valor: " + req.getValor()).build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
-             */     
-        }
-        @Override
-        public void getTabela(ChaveRequest req,StreamObserver<TabelaResponse> responseObserver){
-            String t = tabela.getTabelaString();
-            TabelaResponse r;
-            TabelaResponse reply = TabelaResponse.newBuilder().setTabela(t).build();
-            responseObserver.onNext(reply);
-            responseObserver.onCompleted();
-            
+    public Boolean Update(Commit<UpdateCommand> commit) throws UnsupportedEncodingException {
+        try {
+            UpdateCommand aec = commit.operation();
+            String dado = new String(aec.value, "UTF-8");
+            Comando cmd = new Comando("UPDATE", dado, aec.key);
+            AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
+            String retorno = bancoDados.ProcessaComando(cmd);
+            this.F1.add(cmd);
+            if (retorno == "UPDATE Com Sucesso") {
+                System.out.println("Atualizado");
+                Data result = new Data(aec.key, this.Banco.read(aec.key).getBytes());
+                return true;
+            } else {
+                return true;
+            }
+        } finally {
+            commit.close();
         }
     }
-     static class ChordServiceImpl extends gRPC.proto.ChordServiceGrpc.ChordServiceImplBase {
 
-        private static volatile ChordNode node;
+    public Boolean Delete(Commit<DeleteCommand> commit) throws UnsupportedEncodingException {
+        try {
+            DeleteCommand aec = commit.operation();
+            Comando cmd = new Comando("DELETE", aec.key);
+            this.F1.add(cmd);
+            AplicarAoBanco bancoDados = new AplicarAoBanco(this.Banco, this.F3, this);
+            String retorno = bancoDados.ProcessaComando(cmd);
+            if (retorno == "Nao existe chave para ser deletada") {
+                System.out.println("Deletado");
+                Data result = new Data(aec.key, retorno.getBytes());
+                return false;
+            } else {
+               Data e = new Data(aec.key, retorno.getBytes());
+               return true;
+            }
 
-        public ChordServiceImpl(ChordNode node) {
-            this.node = node;
+        } finally {
+            commit.close();
         }
+    }
 
-       
-        @Override
-        public void setAnterior(DataNode request, StreamObserver<Empty> responseObserver) {
-node.setAnterior(request);
-responseObserver.onNext(Empty.newBuilder().build());
-responseObserver.onCompleted();
-System.out.println(node);
-        }
-         @Override
-        public void escutando(Empty request, StreamObserver<DataNode> responseObserver) {
-responseObserver.onNext(node.getDataNode());
-responseObserver.onCompleted();
-        }
-        @Override
-        public void setPrimeiroUltimo(DataNode request, StreamObserver<DataNode> responseObserver) {
-if(node.ehPrimeiro()){
-node.setProximo(request);
-DataNode primeiroNode = DataNode.newBuilder().setIp(node.getIp()).setPort(node.getPorta()).build();
-responseObserver.onNext(primeiroNode);
-responseObserver.onCompleted();
-System.out.println(node);
-}else{
-ManagedChannel proxChannel = ManagedChannelBuilder.forAddress(node.getIpProximo(),node.getProximaPorta()).usePlaintext(true).build();
-ChordServiceGrpc.ChordServiceBlockingStub stub = ChordServiceGrpc.newBlockingStub(proxChannel);
-DataNode primeiro = stub.setPrimeiroUltimo(request);
-responseObserver.onNext(primeiro);
-responseObserver.onCompleted();
-}
-        }
-	 }
+    public BigInteger getQuantidadeChaves() {
+        return this.quantidade_chaves;
+    }
+
+    public BigInteger getChave() {
+        return this.chave_responsavel;
+    }
+
 }
