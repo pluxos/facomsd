@@ -121,7 +121,6 @@ public class InsereBanco implements Runnable {
 				}
 			} catch (InterruptedException | IOException e) {
 				System.out.println("Erro "+e.getMessage());
-				break;
 			}
 		}
 

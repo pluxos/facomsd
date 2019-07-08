@@ -13,5 +13,5 @@ sleep 2
 mvn exec:java -Dexec.mainClass="br.ufu.sd.main.ClientTest" -Dexec.args="3 src\test\resources\test-op3.txt" 
 sleep 5
 
-
+echo "Fim dos testes"
 sleep 60
