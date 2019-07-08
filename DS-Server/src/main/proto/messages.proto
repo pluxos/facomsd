@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_package = "br.ufu.ds.rpc";
+option java_multiple_files = true;
+
+service ServerProtocol {
+
+  rpc Create(Request) returns (Response) {}
+  rpc Read(Request) returns (Response) {}
+  rpc Update(Request) returns (Response) {}
+  rpc Delete(Request) returns (Response) {}
+
+}
+
+message Request {
+
+  enum RequestType {
+    CREATE = 0;
+    READ = 1;
+    UPDATE = 2;
+    DELETE = 3;
+  }
+
+  RequestType requestType = 1;
+
+  int64 id = 2;
+  bytes data = 3;
+
+}
+
+message Response {
+  bool success = 1;
+  string description = 2;
+  bytes data = 3;  
+}

@@ -1,0 +1,14 @@
+\.idea/uiDesigner\.xml
+
+\.idea/workspace\.xml
+
+target/
+proto/br/
+
+log\.bin
+
+\.idea/
+
+*.bin
+
+*.snap
