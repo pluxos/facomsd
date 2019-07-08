@@ -1,4 +1,4 @@
-#### Trabalhos da disciplina de Sistemas Distribuídos
+# Trabalhos da disciplina de Sistemas Distribuídos
 
 - Etapa 3 do trabalho.
 - Faculdade de Computação - Universidade Federal de Uberlândia.
@@ -7,7 +7,7 @@
               Wallyson Pedrosa Ferreira - 11711BSI267, 
               Rafael Denipote Ricci - 11511BSI255.
 
-### Descrição
+## Descrição
 
 O projeto é uma aplicação cliente-servidor, em que a comunicação é feita por socket.
 Multithread para atender vários clientes ao mesmo tempo
@@ -15,8 +15,8 @@ Será utilizando o atomix para replicar os servidores
 O cliente pode se conectar por qualquer um dos servidores
 Devido a natureza do atomix de ser consistente, toda a parte de logs de arquivos não foram necessárias nesta etapa
 
-### Instruções
-## Server
+## Instruções
+# Server
 
 - Execute os 3 servidores
 
@@ -39,7 +39,7 @@ mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="3"
   - close - para finalizar aquele servidor
   - clear - para limpar o banco ( Util para rodar antes dos testes, pois pode haver já alguns dados naquele server que pode comprometer os resultados), muito cuidado, pois esse comando limpa todos os bancos de todos os servidores devido a natureza do atomix. 
   
-## Cliente interativo
+# Cliente interativo
 
 - Com os servers onlines execute
 
@@ -51,26 +51,26 @@ mvn exec:java -Dexec.mainClass="br.ufu.sd.main.Client" -Dexec.args="1"
 - No caso um cliente se conectando ao server de id 1, para se conectar aos outros basta mudar ( 2 ou 3)
 - Como padrão os ids dos servers são 1, 2 e 3
 
-## Testes
+# Testes
 
 - Alguns testes criados para o servidor
 - Para mais informações leia o arquivo "descrioes-test.txt"
 - É necessários os 3 servers onlines para executar os testes
 
-# Teste Ok e NOK
+### Teste Ok e NOK
 Execute o script "test-oknok.sh"
 
-# Teste OPERACOES
+### Teste OPERACOES
 Execute o script "test-operacoes.sh"
 
-# Teste READ
+### Teste READ
 Execute o script "test-read.sh"
 
-# Teste de Consistência
+### Teste de Consistência
 Execute o script "test-operacoes.sh", reinicie os 3 servidores manualmente, depois execute o script "test-read.sh"
 
-# Teste Ordem de Excecucão
+### Teste Ordem de Excecucão
 Execute os script "test-ordem-exec.sh"
 
-# Teste Multiplos Clientes
+### Teste Multiplos Clientes
 Execute o script "test-multclient-exec.sh"
