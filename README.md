@@ -21,8 +21,11 @@ Devido a natureza do atomix de ser consistente, toda a parte de logs de arquivos
 - Execute os 3 servidores
 
 mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="1"
+
 mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="2"
+
 mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="3"
+
 
 - O único argumento necessário é o id do server que deseja executar
 - As demais ficam em um arquivo de configuração 
@@ -40,7 +43,9 @@ mvn exec:java -Dexec.mainClass="br.ufu.sd.main.StartServer" -Dexec.args="3"
 
 - Com os servers onlines execute
 
+
 mvn exec:java -Dexec.mainClass="br.ufu.sd.main.Client" -Dexec.args="1"
+
 
 - Apenas é necessário um argumento que representa o server que o cliente vai se conectar
 - No caso um cliente se conectando ao server de id 1, para se conectar aos outros basta mudar ( 2 ou 3)
