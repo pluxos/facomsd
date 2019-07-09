@@ -15,11 +15,11 @@ public class ShutdownClusterHook implements Runnable {
 
         System.err.println("*** shutting down Cluster");
 
-        this.cluster.getValue("keyChord").close();
-        this.cluster.getList("rangeChord").close();
-        this.cluster.getMap("db").close();
-        this.cluster.getMap("fingerTable").close();
-
-        cluster.stop();
+//        this.cluster.getValue("keyChord").close();
+//        this.cluster.getList("rangeChord").close();
+////        this.cluster.getMap("db").close();
+//        this.cluster.getMap("fingerTable").close();
+//
+////        cluster.stop();
     }
 }

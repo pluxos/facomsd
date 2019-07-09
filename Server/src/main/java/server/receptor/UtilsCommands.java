@@ -1,6 +1,8 @@
 package server.receptor;
 
+import io.atomix.primitive.PrimitiveException;
 import server.business.persistence.Manipulator;
+import server.commons.atomix.ClusterAtomix;
 import server.commons.chord.Chord;
 import server.commons.chord.ChordUtils;
 
@@ -44,9 +46,13 @@ public class UtilsCommands implements Runnable {
                     break;
 
                 case "bd":
-                    Manipulator.getDb().forEach(
-                            (pos, value) ->  System.out.println("Key: " + pos + " ->  " + Arrays.toString(value))
-                    );
+                    try {
+                        Manipulator.getDb().forEach(
+                                (pos, value) -> System.out.println("Key: " + pos + " ->  " + Arrays.toString(value))
+                        );
+                    } catch(PrimitiveException.Timeout e) {
+                        System.out.println("TIME " + e.getMessage());
+                    }
 
                 default:
                     break;

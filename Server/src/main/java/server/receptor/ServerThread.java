@@ -97,6 +97,7 @@ public class ServerThread implements Runnable {
 			Chord.setFt(new FingerTable());
 
 			if(this.myId == 0) {
+				ClusterAtomix.clearVars();
 				Chord.getChodNode().setRange(ClusterAtomix.getRange());
 				Chord.getChodNode().setKey(ClusterAtomix.getKey());
 				Manipulator.setDb(ClusterAtomix.getDb());

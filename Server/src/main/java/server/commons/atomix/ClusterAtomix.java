@@ -2,19 +2,20 @@ package server.commons.atomix;
 
 import io.atomix.cluster.Node;
 import io.atomix.cluster.discovery.BootstrapDiscoveryProvider;
+import io.atomix.cluster.protocol.SwimMembershipProtocol;
 import io.atomix.core.Atomix;
 import io.atomix.core.AtomixBuilder;
 import io.atomix.core.list.DistributedList;
 import io.atomix.core.map.DistributedMap;
 import io.atomix.core.profile.ConsensusProfile;
 import io.atomix.core.value.DistributedValue;
+import io.atomix.primitive.Recovery;
 import io.atomix.protocols.raft.MultiRaftProtocol;
 import io.atomix.protocols.raft.ReadConsistency;
 import io.atomix.protocols.raft.session.CommunicationStrategy;
 import io.atomix.utils.net.Address;
 import server.commons.chord.ChodNode;
 import server.receptor.hooks.ShutdownClusterHook;
-import server.receptor.hooks.ShutdownServerHook;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -84,7 +85,8 @@ public class ClusterAtomix {
                 .withCacheEnabled()
                 .withProtocol(MultiRaftProtocol.builder()
                         .withReadConsistency(ReadConsistency.LINEARIZABLE)
-                        .withCommunicationStrategy(CommunicationStrategy.LEADER)
+                        .withCommunicationStrategy(CommunicationStrategy.FOLLOWERS)
+                        .withRecoveryStrategy(Recovery.RECOVER)
                         .build())
                 .build();
 
@@ -122,12 +124,14 @@ public class ClusterAtomix {
                                         .build())
                         .build())
                 .withMulticastEnabled()
+                .withMembershipProtocol(SwimMembershipProtocol.builder()
+                    .withBroadcastDisputes(true)
+                    .build())
                 .withProfiles(
                         ConsensusProfile.builder()
                                 .withDataPath("/tmp/member-" + id)
-                                .withMembers("member-1", "member-2", "member-3")
+                                .withMembers("member-0", "member-1", "member-2")
                                 .build())
-                .withShutdownHook(true)
                 .build();
     }
 }
