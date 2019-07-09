@@ -25,4 +25,4 @@
 - Caso informe uma operação incorreta, é enviado uma mensagem de erro para o cliente e para informar uma operação válida (o cliente não é desconectado do servidor).
 
 # Testes
-- As instruções para os testes estão no arquivo 
+- As instruções para os testes estão no arquivo "descricao-tests.txt"  
