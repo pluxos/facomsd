@@ -1,0 +1,88 @@
+Testes
+
+Obs. Para garantir os testes é recomendado apagar o "arquvivo.txt" antes de inicias, pois ele salva 
+as operacoes efetuadas no banco
+
+Teste Ok e NOK
+Descricao
+ - Vao ser inseridos valores para testar e as repostas do servidor
+ - O OK para testar sucesso e NOK falha
+
+Como executar
+ - Os servidor tem que estar online
+ - Entre na pasta do projeto pelo terminal 
+ - Execute o script "test-oknok.sh"
+
+________________________________________________________________
+
+
+Teste OPERACOES
+Descricao
+ - Vai ser feitas todas as operacoes em 15 chaves (2 a 16)
+ - Primeiro um DELETE e depois um CREATE
+ - Por fim um UPDATE
+ - Vao ser inseridos 15 chaves
+ - No final o banco deve ter os valores de A a O
+
+Como executar
+ - Servidor online
+ - Entre na pasta do projeto pelo terminal
+ - Execute o script "test-operacoes.sh"
+
+________________________________________________________________
+
+Teste READ
+Descricao
+ - Vao ser lida as mesmas chaves inseridas no "Test OPERACOES"
+ - Todas as chaves vao ser lidas
+
+Como executar
+ - Servidor online
+ - Entre na pasta do projeto pelo terminal
+ - Execute os script "test-read.sh"
+
+________________________________________________________________
+
+Teste Consistencia
+Obs. Nao conseguimos reiniciar o servidor de forma automatizada,
+entao e necessario reinicia-los manualmente
+Descricao
+ - Teste para testar a consistencia do banco
+
+Como executar
+ - Faca o "Teste OPERACOES"
+ - Feche o servidor
+ - Inicie o servidor
+ - Faca o "Test READ"
+
+________________________________________________________________
+
+Teste Ordem de Excecucao
+Descricao
+ - A tentativa de executar esse teste mostrou um problema, pois o comando
+ READ não devolve o valor em si, mas sim uma mensagem contendo o valor
+ - Isso pode ser apontado como uma falha e que deve ser corrigida
+
+________________________________________________________________
+
+Teste Ordem de Multiplos clientes
+Descricao
+ - Teste para acesso de multiplos clientes no servidor
+ - Total de 9 clientes
+ - Vai ser feita o "Teste OPERACOES" e o "Teste READ" 
+
+Como executar
+ - Servidor online
+ - Entre na pasta do projeto pelo terminal 
+ - Execute o script "test-multclient.sh"
+ - Faca o "Test READ" para verificar os resultados
+ 
+ ________________________________________________________________
+ 
+ Considerações
+  - Algumas inconsistencias foram apontadas com os testes
+   - Ordem de execucao (Já explicada)
+   - Consistencia - Quando o servidor é reiniciado é observado uma inconsistencia no banco, isso pode
+   ser porque pode estar sendo inserido as operacões no arquivo de log em uma ordem diferente do que no
+   banco
+   - Multiplos clientes - A ordem em que os clientes são atendidos pode estar influenciando os testes
