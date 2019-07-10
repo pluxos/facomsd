@@ -29,7 +29,7 @@ Executar o Server:
 
 Executar o Client:
 - na pasta /target/classes executar o comando:
-   mvn exec:java -Dexec.mainClass="com.sd.projeto1.main.Client" -Dexec.args="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
+   mvn exec:java -Dexec.mainClass="com.sd.projeto1.main.Client" -Dexec.args="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
 
 
 Aparecerá o menu:
