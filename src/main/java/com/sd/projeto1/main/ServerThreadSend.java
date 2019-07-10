@@ -55,7 +55,7 @@ public class ServerThreadSend implements Runnable {
     public void send(DatagramPacket receivePacket, MapaDTO mapaDTO) throws IOException {
 
         InetAddress IPAddress = receivePacket.getAddress();
-        int port = receivePacket.getPort();
+        int port = 7391;//receivePacket.getPort();
         byte mensagem[] = new byte[1400];
 
         mensagem = SerializationUtils.serialize(mapaDTO);

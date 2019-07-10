@@ -25,11 +25,11 @@ Compilar o projeto:
 
 Executar o Server:
 - na pasta /target/classes executar o comando:
-   java com.sd.projeto1.main.Server
+   mvn exec:java -Dexec.mainClass="com.sd.projeto1.main.Server" -Dexec.args="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
 
 Executar o Client:
 - na pasta /target/classes executar o comando:
-   java com.sd.projeto1.main.Client
+   mvn exec:java -Dexec.mainClass="com.sd.projeto1.main.Client" -Dexec.args="0 127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
 
 
 Aparecerá o menu:

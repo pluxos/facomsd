@@ -1,45 +1,63 @@
 package com.sd.projeto1.main;
 
+import com.sd.projeto1.command.AddCommand;
+import com.sd.projeto1.command.GetCommand;
 import com.sd.projeto1.model.Mapa;
 import com.sd.projeto1.model.MapaDTO;
 import com.sd.projeto1.util.PropertyManagement;
+import io.atomix.catalyst.transport.Address;
+import io.atomix.catalyst.transport.netty.NettyTransport;
+import io.atomix.copycat.client.CopycatClient;
+import io.atomix.copycat.server.StateMachine;
+import org.apache.commons.lang3.SerializationUtils;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.SerializationUtils;
 
-public class Client {
+public class Client extends StateMachine {
 
     private static Queue<DatagramPacket> comandos = new LinkedList<>();
     private static DatagramSocket socketCliente;
     private static InetAddress enderecoIP;
+   // private static CopycatClient client;
 
     static PropertyManagement pm = new PropertyManagement();
 
-    public static void main(String[] args) throws SocketException, UnknownHostException {
+    public static void main(String[] args) {
+        List<Address> addresses = new LinkedList<>();
 
-        socketCliente = new DatagramSocket();
-        enderecoIP = InetAddress.getByName(pm.getAddress());
-        byte[] receiveData = new byte[1400];
+        CopycatClient.Builder builder = CopycatClient.builder()
+                .withTransport( NettyTransport.builder()
+                        .withThreads(4)
+                        .build());
+        CopycatClient client = builder.build();
 
-        ExecutorService executor = Executors.newCachedThreadPool();
+        for(int i = 0; i <args.length;i+=2)
+        {
+            Address address = new Address(args[i], Integer.parseInt(args[i+1]));
+            addresses.add(address);
+        }
 
+        CompletableFuture<CopycatClient> future = client.connect(addresses);
+        future.join();
+
+
+
+
+
+
+/*
         Thread receive = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -67,29 +85,32 @@ public class Client {
             }
 
         });
-
-        Thread send = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        menu();
-                        Thread.sleep(2000);
-                    }
-
-                } catch (IOException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+*/
+        Thread send = new Thread(() -> {
+            try {
+                while (true) {
+                    menu(client);
+                    Thread.sleep(2000);
                 }
-            }
 
+            } catch (IOException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
-        executor.execute(receive);
-        executor.execute(send);
+        send.start();
+        try {
+            send.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        executor.shutdown();
+        // executor.execute(receive);
+        //executor.execute(send);
+
+        //executor.shutdown();
     }
 
     public static DatagramPacket send(byte[] outData) throws IOException {
@@ -108,13 +129,14 @@ public class Client {
         return in;
     }
 
-    public static void menu() throws Exception {
+    public static void menu(CopycatClient client) throws Exception {
 
         int opcao = 0, chave;
         String msg;
         BufferedReader mensagem;
         Mapa mapa;
         mensagem = new BufferedReader(new InputStreamReader(System.in));
+        Long key = 0l;
 
         Scanner scanner = new Scanner(System.in);
 
@@ -129,10 +151,14 @@ public class Client {
 
         opcao = scanner.nextInt();
 
+
         switch (opcao) {
             case 1:
-            	
-                System.out.println("Digite a Mensagem:");
+
+                System.out.println("Digite a chave:");
+                key = scanner.nextLong();
+
+                System.out.println("Digite a mensagem:");
                 msg = mensagem.readLine();
 
                 mapa = new Mapa();
@@ -145,63 +171,48 @@ public class Client {
                 if (object.length > 1400) {
                     System.out.println("Pacote maior que o suportado!");
                 } else {
-                    send(object);
+                    //send(object);
+                    CompletableFuture<Boolean> future = client.submit(new AddCommand(Long.valueOf(key), msg));
+                    Object result = future.get();
+                    System.out.println(String.valueOf(result));
                 }
 
                 break;
             case 2:
                 System.out.println("Digite a chave da mensagem que deseja atualizar:");
-                chave = scanner.nextInt();
+                key = scanner.nextLong();
 
                 System.out.println("Digite a Mensagem:");
                 msg = mensagem.readLine();
 
-                mapa = new Mapa();
-                mapa.setChave(chave);
-                mapa.setTipoOperacaoId(2);
-                mapa.setTexto(msg);
 
-                byte[] objectUpdate = SerializationUtils.serialize(mapa);
 
-                if (objectUpdate.length > 1400) {
+                if (msg.length() > 1400) {
                     System.out.println("Pacote maior que o suportado!");
                 } else {
-                    send(objectUpdate);
+                    CompletableFuture<Object> future = client.submit(new GetCommand(key));
+                    Object result = future.get();
+                    System.out.println(String.valueOf(result));
                 }
 
                 break;
             case 3:
                 System.out.println("Digite a chave da mensagem que deseja excluir:");
-                chave = scanner.nextInt();
+                key = scanner.nextLong();
 
-                mapa = new Mapa();
-                mapa.setChave(chave);
-                mapa.setTipoOperacaoId(3);
 
-                byte[] objectDelete = SerializationUtils.serialize(mapa);
-
-                if (objectDelete.length > 1400) {
-                    System.out.println("Pacote maior que o suportado!");
-                } else {
-                    send(objectDelete);
-                }
+                CompletableFuture<Object> future = client.submit(new GetCommand(key));
+                Object result = future.get();
+                System.out.println(String.valueOf(result));
 
                 break;
             case 4:
                 System.out.println("Digite a chave da mensagem que deseja buscar:");
-                chave = scanner.nextInt();
+                key = scanner.nextLong();
 
-                mapa = new Mapa();
-                mapa.setChave(chave);
-                mapa.setTipoOperacaoId(4);
 
-                byte[] objectSearch = SerializationUtils.serialize(mapa);
-
-                if (objectSearch.length > 1400) {
-                    System.out.println("Pacote maior que o suportado!");
-                } else {
-                    send(objectSearch);
-                }
+                CompletableFuture<Object> futureGet = client.submit(new GetCommand(key));
+                System.out.println(String.valueOf(futureGet.get()));
 
                 break;
             case 5:
@@ -211,14 +222,14 @@ public class Client {
                 break;
         }
     }
-    
-   
+
+
 
     public static void objetoRetornado(MapaDTO mapa) {
         System.out.println("\n================================");
         System.out.println("Chave: " + mapa.getMapa().getChave());
         System.out.println("Texto: " + mapa.getMapa().getTexto());
     }
-    
-    
+
+
 }

@@ -27,6 +27,21 @@
 			<version>2.44.0</version>
 		</dependency>
 		<dependency>
+			<groupId>io.atomix.copycat</groupId>
+			<artifactId>copycat-server</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>io.atomix.copycat</groupId>
+			<artifactId>copycat-client</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>io.atomix.catalyst</groupId>
+			<artifactId>catalyst-netty</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.opera</groupId>
 			<artifactId>operadriver</artifactId>
 			<scope>test</scope>

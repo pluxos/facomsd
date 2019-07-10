@@ -1,10 +1,12 @@
 package com.sd.projeto1.model;
 
+import io.atomix.copycat.Command;
+
 import java.io.Serializable;
 import java.util.Date;
 
 
-public class Mapa implements Serializable{
+public class Mapa implements Serializable {
  
     private int chave;
     private String texto;
