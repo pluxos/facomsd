@@ -16,7 +16,7 @@ public class MapaDao implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Mapa buscarPorId(Integer id) throws Exception {
+    public Mapa buscarPorId(Long id) throws Exception {
 //        Connection con = null;
 //        PreparedStatement ps = null;
 
@@ -116,7 +116,7 @@ public class MapaDao implements Serializable {
 //        }
     }
 
-    public Mapa excluir(int id) throws Exception {
+    public Mapa excluir(Long id) throws Exception {
     	Mapa m = buscarPorId(id);
 
         return m;

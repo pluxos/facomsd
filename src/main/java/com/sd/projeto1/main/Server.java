@@ -1,15 +1,9 @@
 package com.sd.projeto1.main;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-
 import com.sd.projeto1.command.AddCommand;
+import com.sd.projeto1.command.DeleteCommand;
 import com.sd.projeto1.command.GetCommand;
+import com.sd.projeto1.command.PutCommand;
 import com.sd.projeto1.model.Mapa;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
@@ -18,20 +12,32 @@ import io.atomix.copycat.server.CopycatServer;
 import io.atomix.copycat.server.StateMachine;
 import io.atomix.copycat.server.storage.Storage;
 import io.atomix.copycat.server.storage.StorageLevel;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Server extends StateMachine {
 
 
-	private Map<Long,String> maps = new HashMap<>();
+	private static Map<Long, String> maps = new HashMap<>();
 
-	public Boolean AddCommand(Commit<AddCommand> commit){
+	public String AddCommand(Commit<AddCommand> commit) {
 		try{
 			AddCommand aec = commit.operation();
+
+			if (maps.containsKey(aec.id)) {
+
+				return "Mensagem com essa chave já adicionada";
+			}
+
 			maps.put(aec.id,aec.message);
 
-			System.out.println("Adding " + maps);
-
-			return true;
+			return "Mensagem adicionada com sucesso!";
 		}finally{
 			commit.close();
 		}
@@ -42,9 +48,44 @@ public class Server extends StateMachine {
 			GetCommand aec = commit.operation();
 			String message = maps.get(aec.id);
 
-			System.out.println("message key "+aec.id+" : " + message);
+			if (StringUtils.isBlank(message))
+				return "Dados não encontrados para a chave: " + aec.id;
 
-			return message;
+			return "Chave encontrada: Chave: " + aec.id + " Messagem: " + message;
+		}finally{
+			commit.close();
+		}
+	}
+
+	public String PutCommand(Commit<PutCommand> commit) {
+		try {
+			PutCommand aec = commit.operation();
+
+			if (!maps.containsKey(aec.id)) {
+
+				return "Mensagem com essa chave não existe";
+			}
+
+			maps.put(aec.id, aec.message);
+
+			return "Mensagem atualizada com sucesso!";
+		} finally {
+			commit.close();
+		}
+	}
+
+	public String DeleteCommand(Commit<DeleteCommand> commit){
+		try{
+			DeleteCommand aec = commit.operation();
+
+			if (!maps.containsKey(aec.id)) {
+
+				return "Chave " +aec.id+" não encontrada";
+			}
+
+			maps.remove(aec.id);
+
+			return "Chave " +aec.id+" excluida com sucesso!";
 		}finally{
 			commit.close();
 		}
@@ -102,14 +143,14 @@ public class Server extends StateMachine {
 				String[] content = line.split("#");
 				if(content.length>0){
 					mapa.setTipoOperacaoId(Integer.parseInt(content[0]));
-					mapa.setChave(Integer.parseInt(content[1]));
+					mapa.setChave(Long.valueOf(content[1]));
 					if(content.length>2)
 						mapa.setTexto(content[2]);
 
 					if(mapa.getTipoOperacaoId() == 1 || mapa.getTipoOperacaoId() == 2)
-						ServerThreadDisk.mapa.put(new BigInteger(String.valueOf(mapa.getChave())), mapa.getTexto());
+						maps.put(mapa.getChave(), mapa.getTexto());
 					else if(mapa.getTipoOperacaoId() == 3)
-						ServerThreadDisk.mapa.remove(new BigInteger(String.valueOf(mapa.getChave())));
+						ServerThreadDisk.mapa.remove(mapa.getChave());
 				}
 
 				sb.append(line).append("\n");
@@ -118,8 +159,6 @@ public class Server extends StateMachine {
 		} catch (IOException e) {
 			System.err.format("IOException: %s%n", e);
 		}
-
 		System.out.println(sb);
-
 	}
 }

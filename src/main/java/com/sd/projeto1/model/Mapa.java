@@ -8,15 +8,15 @@ import java.util.Date;
 
 public class Mapa implements Serializable {
  
-    private int chave;
+    private Long chave;
     private String texto;
     private int tipoOperacaoId;
     private Date data;
     
-    public int getChave() {
+    public Long getChave() {
         return chave;
     }
-    public void setChave(int chave) {
+    public void setChave(Long chave) {
         this.chave = chave;
     }
 

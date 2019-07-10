@@ -1,7 +1,9 @@
 package com.sd.projeto1.main;
 
 import com.sd.projeto1.command.AddCommand;
+import com.sd.projeto1.command.DeleteCommand;
 import com.sd.projeto1.command.GetCommand;
+import com.sd.projeto1.command.PutCommand;
 import com.sd.projeto1.model.Mapa;
 import com.sd.projeto1.model.MapaDTO;
 import com.sd.projeto1.util.PropertyManagement;
@@ -172,7 +174,7 @@ public class Client extends StateMachine {
                     System.out.println("Pacote maior que o suportado!");
                 } else {
                     //send(object);
-                    CompletableFuture<Boolean> future = client.submit(new AddCommand(Long.valueOf(key), msg));
+                    CompletableFuture<String> future = client.submit(new AddCommand(Long.valueOf(key), msg));
                     Object result = future.get();
                     System.out.println(String.valueOf(result));
                 }
@@ -190,7 +192,7 @@ public class Client extends StateMachine {
                 if (msg.length() > 1400) {
                     System.out.println("Pacote maior que o suportado!");
                 } else {
-                    CompletableFuture<Object> future = client.submit(new GetCommand(key));
+                    CompletableFuture<String> future = client.submit(new PutCommand(Long.valueOf(key), msg));
                     Object result = future.get();
                     System.out.println(String.valueOf(result));
                 }
@@ -201,7 +203,7 @@ public class Client extends StateMachine {
                 key = scanner.nextLong();
 
 
-                CompletableFuture<Object> future = client.submit(new GetCommand(key));
+                CompletableFuture<String> future = client.submit(new DeleteCommand(key));
                 Object result = future.get();
                 System.out.println(String.valueOf(result));
 
@@ -211,8 +213,8 @@ public class Client extends StateMachine {
                 key = scanner.nextLong();
 
 
-                CompletableFuture<Object> futureGet = client.submit(new GetCommand(key));
-                System.out.println(String.valueOf(futureGet.get()));
+                CompletableFuture<String> futureGet = client.submit(new GetCommand(key));
+                System.out.println(futureGet.get());
 
                 break;
             case 5:
