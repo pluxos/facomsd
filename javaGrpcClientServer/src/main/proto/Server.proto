@@ -1,0 +1,62 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "br.com.ufu.javaGrpcClientServer";
+package br.com.ufu.javaGrpcClientServer;
+
+message InsertRequest {
+    string content = 1;
+}
+
+message InsertResponse {
+    string response = 1;
+}
+
+message SelectRequest {
+    bool all = 1;
+    int64 id = 2;    
+}
+
+message SelectResponse {
+    string response = 1;
+}
+
+message UpdateRequest {
+	int64 id = 1;
+    string content = 2;
+}
+
+message UpdateResponse {
+    string response = 1;
+}
+
+message DeleteRequest {
+    int64 id = 1;
+}
+
+message DeleteResponse {
+    string response = 1;
+}
+
+message JoinRequest {
+	int32 id = 1;
+}
+
+message JoinResponse {
+	string address = 1;
+	int32 port = 2;
+	int32 id = 3;
+}
+
+service CrudService {
+    rpc insert(InsertRequest) returns (InsertResponse);
+    
+    rpc select(SelectRequest) returns (SelectResponse);
+    
+    rpc update(UpdateRequest) returns (UpdateResponse);
+    
+    rpc delete(DeleteRequest) returns (DeleteResponse);    
+}
+
+service ChordService {
+	rpc join(JoinRequest) returns (JoinResponse);
+}
