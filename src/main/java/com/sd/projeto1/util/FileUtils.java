@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 public class FileUtils {
 
-	public static void writeFile(String operationType, BigInteger id, String message) {
+	public static void writeFile(String operationType, Long id, String message) {
 		String separator = "#";
 		try (FileWriter writer = new FileWriter("app.log", true); BufferedWriter bw = new BufferedWriter(writer)) {
 			String line = operationType.concat(separator).concat(String.valueOf(id)).concat(separator).concat(message);

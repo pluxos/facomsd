@@ -5,6 +5,8 @@ import com.sd.projeto1.command.DeleteCommand;
 import com.sd.projeto1.command.GetCommand;
 import com.sd.projeto1.command.PutCommand;
 import com.sd.projeto1.model.Mapa;
+import com.sd.projeto1.util.FileUtils;
+import com.sd.projeto1.util.Utils;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
 import io.atomix.copycat.server.Commit;
@@ -37,6 +39,8 @@ public class Server extends StateMachine {
 
 			maps.put(aec.id,aec.message);
 
+            FileUtils.writeFile(String.valueOf(Utils.CREATE), aec.id, aec.message);
+
 			return "Mensagem adicionada com sucesso!";
 		}finally{
 			commit.close();
@@ -68,6 +72,8 @@ public class Server extends StateMachine {
 
 			maps.put(aec.id, aec.message);
 
+            FileUtils.writeFile(String.valueOf(Utils.UPDATE), aec.id, aec.message);
+
 			return "Mensagem atualizada com sucesso!";
 		} finally {
 			commit.close();
@@ -85,6 +91,8 @@ public class Server extends StateMachine {
 
 			maps.remove(aec.id);
 
+            FileUtils.writeFile(String.valueOf(Utils.DELETE), aec.id, "");
+
 			return "Chave " +aec.id+" excluida com sucesso!";
 		}finally{
 			commit.close();
@@ -94,8 +102,8 @@ public class Server extends StateMachine {
 	public static void main(String[] args) throws Exception {
 		List<Mapa> logs = new ArrayList<Mapa>();
 
-		//loadData();
-		//ServerThreadDisk.imprimeMapa();
+
+
 
         int myId = Integer.parseInt(args[0]);
         List<Address> addresses = new LinkedList<>();
@@ -119,6 +127,7 @@ public class Server extends StateMachine {
 
         if(myId == 0)
         {
+			loadData();
             server.bootstrap().join();
         }
         else
@@ -135,6 +144,9 @@ public class Server extends StateMachine {
 	private static void loadData() {
 		Mapa mapa = new Mapa();
 		StringBuilder sb = new StringBuilder();
+        int operationId = 0;
+        Long key = 0L;
+        String message = "";
 
 		try (BufferedReader br = Files.newBufferedReader(Paths.get("app.log"))) {
 
@@ -142,15 +154,14 @@ public class Server extends StateMachine {
 			while ((line = br.readLine()) != null) {
 				String[] content = line.split("#");
 				if(content.length>0){
-					mapa.setTipoOperacaoId(Integer.parseInt(content[0]));
-					mapa.setChave(Long.valueOf(content[1]));
+                    operationId = Integer.parseInt(content[0]);
+                    key = Long.valueOf(content[1]);
 					if(content.length>2)
-						mapa.setTexto(content[2]);
-
-					if(mapa.getTipoOperacaoId() == 1 || mapa.getTipoOperacaoId() == 2)
-						maps.put(mapa.getChave(), mapa.getTexto());
-					else if(mapa.getTipoOperacaoId() == 3)
-						ServerThreadDisk.mapa.remove(mapa.getChave());
+                        message = content[2];
+                    if (operationId == 1 || operationId == 2)
+                        maps.put(key, message);
+                    else if (operationId == 3)
+                        maps.remove(key);
 				}
 
 				sb.append(line).append("\n");
