@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +33,9 @@ public class Client extends StateMachine {
     private static Queue<DatagramPacket> comandos = new LinkedList<>();
     private static DatagramSocket socketCliente;
     private static InetAddress enderecoIP;
+    public static boolean isTest = false;
+    private static CopycatClient client;
+    
    // private static CopycatClient client;
 
     static PropertyManagement pm = new PropertyManagement();
@@ -43,7 +47,7 @@ public class Client extends StateMachine {
                 .withTransport( NettyTransport.builder()
                         .withThreads(4)
                         .build());
-        CopycatClient client = builder.build();
+        client = builder.build();
 
         for(int i = 0; i <args.length;i+=2)
         {
@@ -53,10 +57,6 @@ public class Client extends StateMachine {
 
         CompletableFuture<CopycatClient> future = client.connect(addresses);
         future.join();
-
-
-
-
 
 
 /*
@@ -88,27 +88,29 @@ public class Client extends StateMachine {
 
         });
 */
-        Thread send = new Thread(() -> {
-            try {
-                while (true) {
-                    menu(client);
-                    Thread.sleep(2000);
+        if( isTest == false ) {
+            Thread send = new Thread(() -> {
+                try {
+                    while (true) {
+                        menu(client);
+                        Thread.sleep(2000);
+                    }
+
+                } catch (IOException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-            } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            });
+                
+            send.start();
+            try {
+                send.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-
-        send.start();
-        try {
-            send.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
+        
         // executor.execute(receive);
         //executor.execute(send);
 
@@ -133,7 +135,7 @@ public class Client extends StateMachine {
 
     public static void menu(CopycatClient client) throws Exception {
 
-        int opcao = 0, chave;
+        int opcao = 0;
         String msg;
         BufferedReader mensagem;
         Mapa mapa;
@@ -153,7 +155,6 @@ public class Client extends StateMachine {
 
         opcao = scanner.nextInt();
 
-
         switch (opcao) {
             case 1:
 
@@ -164,7 +165,7 @@ public class Client extends StateMachine {
                 msg = mensagem.readLine();
 
                 mapa = new Mapa();
-
+                mapa.setChave(key);
                 mapa.setTipoOperacaoId(1);
                 mapa.setTexto(msg);
 
@@ -178,7 +179,6 @@ public class Client extends StateMachine {
                     Object result = future.get();
                     System.out.println(String.valueOf(result));
                 }
-
                 break;
             case 2:
                 System.out.println("Digite a chave da mensagem que deseja atualizar:");
@@ -225,7 +225,16 @@ public class Client extends StateMachine {
         }
     }
 
-
+    public void insertTest(long key, String msg) throws InterruptedException, ExecutionException{
+        CompletableFuture<String> future = client.submit(new AddCommand(Long.valueOf(key), msg));
+        Object result = future.get();
+        System.out.println(String.valueOf(result));
+    }
+    
+    public void getKeyTest(long key) throws InterruptedException, ExecutionException{
+        CompletableFuture<String> futureGet = client.submit(new GetCommand(key));
+        System.out.println(futureGet.get());
+    }
 
     public static void objetoRetornado(MapaDTO mapa) {
         System.out.println("\n================================");
