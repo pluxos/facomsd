@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc";
+
+service CRUD {
+
+  rpc Create (Comando) returns (Result) {}
+
+  rpc Read (Comando) returns (Result) {}
+
+  rpc Update (Comando) returns (Result) {}
+
+  rpc Delete (Comando) returns (Result) {}
+  
+  //rpc Stream (stream Comando) returns (stream Comando) {}
+}
+
+
+message Comando {
+  int64 chave = 1;
+  string valor = 2;
+}
+
+
+message Result {
+  string message = 1;
+}
