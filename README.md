@@ -16,6 +16,7 @@ Executar primeiramente o arquivo Servidor, depois o ProcessaCliente.
 ---------------------------------------------
 # OBS:
 Ao executar o ProcessaCliente, da o seguinte erro que não consegui resolver:
-<span style="color:blue">Exception in thread "main" java.util.concurrent.CompletionException: java.net.ConnectException: failed to register session</span>
+
+<p><span style="color:red">Exception in thread "main" java.util.concurrent.CompletionException: java.net.ConnectException: failed to register session</span></p>
 relacionado ao join() do Atomix.
 
